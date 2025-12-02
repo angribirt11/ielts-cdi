@@ -1,0 +1,380 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test - Interactive</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            position: relative;
+        }
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .left {
+            width: 50%;
+            padding-right: 20px;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+        .right {
+            width: 50%;
+            padding-left: 20px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .navigation button {
+            margin: 5px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .navigation button:hover {
+            background: #0056b3;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        #submit-btn {
+            display: none;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #submit-btn:hover {
+            background: #218838;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 10px;
+            background: #e9ecef;
+            border: 1px solid #ced4da;
+        }
+        .highlight-btn {
+            position: absolute;
+            display: none;
+            padding: 5px 10px;
+            background: #ffc107;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .highlight {
+            background-color: yellow;
+        }
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 50px;
+            color: rgba(0, 0, 0, 0.5); /* Lighter black, not too light */
+            pointer-events: none;
+            z-index: 999;
+        }
+        input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+        select {
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+        .checkbox-group {
+            margin-bottom: 10px;
+        }
+        .checkbox-group label {
+            display: block;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="watermark">@Avazbeks_Media</div>
+    <div class="navigation">
+        <button onclick="showPassage(1)">Passage 1</button>
+        <button onclick="showPassage(2)">Passage 2</button>
+        <button onclick="showPassage(3)">Passage 3</button>
+    </div>
+    <div class="container">
+        <div class="left" id="passage-text"></div>
+        <div class="right" id="questions"></div>
+    </div>
+    <button id="submit-btn" onclick="checkAnswers()">Submit Answers</button>
+    <div id="results"></div>
+
+    <button class="highlight-btn" id="highlight-btn">Highlight</button>
+
+    <script>
+        const passages = {
+            1: {
+                text: `
+<h2>READING PASSAGE 1</h2>
+<p>You should spend about 20 minutes on Questions 1-13, which are based on Reading Passage 1 below.</p>
+<h3>Intellectual Gymnastics</h3>
+<p>John McCrone explains how mental exercise is being used to boost corporate brainpower</p>
+<p>The working day has just started at the head office of Barclays Bank in London. Seventeen staff are helping themselves to a buffet breakfast as young psychologist Sebastian Bailey enters the room to begin the morning's training session. But this is no ordinary training session. He is here, not to sharpen their finance or management skills, but to exercise their brains. Today's workout, organised by a company called Mind Gym, is entitled 'Having Presence'.</p>
+<p>What follows is an intense 90-minute session, in which this rather abstract concept is broken down into a concrete set of feelings, mental tricks and behaviours. At one point, the bankers are instructed to shut their eyes and visualise themselves filling the room and then the building. They finish by walking around the room acting out various levels of 'presence', from low-key to over-the-top.</p>
+<p>Similar mental workouts are happening in corporate seminar rooms around the globe. Mind Gym alone offers some 70 different sessions, including ones on mental stamina and creativity for logical thinkers. Other outfits draw more directly on the exercise analogy, offering 'neurobics' courses with names like 'brain sets' and 'cerebral fitness'. Whatever the style, the companies' sales pitch is similar: 'Follow our routines,' they tell us, 'to shape and sculpt your brain or mind, just as you might tone and train your body.' Nearly all claim that their mental workouts draw on serious research into how the brain works.</p>
+<p>Gessner Geyer, from Brainergy of Cambridge, Massachusetts, puts it like this: 'Studies have shown that mental exercise can cause changes in brain anatomy and brain chemistry, which promote increased mental efficiency and clarity. The neuroscience behind this is cutting-edge.' Mind Gym trades on a quote from Susan Greenfield, one of Britain's best-known neuroscientists: 'It's a bit like going to the gym: if you exercise your brain, it will grow.'</p>
+<p>In practice, the training can seem mundane. Take 'Creativity for logical thinkers', one of Mind Gym's eight different creativity workouts. One of the mental strategies taught is to make a sensible suggestion, then pose its opposite. Asked to spend five minutes inventing a new pizza, a group soon comes up with no topping, sweet topping, cold topping, price based on time of day, flat-rate prices and so on.</p>
+<p>The trick is simple, but Bailey points out how few such tricks people have to call upon when suddenly asked to be creative: 'They tend to just label themselves as uncreative, realising that there are techniques every creative person employs.' Bailey says the aim is to introduce people to half a dozen such strategies, so that what at first seems like a dauntingly abstract mental task becomes a set of concrete, learnable behaviours. He admits this is not a short cut to genius. Neurologically, some people do start with quicker circuits or greater handling capacity. However, the right kind of training he believes can dramatically increase brain efficiency.</p>
+<p>Though it is hard to prove that the training itself is effective - how do you measure a change in creativity levels, or memory skills? - staff certainly report feeling that such classes have opened their eyes. For example, they may have felt the only way to solve a difficult problem is to bang away at it as hard as possible. Then they learn that creative thinkers advise taking a break and letting ideas incubate. A simple tactic, yet one rarely taught in normal life. Which, according to educational psychologist Guy Claxton, Mind Gym's academic adviser, is exactly the point.</p>
+<p>Claxton, who dismisses most neurological approaches as 'neuro-babble', insists creativity, mental flexibility, even motivation is all thought habits that can be learned. The problem, he claims, is that most of us never receive proper training. We develop mental strategies for tackling tasks haphazardly and soon lose sight of the very thought habits we are relying upon. Claxton believes we must return our thought patterns to a conscious level, becoming aware of how we usually think. Only then can we start to practice better thought patterns, until eventually these become our new habits.</p>
+<p>Russian psychologists Lev Vygotsky and Aleksandr Luria put forward similar arguments in the 1930s and various attempts have been made to put them into practice. The business world is familiar with both 'better thinking' gurus such as Edward de Bono and Tony Buzan, and habit-breaking techniques such as neurolinguistic programming. Modern companies will seize on anything that claims to create flexible, bright thinkers, without scrutinising the facts. But are neurobic workouts underpinned by scientific fact?</p>
+<p>Certainly the brain adapts to demands placed on it. Neurologists have proved time and again that people who lose brain cells suddenly during a stroke often sprout new neural connections to compensate - especially if they undergo therapy. Rats raised in cages with toys sprout more neural connections than rats raised in bare cages. Brain scans suggest that people use more of their grey matter to carry out new tasks than well-rehearsed ones.</p>
+<p>So the general basis of neurobics looks sound: the brain really is inherently alterable or plastic. The problem is in the specifics. Qualities such as creativity are too subjective to rate, forcing psychologists to rely on the easy-to-score spatial and verbal reasoning tasks involved in IQ tests. This creates a problem for neurobics. Time and again, psychologists have found that neither mental exercises nor any other type of brain-boosting regime, including so-called smart pills designed to improve blood flow to the brain, reliably improve our ability to do these basic tasks.</p>
+<p>Nevertheless, Claxton for one believes there is no reason why schools and universities should not spend more time teaching analysis and problem-solving techniques, rather than trying to stuff heads with facts and hoping that effective thought habits are somehow absorbed by osmosis.</p>
+                `,
+                questions: `
+<h3>Questions 1-5</h3>
+<p>Do the following statements agree with the information given in Reading Passage 1? In boxes 1-5 on your answer sheet, write<br><strong>TRUE</strong> if the statement is true<br><strong>FALSE</strong> if the statement is false<br><strong>NOT GIVEN</strong> if the information is not given in the passage</p>
+<div class="question">1 Bailey asks his participants to imagine they are buildings. <select id="q1"><option value="">--</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select></div>
+<div class="question">2 Brain training is used by business people all over the world. <select id="q2"><option value="">--</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select></div>
+<div class="question">3 The organisations that sell mental exercise all promote it in much the same way. <select id="q3"><option value="">--</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select></div>
+<div class="question">4 Companies offering mental workouts say that their practice has a scientific basis. <select id="q4"><option value="">--</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select></div>
+<div class="question">5 Susan Greenfield was one of the founders of Mind Gym. <select id="q5"><option value="">--</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select></div>
+
+<h3>Questions 6-13</h3>
+<p>Look at the following statements and the list of people below. Match each statement with the correct person, A, B, C or D. Write the correct letter, A, B, C or D, in boxes 6-13 on your answer sheet.<br><strong>NB</strong> You may use any letter more than once.</p>
+<div class="question">6 People rarely take time to stand back from a problem before taking a decision. <select id="q6"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+<div class="question">7 Most people underestimate their potential to be creative. <select id="q7"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+<div class="question">8 Most ways of looking at mental development are unconvincing. <select id="q8"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+<div class="question">9 Exercising the brain can be compared to exercising the body. <select id="q9"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+<div class="question">10 Training can actually modify the structure of the brain. <select id="q10"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+<div class="question">11 Effective mental training begins with a close examination of how we ordinarily think. <select id="q11"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+<div class="question">12 People who think that they are uncreative may be unaware of techniques used by creative people. <select id="q12"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+<div class="question">13 Educators should place greater emphasis on developing students' thinking skills. <select id="q13"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+<p><strong>List of People</strong><br>A. Sebastian Bailey<br>B. Gessner Geyer<br>C. Susan Greenfield<br>D. Guy Claxton</p>
+                `
+            },
+            2: {
+                text: `
+<h2>READING PASSAGE 2</h2>
+<p>You should spend about 20 minutes on Questions 14-26, which are based on Reading Passage 2 below.</p>
+<h3>Underwater Archaeology</h3>
+<p><strong>A</strong><br>Underwater archaeology is a specialized field of study that investigates past human activities through submerged sites, offering unique insights into maritime history, trade networks, and technological advancements. Broadly categorized, these sites include shipwrecks, which provide evidence of naval engineering and trade routes; submerged settlements, which reveal how ancient communities adapted to coastal environments; prehistoric landscapes, which were once dry land but became inundated due to rising sea levels; and harbor structures, which illuminate past maritime commerce and infrastructure.</p>
+<p><strong>B</strong><br>Among the most renowned discoveries is the wreck of the Mary Rose, a 16th-century English warship that sank in battle in 1545. The vessel's excavation yielded an extensive collection of artifacts, ranging from weaponry to medical instruments, offering an unparalleled glimpse into Tudor naval warfare and daily life at sea. Equally significant is the Resurgam II, an experimental submarine from the 19th century, which serves as a testament to early innovations in underwater military technology. The study of such wrecks not only informs historians about historical shipbuilding techniques but also demonstrates the evolving nature of naval warfare.</p>
+<p><strong>C</strong><br>Unlike terrestrial sites, underwater environments can, under specific conditions, provide exceptional preservation for organic materials that would typically degrade on land. In deep-sea environments with anoxic (oxygen-depleted) conditions, artifacts remain remarkably intact for centuries, shielded from biological decay. Additionally, sedimentation can rapidly bury objects, forming a protective barrier against erosion and human interference. This phenomenon has allowed archaeologists to recover delicate materials such as textiles, leather, and wooden structures that would otherwise have been lost to time.</p>
+<p><strong>D</strong><br>However, many underwater conditions actively contribute to the deterioration of submerged artifacts. The presence of saltwater accelerates corrosion, particularly for metal objects, while fluctuating temperatures and water currents can cause physical stress on fragile materials. Wooden structures are especially vulnerable to marine organisms, such as shipworms, which bore through submerged timber, reducing it to a fragile skeletal framework. The impact of human activity, including unauthorized salvage operations, pollution, and trawling, poses an additional threat to underwater cultural heritage.</p>
+<p><strong>E</strong><br>Conducting underwater excavations requires a combination of advanced technical skills, specialized equipment, and adherence to strict conservation protocols. Divers must be proficient in controlled excavation techniques to prevent disturbance to fragile remains, while technological tools such as sonar imaging, remotely operated vehicles (ROVs), and photogrammetry enable researchers to map sites with precision. Furthermore, the ethical considerations surrounding underwater heritage necessitate legal protections, particularly for sites classified as war graves. A significant concern is the safeguarding of artifacts composed of precious metals, which are often targeted by treasure hunters seeking financial gain rather than historical insight.</p>
+<p><strong>F</strong><br>Despite advancements in methodology, underwater archaeology remains fraught with logistical and financial challenges. Harsh marine conditions, including unpredictable weather patterns, strong currents, and poor visibility, frequently hinder excavation efforts. Additionally, the substantial costs associated with deep-sea exploration, including specialized diving gear, submersibles, and post-recovery conservation, limit the scope of many projects. The long-term preservation of recovered materials presents another obstacle, as exposure to air after centuries underwater can trigger rapid deterioration, necessitating extensive conservation efforts.</p>
+<p><strong>G</strong><br>Underwater archaeology is an inherently interdisciplinary field, drawing upon expertise from marine science, conservation, and historical analysis. Specialized research techniques play a crucial role in uncovering the past. For instance, dendrochronology, a method that examines tree ring patterns, enables archaeologists to determine the age and origin of timber used in shipbuilding, thereby linking vessels to specific time periods and regions. Additionally, material analysis techniques allow researchers to trace the sources of metals and other materials, offering valuable insights into historical trade routes and resource distribution. The study of artifacts, including weaponry, navigational tools, and cargo, further enhances our understanding of technological and economic developments across different civilizations.</p>
+                `,
+                questions: `
+<h3>Questions 14-18</h3>
+<p>Which section contains the following information? Write the correct letter, A-G, in boxes 14-18 on your answer sheet.</p>
+<div class="question">14 Details of some specialist areas of research which form part of underwater archaeology. <select id="q14"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select></div>
+<div class="question">15 Details of some requirements necessary for undertaking underwater archaeology. <select id="q15"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select></div>
+<div class="question">16 A reference to the underwater conditions which may prevent a range of materials from deteriorating. <select id="q16"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select></div>
+<div class="question">17 Examples of underwater conditions which can damage materials. <select id="q17"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select></div>
+<div class="question">18 A description of the four types of underwater archaeological sites. <select id="q18"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select></div>
+
+<h3>Questions 19-22</h3>
+<p>Complete the sentences below. Write <strong>NO MORE THAN TWO WORDS</strong> for each answer.</p>
+<div class="question">19 The wreck of the ship called the <input type="text" id="q19"> is seen as important because of what it contains.</div>
+<div class="question">20 Archaeologists are able to learn about innovation in military technology by investigating the submarine called <input type="text" id="q20">.</div>
+<div class="question">21 Wood submerged in water may be eaten away by <input type="text" id="q21">.</div>
+<div class="question">22 Dendrochronology helps to assess the age of <input type="text" id="q22">.</div>
+
+<h3>Questions 23-24</h3>
+<p>Which <strong>TWO</strong> of these are mentioned as problems associated with underwater archaeology? Write the correct letters in boxes 23-24 on your answer sheet.</p>
+<div class="checkbox-group">
+    <label><input type="checkbox" name="q23_24" value="A"> A. The high cost of research</label>
+    <label><input type="checkbox" name="q23_24" value="B"> B. Limited interest from historians</label>
+    <label><input type="checkbox" name="q23_24" value="C"> C. Lack of skilled divers</label>
+    <label><input type="checkbox" name="q23_24" value="D"> D. Bad weather</label>
+    <label><input type="checkbox" name="q23_24" value="E"> E. The need to protect items made of precious metals</label>
+</div>
+
+<h3>Questions 25-26</h3>
+<p>Which <strong>TWO</strong> of these are mentioned as being of interest to underwater archaeologists? Write the correct letters in boxes 25-26 on your answer sheet.</p>
+<div class="checkbox-group">
+    <label><input type="checkbox" name="q25_26" value="A"> A. The design of ancient ports</label>
+    <label><input type="checkbox" name="q25_26" value="B"> B. The origin of materials used in shipbuilding</label>
+    <label><input type="checkbox" name="q25_26" value="C"> C. The depth at which wrecks are found</label>
+    <label><input type="checkbox" name="q25_26" value="D"> D. Details concerning artifacts made of metal</label>
+</div>
+                `
+            },
+            3: {
+                text: `
+<h2>READING PASSAGE 3</h2>
+<p>You should spend about 20 minutes on Questions 27-40, which are based on Reading Passage 3 below.</p>
+<h3>Avalanches</h3>
+<p><strong>A</strong><br>Predicting avalanches remains one of the greatest challenges for scientists and meteorologists. The process involves numerous variables, including snowfall, temperature fluctuations, wind direction, and the underlying structure of the snowpack. Despite advances in technology, accurately forecasting when and where an avalanche will occur is still a complex task due to the highly dynamic nature of mountain environments.</p>
+<p><strong>B</strong><br>One method used by researchers to examine snow conditions is through direct sampling. Scientists and avalanche experts extract snow cores to analyze their structure and density. By assessing the stability of different layers within a snowpack, they can determine potential weak points where an avalanche might initiate. These tests are crucial for understanding the mechanics of snow movement.</p>
+<p><strong>C</strong><br>To improve awareness and prevent avalanche-related accidents, information about avalanche risks is systematically spread among communities living in mountainous regions. Various organizations conduct public education campaigns, providing information on safety measures, warning signs, and recommended responses to avalanche threats. Avalanche bulletins are also issued regularly to inform skiers, mountaineers, and residents.</p>
+<p><strong>D</strong><br>An avalanche typically starts when a weak layer within the snowpack collapses under stress. This collapse allows the upper layers to break away and slide down the mountain. Snow accumulates in layers, with each new snowfall potentially adding instability to the underlying structure. The interaction between these layers determines the likelihood of an avalanche occurring.</p>
+<p><strong>E</strong><br>Human activity can significantly contribute to triggering avalanches. Skiers, snowboarders, and mountaineers moving across unstable snow can disturb weak layers, causing a sudden release of snow. Additionally, construction and deforestation can alter natural snowpack conditions, making certain slopes more susceptible to avalanches. Therefore, individuals must take precautions when venturing into avalanche-prone areas.</p>
+<p><strong>F</strong><br>Atmospheric conditions play a crucial role in avalanche formation. Temperature fluctuations can weaken the bonds between snow layers, while wind can transport snow from one part of a slope to another, creating imbalanced accumulations. Slopes facing strong winds often experience higher risks, as wind-deposited snow tends to be less compact and more unstable.</p>
+<p><strong>G</strong><br>The absence of vegetation further increases avalanche susceptibility. Trees and shrubs act as natural anchors, helping to bind snow layers together. In areas where deforestation has occurred, the lack of vegetation allows snow to slide more easily, increasing the probability of avalanches.</p>
+<p><strong>H</strong><br>The structural integrity of snow is influenced by its composition. Snow can vary significantly in terms of moisture content, with water making up between 30 and 60 percent of its volume. When temperatures fluctuate, snow may partially melt and refreeze, creating ice layers that can either strengthen or weaken the overall stability of the snowpack.</p>
+<p><strong>I</strong><br>To minimize damage caused by avalanches, various practical measures can be taken. Controlled detonations are sometimes used to trigger small, manageable avalanches before dangerous amounts of snow accumulate. Additionally, snow barriers and reinforced structures are built in vulnerable locations to redirect avalanches away from inhabited areas. Education and safety training also play a vital role in reducing avalanche-related fatalities.</p>
+                `,
+                questions: `
+<h3>Questions 27-32</h3>
+<p>Reading Passage 3 has nine paragraphs, A-I. Which paragraph contains the following information? Write the correct letter, A-I, in boxes 27-32 on your answer sheet.</p>
+<div class="question">27 The possible part played by people in causing an avalanche. <select id="q27"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option></select></div>
+<div class="question">28 How information about avalanches is spread systematically. <select id="q28"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option></select></div>
+<div class="question">29 A method of obtaining snow for examination. <select id="q29"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option></select></div>
+<div class="question">30 The effect of atmospheric conditions. <select id="q30"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option></select></div>
+<div class="question">31 Why it is difficult to predict avalanches. <select id="q31"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option></select></div>
+<div class="question">32 Practical measures that can be taken to minimise damage done by avalanches. <select id="q32"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option></select></div>
+
+<h3>Questions 33-40</h3>
+<p>Complete the summary below. Write <strong>NO MORE THAN TWO WORDS</strong> for each answer.</p>
+<p><strong>How most avalanches are caused</strong><br>Most avalanches occur on slopes with a gradient of over <input type="text" id="q33">. Absence of <input type="text" id="q35"> mean there is nothing to bind and <input type="text" id="q36"> the snow. (Slopes not facing prevailing winds are more vulnerable as they receive additional snow from the <input type="text" id="q34"> slopes.)</p>
+<p>New snow falls on old, creating layers in something called the <input type="text" id="q37">. Snow can vary greatly, with <input type="text" id="q38"> making up between 30 and 60 per cent of its content.</p>
+<p>Most avalanches are caused by a <input type="text" id="q39"> layer separating from the layer beneath so that the slab of snow above it <input type="text" id="q40"> before sliding down the mountain.</p>
+                `
+            }
+        };
+
+        const correctAnswers = {
+            q1: 'FALSE',
+            q2: 'TRUE',
+            q3: 'TRUE',
+            q4: 'TRUE',
+            q5: 'NOT GIVEN',
+            q6: 'D',
+            q7: 'A',
+            q8: 'D',
+            q9: 'C',
+            q10: 'B',
+            q11: 'D',
+            q12: 'A',
+            q13: 'D',
+            q14: 'G',
+            q15: 'E',
+            q16: 'C',
+            q17: 'D',
+            q18: 'A',
+            q19: 'MARY ROSE',
+            q20: 'RESURGAM II',
+            q21: 'MARINE ORGANISMS',
+            q22: 'TIMBER',
+            q23: 'A',
+            q24: 'D',
+            q25: 'A',
+            q26: 'B',
+            q27: 'E',
+            q28: 'C',
+            q29: 'B',
+            q30: 'F',
+            q31: 'A',
+            q32: 'I',
+            q33: '35 DEGREES',
+            q34: 'WINDWARD',
+            q35: 'TREES',
+            q36: 'ANCHOR',
+            q37: 'SNOWPACK',
+            q38: 'WATER',
+            q39: 'WEAK',
+            q40: 'BREAKS AWAY'
+        };
+
+        function showPassage(num) {
+            document.getElementById('passage-text').innerHTML = passages[num].text;
+            document.getElementById('questions').innerHTML = passages[num].questions;
+            if (num === 3) {
+                document.getElementById('submit-btn').style.display = 'block';
+            } else {
+                document.getElementById('submit-btn').style.display = 'none';
+            }
+        }
+
+        function checkAnswers() {
+            let results = '';
+            let score = 0;
+
+            // Check single-answer questions (1-22, 27-40)
+            for (let i = 1; i <= 40; i++) {
+                if (i >= 23 && i <= 26) continue; // Skip multiple-choice checkbox questions
+                const qid = 'q' + i;
+                const userAnswer = document.getElementById(qid) ? document.getElementById(qid).value.trim().toUpperCase() : '';
+                const correct = correctAnswers[qid].toUpperCase();
+                if (userAnswer === correct) {
+                    results += `<p>Question ${i}: Correct (Your answer: ${userAnswer})</p>`;
+                    score++;
+                } else {
+                    results += `<p>Question ${i}: Incorrect (Your answer: ${userAnswer}, Correct: ${correctAnswers[qid]})</p>`;
+                }
+            }
+
+            // Check multiple-choice checkbox questions (23-24)
+            const q23_24 = Array.from(document.getElementsByName('q23_24')).filter(cb => cb.checked).map(cb => cb.value);
+            const correct_23_24 = ['A', 'D'];
+            let q23_24_correct = q23_24.length === 2 && q23_24.every(val => correct_23_24.includes(val)) && correct_23_24.every(val => q23_24.includes(val));
+            if (q23_24_correct) {
+                results += `<p>Questions 23-24: Correct (Your answers: ${q23_24.join(', ')})</p>`;
+                score += 2;
+            } else {
+                results += `<p>Questions 23-24: Incorrect (Your answers: ${q23_24.join(', ')}, Correct: A, D)</p>`;
+            }
+
+            // Check multiple-choice checkbox questions (25-26)
+            const q25_26 = Array.from(document.getElementsByName('q25_26')).filter(cb => cb.checked).map(cb => cb.value);
+            const correct_25_26 = ['A', 'B'];
+            let q25_26_correct = q25_26.length === 2 && q25_26.every(val => correct_25_26.includes(val)) && correct_25_26.every(val => q25_26.includes(val));
+            if (q25_26_correct) {
+                results += `<p>Questions 25-26: Correct (Your answers: ${q25_26.join(', ')})</p>`;
+                score += 2;
+            } else {
+                results += `<p>Questions 25-26: Incorrect (Your answers: ${q25_26.join(', ')}, Correct: A, B)</p>`;
+            }
+
+            results += `<p>Total Score: ${score}/40</p>`;
+            document.getElementById('results').innerHTML = results;
+        }
+
+        // Highlight feature
+        const highlightBtn = document.getElementById('highlight-btn');
+        let currentSelection;
+
+        document.addEventListener('mouseup', (e) => {
+            const selection = window.getSelection();
+            if (selection.toString().trim() !== '') {
+                currentSelection = selection.getRangeAt(0);
+                const rect = currentSelection.getBoundingClientRect();
+                highlightBtn.style.top = `${rect.top - 40}px`;
+                highlightBtn.style.left = `${rect.left}px`;
+                highlightBtn.style.display = 'block';
+            } else {
+                highlightBtn.style.display = 'none';
+            }
+        });
+
+        highlightBtn.addEventListener('click', () => {
+            if (currentSelection) {
+                const span = document.createElement('span');
+                span.className = 'highlight';
+                currentSelection.surroundContents(span);
+                highlightBtn.style.display = 'none';
+            }
+        });
+
+        // Initial load
+        showPassage(1);
+    </script>
+</body>
+</html>

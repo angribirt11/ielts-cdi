@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IELTS Writing Task 1</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #fff;
+    }
+    header {
+      background: #fff;
+      padding: 10px 20px;
+      border-bottom: 2px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 {
+      color: #d51224;
+      margin-right: 20px;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .telegram-btn, .timer-box {
+      background: #0284c7;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      text-decoration: none;
+    }
+    main {
+      display: flex;
+      height: calc(100vh - 60px);
+    }
+    .left-pane {
+      flex: 1;
+      padding: 20px;
+      border-right: 2px solid #ccc;
+      overflow-y: auto;
+    }
+    .right-pane {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .task-instruction {
+      background: #f6f6f6;
+      padding: 15px;
+      border-left: 5px solid #ccc;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .task-instruction strong {
+      font-style: normal;
+      font-weight: bold;
+    }
+    textarea {
+      width: 100%;
+      height: 300px;
+      padding: 12px;
+      font-size: 17px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      resize: vertical;
+    }
+    .word-count {
+      text-align: right;
+      margin-top: 5px;
+      font-size: 14px;
+      color: #555;
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .nav-buttons button {
+      padding: 10px 20px;
+      border: none;
+      background: #ccc;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 4px;
+    }
+    .nav-buttons button.active {
+      background: black;
+      color: white;
+    }
+    .export-btn {
+      background: #10b981;
+      color: white;
+    }
+    .sample-btn {
+      background: #3b82f6;
+      color: white;
+    }
+    img {
+      max-width: 100%;
+      border: 1px solid #ccc;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printable, #printable * {
+        visibility: visible;
+      }
+      #printable {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>IELTS</h1>
+    <div class="header-actions">
+      <a href="https://t.me/Avazbeks_Media" target="_blank" class="telegram-btn">
+        <i>📨</i> Avazbeks_Media
+      </a>
+      <div class="timer-box">
+        <i>⏰</i>
+        <span id="timer">20:00</span>
+        <button onclick="startTimer()">▶</button>
+        <button onclick="pauseTimer()">⏸</button>
+        <button onclick="resetTimer()">🔁</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="left-pane">
+      <div class="task-instruction">
+        <strong>Part 1</strong><br/>
+        <em>You should spend about 20 minutes on this task. Write at least 150 words.</em>
+      </div>
+      <p>The diagrams below give information about two road tunnels in two Australian cities.</p>
+      <img src="https://engnovatewebsitestorage.blob.core.windows.net/ielts-writing-task-1-images/fb79868690248484" alt="Two road tunnels in Australian cities"/>
+    </div>
+    <div class="right-pane">
+      <div id="printable">
+        <textarea id="writingBox" placeholder="Write your answer here..."></textarea>
+      </div>
+      <div class="word-count" id="wordCount">Words: 0</div>
+      <div class="nav-buttons">
+        <button>&larr;</button>
+        <button class="active">&rarr;</button>
+        <button class="sample-btn" id="sampleBtn">Show Sample Answer</button>
+        <button class="export-btn" id="exportBtn">Export to PDF</button>
+      </div>
+    </div>
+  </main>
+  <script>
+    const textarea = document.getElementById('writingBox');
+    const wordCount = document.getElementById('wordCount');
+    textarea.addEventListener('input', () => {
+      const words = textarea.value.trim().split(/\s+/).filter(word => word.length > 0);
+      wordCount.textContent = `Words: ${words.length}`;
+    });
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const content = document.getElementById('writingBox').value;
+      const win = window.open('', '', 'height=700,width=800');
+      win.document.write('<html><head><title>IELTS Writing Task</title></head><body style="font-family:Arial; padding:20px; line-height:1.6">');
+      win.document.write('<h2>IELTS Writing Task 1</h2>');
+      win.document.write('<p>' + content.replace(/\n/g, '<br>') + '</p>');
+      win.document.write('</body></html>');
+      win.document.close();
+      win.print();
+    });
+    document.getElementById('sampleBtn').addEventListener('click', () => {
+      const sampleText = `The given maps illustrate two different underground tunnel systems for cars in two Australian cities.\n\nOverall, there are a number of differences between the two tunnel systems, in terms of the cost, size, length, time of construction, and the surrounding environment. The first tunnel cost approximately half as much as the second tunnel to construct, however, the first tunnel was significantly smaller in terms of length and vehicle capacity. The first tunnel also took much longer to construct.\n\nThe first tunnel, which took twelve years to construct between 1986 and 1998, cost $555 million, and was built underneath a body of water and sand. Meanwhile, the second tunnel only took four years for completion but cost twice as much, at $1.1 billion, and was constructed beneath a layer of stone and clay.\n\nThe size of the tunnels was also significantly different, with the first tunnel being 1.5 meters high and 2.2km long, and the second tunnel being 2.5m high and 3.6 km long. The first tunnel system is four lanes wide, while the second tunnel system is six lanes wide.`;
+      textarea.value = sampleText.replace(/\n/g, '\n');
+      const words = sampleText.trim().split(/\s+/).filter(word => word.length > 0);
+      wordCount.textContent = `Words: ${words.length}`;
+    });
+    let timerInterval;
+    let totalSeconds = 20 * 60;
+    function updateTimerDisplay() {
+      const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+      const seconds = String(totalSeconds % 60).padStart(2, '0');
+      document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+    }
+    function startTimer() {
+      if (timerInterval) return;
+      timerInterval = setInterval(() => {
+        if (totalSeconds > 0) {
+          totalSeconds--;
+          updateTimerDisplay();
+        } else {
+          clearInterval(timerInterval);
+        }
+      }, 1000);
+    }
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+    function resetTimer() {
+      pauseTimer();
+      totalSeconds = 20 * 60;
+      updateTimerDisplay();
+    }
+    updateTimerDisplay();
+  </script>
+</body>
+</html>

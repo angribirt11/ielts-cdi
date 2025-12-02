@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IELTS Reading – The Secrets of Long Life</title>
+  <style>
+    :root {
+      --border: #d9d9d9;
+      --muted: #666;
+      --ok: #e6ffe6;
+      --bad: #ffecec;
+      --pill: #f3f3f3;
+      --primary: #1f6feb;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: #111
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px
+    }
+
+    header h1 {
+      font-size: 16px;
+      margin: 0;
+      font-weight: 600
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap
+    }
+
+    .toolbtn {
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px
+    }
+
+    .toolbtn[data-color="yellow"] {
+      background: #fff8b3
+    }
+
+    .toolbtn[data-color="green"] {
+      background: #d6ffd6
+    }
+
+    .toolbtn[data-color="blue"] {
+      background: #d6e8ff
+    }
+
+    .wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: calc(100vh - 58px)
+    }
+
+    .panel {
+      padding: 18px 16px;
+      overflow: auto
+    }
+
+    .panel--left {
+      border-right: 1px solid var(--border)
+    }
+
+    .panel h2 {
+      margin: 0 0 8px 0
+    }
+
+    .panel p {
+      line-height: 1.5
+    }
+
+    .note {
+      font-size: 13px;
+      color: var(--muted)
+    }
+
+    .qblock {
+      border-bottom: 1px dashed var(--border);
+      padding: 12px 0
+    }
+
+    .qblock:last-child {
+      border-bottom: 0
+    }
+
+    .qnum {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      margin-right: 6px;
+      border-radius: 50%;
+      background: var(--pill);
+      font-size: 12px
+    }
+
+    select,
+    input[type="text"] {
+      padding: 7px 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      width: 100%;
+      max-width: 320px
+    }
+
+    .submitbar {
+      position: sticky;
+      bottom: 0;
+      background: #fff;
+      border-top: 1px solid var(--border);
+      padding: 10px 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 600
+    }
+
+    .btn.secondary {
+      background: #eee;
+      color: #111
+    }
+
+    .result {
+      font-size: 14px
+    }
+
+    /* palette */
+    .palette {
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 10px
+    }
+
+    .pill {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+      cursor: pointer
+    }
+
+    .pill.answered {
+      background: #dbf4ff;
+      border-color: #bfe4ff
+    }
+
+    .pill.current {
+      outline: 2px solid var(--primary)
+    }
+
+    /* correctness */
+    .correct {
+      background: var(--ok)
+    }
+
+    .incorrect {
+      background: var(--bad)
+    }
+
+    /* responsive */
+    @media (max-width: 980px) {
+      .wrap {
+        grid-template-columns: 1fr
+      }
+
+      .panel--left {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+        max-height: 50vh
+      }
+
+      header {
+        flex-wrap: wrap;
+        gap: 8px
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>IELTS Reading — The Secrets of Long Life</h1>
+    <!-- Telegram Button -->
+    <a href="https://t.me/Avazbeks_Media" target="_blank" style="
+    display:inline-flex;align-items:center;gap:6px;
+    background:#f5427d;color:#fff;font-weight:600;
+    padding:8px 14px;border-radius:20px;
+    text-decoration:none;font-size:14px;
+  ">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#fff" viewBox="0 0 24 24">
+        <path d="M9.99999 15.5L9.99999 12.5L16 7.99999L9.99999 12.5L4.99999 10L20 4.99999L17 19L9.99999 15.5Z"></path>
+      </svg>
+      Avazbeks_media CD IELTS
+    </a>
+    <div class="toolbar">
+      <button class="toolbtn" data-color="yellow" onclick="setHighlight('yellow')">Highlight: Yellow</button>
+      <button class="toolbtn" data-color="green" onclick="setHighlight('lightgreen')">Green</button>
+      <button class="toolbtn" data-color="blue" onclick="setHighlight('lightblue')">Blue</button>
+      <button class="toolbtn" onclick="clearSelection()">Remove</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <!-- PASSAGE -->
+    <section class="panel panel--left">
+      <h2>The Secrets of Long Life</h2>
+
+      <p>This year, the number of retired pensioners in the UK exceeded the number of under 18 years old for the first
+        time in history. That's remarkable in its own right, but the real 'population explosion' has been among the
+        oldest of the old — the centenarians. In fact, this imbalance is the fastest growing demographic in much of the
+        developed world. In the UK, the number of centenarians has increased by 60 per cent since the early 20th
+        century. And their ranks are set swell even further, thanks to the ageing baby-boomer generation: by 2030 there
+        will be about a million worldwide.</p>
+
+      <p>These trends raise social, ethical and economic dilemmas. Are medical advances artificially prolonging life,
+        with hide regard for the quality of that life? If growing numbers of elderly people become dependent on state or
+        familial support, society faces skyrocketing costs and commitments. Yet researchers who study the oldest old
+        have made a surprising discovery that presents a less pessimistic view of the future than many anticipate.</p>
+
+      <p>It is becoming clear that people who break through the 90-plus barrier represent a physical elite. Far from
+        gaining a longer burden of disability, their extra years tend to be healthy ones. And supercentenarians, people
+        aged 110 or over, are even better examples of ageing well. The average supercentenarian had freely gone about
+        their daily life up until the age of 105 or so, some five to ten years longer even than centenarians.</p>
+
+      <p>One of the most comprehensive studies comes from Denmark. In 1998 Kare Christensen, at the University of
+        Southern Denmark, contacted every single one of 3600 people born in 1905 who was still alive. Assessing their
+        health over the subsequent decade, he found that the proportion of people who managed to remain independent
+        throughout was constantly around one-third of the total. Each individual risked becoming more infirm, but the
+        unhealthiest ones passed away at earlier ages, leaving the strongest behind. In 2005, only 166 of the people in
+        Christensen's sample were still alive, but one-third of those were still entirely self-sufficient.</p>
+
+      <p>Christensen's optimistic findings are echoed in studies all over the world. In the MC, Carol Brayne at the
+        University of Cambridge studied 958 people aged over 90, and found that only one-quarter of them were living in
+        accommodation specifically catering for the needs of older people. Research in China reveals that centenarians
+        and nonagenarians spend fewer days ill and in bed than younger elderly groups. Of course, people can live
+        independently without being entirely healthy, and it is true that most centenarians suffer from some kind of
+        ailment. These range from osteoarthritis to simple loneliness.</p>
+
+      <p>Not all the oldest old survive by delaying illness or disability, though. Many soldier through it. Jessica
+        Evert of Ohio State University examined the medical histories of over 400 centenarians. She found that those who
+        achieve extreme longevity tend to fall into three categories. About 40 per cent were 'delayers', who avoided
+        chronic diseases until after the age of 80. Another 40 per cent were 'survivors', who suffered from chronic
+        diseases before the age of 80 but lived longer to tell the tale. The final 20 per cent were 'escapers', who
+        reached their century with no sign of the most common chronic diseases. Intriguingly, one-third of male
+        centenarians were in this category, compared with only 15 per cent of women. In fact, the two sexes fare very
+        differently when it comes to longevity. There are far more female centenarians, but the reasons for this are
+        unclear. Certainly, women tend to lead healthier lifestyles and experience fewer serious accidents. They also go
+        to their doctor more. Men are more prone to risky behaviour and chronic illness, so it must be genetics which
+        allows some men to reach extreme old age. Evidence of this comes from longevity hotspots.</p>
+
+      <p>The Japanese island of Okinawa is the front runner. At 58 centenarians per 100,000 people, it has the world's
+        highest proportion in this age group, with Sardinia and Iceland not too far behind. All three are relatively
+        isolated island communities, which leads to less genetic variation amongst inhabitants. In these places, the
+        result has been a predisposition towards a longer life. Of course, members of such communities usually share a
+        particular environment, too, but this alone cannot explain longevity. Gerontologists have emphasised the
+        importance of regular exercise, so anyone aiming to reach a century should not underestimate this. They have
+        also found that the influence on lifespan of social factors such as wealth fades as we age. By comparing 10,000
+        pairs of Scandinavian twins, Christensen found that genes are key, but that they only start exerting a strong
+        influence on our lifespan after the age of 60. Before then, those who are both identical and non-identical have
+        largely independent chances of reaching a given age.</p>
+
+      <p>Longevity genes have also been found in abundance in other organisms, including over 70 in particular worms.
+        Unfortunately, it's a different story in humans. While many genes have been suggested to affect lifespan, very
+        few have been consistently verified in multiple populations.</p>
+
+      <p class="note"><b>Note:</b> “Centenarian”: someone who is 100 years or older. “Baby-boomer”: someone born just
+        after the Second World War. “Nonagenarian”: someone who is 90–99 years old. “Gerontologist”: a doctor
+        specialising in ageing.</p>
+
+      <div class="palette" id="palette"></div>
+    </section>
+
+    <!-- QUESTIONS -->
+    <section class="panel" id="qpanel">
+      <h3>Questions 1–7</h3>
+      <p>Do the following statements agree with the information given in the Reading Passage?<br>
+        <i>TRUE</i> / <i>FALSE</i> / <i>NOT GIVEN</i>
+      </p>
+
+      <div class="qblock" data-q="1">
+        <span class="qnum">1</span>
+        The greatest growth in the centenarian population across the world is in the UK.
+        <div><select class="tf">
+            <option value="">Select</option>
+            <option>TRUE</option>
+            <option>FALSE</option>
+            <option>NOT GIVEN</option>
+          </select></div>
+      </div>
+
+      <div class="qblock" data-q="2">
+        <span class="qnum">2</span>
+        Fewer families today are looking after their elderly members.
+        <div><select class="tf">
+            <option value="">Select</option>
+            <option>TRUE</option>
+            <option>FALSE</option>
+            <option>NOT GIVEN</option>
+          </select></div>
+      </div>
+
+      <div class="qblock" data-q="3">
+        <span class="qnum">3</span>
+        People who live beyond 90 years old are likely to be in good health.
+        <div><select class="tf">
+            <option value="">Select</option>
+            <option>TRUE</option>
+            <option>FALSE</option>
+            <option>NOT GIVEN</option>
+          </select></div>
+      </div>
+
+      <div class="qblock" data-q="4">
+        <span class="qnum">4</span>
+        Centenarians tend to be in better physical health than supercentenarians.
+        <div><select class="tf">
+            <option value="">Select</option>
+            <option>TRUE</option>
+            <option>FALSE</option>
+            <option>NOT GIVEN</option>
+          </select></div>
+      </div>
+
+      <div class="qblock" data-q="5">
+        <span class="qnum">5</span>
+        None of the oldest survivors in Christensen's study could take care of themselves.
+        <div><select class="tf">
+            <option value="">Select</option>
+            <option>TRUE</option>
+            <option>FALSE</option>
+            <option>NOT GIVEN</option>
+          </select></div>
+      </div>
+
+      <div class="qblock" data-q="6">
+        <span class="qnum">6</span>
+        Research findings from Cambridge and China conflicted with Christensen's findings in Denmark.
+        <div><select class="tf">
+            <option value="">Select</option>
+            <option>TRUE</option>
+            <option>FALSE</option>
+            <option>NOT GIVEN</option>
+          </select></div>
+      </div>
+
+      <div class="qblock" data-q="7">
+        <span class="qnum">7</span>
+        Centenarians may suffer from stronger feelings of isolation than people a generation younger.
+        <div><select class="tf">
+            <option value="">Select</option>
+            <option>TRUE</option>
+            <option>FALSE</option>
+            <option>NOT GIVEN</option>
+          </select></div>
+      </div>
+
+      <h3>Questions 8–13</h3>
+      <p>Answer the questions below. Choose <b>ONE WORD ONLY</b> from the passage.</p>
+
+      <div class="qblock" data-q="8">
+        <span class="qnum">8</span>
+        What name has Jessica Evert given to the category of centenarians who become 100 without suffering serious
+        disease?
+        <div><input type="text" class="fill" placeholder="ONE WORD ONLY"></div>
+      </div>
+
+      <div class="qblock" data-q="9">
+        <span class="qnum">9</span>
+        What factor is most likely to contribute to longevity in men?
+        <div><input type="text" class="fill" placeholder="ONE WORD ONLY"></div>
+      </div>
+
+      <div class="qblock" data-q="10">
+        <span class="qnum">10</span>
+        Which place has the largest proportion of centenarians in the world?
+        <div><input type="text" class="fill" placeholder="ONE WORD ONLY"></div>
+      </div>
+
+      <div class="qblock" data-q="11">
+        <span class="qnum">11</span>
+        According to gerontologists, what should people avoid neglecting if they wish to reach old age?
+        <div><input type="text" class="fill" placeholder="ONE WORD ONLY"></div>
+      </div>
+
+      <div class="qblock" data-q="12">
+        <span class="qnum">12</span>
+        What social influence on longevity decreases as people get older?
+        <div><input type="text" class="fill" placeholder="ONE WORD ONLY"></div>
+      </div>
+
+      <div class="qblock" data-q="13">
+        <span class="qnum">13</span>
+        In which species, apart from humans, have longevity genes been reliably identified?
+        <div><input type="text" class="fill" placeholder="ONE WORD ONLY"></div>
+      </div>
+
+      <div class="submitbar">
+        <button class="btn secondary" onclick="resetAll()">Reset</button>
+        <div class="result" id="result">Answer all questions, then click Submit.</div>
+        <button class="btn" onclick="checkAnswers()">Submit</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    /* ---------- Highlighter ---------- */
+    let currentColor = '';
+    function setHighlight(color) { currentColor = color; }
+    function clearSelection() {
+      // remove background color from selected range
+      document.execCommand('removeFormat', false, null);
+      document.execCommand('hiliteColor', false, 'transparent');
+      document.execCommand('backColor', false, 'transparent');
+    }
+    // allow highlight on the passage (contenteditable to enable selection styling)
+    const passage = document.querySelector('.panel--left');
+    passage.setAttribute('contenteditable', 'true');
+    passage.addEventListener('keydown', e => { e.preventDefault(); }); // block typing
+    passage.addEventListener('mouseup', () => {
+      if (!currentColor) return;
+      // some browsers use hiliteColor, some backColor
+      document.execCommand('hiliteColor', false, currentColor);
+      document.getSelection().removeAllRanges();
+    });
+
+    /* ---------- Palette (answered/unanswered) ---------- */
+    const totalQs = 13;
+    const palette = document.getElementById('palette');
+    for (let i = 1; i <= totalQs; i++) {
+      const b = document.createElement('button');
+      b.className = 'pill';
+      b.textContent = i;
+      b.addEventListener('click', () => scrollToQ(i));
+      palette.appendChild(b);
+    }
+    function updatePalette() {
+      document.querySelectorAll('.pill').forEach((p, i) => {
+        const qnum = i + 1;
+        const node = document.querySelector(`.qblock[data-q="${qnum}"]`);
+        const sel = node.querySelector('select');
+        const inp = node.querySelector('input');
+        const answered = sel ? sel.value !== '' : (inp && inp.value.trim() !== '');
+        p.classList.toggle('answered', answered);
+      });
+    }
+    function scrollToQ(n) {
+      document.querySelector(`.qblock[data-q="${n}"]`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('current'));
+      document.querySelectorAll('.pill')[n - 1].classList.add('current');
+      setTimeout(() => document.querySelectorAll('.pill')[n - 1].classList.remove('current'), 1200);
+    }
+    document.getElementById('qpanel').addEventListener('input', updatePalette);
+
+    /* ---------- Answers & Checking ---------- */
+    const correctTF = ["NOT GIVEN", "NOT GIVEN", "TRUE", "FALSE", "FALSE", "FALSE", "NOT GIVEN"];
+    const correctFill = ["escapers", "genetics", "okinawa", "exercise", "wealth", "worms"];
+
+    function normalize(s) { return s.trim().toLowerCase(); }
+
+    function checkAnswers() {
+      let score = 0;
+      // clear previous styles
+      document.querySelectorAll('.qblock').forEach(el => { el.classList.remove('correct', 'incorrect') });
+
+      // TF/NG
+      document.querySelectorAll('.tf').forEach((sel, i) => {
+        const user = sel.value.toUpperCase();
+        const correct = correctTF[i];
+        const holder = sel.closest('.qblock');
+        if (user === correct) { score++; holder.classList.add('correct'); }
+        else { holder.classList.add('incorrect'); }
+      });
+
+      // Fill-ins
+      document.querySelectorAll('.fill').forEach((inp, i) => {
+        const user = normalize(inp.value);
+        const correct = correctFill[i];
+        const holder = inp.closest('.qblock');
+        // enforce ONE WORD ONLY
+        if (user.split(/[\s-]+/).length > 1) { holder.classList.add('incorrect'); return; }
+        if (user === correct) { score++; holder.classList.add('correct'); }
+        else { holder.classList.add('incorrect'); }
+      });
+
+      updatePalette();
+
+      document.getElementById('result').innerHTML =
+        `<b>Score:</b> ${score} / ${totalQs}
+       <br><b>Correct (1–7):</b> ${correctTF.join(', ')}
+       <br><b>Correct (8–13):</b> ${correctFill.join(', ')}`;
+    }
+
+    function resetAll() {
+      document.querySelectorAll('select').forEach(s => s.value = '');
+      document.querySelectorAll('input').forEach(i => i.value = '');
+      document.querySelectorAll('.qblock').forEach(el => el.classList.remove('correct', 'incorrect'));
+      document.getElementById('result').textContent = 'Answer all questions, then click Submit.';
+      updatePalette();
+    }
+
+    // init palette once
+    updatePalette();
+  </script>
+</body>
+
+</html>

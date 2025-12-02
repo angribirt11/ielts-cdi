@@ -1,0 +1,3637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS CDI Listening Practice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            line-height: 1.4;
+            font-size: 16px;
+            padding-bottom: 90px; /* nav-row height (80px) + some extra spacing */
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 60px;
+        }
+
+        .ielts-logo {
+            display: none;
+        }
+
+        .test-info {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .audio-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+
+        .audio-icon {
+            width: 16px;
+            height: 16px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon></svg>') no-repeat center;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .telegram-link {
+            color: #0088cc;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .telegram-link:hover {
+            text-decoration: underline;
+        }
+
+        .telegram-link::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: currentColor;
+            -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23l7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3L3.64 12c-.88-.25-.89-1.37.2-1.64l16.56-6.4c.75-.29 1.4.22 1.2.94l-2.67 12.61c-.22.95-1.13 1.18-1.78.73l-4.5-3.32l-2.23 2.15c-.47.44-1.29.21-1.48-.37z"/></svg>');
+            mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23l7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3L3.64 12c-.88-.25-.89-1.37.2-1.64l16.56-6.4c.75-.29 1.4.22 1.2.94l-2.67 12.61c-.22.95-1.13 1.18-1.78.73l-4.5-3.32l-2.23 2.15c-.47.44-1.29.21-1.48-.37z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        #volume-slider {
+            -webkit-appearance: none;
+            width: 80px;
+            height: 4px;
+            background: #ddd;
+            outline: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        #volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #333;
+            cursor: pointer;
+        }
+
+        #volume-slider::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #333;
+            cursor: pointer;
+            border: none;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            opacity: 0.7;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .icon:hover {
+            opacity: 1;
+        }
+        
+        #play-pause-btn {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .main-container {
+            margin-top: 60px;
+            display: flex;
+            background: #ffffff;
+            padding-bottom: 100px; /* Space for bottom nav */
+        }
+
+        .main-container.results-mode {
+            display: flex;
+            flex-direction: row;
+        }
+
+        /* Left Panel */
+        .left-panel {
+            width: 100%;
+            padding: 20px;
+            transition: width 0.4s ease;
+        }
+
+        .main-container.results-mode .left-panel {
+            width: 50%;
+            overflow-y: auto;
+            height: calc(100vh - 195px);
+        }
+
+        /* Right Panel */
+        .right-panel {
+            display: none;
+            width: 50%;
+            padding: 20px;
+            position: relative;
+            border-left: 1px solid #e0e0e0;
+            overflow-y: auto;
+            height: calc(100vh - 195px);
+        }
+
+        #transcription-container h2 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        #transcription-text {
+            white-space: pre-wrap;
+            font-family: inherit;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        
+        .transcription-instruction {
+            display: block;
+            margin: 1em 0;
+            font-style: italic;
+            color: #444;
+        }
+
+        .main-container.results-mode .right-panel {
+            display: block;
+            width: 50%;
+            border-left: 1px solid #e0e0e0;
+            border-top: none;
+            height: calc(100vh - 195px);
+            overflow-y: auto;
+        }
+
+        .help-button {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .correct-answer-text {
+            color: #28a745;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .help-button:hover {
+            background: #357abd;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .people-section {
+            margin-bottom: 30px;
+        }
+
+        .people-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+        }
+
+        .people-table th {
+            text-align: left;
+            padding: 10px;
+            font-weight: bold;
+            border: 1px solid #ddd;
+        }
+
+        .people-table td {
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+        }
+
+        .person-name {
+            font-size: 16px;
+        }
+
+        .question-number {
+            background: white;
+            border: 1px solid #4a90e2;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #4a90e2;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .assigned-responsibility {
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+        }
+
+        .responsibilities-section {
+            margin-bottom: 30px;
+        }
+
+        .responsibility-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .responsibility-item {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: move;
+            font-size: 16px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .responsibility-item:hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+
+        .responsibility-item.dragging {
+            opacity: 0.5;
+            transform: rotate(2deg);
+        }
+
+        .questions-section {
+            margin-bottom: 20px;
+        }
+
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .instruction {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .centered-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Map Styles */
+        .map-container {
+            position: relative;
+            margin: 20px auto;
+            width: 100%;
+            max-width: 600px;
+            display: block;
+        }
+        .map-container img {
+            width: 100%;
+            display: block;
+        }
+        .map-drop-zone {
+            position: absolute;
+            width: 13%;
+            height: 15%;
+            border: 2px dashed #999;
+            background-color: rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #555;
+            border-radius: 4px;
+            padding: 2px;
+        }
+        .map-drop-zone:hover {
+            background-color: rgba(230, 244, 255, 0.7);
+            border-color: #4a90e2;
+        }
+        .map-drop-zone .drag-item {
+            font-size: 14px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+        }
+        .map-options-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .map-options-list .drag-item {
+            width: calc(25% - 10px);
+            text-align: center;
+        }
+
+        /* Navigation Arrows */
+        .nav-arrows {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            display: flex;
+            gap: 5px;
+            z-index: 101;
+        }
+
+        .nav-arrow {
+            width: 50px;
+            height: 50px;
+            background: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .nav-arrow:hover {
+            background: #555;
+        }
+
+        .nav-arrow:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Bottom Navigation - Exact Match */
+        .nav-row {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+        
+            padding: 0;
+            display: flex;
+            align-items: center;
+            height: 80px;
+            z-index: 100;
+
+            /* Allow horizontal scrolling on smaller screens */
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .footer__questionWrapper___1tZ46 {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+
+        .footer__questionNo___3WNct {
+            background: none;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .footer__questionNo___3WNct:hover {
+            background-color: #f8f9fa;
+        }
+
+        .section-prefix {
+            font-size: 16px;
+        }
+
+        .sectionNr {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .attemptedCount {
+            font-size: 14px;
+            color: #666;
+            margin-left: 5px;
+            font-weight: 400; /* Normal weight */
+        }
+
+        @media (max-width: 1024px) {
+            .attemptedCount {
+                display: none;
+            }
+        }
+
+        .footer__questionWrapper___1tZ46.selected .attemptedCount {
+            display: none;
+        }
+
+        .footer__subquestionWrapper___9GgoP {
+            display: none;
+            gap: 2px;
+            margin-left: 10px;
+        }
+
+        .footer__questionWrapper___1tZ46.selected .footer__subquestionWrapper___9GgoP {
+            display: flex;
+        }
+
+        .subQuestion {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ccc;
+            background: white;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            border-radius: 2px;
+        }
+
+        .subQuestion.answered {
+            background-color: #e9ecef;
+            border-color: #ddd;
+        }
+        .subQuestion.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        .subQuestion.incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .subQuestion:hover {
+            background-color: #f0f0f0;
+            border-color: #999;
+        }
+
+        .subQuestion.active {
+            background-color: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+        }
+
+        .subQuestion.completed {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .footer__deliverButton___3FM07 {
+            margin-left: auto;
+            margin-right: 20px;
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s, border-color 0.2s;
+            min-width: 170px;
+            justify-content: center;
+        }
+
+        .footer__deliverButton___3FM07:hover {
+            background-color: #e0e0e0;
+            border-color: #bbb;
+        }
+
+        .footer__deliverButton___3FM07:disabled {
+            background: #e9ecef;
+            color: #6c757d;
+            cursor: not-allowed;
+            border-color: #ddd;
+        }
+
+        .fa-check::before {
+            content: "✓";
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Context Menu */
+        .context-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: none;
+            min-width: 140px;
+        }
+
+        .context-menu-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .context-menu-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .context-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .highlight {
+            background-color: #ffff00;
+        }
+
+        .comment-highlight {
+            background-color: #90EE90;
+            position: relative;
+            cursor: help;
+        }
+
+        .comment-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .comment-highlight:hover .comment-tooltip {
+            opacity: 1;
+        }
+
+        .question {
+            margin-bottom: 40px;
+        }
+        .question p {
+            margin-bottom: 10px;
+        }
+        .question ul, .question .people-table {
+            margin-top: 0;
+        }
+        .question-prompt {
+            margin-bottom: 20px;
+        }
+        .question ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .question ul li {
+            margin-bottom: 5px;
+        }
+        .answer-input {
+            border: 1px solid #888;
+            border-radius: 4px;
+            background-color: #fff;
+            padding: 4px 8px;
+            font-size: 16px;
+            text-align: center;
+            margin-right: 4px;
+            margin-left: 4px;
+            width: 140px;
+            max-width: 160px;
+            min-width: 120px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            height: 24px;
+            min-height: 24px;
+            line-height: 1.2;
+            vertical-align: middle;
+        }
+        .answer-input::placeholder {
+            color: #999;
+            font-weight: bold;
+            text-align: center;
+        }
+        .answer-input.correct {
+            border-color: #28a745;
+            background-color: #e9f7ef;
+        }
+        .answer-input.incorrect {
+            border-color: #dc3545;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .answer-input {
+    z-index: 10;
+    position: relative;
+    pointer-events: auto;
+}
+        .drag-drop-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            align-items: flex-start;
+        }
+        .recommendations-box {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            min-height: 200px;
+        }
+        .drag-item {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 6px 8px;
+            border-radius: 4px;
+            cursor: move;
+            font-size: 16px;
+            transition: all 0.2s;
+            user-select: none;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+            line-height: 1.2;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        .drag-item:hover {
+            background: #e9ecef;
+        }
+        .drag-item.dragging {
+            opacity: 0.5;
+            transform: rotate(2deg);
+        }
+        .drop-zone {
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+            min-height: 40px;
+            height: auto;
+            max-width: 120px;
+            min-width: 100px;
+            transition: background-color 0.2s, border-color 0.2s;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .drop-zone.drag-over {
+            background-color: #e6f4ff;
+            border-color: #4a90e2;
+        }
+        .drop-zone.correct {
+            background-color: #e9f7ef;
+            border-color: #28a745;
+            border-style: solid;
+        }
+        .drop-zone.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            border-style: solid;
+        }
+        .drop-zone .drag-item {
+            cursor: default;
+        }
+        .drag-item.selected {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 1px #4a90e2;
+        }
+        .questions-container {
+            width: 50%;
+        }
+        audio {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .part-header {
+            background-color: #f1f2ec;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+        .part-header p {
+            margin: 0;
+        }
+
+        .question li.correct {
+            color: #155724;
+            font-weight: bold;
+        }
+        .question li.incorrect {
+            color: #721c24;
+        }
+        .question li.correct::before {
+            content: '✔ ';
+            color: #28a745;
+        }
+        .question li.incorrect::before {
+            content: '✖ ';
+            color: #dc3545;
+        }
+
+        .example-box {
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .timer-container {
+            display: none; /* Timer hidden */
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .timer-container .timer-tooltip {
+            display: none;
+        }
+
+        .audio-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(40, 40, 40, 0.9);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+        .audio-modal-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            max-width: 500px;
+            padding: 20px;
+        }
+        .audio-modal-content p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #eee;
+        }
+        .audio-modal-icon {
+            margin-bottom: 20px;
+        }
+        .modal-play-btn {
+            background-color: #000;
+            color: white;
+            border: 1px solid white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+        .modal-play-btn:hover {
+            background-color: #333;
+        }
+        #goto-widget {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        #goto-input {
+            width: 80px;
+            padding: 4px 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #goto-btn {
+            padding: 4px 10px;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        @keyframes flash {
+            0% { background-color: #e6f4ff; }
+            100% { background-color: transparent; }
+        }
+
+        .question.flash {
+            animation: flash 1s ease-out;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .modal-header h2 {
+            font-size: 24px;
+            color: #333;
+        }
+        .modal-close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #888;
+            line-height: 1;
+        }
+        .modal-close-btn:hover {
+            color: #333;
+        }
+        #score-summary {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        #result-details table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        #result-details th, #result-details td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        #result-details th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        #result-details td:nth-child(1) {
+            font-weight: bold;
+            text-align: center;
+        }
+        .result-correct {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .result-incorrect {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        #result-details table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        #result-details th,
+        #result-details td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        #result-details th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        #result-details tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .context-menu-icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        .matching-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            margin-top: 20px;
+            align-items: flex-start;
+        }
+        .matching-table {
+            flex: 4;
+            border-collapse: collapse;
+        }
+        .matching-table th, .matching-table td {
+            border: 1px solid #ddd;
+            padding: 6px 12px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        .matching-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .matching-table .drop-zone {
+            min-height: 35px;
+            height: 35px;
+            width: 100%;
+            max-width: none;
+            min-width: 200px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+            background-color: #fff;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            text-align: left;
+            line-height: 1.2;
+        }
+        .matching-table .drop-zone .drag-item {
+            width: auto;
+            max-width: none;
+            text-align: left;
+            padding: 6px 8px;
+            font-size: 14px;
+            line-height: 1.2;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            box-sizing: border-box;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 2px;
+        }
+        .matching-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+            background-color: transparent;
+            padding: 0;
+            border: none;
+            min-height: 250px;
+            min-width: 280px; /* ensure enough width for long option text to stay on one line */
+        }
+        .matching-options-list .drag-item {
+            width: 100%;
+        }
+        .matching-question-item .drop-zone .placeholder {
+            color: #999;
+            font-weight: bold;
+        }
+
+        .option strong,
+        .question ul li label strong {
+            display: none;
+        }
+
+        /* Mobile selection toolbar */
+        .mobile-selection-menu {
+            position: absolute;
+            background: #333;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            display: flex;
+            gap: 8px;
+            z-index: 3000;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+        }
+        .mobile-selection-menu button {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .mobile-selection-menu.hidden {
+            display: none;
+        }
+
+        /* === MCQ table styling for Questions 11-15 === */
+        .mcq-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .mcq-table th,
+        .mcq-table td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .mcq-table th {
+            background-color: #1e6de6; /* vibrant blue header like screenshot */
+            color: #ffffff;
+            font-weight: 600;
+            text-align: center;
+        }
+        .mcq-table th:first-child {
+            text-align: left;
+        }
+        .mcq-table tbody td:first-child {
+            font-weight: 500;
+            text-align: left;
+        }
+        .mcq-table tr:nth-child(even) td {
+            background-color: #f8faff; /* subtle alternating row colour */
+        }
+        .mcq-table input[type="radio"] {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+        /* list of options (A, B, C) shown above the table */
+        .mcq-options {
+            list-style: none;
+            padding-left: 0;
+            margin: 10px 0;
+        }
+        .mcq-options li {
+            margin-bottom: 4px;
+            font-size: 16px;
+        }
+
+        /* Compact single-choice list */
+        .single-choice-container { margin: 10px 0; display: flex; flex-direction: column; gap: 18px; }
+        .single-choice label { display: block; margin-left: 20px; margin-top: 4px; font-size: 16px; }
+
+        .aligned-form .question-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .aligned-form .question-label {
+            width: 230px;
+            padding-right: 10px;
+        }
+
+        /* Responsive adjustments for tablets */
+        @media (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .right-panel, .main-container.results-mode .right-panel {
+                display: none;
+            }
+            .left-panel, .main-container.results-mode .left-panel {
+                width: 100%;
+                padding: 20px 10px;
+                height: auto; /* Reset height for mobile */
+            }
+            .questions-container {
+                width: 100%;
+            }
+        }
+
+        .single-choice label.correct {
+            color: #155724;
+            font-weight: bold;
+        }
+        .single-choice label.correct::before {
+            content: '✔ ';
+            color: #28a745;
+        }
+        .single-choice label.incorrect {
+            color: #721c24;
+            text-decoration: line-through;
+        }
+        .single-choice label.incorrect::before {
+            content: '✖ ';
+            color: #dc3545;
+        }
+        .mcq-table tbody tr.correct {
+            background-color: #d4edda !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .mcq-table tbody tr.incorrect {
+            background-color: #f8d7da !important;
+            text-decoration: line-through;
+        }
+        .mcq-table tbody tr.incorrect td {
+            color: #721c24;
+        }
+
+        /* New Audio Player Styles */
+        .audio-player-container {
+            position: fixed;
+            top: 65px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+            max-width: 90%;
+            height: 40px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            z-index: 99;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .main-container {
+            margin-top: 115px;
+        }
+        .player-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .player-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #333;
+        }
+        .progress-container {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #progress-bar {
+            flex-grow: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            background: #ddd;
+            outline: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        #progress-bar::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4a90e2;
+            cursor: pointer;
+        }
+        #progress-bar::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4a90e2;
+            cursor: pointer;
+            border: none;
+        }
+        #current-time, #total-duration {
+            font-size: 12px;
+            color: #555;
+            min-width: 35px;
+            text-align: center;
+        }
+        .controls-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .volume-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        #new-volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 60px;
+            height: 3px;
+            background: #ccc;
+            outline: none;
+            border-radius: 2px;
+            cursor: pointer;
+            margin-left: 8px;
+            display: block; 
+        }
+    
+        #new-volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #333;
+        }
+        #new-volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #333;
+            border: none;
+        }
+        .speed-container {
+            position: relative;
+        }
+        #speed-btn {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 4px 8px;
+        }
+        #speed-options {
+            position: absolute;
+            top: calc(100% + 5px); /* Position below the button with a small gap */
+            right: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        #speed-options div {
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+        #speed-options div:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Flowchart styles */
+        .flowchart-container {
+            border: 1px solid #ccc;
+            padding: 0 20px;
+        }
+        .flowchart-step {
+            text-align: center;
+            margin: 0;
+            padding: 20px 0;
+            border-top: 1px solid #ddd;
+        }
+        .flowchart-step:first-child {
+            border-top: none;
+            padding-top: 20px;
+            margin-top: 0;
+        }
+        .flowchart-arrow {
+            text-align: center;
+            margin: 0;
+            padding: 15px 0;
+            font-size: 20px;
+            color: #555;
+            border-top: 1px solid #ddd;
+        }
+        .flowchart-split {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            gap: 20px;
+            border-top: 1px solid #ddd;
+        }
+        .flowchart-split-col {
+            width: 48%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .flowchart-split .flowchart-step {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        .flowchart-split .flowchart-arrow {
+            border-top: none;
+            padding: 15px 0;
+        }
+
+
+        /* Responsive adjustments for tablets */
+        @media (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .right-panel, .main-container.results-mode .right-panel {
+                display: none;
+            }
+            .left-panel, .main-container.results-mode .left-panel {
+                width: 100%;
+                padding: 20px 10px;
+                height: auto; /* Reset height for mobile */
+            }
+            .questions-container {
+                width: 100%;
+            }
+            
+            /* Adjust input boxes for tablets */
+            .answer-input {
+                width: 90px;
+                max-width: 110px;
+                font-size: 15px;
+            }
+            
+            .drop-zone {
+                max-width: 110px;
+                min-width: 90px;
+            }
+            
+            .matching-table .drop-zone {
+                max-width: 110px;
+                min-width: 90px;
+            }
+        }
+        
+        /* Responsive adjustments for mobile phones */
+        @media (max-width: 768px) {
+            .answer-input {
+                width: 80px;
+                max-width: 100px;
+                font-size: 14px;
+                padding: 2px 4px;
+            }
+            
+            .drop-zone {
+                max-width: 100px;
+                min-width: 80px;
+                font-size: 14px;
+            }
+            
+            .matching-table .drop-zone {
+                max-width: 100px;
+                min-width: 80px;
+            }
+            
+            .drag-item {
+                font-size: 13px;
+                padding: 4px 6px;
+            }
+            
+            .matching-table .drop-zone .drag-item {
+                font-size: 12px;
+            }
+            
+            /* Ensure drag-drop containers are more mobile-friendly */
+            .drag-drop-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .matching-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+        
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            .answer-input {
+                width: 70px;
+                max-width: 90px;
+                font-size: 13px;
+            }
+            
+            .drop-zone {
+                max-width: 90px;
+                min-width: 70px;
+            }
+            
+            .matching-table .drop-zone {
+                max-width: 90px;
+                min-width: 70px;
+            }
+        }
+            /* Activity table styles */
+        .abc-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;}
+        .abc-table th{background-color:#007bff;color:white;padding:12px;text-align:center;font-weight:bold;border:1px solid #ddd;}
+        .abc-table td{padding:12px;border:1px solid #ddd;vertical-align:top;}
+        .abc-table .statement{text-align:left;width:60%;}
+        .abc-table td:not(.statement){text-align:center;width:6.67%;min-width:60px;}
+        .clickable-cell{cursor:pointer;transition:background-color 0.2s ease;min-height:40px;position:relative;}
+        .clickable-cell:hover{background-color:#f0f8ff;border-color:#007bff;}
+        .clickable-cell.selected{background-color:#e3f2fd;}
+        .clickable-cell.correct{background-color:#d4edda !important;border-color:#c3e6cb;}
+        .clickable-cell.incorrect{background-color:#f8d7da !important;border-color:#f5c6cb;}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="timer-container">
+            <span class="timer-display">60:00</span>
+        </div>
+        <a href="https://t.me/Avazbeks_Media" target="_blank" class="telegram-link">
+            Avazbeks_Media
+        </a>
+        <div class="header-icons">
+        
+        </div>
+    </div>
+
+    <div class="audio-player-container">
+        <button id="play-pause-btn" class="player-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <div class="progress-container">
+            <span id="current-time">0:00</span>
+            <input type="range" id="progress-bar" value="0" step="1" style="width: 100%;">
+            <span id="total-duration">0:00</span>
+        </div>
+        <div class="controls-container">
+            <div class="volume-container">
+                <button id="volume-btn" class="player-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                </button>
+                <input type="range" id="new-volume-slider" min="0" max="1" step="0.01" value="1">
+            </div>
+            <div class="speed-container">
+                <button id="speed-btn" class="player-btn">1x</button>
+                <div id="speed-options" class="hidden">
+                    <div data-speed="0.5">0.5x</div>
+                    <div data-speed="0.75">0.75x</div>
+                    <div data-speed="1">1x</div>
+                    <div data-speed="1.25">1.25x</div>
+                    <div data-speed="1.5">1.5x</div>
+                    <div data-speed="2">2x</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- Left Panel -->
+        <div class="left-panel">
+            
+            <div id="part-1" class="question-part">
+                <div class="part-header">
+                    <p><strong>Part 1</strong></p>
+                    <p>Listen and answer questions 1–10.</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 1-10</strong></p>
+                            <p>Complete the notes below.</p>
+                    <p>Write <strong>NO MORE THAN TWO WORDS AND/OR A NUMBER</strong> for each answer.</p>
+                        </div>
+                <div style="border: 1px solid #000000; padding: 15px;"> <p class="centered-title">Accommodation request</p>
+                            <ul style="list-style-type: none; padding-left: 0px;">
+                        <li><strong>Type of accommodation:</strong> a house</li>
+                        <li><strong>Preferred location:</strong> the <input type="text" id="q1" class="answer-input" placeholder="1"> of the town</li>
+                        <li><strong>Facilities required:</strong></li>
+                                <ul style="list-style-type: none; padding-left: 20px;">
+                            <li>&bull;&nbsp;&nbsp; furnished property</li>
+                            <li>&bull;&nbsp;&nbsp; with a <input type="text" id="q2" class="answer-input" placeholder="2"></li>
+                                </ul>
+                        <li><strong>Period of time required:</strong> one year</li>
+                        <li><strong>Start date of rental period:</strong> <input type="text" id="q3" class="answer-input" placeholder="3"></li>
+                        <li><strong>Present address:</strong> 56, Stone Street</li>
+                        <li><strong>Phone number:</strong> (mobile)07942 326584</li>
+                        <li><strong>Reference from:</strong> her <input type="text" id="q4" class="answer-input" placeholder="4"></li>
+                        <li><strong>Maximum rent:</strong> <input type="text" id="q5" class="answer-input" placeholder="5"> £ per month</li>
+                        <li><strong>Applicant's job:</strong> <input type="text" id="q6" class="answer-input" placeholder="6"></li>
+                        <li><strong>Documents to be supplied</strong></li>
+                                <ul style="list-style-type: none; padding-left: 20px;">
+                            <li><strong>ID check:</strong> applicant's passport</li>
+                            <li><strong>Credit check:</strong> a <input type="text" id="q7" class="answer-input" placeholder="7"></li>
+                                </ul>
+                        <li><strong>Viewing arrangements</strong></li>
+                        <li><strong>Address of property:</strong> 33,<input type="text" id="q8" class="answer-input" placeholder="8"> Street</li>
+                        <li><strong>Viewing day and time:</strong> Saturday 4 p.m</li>
+                        <li><strong>To check:</strong></li>
+                        <ul style="list-style-type: none; padding-left: 20px;">
+                            <li>&bull;&nbsp;&nbsp; Is there a <input type="text" id="q9" class="answer-input" placeholder="9"> in the house?</li>
+                            <li>&bull;&nbsp;&nbsp; Is there a <input type="text" id="q10" class="answer-input" placeholder="10"> nearby?</li>
+                        </ul>
+                            </ul></div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-2" class="question-part hidden">
+                <div class="part-header">
+                    <p><strong>Part 2</strong></p>
+                    <p>Listen and answer questions 11–20.</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 11 and 12</strong></p>
+                            <p>Choose the correct answer.</p>
+                        </div>
+                        <div class="single-choice-container">
+                            <div class="single-choice">
+                                <p><strong>11</strong>   Which natural feature of Green Island is special?</p>
+                                <label><input type="radio" name="q11" value="A">&nbsp;&nbsp;The water</label>
+                                <label><input type="radio" name="q11" value="B">&nbsp;&nbsp;The birds</label>
+                                <label><input type="radio" name="q11" value="C">&nbsp;&nbsp;The fish</label>
+                            </div>
+                            <div class="single-choice">
+                                <p><strong>12</strong>   Who started the nature park?</p>
+                                <label><input type="radio" name="q12" value="A">&nbsp;&nbsp;Mitchell Cullen</label>
+                                <label><input type="radio" name="q12" value="B">&nbsp;&nbsp;Churchill Peters</label>
+                                <label><input type="radio" name="q12" value="C">&nbsp;&nbsp;Joseph Turia</label>
+                            </div>
+                            </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 13 and 14</strong></p>
+                            <p>Choose <strong>TWO</strong> answers.</p>
+                            <p>Which <strong>TWO</strong> conditions are best for seeing fish?</p>
+                        </div>
+                        <div class="single-choice-container">
+                            <div class="single-choice">
+                                <label><input type="checkbox" name="q13-14" value="A" onchange="limitCheckboxes(this, 'q13-14', 2)">&nbsp;&nbsp;Summer days</label>
+                                <label><input type="checkbox" name="q13-14" value="B" onchange="limitCheckboxes(this, 'q13-14', 2)">&nbsp;&nbsp;No wind</label>
+                                <label><input type="checkbox" name="q13-14" value="C" onchange="limitCheckboxes(this, 'q13-14', 2)">&nbsp;&nbsp;Early morning</label>
+                                <label><input type="checkbox" name="q13-14" value="D" onchange="limitCheckboxes(this, 'q13-14', 2)">&nbsp;&nbsp;High tide</label>
+                                <label><input type="checkbox" name="q13-14" value="E" onchange="limitCheckboxes(this, 'q13-14', 2)">&nbsp;&nbsp;No rain for one week</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 15-20</strong></p>
+                            <p>What are the rules for the following activities in the nature park?</p>
+                            <p>Write the correct letter, <strong>A, B or C</strong>, next to questions 15-20.</p>
+                            <div style="margin: 10px 0; padding: 10px; background-color: #f5f5f5; border-radius: 4px;">
+                                <p><strong>A.</strong> Visitors can always do this</p>
+                                <p><strong>B.</strong> Visitors can sometimes do this</p>
+                                <p><strong>C.</strong> Visitors must not do this</p>
+                        </div>
+                                </div>
+                        <div style="border: 1px solid #000000; padding: 15px;">
+                            <p class="centered-title"><strong>Activities</strong></p>
+                            <div class="table-container">
+                                <table class="abc-table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>A</th>
+                                            <th>B</th>
+                                            <th>C</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="statement">15. play games on the beach</td>
+                                            <td class="clickable-cell" data-question="q15" data-value="A" onclick="selectCell(this, 'q15', 'A')"></td>
+                                            <td class="clickable-cell" data-question="q15" data-value="B" onclick="selectCell(this, 'q15', 'B')"></td>
+                                            <td class="clickable-cell" data-question="q15" data-value="C" onclick="selectCell(this, 'q15', 'C')"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="statement">16. feed the fish</td>
+                                            <td class="clickable-cell" data-question="q16" data-value="A" onclick="selectCell(this, 'q16', 'A')"></td>
+                                            <td class="clickable-cell" data-question="q16" data-value="B" onclick="selectCell(this, 'q16', 'B')"></td>
+                                            <td class="clickable-cell" data-question="q16" data-value="C" onclick="selectCell(this, 'q16', 'C')"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="statement">17. touch the fish on purpose</td>
+                                            <td class="clickable-cell" data-question="q17" data-value="A" onclick="selectCell(this, 'q17', 'A')"></td>
+                                            <td class="clickable-cell" data-question="q17" data-value="B" onclick="selectCell(this, 'q17', 'B')"></td>
+                                            <td class="clickable-cell" data-question="q17" data-value="C" onclick="selectCell(this, 'q17', 'C')"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="statement">18. take photographs underwater</td>
+                                            <td class="clickable-cell" data-question="q18" data-value="A" onclick="selectCell(this, 'q18', 'A')"></td>
+                                            <td class="clickable-cell" data-question="q18" data-value="B" onclick="selectCell(this, 'q18', 'B')"></td>
+                                            <td class="clickable-cell" data-question="q18" data-value="C" onclick="selectCell(this, 'q18', 'C')"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="statement">19. climb on Green Island</td>
+                                            <td class="clickable-cell" data-question="q19" data-value="A" onclick="selectCell(this, 'q19', 'A')"></td>
+                                            <td class="clickable-cell" data-question="q19" data-value="B" onclick="selectCell(this, 'q19', 'B')"></td>
+                                            <td class="clickable-cell" data-question="q19" data-value="C" onclick="selectCell(this, 'q19', 'C')"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="statement">20. use a private boat</td>
+                                            <td class="clickable-cell" data-question="q20" data-value="A" onclick="selectCell(this, 'q20', 'A')"></td>
+                                            <td class="clickable-cell" data-question="q20" data-value="B" onclick="selectCell(this, 'q20', 'B')"></td>
+                                            <td class="clickable-cell" data-question="q20" data-value="C" onclick="selectCell(this, 'q20', 'C')"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div style="display:none;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="font-weight: 500;">15. play games on the beach</span>
+                                        <select class="answer-input" id="q15" style="width: 80px; text-align: center; padding: 4px;">
+                                            <option value="">Select</option>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="font-weight: 500;">16. feed the fish</span>
+                                        <select class="answer-input" id="q16" style="width: 80px; text-align: center; padding: 4px;">
+                                            <option value="">Select</option>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="font-weight: 500;">17. touch the fish on purpose</span>
+                                        <select class="answer-input" id="q17" style="width: 80px; text-align: center; padding: 4px;">
+                                            <option value="">Select</option>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="font-weight: 500;">18. take photographs underwater</span>
+                                        <select class="answer-input" id="q18" style="width: 80px; text-align: center; padding: 4px;">
+                                            <option value="">Select</option>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="font-weight: 500;">19. climb on Green Island</span>
+                                        <select class="answer-input" id="q19" style="width: 80px; text-align: center; padding: 4px;">
+                                            <option value="">Select</option>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="font-weight: 500;">20. use a private boat</span>
+                                        <select class="answer-input" id="q20" style="width: 80px; text-align: center; padding: 4px;">
+                                            <option value="">Select</option>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                        </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-3" class="question-part hidden">
+                <div class="part-header">
+                    <p><strong>Part 3</strong></p>
+                    <p>Listen and answer questions 21–30.</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 21-24</strong></p>
+                            <p>Choose the correct letter, <strong>A, B, or C</strong>.</p>
+                        </div>
+                        <div class="single-choice-container">
+                            <div class="single-choice">
+                                <p><strong>21</strong>   The lecturer likes the topic because</p>
+                                <label><input type="radio" name="q21" value="A">&nbsp;&nbsp;it links to a previous research topic.</label>
+                                <label><input type="radio" name="q21" value="B">&nbsp;&nbsp;the whole class will be interested in it.</label>
+                                <label><input type="radio" name="q21" value="C">&nbsp;&nbsp;there is plenty of information to write about.</label>
+                            </div>
+                            <div class="single-choice">
+                                <p><strong>22</strong>   When talking about their teenage years, participants in a study were asked to say</p>
+                                <label><input type="radio" name="q22" value="A">&nbsp;&nbsp;how often they listened to music</label>
+                                <label><input type="radio" name="q22" value="B">&nbsp;&nbsp;who some music reminded them of</label>
+                                <label><input type="radio" name="q22" value="C">&nbsp;&nbsp;whether their musical tastes had changed</label>
+                            </div>
+                            <div class="single-choice">
+                                <p><strong>23</strong>   The study is important because it is the first to</p>
+                                <label><input type="radio" name="q23" value="A">&nbsp;&nbsp;involve so many participants.</label>
+                                <label><input type="radio" name="q23" value="B">&nbsp;&nbsp;do research into this topic area.</label>
+                                <label><input type="radio" name="q23" value="C">&nbsp;&nbsp;show a link between music and social class</label>
+                            </div>
+                            <div class="single-choice">
+                                <p><strong>24</strong>   Sarah doubts the findings of the study because she thinks</p>
+                                <label><input type="radio" name="q24" value="A">&nbsp;&nbsp;the research was rushed.</label>
+                                <label><input type="radio" name="q24" value="B">&nbsp;&nbsp;some people wouldn't fit the findings.</label>
+                                <label><input type="radio" name="q24" value="C">&nbsp;&nbsp;the information given may not be reliable</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 25-30</strong></p>
+                            <p>What comments do Mike and Sarah make about each of the following sections of the presentation?</p>
+                            <p>Choose SIX answers from the box and write the correct letter, <strong>A-G</strong>, next to questions 25-30.</p>
+                        </div>
+                        <div>
+                            <div style="margin-bottom: 20px;">
+                                <p class="centered-title"><strong>Comments</strong></p>
+                                <div style="display: flex; flex-direction: column; gap: 5px;">
+                                    <p><strong>A</strong> the information is inaccurate</p>
+                                    <p><strong>B</strong> not interesting enough</p>
+                                    <p><strong>C</strong> too detailed</p>
+                                    <p><strong>D</strong> the statistics are incomplete</p>
+                                    <p><strong>E</strong> need more expert opinions</p>
+                                    <p><strong>F</strong> need to make it more relevant</p>
+                                    <p><strong>G</strong> present both sides</p>
+                    </div>
+                                        </div>
+                            <div class="table-container">
+                                <table class="abc-table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>A</th>
+                                            <th>B</th>
+                                            <th>C</th>
+                                            <th>D</th>
+                                            <th>E</th>
+                                            <th>F</th>
+                                            <th>G</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="statement">25. Background to the study</td>
+                                            <td class="clickable-cell" data-question="q25" data-value="A" onclick="selectCell(this, 'q25', 'A')"></td>
+                                            <td class="clickable-cell" data-question="q25" data-value="B" onclick="selectCell(this, 'q25', 'B')"></td>
+                                            <td class="clickable-cell" data-question="q25" data-value="C" onclick="selectCell(this, 'q25', 'C')"></td>
+                                            <td class="clickable-cell" data-question="q25" data-value="D" onclick="selectCell(this, 'q25', 'D')"></td>
+                                            <td class="clickable-cell" data-question="q25" data-value="E" onclick="selectCell(this, 'q25', 'E')"></td>
+                                            <td class="clickable-cell" data-question="q25" data-value="F" onclick="selectCell(this, 'q25', 'F')"></td>
+                                            <td class="clickable-cell" data-question="q25" data-value="G" onclick="selectCell(this, 'q25', 'G')"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="statement">26. Other similar research</td>
+                                            <td class="clickable-cell" data-question="q26" data-value="A" onclick="selectCell(this, 'q26', 'A')"></td>
+                                            <td class="clickable-cell" data-question="q26" data-value="B" onclick="selectCell(this, 'q26', 'B')"></td>
+                                            <td class="clickable-cell" data-question="q26" data-value="C" onclick="selectCell(this, 'q26', 'C')"></td>
+                                            <td class="clickable-cell" data-question="q26" data-value="D" onclick="selectCell(this, 'q26', 'D')"></td>
+                                            <td class="clickable-cell" data-question="q26" data-value="E" onclick="selectCell(this, 'q26', 'E')"></td>
+                                            <td class="clickable-cell" data-question="q26" data-value="F" onclick="selectCell(this, 'q26', 'F')"></td>
+                                            <td class="clickable-cell" data-question="q26" data-value="G" onclick="selectCell(this, 'q26', 'G')"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="statement">27. Findings</td>
+                                            <td class="clickable-cell" data-question="q27" data-value="A" onclick="selectCell(this, 'q27', 'A')"></td>
+                                            <td class="clickable-cell" data-question="q27" data-value="B" onclick="selectCell(this, 'q27', 'B')"></td>
+                                            <td class="clickable-cell" data-question="q27" data-value="C" onclick="selectCell(this, 'q27', 'C')"></td>
+                                            <td class="clickable-cell" data-question="q27" data-value="D" onclick="selectCell(this, 'q27', 'D')"></td>
+                                            <td class="clickable-cell" data-question="q27" data-value="E" onclick="selectCell(this, 'q27', 'E')"></td>
+                                            <td class="clickable-cell" data-question="q27" data-value="F" onclick="selectCell(this, 'q27', 'F')"></td>
+                                            <td class="clickable-cell" data-question="q27" data-value="G" onclick="selectCell(this, 'q27', 'G')"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="statement">28. Market research</td>
+                                            <td class="clickable-cell" data-question="q28" data-value="A" onclick="selectCell(this, 'q28', 'A')"></td>
+                                            <td class="clickable-cell" data-question="q28" data-value="B" onclick="selectCell(this, 'q28', 'B')"></td>
+                                            <td class="clickable-cell" data-question="q28" data-value="C" onclick="selectCell(this, 'q28', 'C')"></td>
+                                            <td class="clickable-cell" data-question="q28" data-value="D" onclick="selectCell(this, 'q28', 'D')"></td>
+                                            <td class="clickable-cell" data-question="q28" data-value="E" onclick="selectCell(this, 'q28', 'E')"></td>
+                                            <td class="clickable-cell" data-question="q28" data-value="F" onclick="selectCell(this, 'q28', 'F')"></td>
+                                            <td class="clickable-cell" data-question="q28" data-value="G" onclick="selectCell(this, 'q28', 'G')"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="statement">29. Limitations of the research</td>
+                                            <td class="clickable-cell" data-question="q29" data-value="A" onclick="selectCell(this, 'q29', 'A')"></td>
+                                            <td class="clickable-cell" data-question="q29" data-value="B" onclick="selectCell(this, 'q29', 'B')"></td>
+                                            <td class="clickable-cell" data-question="q29" data-value="C" onclick="selectCell(this, 'q29', 'C')"></td>
+                                            <td class="clickable-cell" data-question="q29" data-value="D" onclick="selectCell(this, 'q29', 'D')"></td>
+                                            <td class="clickable-cell" data-question="q29" data-value="E" onclick="selectCell(this, 'q29', 'E')"></td>
+                                            <td class="clickable-cell" data-question="q29" data-value="F" onclick="selectCell(this, 'q29', 'F')"></td>
+                                            <td class="clickable-cell" data-question="q29" data-value="G" onclick="selectCell(this, 'q29', 'G')"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="statement">30. Future research</td>
+                                            <td class="clickable-cell" data-question="q30" data-value="A" onclick="selectCell(this, 'q30', 'A')"></td>
+                                            <td class="clickable-cell" data-question="q30" data-value="B" onclick="selectCell(this, 'q30', 'B')"></td>
+                                            <td class="clickable-cell" data-question="q30" data-value="C" onclick="selectCell(this, 'q30', 'C')"></td>
+                                            <td class="clickable-cell" data-question="q30" data-value="D" onclick="selectCell(this, 'q30', 'D')"></td>
+                                            <td class="clickable-cell" data-question="q30" data-value="E" onclick="selectCell(this, 'q30', 'E')"></td>
+                                            <td class="clickable-cell" data-question="q30" data-value="F" onclick="selectCell(this, 'q30', 'F')"></td>
+                                            <td class="clickable-cell" data-question="q30" data-value="G" onclick="selectCell(this, 'q30', 'G')"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-4" class="question-part hidden">
+                <div class="part-header">
+                    <p><strong>Part 4</strong></p>
+                    <p>Listen and answer questions 31–40.</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 31-40</strong></p>
+                            <p>Complete the notes below.</p>
+                            <p>Write <strong>ONE WORD ONLY</strong> for each answer.</p>
+                        </div>
+                        <div style="border: 1px solid #000000; padding: 15px;"> <p class="centered-title">Effects of Drama Activities on Children</p>
+                        <p><strong>Drama helps children's personal development</strong></p>
+                        <ul style="list-style-type: none; padding-left: 20px;">
+                            <li>&bull;&nbsp;&nbsp; firstly, group participation develops <input type="text" class="answer-input" id="q31" placeholder="31"> in their own ideas</li>
+                            <li>&bull;&nbsp;&nbsp; unscripted, imaginative activities allow children to take <input type="text" class="answer-input" id="q32" placeholder="32"></li>
+                            <li>&bull;&nbsp;&nbsp; Also, working as a group teaches the importance of <input type="text" class="answer-input" id="q33" placeholder="33"> to others</li>
+                            <li>&bull;&nbsp;&nbsp; performance makes children <input type="text" class="answer-input" id="q34" placeholder="34"> for their learning and behavior.</li>
+                        </ul>
+                        <p><strong>The value of role play in the classroom</strong></p>
+                        <ul style="list-style-type: none; padding-left: 20px;">
+                            <li>&bull;&nbsp;&nbsp; to function as a form of <input type="text" class="answer-input" id="q35" placeholder="35"> for children experiencing difficulties.</li>
+                            <li>&bull;&nbsp;&nbsp; to help children judge their behavior objectively.</li>
+                            <li>&bull;&nbsp;&nbsp; to explore controversial subjects with a class in a <input type="text" class="answer-input" id="q36" placeholder="36"> environment</li>
+                            <li>&bull;&nbsp;&nbsp; to develop children's self-knowledge and understanding of <input type="text" class="answer-input" id="q37" placeholder="37"></li>
+                        </ul>
+                        <p><strong>How drama improves the process of history learning.</strong></p>
+                        <ul style="list-style-type: none; padding-left: 20px;">
+                            <li>&bull;&nbsp;&nbsp; drama activities increase children's <input type="text" class="answer-input" id="q38" placeholder="38"> class.</li>
+                            <li>&bull;&nbsp;&nbsp; make it easier for children to <input type="text" class="answer-input" id="q39" placeholder="39"> and understand historical event.</li>
+                            <li>&bull;&nbsp;&nbsp; find answer to <input type="text" class="answer-input" id="q40" placeholder="40"> in history to see why certain decisions were made.</li>
+                        </ul></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <div id="transcription-container">
+                <h2>Transcription</h2>
+                <pre id="transcription-text"></pre>
+            </div>
+        </div>
+    </div>
+
+    <div id="transcription-data" style="display:none;">
+        <div data-part="1"><strong>SECTION 1</strong>
+
+You will hear a woman asking an agent about rented accommodation. First, you have some time to look at questions 1 to 6 on page 2. Listen carefully and answer questions 1 to 6.
+
+Good morning. How can I help you? I'm interested in renting somewhere to live in town and was wondering what you had available. Excellent. I'll just need to find out a bit more about what you're looking for and then we can see what we've got.
+
+So your name is… Anna Black. Good, got that. And what sort of accommodation are you looking for, ideally? Well, I don't know if this is going to be possible, but ideally a house.
+
+I live in a flat at the moment and I've got really noisy neighbours. That's the reason I want to move. Oh dear.
+
+And I'm afraid most of the accommodation for rent in the city centre is flats. Would you be prepared to look elsewhere? There are a lot of nice properties in the south-east. Oh yes, that would be really convenient for me.
+
+Quite a few of my friends are there and it would be really close to my work. And there's more chance of finding what you're after there. I take it you'd be looking for a furnished place, would you? Yes.
+
+And I know it's not always included, but I'd like to have a washing machine. I hate going to laundrettes. And if I'm a bit further out of the city, it might be a problem to find one.
+
+I'll see what I can do. Now, how long would you need the property for, bearing in mind that the minimum is six months? One year. I don't want to chop and change too often and that'd give me the chance to see how things work out.
+
+And then I could reassess the situation after that. And when would you like to move in? I've got to be out of my present place by the 30th of April. Then I'm going to visit my parents for a couple of weeks, so let's say 15th of May.
+
+And what's your current address? I'd better make a note of that for our files and I'll put that you're there only until the end of April. 56 Stone Street. And is there a phone number I can get you on? Yes.
+
+The best one to use is my mobile and that's 07942 326 584. Now, of course, we'll need a reference before we're able to proceed with any contract. Who would be able to supply you with a reference? I'm pretty sure my employer will do that for me.
+
+I don't really know my doctor or anyone like that here. Good. Now let's see what we've got that might suit you.
+
+Oh, first, how much are you looking to pay? I'm paying £650 a month at the moment and the most I can go to is £675. I really can't go over that. That shouldn't be any problem.
+
+It's a realistic figure. And can I ask what it is you do for a living? Since I came here, I've been working for various bodies within the city as a translator, you know, for the police and the hospital. OK, good.
+
+Before you hear the rest of the conversation, you have some time to look at questions 7 to 10 on page 2. Now listen and answer questions 7 to 10.
+
+Now, if we do find something, we'll need to check your ID, so we'll need to see your passport and, of course, to do the credit check, we'll need to see a bank statement in order to complete all the paperwork. No problem.
+
+I can bring those in tomorrow. Good. Now we've got a small house to rent that I think might be just what you're looking for.
+
+33 Ainsworth Street. That's A-I-N-S-W-O-R-T-H Street. Here are the details.
+
+This looks great. Right size, right price? Well, I could arrange for you to view it on Saturday around 4pm if that's convenient. Good.
+
+I can't see any mention of a telephone in the details though. I'd need that. Hmm.
+
+I'll look into that and I can double check when we're at the property. And sorry, there's another thing. Do you happen to know if there's a bus stop reasonably close to the house so that I can get around easily? Again, if I can't find out before Saturday, I'll check it out when we're there.
+
+OK. So I'll drop by tomorrow with those papers you need and then see you at the property Saturday at 4pm. Excellent.
+
+That is the end of section 1. You now have half a minute to check your answers.</div>
+        <div data-part="2"><strong>SECTION 2</strong>
+
+Have some time to look at questions 11 to 14. Now listen carefully and answer questions 11 to 14.
+
+It's common for the country to use our glass bottom boat to see the fish at Green Island. But in fact, there's nothing unusual about the fish here. You find exactly the same species in many other places on this coast. And the same is true of the birds.
+
+What is unique about Green Island is that the water is so clear, which means that you can actually see the fish more easily. The first scientist to work here was Mitchell Cullen, who began recording information about marine life in the area. Some years later, Joseph Tourier established a laboratory, which we'll be visiting shortly.
+
+But of course, the name of Churchill Peters will always be the most closely associated with the setting up of the nature park itself. He wanted to protect the species that live around Green Island. And creating a nature park was the best way of achieving that.
+
+So let me tell you about the fish. As I mentioned, you can usually see them quite easily. But the distance you can see underwater does change depending on the conditions.
+
+So, here are a few things to think about. The most important consideration is rainfall. If it's raining, don't come to Green Island to see the fish.
+
+What you want is a bright day. But either summer or winter is fine. As we know, in this part of the world, it can actually be quite hazy and cloudy in summer, so the season doesn't really matter.
+
+What's important is that there shouldn't have been any rain for a week. That's when the water is clearest. The state of the tide, though, doesn't make much difference to underwater visibility.
+
+And you can come at either high or low tide. Another thing to think about is the wind. The perfect time to come to Green Island is when it's calm and there are no waves on the sea.
+
+In our experience, an east wind is the worst because it causes too many waves. Oh, one other thing. Don't come too early in the morning.
+
+Any time in the middle of the day when the sun is high is best. Before you hear the rest of the information, you have some time to look at questions 15 to 20. Now listen and answer questions 15 to 20.
+
+All right. So, before we go and see the fish for ourselves, there are a number of rules you must know about. So far as the beach goes, this isn't the best place for your family's soccer or cricket game.
+
+There are many other beaches in the area for those sorts of activities. But at low tide and when the park doesn't have very many visitors, people do occasionally play a game on the beach. We don't mind that.
+
+Many of our visitors like to use the glass bottom boats to see the fish. But you're welcome to get into the water and swim with them at any time. Soon you'll be surrounded by hundreds of small fish.
+
+It's a wonderful experience. Now, the difficult question of feeding the fish. Feeding the fish encourages them to swim around people, but it also changes their natural environment.
+
+We ask you, therefore, to use your common sense. If there are only a few visitors, you can give the fish a small amount of food. But when the park is very busy, we ask you not to feed the fish.
+
+If you do go swimming with the fish, you'll find that sometimes they bump into you, touch your legs or arms. However, you shouldn't try to deliberately touch the fish. Photographs, though, are not a problem.
+
+In fact, professional underwater photographers often visit the park. And today, it's possible to buy simple underwater cameras quite cheaply. Now, we don't encourage you to visit the island itself, and climbing on it is forbidden during the spring nesting season.
+
+But at other times of the year, if you're swimming near the island and are feeling tired, it's okay to climb up and have a quick rest. Finally, boats. We provide a number of different boat trips for visitors.
+
+But if you have your own boat, you are very welcome to use it here at the nature park. Just remember to go slowly near the beach or when there are divers in the water. Okay, well, I think we're ready to go down to the beach, so grab your...
+
+That is the end of Section 2. You now have half a minute to check your answers.</div>
+        <div data-part="3"><strong>SECTION 3</strong>
+
+You will hear two psychology students called Sarah and Mike discussing their research on music and psychology with a lecturer. First, you have some time to look at questions 21 to 24. Now, listen carefully and answer questions 21 to 24.
+
+Hi, Sarah. Hi, Mike. Now, I don't have long to discuss this today. This is your research into the relationship between psychology and music, isn't it? Yes, that's right. We found a recent study by a Professor North in the U.K. Experts have always suspected there were similarities between fans of certain music types, but this study was able to prove that musical tastes are directly related to our personality. I like this topic.
+
+It's certainly going to generate a lot of discussion among your classmates when you present it. I'm pleased to see you bringing in a topic we haven't seen before. Just make sure there's enough detail and it's readily available for your presentation. We think there is, yes.
+
+So, what does the study involve? Well, 36,000 people from all around the world completed an online survey. One part of this was to provide information about the first album or CD that they considered important as a teenager. Yes, they also had to say who they associate that music with now. For example, a parent or a romantic partner. Professor North was trying to see if there were any links between musical tastes and emotions.
+
+Interesting. And, uh, what makes this study so significant? Have there been any other studies in this area? Well, we think this research is quite groundbreaking. It isn't the first study of its kind, as experts have found links previously between things like musical tastes and social class, for example. But people from all over the world were involved in this one, so it's the scale of the study that makes it significant.
+
+And what were their findings? For each music shopper, they listed the most common characteristics that each typical fan had. The findings suggest classical music fans are shy, have high self-esteem, are creative, and add ease. Although heavy metal music fans come from a different generation, it was found that they also share these characteristics, which is a remarkable discovery. Actually, I have to say that I'm a bit skeptical of the findings. I'm not so sure we can trust them.
+
+Why? He can't be accused of using a small sample or rushing the findings. This study's taken some time to come out. Is it because you think some people won't match their descriptions? Well, I do know a few who don't fit neatly, but that's not the issue. The participants were asked to describe themselves during the study, so it's only their opinion of their personality rather than objective fact. Well, that's certainly something to explore further. I have to go to deliver my lecture now, so if I were you, I'd look at the material you've got and decide what you're going to do with it.
+
+Before you hear the rest of the discussion, you have some time to look at questions 25 to 30. Now listen and answer questions 25 to 30.
+
+All right, so let's decide what to do with each of the sections of our presentation on Professor North's research. The first part was the background section. We want to include that, of course. Yes, but when we put all our notes together, we really ended up with too much. I agree. It's not really the length that's the problem, though. There are just too many facts here at the moment. True. Let's make it more general.
+
+What about the next section? It's about the earlier research that has been done in this area. We've printed out pages and pages here. Yes, I was expecting to find some fascinating information here, but it's a bit dull, especially all those statistics. I agree. We have to mention it first, so we'll just have to try and make it sound noteworthy. Yes.
+
+Well, what about the findings of the study? Well, you wanted to focus on the similarities you found between various music lovers, and I wanted to show the opposite view and see how they differ. Well, they're both important, so maybe we could include the two different points of view. Yes, that could work. Let's do it independently, then, before we put our information together. We probably have enough for that section, then. Great.
+
+Now, market research. There are so many implications of how this could be used in a marketing situation. Yes, but we just don't have all the data yet, and we don't know when it's going to be available. Okay. Well, let's point that out, but present it briefly anyway. Good idea.
+
+The next one was limitations of the study. Did you look into that? I did. I think because Professor North wrote this himself, there's not much here, and it might not be very objective. Yes. We need to find out how other researchers view the study to see if there's been any criticism of it. All right.
+
+And, finally, future research. That seems like a good way to end our presentation. It would be, but his suggestions are too far removed from our original topic. They concentrate too much on music. Yes. Let's find a way to include more psychology so it relates better to our course. Good idea. So what do you think about saying...
+
+That is the end of Section 3. You now have half a minute to check your answers.</div>
+        <div data-part="4"><strong>SECTION 4</strong>
+
+You will hear a part of a lecture for teacher trainees using drama activities in the classroom. First, you have some time to look at questions 31 to 40.
+
+Now listen carefully and answer questions 31 to 40. So now we're going to look at some of the reasons why it's beneficial to include drama activities, such as role play, in your teaching practice in a range of subject areas. There's a lot of evidence to show that drama helps a child's personal development.
+
+Firstly, creating a space for children to express themselves freely in a group situation helps to give them confidence in their own opinions and ideas. And, of course, drama activities can work especially well for shy or introverted children who usually don't participate in other types of classroom situations. Secondly, unscripted improvisation activities where children work from their imagination, if done in a supportive way, give children the opportunity to gain experience in taking risks and encourage them to say things that they might normally be afraid to say.
+
+Drama can also support the child's educational development. For example, the emphasis placed on cooperative activities in drama means that group members must learn the value of listening to one another. Being involved in any sort of performance, which relies on everyone working together and playing their part, also helps children to be responsible not only for their learning, but for their general behavior.
+
+These are just a couple of ways in which drama can benefit a child's learning. Now, I'd like to look at how role play can be such a valuable learning tool in the classroom. The value of role play for children who are having difficulties as a means of therapy is now widely accepted.
+
+The experience of doing a role play where children act out aspects of their own life without explicitly stating that it is a direct representation of their own experiences can help children to judge their own behavior in an objective way. One obvious example would be doing a role reversal with a bully role playing a victim. Because this approach doesn't involve direct confrontation, it may help the bully to see his or her behavior in a different light.
+
+More generally, role play also allows the teacher to explore potentially controversial or taboo subjects in a safe setting in which children feel at ease. It's obviously essential for children to feel they won't be criticized or judged for voicing certain views. Getting children to examine their thoughts and opinions carefully can lead to a deeper self-knowledge and a stronger awareness of morality.
+
+This is an important factor in developing social skills. Let's look at a specific subject area now and think about how drama can enrich the learning process for the study of history. Bringing characters from the past to life in the classroom by doing classroom drama activities is an easy way to improve the level of the children's participation in the lesson.
+
+So, drama in the history classroom makes for a livelier atmosphere. But getting children to reenact scenes from history can also be extremely useful as it helps them to remember what happened and why it was important as well as helping to bring the past alive. Another way of doing this is to ask children to find solutions to historical problems using role play.
+
+This can help to focus attention on why certain decisions were taken. For example, children can be asked to decide how best to defend their town from attack or where to build a new site. Okay, what I'd like to do now is to think about your next teaching practice session and in groups discuss how you would incorporate an element of drama into your lesson plan.
+
+That is the end of Section 4. You now have half a minute to check your answers.</div>
+    </div>
+
+    <audio id="global-audio-player" class="hidden"></audio>
+
+    <!-- Navigation Arrows -->
+    <div class="nav-arrows">
+        <button class="nav-arrow" onclick="previousPart()" id="prevBtn">‹</button>
+        <button class="nav-arrow" onclick="nextPart()" id="nextBtn">›</button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="nav-row perScorableItem" aria-label="Questions">
+        <div class="footer__questionWrapper___1tZ46 multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(1)">
+                <span>
+                    <span aria-hidden="true" class="section-prefix">Part </span>
+                    <span class="sectionNr" aria-hidden="true">1</span>
+                    <span class="attemptedCount" aria-hidden="true">0 of 10</span>
+                </span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion scorable-item" onclick="goToQuestion(1)"><span class="sr-only">Question 1</span><span aria-hidden="true">1</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(2)"><span class="sr-only">Question 2</span><span aria-hidden="true">2</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(3)"><span class="sr-only">Question 3</span><span aria-hidden="true">3</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(4)"><span class="sr-only">Question 4</span><span aria-hidden="true">4</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(5)"><span class="sr-only">Question 5</span><span aria-hidden="true">5</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(6)"><span class="sr-only">Question 6</span><span aria-hidden="true">6</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(7)"><span class="sr-only">Question 7</span><span aria-hidden="true">7</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(8)"><span class="sr-only">Question 8</span><span aria-hidden="true">8</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(9)"><span class="sr-only">Question 9</span><span aria-hidden="true">9</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(10)"><span class="sr-only">Question 10</span><span aria-hidden="true">10</span></button>
+            </div>
+        </div>
+        
+        <div class="footer__questionWrapper___1tZ46 selected multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(2)">
+                <span>
+                    <span aria-hidden="true" class="section-prefix">Part </span>
+                    <span class="sectionNr" aria-hidden="true">2</span>
+                    <span class="attemptedCount" aria-hidden="true">0 of 10</span>
+                </span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion scorable-item" onclick="goToQuestion(11)"><span class="sr-only">Question 11</span><span aria-hidden="true">11</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(12)">
+                    <span class="sr-only">Question 12</span>
+                    <span aria-hidden="true">12</span>
+                </button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(13)">
+                    <span class="sr-only">Question 13</span>
+                    <span aria-hidden="true">13</span>
+                </button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(14)">
+                    <span class="sr-only">Question 14</span>
+                    <span aria-hidden="true">14</span>
+                </button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(15)">
+                    <span class="sr-only">Question 15</span>
+                    <span aria-hidden="true">15</span>
+                </button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(16)">
+                    <span class="sr-only">Question 16</span>
+                    <span aria-hidden="true">16</span>
+                </button>
+                <button class="subQuestion active scorable-item" onclick="goToQuestion(17)">
+                    <span class="sr-only">Question 17</span>
+                    <span aria-hidden="true">17</span>
+                </button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(18)">
+                    <span class="sr-only">Question 18</span>
+                    <span aria-hidden="true">18</span>
+                </button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(19)">
+                    <span class="sr-only">Question 19</span>
+                    <span aria-hidden="true">19</span>
+                </button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(20)">
+                    <span class="sr-only">Question 20</span>
+                    <span aria-hidden="true">20</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="footer__questionWrapper___1tZ46 multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(3)">
+                <span>
+                    <span aria-hidden="true" class="section-prefix">Part </span>
+                    <span class="sectionNr" aria-hidden="true">3</span>
+                    <span class="attemptedCount" aria-hidden="true">0 of 10</span>
+                </span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion scorable-item" onclick="goToQuestion(21)"><span class="sr-only">Question 21</span><span aria-hidden="true">21</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(22)"><span class="sr-only">Question 22</span><span aria-hidden="true">22</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(23)"><span class="sr-only">Question 23</span><span aria-hidden="true">23</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(24)"><span class="sr-only">Question 24</span><span aria-hidden="true">24</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(25)"><span class="sr-only">Question 25</span><span aria-hidden="true">25</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(26)"><span class="sr-only">Question 26</span><span aria-hidden="true">26</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(27)"><span class="sr-only">Question 27</span><span aria-hidden="true">27</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(28)"><span class="sr-only">Question 28</span><span aria-hidden="true">28</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(29)"><span class="sr-only">Question 29</span><span aria-hidden="true">29</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(30)"><span class="sr-only">Question 30</span><span aria-hidden="true">30</span></button>
+            </div>
+        </div>
+        
+        <div class="footer__questionWrapper___1tZ46 multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(4)">
+                <span>
+                    <span aria-hidden="true" class="section-prefix">Part </span>
+                    <span class="sectionNr" aria-hidden="true">4</span>
+                    <span class="attemptedCount" aria-hidden="true">0 of 10</span>
+                </span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion scorable-item" onclick="goToQuestion(31)"><span class="sr-only">Question 31</span><span aria-hidden="true">31</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(32)"><span class="sr-only">Question 32</span><span aria-hidden="true">32</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(33)"><span class="sr-only">Question 33</span><span aria-hidden="true">33</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(34)"><span class="sr-only">Question 34</span><span aria-hidden="true">34</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(35)"><span class="sr-only">Question 35</span><span aria-hidden="true">35</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(36)"><span class="sr-only">Question 36</span><span aria-hidden="true">36</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(37)"><span class="sr-only">Question 37</span><span aria-hidden="true">37</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(38)"><span class="sr-only">Question 38</span><span aria-hidden="true">38</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(39)"><span class="sr-only">Question 39</span><span aria-hidden="true">39</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(40)"><span class="sr-only">Question 40</span><span aria-hidden="true">40</span></button>
+            </div>
+        </div>
+        
+        <button id="deliver-button" aria-label="Review your answers" class="footer__deliverButton___3FM07">
+            <i class="fa fa fa-check" aria-hidden="true"></i>
+            <span>Check Answers</span>
+        </button>
+    </nav>
+
+    <!-- Context Menu -->
+    <div id="contextMenu" class="context-menu">
+        <div class="context-menu-item" id="highlight-item" onclick="highlightText()">
+            <span class="context-menu-icon">
+                <svg viewBox="0 0 24 24" fill="black"><path d="M15.24 12.32L12.28 9.36l-1.04 1.04-1.04-1.04-1.04 1.04-1.04-1.04-1.04 1.04-1.04-1.04-3.12 3.12c-.59.58-1.54.58-2.12 0l-1.04-1.04c-.58-.59-.58-1.54 0-2.12L7.88.88c.59-.58 1.54-.58 2.12 0l1.04 1.04 1.04-1.04 1.04 1.04 1.04-1.04 1.04 1.04 1.04-1.04 3.12 3.12c.58.59.58 1.54 0 2.12l-1.04 1.04c-.58.59-1.54.59-2.12 0zM12 15l-3 3-7-7 3-3 7 7zm-9-5l-2.29 2.29c-.39.39-.39 1.02 0 1.41l8.29 8.29c.39.39 1.02.39 1.41 0L22.7 8.41c.39-.39.39-1.02 0-1.41L14.42.29c-.39-.39-1.02-.39-1.41 0L3 10z"/></svg>
+            </span>
+            <span>Highlight</span>
+        </div>
+        <div class="context-menu-item" id="comment-item" onclick="addComment()">
+            <span class="context-menu-icon">
+                <svg viewBox="0 0 24 24" fill="black"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 12H5.17L4 15.17V4h16v10z"/></svg>
+            </span>
+            <span>Comment</span>
+        </div>
+        <div class="context-menu-item" id="clear-item" onclick="clearHighlight()" style="display:none;">
+            <span class="context-menu-icon">
+                <svg viewBox="0 0 24 24" fill="black"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            </span>
+            <span>Clear</span>
+        </div>
+        <div class="context-menu-item" onclick="clearAllHighlights()">
+            <span class="context-menu-icon">
+                <svg viewBox="0 0 24 24" fill="black"><path d="M16 9h-2.29l3-3-1.42-1.42-3 3V5h-2v2.29l-3-3-1.42 1.42 3 3H5v2h2.29l-3 3 1.42 1.42 3-3V17h2v-2.29l3 3 1.42-1.42-3-3H17V9h-2zm-4 4h-2v-2h2v2z"/></svg>
+            </span>
+            <span>Clear All</span>
+        </div>
+    </div>
+
+    <!-- Mobile highlight/comment toolbar -->
+    <div id="mobile-selection-menu" class="mobile-selection-menu hidden">
+        <button onclick="highlightText()">Highlight</button>
+        <button onclick="addComment()">Comment</button>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="result-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Results</h2>
+                <button id="modal-close-button" class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="score-summary"></p>
+                <div id="result-details"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPart = 1;
+        let currentQuestion = 1;
+        let selectedText = '';
+        let selectedRange = null;
+        let draggedElement = null;
+        let testStarted = false;
+        let timeInSeconds = 3600;
+        let isHovering = false;
+        let timerInterval;
+        let contextElement = null;
+
+        function updateAnsweredIndicators() {
+            for (let qNum = 1; qNum <= 40; qNum++) {
+                const btn = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
+                if (!btn) continue;
+
+                // Do not change style if it's already marked correct or incorrect
+                if (btn.classList.contains('correct') || btn.classList.contains('incorrect')) {
+                    continue;
+                }
+
+                let isAnswered = false;
+                const textInput = document.getElementById(`q${qNum}`);
+                const radioInput = document.querySelector(`input[name="q${qNum}"]:checked`);
+                const selectInput = document.getElementById(`q${qNum}`);
+                const dropZone = document.querySelector(`.drop-zone[data-question-id="${qNum}"]`);
+
+                if (textInput && textInput.value.trim() !== '') {
+                    isAnswered = true;
+                } else if (radioInput) {
+                    isAnswered = true;
+                } else if (selectInput && selectInput.tagName === 'SELECT' && selectInput.value !== '' && selectInput.value !== 'Select') {
+                    isAnswered = true;
+                } else if (dropZone && dropZone.querySelector('.drag-item')) {
+                    isAnswered = true;
+                } else if ((qNum >= 15 && qNum <= 20) && document.querySelector(`.clickable-cell[data-question="q${qNum}"][data-selected="true"]`)) {
+                    isAnswered = true;
+                } else if ((qNum >= 25 && qNum <= 30) && document.querySelector(`.clickable-cell[data-question="q${qNum}"][data-selected="true"]`)) {
+                    isAnswered = true;
+                } else if (qNum === 13) {
+                    const checkedBoxes = document.querySelectorAll('input[name="q13-14"]:checked');
+                    isAnswered = checkedBoxes.length > 0;
+                } else if (qNum === 14) {
+                    const checkedBoxes = document.querySelectorAll('input[name="q13-14"]:checked');
+                    isAnswered = checkedBoxes.length > 1;
+                } else if ((qNum >= 17 && qNum <= 18) && document.querySelector('input[name="q17-18"]:checked')) {
+                    isAnswered = true;
+                } else if ((qNum >= 19 && qNum <= 20) && document.querySelector('input[name="q19-20"]:checked')) {
+                    isAnswered = true;
+                } else if ((qNum >= 21 && qNum <= 23) && document.querySelector('input[name="q21-23"]:checked')) {
+                    isAnswered = true;
+                }
+
+                if (isAnswered) {
+                    btn.classList.add('answered');
+                } else {
+                    btn.classList.remove('answered');
+                }
+            }
+        }
+
+        const audioPlayer = document.getElementById('global-audio-player');
+        const timerContainer = document.querySelector('.timer-container');
+        const timerDisplay = document.querySelector('.timer-display');
+        const volumeSlider = document.getElementById('new-volume-slider');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalDurationEl = document.getElementById('total-duration');
+        const speedBtn = document.getElementById('speed-btn');
+        const speedOptions = document.getElementById('speed-options');
+        const volumeBtn = document.getElementById('volume-btn');
+
+        const audioSource = 'https://ia601007.us.archive.org/26/items/asdasdasdasdasd-copy-copy-copy-copy-copy-copy-copy-copy-copy-copy/asdasdasdasdasd%20-%20CopyCopyCopyCopyCopyCopyCopyCopyCopy%20-%20Copy.mp3';
+        audioPlayer.src = audioSource;
+
+        const correctAnswers = {
+            'q1': ['southeast'],
+            'q2': ['washing machine'],
+            'q3': ['15th May'],
+            'q4': ['employer'],
+            'q5': ['675'],
+            'q6': ['translator'],
+            'q7': ['bank statement'],
+            'q8': ['AINSWORTH'],
+            'q9': ['telephone'],
+            'q10': ['bus stop'],
+            'q11': 'A',
+            'q12': 'B',
+            'q13': 'B',
+            'q14': 'E',
+            'q15': 'B',
+            'q16': 'B',
+            'q17': 'C',
+            'q18': 'A',
+            'q19': 'B',
+            'q20': 'A',
+            'q21': 'B',
+            'q22': 'B',
+            'q23': 'A',
+            'q24': 'C',
+            'q25': 'C',
+            'q26': 'B',
+            'q27': 'G',
+            'q28': 'D',
+            'q29': 'E',
+            'q30': 'F',
+            'q31': ['confidence'],
+            'q32': ['risks'],
+            'q33': ['listening'],
+            'q34': ['responsible'],
+            'q35': ['therapy'],
+            'q36': ['safe'],
+            'q37': ['morality'],
+            'q38': ['participation'],
+            'q39': ['remember'],
+            'q40': ['problems']
+        };
+        
+        const questionTypes = {
+            'q1': 'text', 'q2': 'text', 'q3': 'text', 'q4': 'text', 'q5': 'text',
+            'q6': 'text', 'q7': 'text', 'q8': 'text', 'q9': 'text', 'q10': 'text',
+            'q11': 'mcq', 'q12': 'mcq', 'q13': 'checkbox', 'q14': 'checkbox', 'q15': 'clickable',
+            'q16': 'clickable', 'q17': 'clickable', 'q18': 'clickable', 'q19': 'clickable', 'q20': 'clickable',
+            'q21': 'mcq', 'q22': 'mcq', 'q23': 'mcq', 'q24': 'mcq', 'q25': 'clickable',
+            'q26': 'clickable', 'q27': 'clickable', 'q28': 'clickable', 'q29': 'clickable', 'q30': 'clickable',
+            'q31': 'text', 'q32': 'text', 'q33': 'text', 'q34': 'text', 'q35': 'text',
+            'q36': 'text', 'q37': 'text', 'q38': 'text', 'q39': 'text', 'q40': 'text'
+        };
+
+
+        function setupCheckboxLimits() {
+            const checkboxGroups = [
+                { name: 'q18-20', limit: 3 },
+            ];
+
+            checkboxGroups.forEach(group => {
+                const checkboxes = document.querySelectorAll(`input[name="${group.name}"]`);
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('click', () => {
+                        const checkedCount = document.querySelectorAll(`input[name="${group.name}"]:checked`).length;
+                        if (checkedCount > group.limit) {
+                            checkbox.checked = false;
+                        }
+                    });
+                });
+            });
+        }
+
+        function switchToPart(partNumber, andPlay = false) {
+            if (currentPart !== partNumber) {
+                const firstQuestionOfPart = (partNumber - 1) * 10 + 1;
+                currentQuestion = firstQuestionOfPart;
+            }
+            
+            currentPart = partNumber;
+
+            updateNavigation();
+            document.querySelectorAll('.question-part').forEach(part => part.classList.add('hidden'));
+            const partToShow = document.getElementById(`part-${partNumber}`);
+            if (partToShow) {
+                partToShow.classList.remove('hidden');
+            }
+
+            if (document.querySelector('.main-container.results-mode')) {
+                const transcriptionSource = document.querySelector(`#transcription-data [data-part="${partNumber}"]`);
+                const transcriptionTarget = document.getElementById('transcription-text');
+                if (transcriptionSource && transcriptionTarget) {
+                    transcriptionTarget.innerHTML = transcriptionSource.innerHTML;
+                }
+            }
+
+            updateNavigation();
+        }
+
+        function updateNavigation() {
+            document.querySelectorAll('.footer__questionWrapper___1tZ46').forEach((wrapper, index) => {
+                wrapper.classList.remove('selected');
+                updateAttemptedCount(index + 1);
+            });
+            const currentWrapper = document.querySelectorAll('.footer__questionWrapper___1tZ46')[currentPart - 1];
+            if (currentWrapper) {
+                currentWrapper.classList.add('selected');
+            }
+            document.getElementById('prevBtn').disabled = currentQuestion === 1;
+            document.getElementById('nextBtn').disabled = currentQuestion === 40;
+        }
+
+        function goToQuestion(questionNumber) {
+            currentQuestion = questionNumber;
+            let partNumber = 1;
+            if (questionNumber > 10 && questionNumber <= 20) partNumber = 2;
+            else if (questionNumber > 20 && questionNumber <= 30) partNumber = 3;
+            else if (questionNumber > 30) partNumber = 4;
+            if (currentPart !== partNumber) {
+                switchToPart(partNumber);
+            }
+            document.querySelectorAll('.subQuestion').forEach(btn => btn.classList.remove('active'));
+            const questionBtn = document.querySelector(`.subQuestion[onclick="goToQuestion(${questionNumber})"]`);
+            if (questionBtn) questionBtn.classList.add('active');
+
+            // Scroll to the question
+            let questionElement;
+            if (questionNumber >= 18 && questionNumber <= 20) {
+                questionElement = document.querySelector('input[name="q18-20"]');
+            } else if (questionNumber >= 17 && questionNumber <= 18) {
+                questionElement = document.querySelector('input[name="q17-18"]');
+            } else if (questionNumber >= 19 && questionNumber <= 20) {
+                questionElement = document.querySelector('input[name="q19-20"]');
+            } else {
+                questionElement = document.getElementById(`q${questionNumber}`) || // text inputs
+                                document.querySelector(`[data-question-id="${questionNumber}"]`) || // drag-drop
+                                document.querySelector(`input[name="q${questionNumber}"]`); // radio buttons
+            }
+            
+            if (questionElement) {
+                const questionContainer = questionElement.closest('.question');
+                if(questionContainer) {
+                    questionContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    questionContainer.classList.add('flash');
+                    setTimeout(() => {
+                        questionContainer.classList.remove('flash');
+                    }, 1000);
+                }
+            }
+            updateNavigation();
+        }
+
+        function nextPart() {
+            if (currentQuestion < 40) {
+                goToQuestion(currentQuestion + 1);
+            }
+        }
+
+        function previousPart() {
+            if (currentQuestion > 1) {
+                goToQuestion(currentQuestion - 1);
+            }
+        }
+
+        function highlightText() {
+            if (!selectedRange || selectedRange.collapsed) {
+                closeContextMenu();
+                return;
+            }
+            
+            try {
+                // Check if selection spans multiple elements
+                const startContainer = selectedRange.startContainer;
+                const endContainer = selectedRange.endContainer;
+                
+                if (startContainer === endContainer && startContainer.nodeType === Node.TEXT_NODE) {
+                    // Simple case: selection within a single text node
+                    const span = document.createElement('span');
+                    span.className = 'highlight';
+                    selectedRange.surroundContents(span);
+                } else {
+                    // Complex case: selection spans multiple elements
+                    // Handle partial text selections and complex DOM structures
+                    
+                    // First, handle partial text at the start
+                    const startOffset = selectedRange.startOffset;
+                    const endOffset = selectedRange.endOffset;
+                    
+                    if (startContainer.nodeType === Node.TEXT_NODE && startOffset > 0) {
+                        // Split the start text node if selection starts in the middle
+                        const startText = startContainer.textContent;
+                        const beforeText = startText.substring(0, startOffset);
+                        const selectedStartText = startText.substring(startOffset);
+                        
+                        const beforeNode = document.createTextNode(beforeText);
+                        const selectedNode = document.createTextNode(selectedStartText);
+                        
+                        const parent = startContainer.parentNode;
+                        parent.insertBefore(beforeNode, startContainer);
+                        parent.insertBefore(selectedNode, startContainer);
+                        parent.removeChild(startContainer);
+                        
+                        // Update the range to start from the new node
+                        selectedRange.setStart(selectedNode, 0);
+                    }
+                    
+                    if (endContainer.nodeType === Node.TEXT_NODE && endOffset < endContainer.textContent.length) {
+                        // Split the end text node if selection ends in the middle
+                        const endText = endContainer.textContent;
+                        const selectedEndText = endText.substring(0, endOffset);
+                        const afterText = endText.substring(endOffset);
+                        
+                        const selectedNode = document.createTextNode(selectedEndText);
+                        const afterNode = document.createTextNode(afterText);
+                        
+                        const parent = endContainer.parentNode;
+                        parent.insertBefore(selectedNode, endContainer);
+                        parent.insertBefore(afterNode, endContainer);
+                        parent.removeChild(endContainer);
+                        
+                        // Update the range to end at the new node
+                        selectedRange.setEnd(selectedNode, selectedNode.textContent.length);
+                    }
+                    
+                    // Now extract the contents and highlight all text nodes
+                    const fragment = selectedRange.extractContents();
+                    
+                    // Create a tree walker to find all text nodes
+                    const walker = document.createTreeWalker(
+                        fragment,
+                        NodeFilter.SHOW_TEXT,
+                        {
+                            acceptNode: function(node) {
+                                // Accept text nodes that have content (not just whitespace)
+                                return node.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+                            }
+                        },
+                        false
+                    );
+                    
+                    const textNodes = [];
+                    let node;
+                    while (node = walker.nextNode()) {
+                        textNodes.push(node);
+                    }
+                    
+                    // Wrap each text node in a highlight span
+                    textNodes.forEach(textNode => {
+                        const span = document.createElement('span');
+                        span.className = 'highlight';
+                        const parent = textNode.parentNode;
+                        if (parent) {
+                            parent.insertBefore(span, textNode);
+                            span.appendChild(textNode);
+                        }
+                    });
+                    
+                    // Insert the highlighted fragment back
+                    selectedRange.insertNode(fragment);
+                }
+            } catch(err) {
+                console.warn('Primary highlighting failed, trying robust fallback:', err);
+                
+                // Robust fallback for complex selections
+                try {
+                    const selection = window.getSelection();
+                    if (selection.rangeCount > 0) {
+                        const range = selection.getRangeAt(0);
+                        
+                        // Get all nodes in the selection
+                        const startContainer = range.startContainer;
+                        const endContainer = range.endContainer;
+                        const commonAncestor = range.commonAncestorContainer;
+                        
+                        // Create a temporary range to work with
+                        const tempRange = document.createRange();
+                        tempRange.selectNodeContents(commonAncestor);
+                        
+                        // Find the start and end positions
+                        const startPos = range.startOffset;
+                        const endPos = range.endOffset;
+                        
+                        // Extract and highlight the content
+                        const contents = range.extractContents();
+                        
+                        // Recursively highlight all text content
+                        function highlightAllText(node) {
+                            if (node.nodeType === Node.TEXT_NODE) {
+                                if (node.textContent.trim()) {
+                                    const span = document.createElement('span');
+                                    span.className = 'highlight';
+                                    span.style.backgroundColor = '#ffff00';
+                                    const parent = node.parentNode;
+                                    if (parent) {
+                                        parent.insertBefore(span, node);
+                                        span.appendChild(node);
+                                    }
+                                }
+                            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                                Array.from(node.childNodes).forEach(child => {
+                                    highlightAllText(child);
+                                });
+                            }
+                        }
+                        
+                        highlightAllText(contents);
+                        range.insertNode(contents);
+                    }
+                } catch(e2) {
+                    console.warn('Robust fallback failed, using final method:', e2);
+                    // Final fallback - use execCommand
+                    try {
+                        document.execCommand('backColor', false, 'yellow');
+                    } catch(e3) {
+                        console.error('All highlighting methods failed:', e3);
+                        // Show user feedback
+                        alert('Highlighting failed for this selection. Please try selecting smaller portions of text.');
+                    }
+                }
+            }
+            
+            window.getSelection().removeAllRanges();
+            closeContextMenu();
+        }
+
+        function addComment() {
+            const commentText = prompt('Enter your comment:');
+            if (!commentText || !selectedRange || selectedRange.collapsed) {
+                closeContextMenu();
+                return;
+            }
+            try {
+                const span = document.createElement('span');
+                span.className = 'comment-highlight';
+                const tooltip = document.createElement('span');
+                tooltip.className = 'comment-tooltip';
+                tooltip.textContent = commentText;
+                span.appendChild(tooltip);
+                selectedRange.surroundContents(span);
+            }catch(err){
+                console.warn('Complex selection – cannot comment');
+            }
+            window.getSelection().removeAllRanges();
+            closeContextMenu();
+        }
+
+        function clearHighlight() {
+            const elementToClear = contextElement; // Set by contextmenu handler
+            if (!elementToClear) {
+                closeContextMenu();
+                return;
+            }
+
+            const highlightId = elementToClear.getAttribute('data-highlight-id');
+            const elementsToClear = highlightId
+                ? Array.from(document.querySelectorAll(`[data-highlight-id="${highlightId}"]`))
+                : [elementToClear];
+
+            let commonParent = null;
+            if (elementsToClear.length > 0) {
+                commonParent = elementsToClear[0].parentNode;
+            }
+
+            elementsToClear.forEach(element => {
+                const parent = element.parentNode;
+                const fragment = document.createDocumentFragment();
+
+                while (element.firstChild) {
+                    // Don't keep the tooltip for comments. Just unwrap everything.
+                    if (element.firstChild.nodeType === 1 && element.firstChild.classList.contains('comment-tooltip')) {
+                        element.removeChild(element.firstChild);
+                    } else {
+                        fragment.appendChild(element.firstChild);
+                    }
+                }
+                parent.replaceChild(fragment, element);
+            });
+            
+            if (commonParent) {
+                commonParent.normalize(); // Merges adjacent text nodes
+            }
+            
+            closeContextMenu();
+        }
+
+        function clearAllHighlights() {
+            document.querySelectorAll('.highlight, .comment-highlight').forEach(element => {
+                const parent = element.parentNode;
+                const fragment = document.createDocumentFragment();
+
+                while (element.firstChild) {
+                    if (element.firstChild.nodeType === 1 && element.firstChild.classList.contains('comment-tooltip')) {
+                        element.removeChild(element.firstChild);
+                    } else {
+                        fragment.appendChild(element.firstChild);
+                    }
+                }
+                parent.replaceChild(fragment, element);
+            });
+            closeContextMenu();
+        }
+        
+        function closeContextMenu() {
+            document.getElementById('contextMenu').style.display = 'none';
+            contextElement = null;
+        }
+
+        function updateAttemptedCount(partNumber) {
+            const partContainer = document.getElementById(`part-${partNumber}`);
+            if (!partContainer) return;
+            const inputs = partContainer.querySelectorAll('input.answer-input:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled])');
+            const selects = partContainer.querySelectorAll('select.answer-input:not([disabled])');
+            let answeredCount = 0;
+            const answeredGroups = {};
+            
+            inputs.forEach(input => {
+                if (input.type === 'radio' || input.type === 'checkbox') {
+                    if (input.checked && !answeredGroups[input.name]) {
+                        if (input.name === 'q13-14') {
+                            const checkedCount = document.querySelectorAll('input[name="q13-14"]:checked').length;
+                            answeredCount += checkedCount; // Add 1 or 2 depending on selections
+                        } else {
+                        answeredCount++;
+                        }
+                        answeredGroups[input.name] = true;
+                    }
+                } else {
+                    if (input.value.trim() !== '') answeredCount++;
+                }
+            });
+            
+            selects.forEach(select => {
+                if (select.value !== '' && select.value !== 'Select') answeredCount++;
+            });
+            
+            // Count clickable cells for questions 15-20 and 25-30
+            const clickableCells = partContainer.querySelectorAll('.clickable-cell[data-selected="true"]');
+            clickableCells.forEach(cell => {
+                const questionId = cell.getAttribute('data-question');
+                if (questionId) {
+                    const qNum = parseInt(questionId.replace('q', ''), 10);
+                    // Only count if this question hasn't been counted yet
+                    if (!answeredGroups[questionId]) {
+                        answeredCount++;
+                        answeredGroups[questionId] = true;
+                    }
+                }
+            });
+            
+            const countDisplay = document.querySelector(`.footer__questionWrapper___1tZ46:nth-child(${partNumber}) .attemptedCount`);
+            if (countDisplay) countDisplay.textContent = `${answeredCount} of 10`;
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            let resultsData = [];
+            document.querySelectorAll('.correct, .incorrect, .correct-answer-text').forEach(el => el.classList.contains('correct-answer-text') ? el.remove() : el.classList.remove('correct', 'incorrect'));
+            
+            Object.keys(correctAnswers).forEach(key => {
+                const qNum = parseInt(key.replace('q', ''), 10);
+
+                const correctAnswer = correctAnswers[key];
+                let userAnswer = '';
+                let isCorrect = false;
+
+                const questionType = questionTypes[key];
+                let btn;
+                
+                btn = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
+                
+                switch(questionType) {
+                    case 'text':
+                        const element = document.getElementById(key);
+                        if (element) {
+                            userAnswer = element.value.trim();
+                            const acceptedAnswers = Array.isArray(correctAnswer) ? correctAnswer : [String(correctAnswer)];
+                            isCorrect = acceptedAnswers.some(ans => ans.toLowerCase() === userAnswer.toLowerCase());
+                            element.classList.add(isCorrect ? 'correct' : 'incorrect');
+                            if (!isCorrect) {
+                                const correctAnswerSpan = document.createElement('span');
+                                correctAnswerSpan.className = 'correct-answer-text';
+                                correctAnswerSpan.textContent = `(Correct: ${acceptedAnswers.join(' / ')})`;
+                                element.parentNode.insertBefore(correctAnswerSpan, element.nextSibling);
+                            }
+                        }
+                        break;
+                    
+                    case 'mcq':
+                        const radioChecked = document.querySelector(`input[name="${key}"]:checked`);
+                        userAnswer = radioChecked ? radioChecked.value : '';
+                        isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+                        const isTable = document.querySelector(`input[name="${key}"]`) ? document.querySelector(`input[name="${key}"]`).closest('.mcq-table') : false;
+
+                        if (radioChecked) {
+                            if (isTable) {
+                                // For table MCQs, mark the row
+                                const rowToMark = radioChecked.closest('tr');
+                                if (rowToMark) {
+                                    rowToMark.classList.add(isCorrect ? 'correct' : 'incorrect');
+                                }
+                            } else {
+                                // For single-choice MCQs, mark the label
+                                const labelToMark = radioChecked.closest('label');
+                                if (labelToMark) {
+                                    labelToMark.classList.add(isCorrect ? 'correct' : 'incorrect');
+                                }
+                            }
+                        }
+                        
+                        if (!isCorrect) {
+                            const correctRadio = document.querySelector(`input[name="${key}"][value="${correctAnswer}"]`);
+                            if (correctRadio) {
+                                if (isTable) {
+                                    // For table MCQs, mark the correct row
+                                    const correctRow = correctRadio.closest('tr');
+                                    if (correctRow) {
+                                        correctRow.classList.add('correct');
+                                    }
+                                } else {
+                                    // For single-choice MCQs, mark the correct label
+                                    const correctLabel = correctRadio.closest('label');
+                                    if (correctLabel) {
+                                        correctLabel.classList.add('correct');
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // If no answer was selected, show the correct answer
+                        if (!radioChecked) {
+                            const correctRadio = document.querySelector(`input[name="${key}"][value="${correctAnswer}"]`);
+                            if (correctRadio) {
+                                const correctLabel = correctRadio.closest('label');
+                                if (correctLabel) {
+                                    correctLabel.classList.add('correct');
+                                }
+                            }
+                        }
+                        break;
+                    
+                    case 'clickable':
+                        const selectedCell = document.querySelector(`.clickable-cell[data-question="${key}"][data-selected="true"]`);
+                        if (selectedCell) {
+                            userAnswer = selectedCell.getAttribute('data-answer');
+                            isCorrect = userAnswer.toUpperCase() === correctAnswer.toUpperCase();
+                            selectedCell.classList.add(isCorrect ? 'correct' : 'incorrect');
+                            if (!isCorrect) {
+                                const correctCell = document.querySelector(`.clickable-cell[data-question="${key}"][data-value="${correctAnswer}"]`);
+                                if (correctCell) correctCell.classList.add('correct');
+                            }
+                        } else {
+                            const correctCell = document.querySelector(`.clickable-cell[data-question="${key}"][data-value="${correctAnswer}"]`);
+                            if (correctCell) correctCell.classList.add('correct');
+                        }
+                        break;
+                    
+                    case 'drag_drop':
+                        const dropZone = document.querySelector(`.drop-zone[data-question-id="${qNum}"]`);
+                        if (dropZone) {
+                            const droppedItem = dropZone.querySelector('.drag-item');
+                            if (droppedItem) {
+                                // Extract just the letter from the text (e.g., "A. Abstract" -> "A")
+                                const fullText = droppedItem.textContent.trim();
+                                userAnswer = fullText.charAt(0); // Get first character which should be the letter
+                            } else {
+                                userAnswer = '';
+                            }
+                            const acceptedAnswers = Array.isArray(correctAnswer) ? correctAnswer : [String(correctAnswer)];
+                            isCorrect = acceptedAnswers.some(ans => ans.toUpperCase() === userAnswer.toUpperCase());
+                            dropZone.classList.add(isCorrect ? 'correct' : 'incorrect');
+                            if (!isCorrect) {
+                                const correctAnswerSpan = document.createElement('span');
+                                correctAnswerSpan.className = 'correct-answer-text';
+                                correctAnswerSpan.textContent = `(Correct: ${acceptedAnswers.join(' / ')})`;
+                                dropZone.appendChild(correctAnswerSpan);
+                            }
+                        }
+                        break;
+                    
+                    case 'select':
+                        const selectElement = document.getElementById(key);
+                        if (selectElement) {
+                            userAnswer = selectElement.value;
+                            const acceptedAnswers = Array.isArray(correctAnswer) ? correctAnswer : [String(correctAnswer)];
+                            isCorrect = acceptedAnswers.some(ans => ans.toUpperCase() === userAnswer.toUpperCase());
+                            selectElement.classList.add(isCorrect ? 'correct' : 'incorrect');
+                            if (!isCorrect) {
+                                const correctAnswerSpan = document.createElement('span');
+                                correctAnswerSpan.className = 'correct-answer-text';
+                                correctAnswerSpan.textContent = `(Correct: ${acceptedAnswers.join(' / ')})`;
+                                selectElement.parentNode.insertBefore(correctAnswerSpan, selectElement.nextSibling);
+                            }
+                        }
+                        break;
+                    
+                    case 'checkbox':
+                        const checkedBoxes = (key === 'q13' || key === 'q14') ? document.querySelectorAll('input[name="q13-14"]:checked') : document.querySelectorAll(`input[name="${key}"]:checked`);
+                        const userAnswers = Array.from(checkedBoxes).map(box => box.value).sort();
+                        userAnswer = userAnswers.join(', '); // Set userAnswer for results
+                        const correctAnswersArray = Array.isArray(correctAnswer) ? correctAnswer.sort() : [correctAnswer];
+                        if (Array.isArray(correctAnswer) && correctAnswersArray.length > 1) {
+                            isCorrect = userAnswers.length === correctAnswersArray.length && userAnswers.every((ans, idx) => ans === correctAnswersArray[idx]);
+                        } else {
+                            // Individual checkbox question like q13 or q14
+                            isCorrect = userAnswers.includes(String(correctAnswer));
+                        }
+                        
+                        // Mark all checked boxes
+                        checkedBoxes.forEach(box => {
+                            const label = box.closest('label');
+                            if (label) {
+                                label.classList.add(isCorrect ? 'correct' : 'incorrect');
+                            }
+                        });
+                        
+                        // If incorrect, show correct answers
+                        if (!isCorrect) {
+                            correctAnswersArray.forEach(correctAns => {
+                                const correctBox = document.querySelector((key === 'q13' || key === 'q14') ? `input[name="q13-14"][value="${correctAns}"]` : `input[name="${key}"][value="${correctAns}"]`);
+                                if (correctBox) {
+                                    const correctLabel = correctBox.closest('label');
+                                    if (correctLabel) {
+                                        correctLabel.classList.add('correct');
+                                    }
+                                }
+                            });
+                        }
+                        break;
+                }
+
+                if (isCorrect) score++;
+
+                if (btn) {
+                    btn.classList.remove('answered');
+                    btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+
+                resultsData.push({
+                    question: qNum,
+                    userAnswer: userAnswer || 'No Answer',
+                    correctAnswer: Array.isArray(correctAnswer) ? correctAnswer.join(' / ') : String(correctAnswer),
+                    isCorrect: isCorrect
+                });
+            });
+
+            const deliverButton = document.getElementById('deliver-button');
+            const band = (function(raw){
+                if(raw>=39) return 9;
+                if(raw>=37) return 8.5;
+                if(raw>=35) return 8;
+                if(raw>=32) return 7.5;
+                if(raw>=30) return 7;
+                if(raw>=26) return 6.5;
+                if(raw>=23) return 6;
+                if(raw>=18) return 5.5;
+                if(raw>=16) return 5;
+                if(raw>=13) return 4.5;
+                if(raw>=10) return 4;
+                if(raw>=8)  return 3.5;
+                if(raw>=6)  return 3;
+                if(raw>=4)  return 2.5;
+                if(raw>=2)  return 2;
+                if(raw===1) return 1.5;
+                return 0;
+            })(score);
+            
+            // Change button to "My Answers" and make it green
+            deliverButton.innerHTML = `<i class="fa fa fa-check" aria-hidden="true"></i><span>My Answers</span>`;
+            deliverButton.style.backgroundColor = '#28a745';
+            deliverButton.style.color = 'white';
+            deliverButton.style.borderColor = '#28a745';
+            deliverButton.onclick = showResultsModal;
+            
+            // Store results for modal
+            window.testResults = {
+                score: score,
+                band: band,
+                resultsData: resultsData
+            };
+            document.querySelectorAll('.answer-input, input[type="radio"], input[type="checkbox"]').forEach(input => {
+                input.disabled = true;
+            });
+            document.querySelectorAll('.drag-item').forEach(item => {
+                item.setAttribute('draggable', 'false');
+                item.style.cursor = 'default';
+            });
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.classList.remove('drag-over'); // Ensure no lingering hover styles
+            });
+
+            document.querySelector('.main-container').classList.add('results-mode');
+            switchToPart(currentPart); // Show the transcription for the current part
+
+            // Populate and show modal
+            const modal = document.getElementById('result-modal');
+            const scoreSummary = document.getElementById('score-summary');
+            const resultDetails = document.getElementById('result-details');
+            
+            scoreSummary.textContent = `You scored ${score} out of 40 (Band ${band}).`;
+            
+            let tableHTML = '<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr>';
+            resultsData.sort((a,b) => parseInt(a.question, 10) - parseInt(b.question, 10)).forEach(res => {
+                tableHTML += `
+                    <tr>
+                        <td>${res.question}</td>
+                        <td>${res.userAnswer}</td>
+                        <td>${res.correctAnswer}</td>
+                        <td class="${res.isCorrect ? 'result-correct' : 'result-incorrect'}">
+                            ${res.isCorrect ? '✔ Correct' : '✖ Incorrect'}
+                        </td>
+                    </tr>
+                `;
+            });
+            tableHTML += '</table>';
+            resultDetails.innerHTML = tableHTML;
+
+            modal.style.display = 'flex';
+        }
+        
+        function showResultsModal() {
+            if (!window.testResults) return;
+            
+            const { score, band, resultsData } = window.testResults;
+            
+            // Populate and show modal
+            const modal = document.getElementById('result-modal');
+            const scoreSummary = document.getElementById('score-summary');
+            const resultDetails = document.getElementById('result-details');
+            
+            scoreSummary.textContent = `You scored ${score} out of 40 (Band ${band}).`;
+            
+            let tableHTML = '<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr>';
+            resultsData.sort((a,b) => parseInt(a.question, 10) - parseInt(b.question, 10)).forEach(res => {
+                tableHTML += `
+                    <tr>
+                        <td>${res.question}</td>
+                        <td>${res.userAnswer}</td>
+                        <td>${res.correctAnswer}</td>
+                        <td class="${res.isCorrect ? 'result-correct' : 'result-incorrect'}">
+                            ${res.isCorrect ? '✔ Correct' : '✖ Incorrect'}
+                        </td>
+                    </tr>
+                `;
+            });
+            tableHTML += '</table>';
+            resultDetails.innerHTML = tableHTML;
+
+            modal.style.display = 'flex';
+        }
+        
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeInSeconds--;
+                const minutes = Math.floor(timeInSeconds / 60);
+                const seconds = timeInSeconds % 60;
+                timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                if (timeInSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = "Time's up!";
+                    checkAnswers();
+                }
+            }, 1000);
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+        }
+
+        // Event Listeners
+        playPauseBtn.addEventListener('click', () => {
+            if (!testStarted) {
+                testStarted = true; // Timer removed, skip startTimer
+                switchToPart(currentPart, true);
+            } else {
+                if (audioPlayer.paused) {
+                    // If paused, ensure the audio source is for the current part
+                    if (!audioPlayer.src.includes(audioSource)) {
+                        audioPlayer.src = audioSource;
+                    }
+                    audioPlayer.play();
+                } else {
+                    audioPlayer.pause();
+                }
+            }
+        });
+        
+        audioPlayer.addEventListener('play', () => {
+            playPauseBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+        });
+
+        audioPlayer.addEventListener('pause', () => {
+            playPauseBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
+        });
+
+        audioPlayer.addEventListener('ended', () => {
+            if (currentPart < 4) {
+                switchToPart(currentPart + 1, true);
+            }
+        });
+
+        audioPlayer.addEventListener('loadedmetadata', () => {
+            progressBar.max = audioPlayer.duration;
+            totalDurationEl.textContent = formatTime(audioPlayer.duration);
+        });
+
+        audioPlayer.addEventListener('timeupdate', () => {
+            progressBar.value = audioPlayer.currentTime;
+            currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+        });
+
+        progressBar.addEventListener('input', () => {
+            audioPlayer.currentTime = progressBar.value;
+        });
+
+        volumeSlider.addEventListener('input', (e) => audioPlayer.volume = e.target.value);
+
+        speedBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            speedOptions.classList.toggle('hidden');
+        });
+
+        speedOptions.addEventListener('click', (e) => {
+            if (e.target.dataset.speed) {
+                const speed = parseFloat(e.target.dataset.speed);
+                audioPlayer.playbackRate = speed;
+                speedBtn.textContent = `${speed}x`;
+                speedOptions.classList.add('hidden');
+            }
+        });
+        
+        document.addEventListener('click', () => {
+            if (!speedOptions.classList.contains('hidden')) {
+                speedOptions.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('deliver-button').addEventListener('click', checkAnswers);
+        
+        // Go To Question Widget Logic
+        const gotoWidget = document.getElementById('goto-widget');
+        const gotoInput = document.getElementById('goto-input');
+        const gotoBtn = document.getElementById('goto-btn');
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '0' && e.key <= '9' && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                gotoWidget.classList.remove('hidden');
+                gotoInput.focus();
+                gotoInput.value = e.key;
+            }
+            if (e.key === 'Enter' && document.activeElement === gotoInput) {
+                gotoBtn.click();
+            }
+            if (e.key === 'Escape') {
+                gotoWidget.classList.add('hidden');
+                gotoInput.value = '';
+            }
+        });
+
+        if (gotoBtn) {
+            gotoBtn.addEventListener('click', () => {
+                const qNum = parseInt(gotoInput.value, 10);
+                if (qNum >= 1 && qNum <= 40) {
+                    goToQuestion(qNum);
+                    gotoWidget.classList.add('hidden');
+                    gotoInput.value = '';
+                } else {
+                    alert('Please enter a number between 1 and 40.');
+                }
+            });
+        }
+
+        // Add listener for the modal close button
+        document.getElementById('modal-close-button').addEventListener('click', () => {
+            document.getElementById('result-modal').style.display = 'none';
+        });
+
+        // === Tap-to-select & tap-to-drop for drag items (mobile support) ===
+        document.body.addEventListener('click', function(e){
+            const item = e.target.closest('.drag-item');
+            if(item && item.getAttribute('draggable')){
+                // Toggle selection
+                document.querySelectorAll('.drag-item.selected').forEach(i=>i.classList.remove('selected'));
+                item.classList.add('selected');
+                draggedElement = item;
+                return;
+            }
+            const dz = e.target.closest('.drop-zone');
+            if(dz && draggedElement){
+                // If already filled, move old back
+                const optionsList = document.querySelector('.matching-options-list');
+                if(dz.children.length>0 && dz.firstElementChild!==draggedElement){
+                    optionsList.appendChild(dz.firstElementChild);
+                }
+                dz.appendChild(draggedElement);
+                draggedElement.classList.remove('selected');
+                draggedElement=null;
+                updateAnsweredIndicators();
+            }
+        });
+
+        // === Mobile highlight/comment toolbar ===
+        const mobileToolbar = document.getElementById('mobile-selection-menu');
+        function positionToolbar(){
+            const sel = window.getSelection();
+            if(sel.rangeCount===0 || sel.isCollapsed){
+                mobileToolbar.classList.add('hidden');
+                return;
+            }
+            const range = sel.getRangeAt(0);
+            const rect = range.getBoundingClientRect();
+            mobileToolbar.style.top = window.scrollY + rect.top - mobileToolbar.offsetHeight - 8 + 'px';
+            mobileToolbar.style.left = window.scrollX + rect.left + 'px';
+            mobileToolbar.classList.remove('hidden');
+        }
+        document.addEventListener('selectionchange', () => {
+            const sel = window.getSelection();
+            if(sel && sel.rangeCount>0 && !sel.isCollapsed){
+                selectedRange = sel.getRangeAt(0);
+                selectedText = sel.toString();
+            }
+            if('ontouchstart' in window || navigator.maxTouchPoints>0){
+                setTimeout(positionToolbar, 0);
+            }
+        });
+        document.addEventListener('click', (e)=>{
+            if(!e.target.closest('#mobile-selection-menu')){
+                mobileToolbar.classList.add('hidden');
+            }
+        });
+
+        /* ---------------- Drag and Drop for Matching Questions ---------------- */
+
+        (function initDragAndDrop() {
+            const container = document.querySelector('.left-panel');
+            if (!container) return;
+
+            container.addEventListener('dragstart', (e) => {
+                if (e.target.classList.contains('drag-item')) {
+                    draggedElement = e.target;
+                    setTimeout(() => {
+                        e.target.classList.add('dragging');
+                    }, 0);
+                }
+            });
+
+            container.addEventListener('dragend', (e) => {
+                if (draggedElement) {
+                    draggedElement.classList.remove('dragging');
+                    draggedElement = null;
+                }
+            });
+
+            container.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const target = e.target;
+                const dropZone = target.closest('.drop-zone');
+                const optionsList = target.closest('.matching-options-list');
+
+                if (dropZone || optionsList) {
+                    const overElement = dropZone || optionsList;
+                    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+                    overElement.classList.add('drag-over');
+                }
+            });
+
+            container.addEventListener('dragleave', (e) => {
+                const target = e.target;
+                const dropZone = target.closest('.drop-zone');
+                const optionsList = target.closest('.matching-options-list');
+                if (dropZone || optionsList) {
+                    const overElement = dropZone || optionsList;
+                    overElement.classList.remove('drag-over');
+                }
+            });
+
+
+            container.addEventListener('drop', (e) => {
+                e.preventDefault();
+                if (!draggedElement) return;
+
+                const dropTarget = e.target.closest('.drop-zone, .matching-options-list');
+                if (!dropTarget) {
+                    draggedElement.classList.remove('dragging');
+                    draggedElement = null;
+                    return;
+                }
+
+                document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+                
+                const existingItem = dropTarget.matches('.drop-zone') ? dropTarget.querySelector('.drag-item') : null;
+                const originalParent = draggedElement.parentNode;
+
+                // If there's an item in the target dropzone, swap them
+                if (existingItem) {
+                    originalParent.appendChild(existingItem);
+                }
+                
+                dropTarget.appendChild(draggedElement);
+
+                if(dropTarget.matches('.drop-zone')) {
+                    const placeholder = dropTarget.querySelector('.placeholder');
+                    if (placeholder) placeholder.style.display = 'none';
+                }
+
+                draggedElement.classList.remove('dragging');
+                draggedElement = null;
+                updateAnsweredIndicators();
+            });
+        })();
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            switchToPart(1);
+            goToQuestion(1);
+            setupCheckboxLimits();
+
+            document.body.addEventListener('contextmenu', function (e) {
+                const text = window.getSelection().toString();
+                if (!text) return;
+                e.preventDefault();
+                const menu = document.getElementById('contextMenu');
+                menu.style.left = e.pageX + 'px';
+                menu.style.top = e.pageY + 'px';
+                menu.style.display = 'block';
+
+                const target = e.target;
+                const clearItem = document.getElementById('clear-item');
+                contextElement = target.closest('.highlight, .comment-highlight');
+                if(contextElement){
+                    clearItem.style.display = 'block';
+                } else {
+                    clearItem.style.display = 'none';
+                }
+            });
+            
+            document.body.addEventListener('click', function(e) {
+                if (e.target.closest('.context-menu')) return;
+                document.getElementById('contextMenu').style.display = 'none';
+            });
+        });
+
+        // Initial setup on DOM load
+        document.addEventListener('DOMContentLoaded', updateAnsweredIndicators);
+
+        document.querySelectorAll('.mcq-table td').forEach(cell => {
+            cell.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'INPUT') {
+                    const radio = cell.querySelector('input[type="radio"]');
+                    if (radio && !radio.disabled) {
+                        radio.checked = true;
+                    }
+                }
+            });
+        });
+
+        document.querySelectorAll('.answer-input, input[type="radio"], input[type="checkbox"], select.answer-input').forEach(input => {
+            input.addEventListener('input', updateAnsweredIndicators);
+            input.addEventListener('change', updateAnsweredIndicators);
+        });
+
+        function initAllDragAndDrop() {
+            const dragItems = document.querySelectorAll('.drag-item');
+            const dropZones = document.querySelectorAll('.drop-zone');
+
+            dragItems.forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+            });
+
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('dragleave', handleDragLeave);
+                zone.addEventListener('drop', handleDrop);
+            });
+
+            function handleDragStart(e) {
+                draggedElement = e.target;
+                setTimeout(() => e.target.classList.add('dragging'), 0);
+            }
+
+            function handleDragEnd(e) {
+                e.target.classList.remove('dragging');
+            }
+
+            function handleDragOver(e) {
+                e.preventDefault();
+                const zone = e.target.closest('.drop-zone');
+                if (zone) zone.classList.add('drag-over');
+            }
+
+            function handleDragLeave(e) {
+                const zone = e.target.closest('.drop-zone');
+                if (zone) zone.classList.remove('drag-over');
+            }
+
+            function handleDrop(e) {
+                e.preventDefault();
+                const targetZone = e.target.closest('.drop-zone');
+                if (!targetZone || !draggedElement) return;
+                
+                targetZone.classList.remove('drag-over');
+
+                const sourceContainer = draggedElement.parentNode;
+                const itemInTargetZone = targetZone.querySelector('.drag-item');
+                
+                // Prevent dropping on self or non-droppable area inside zone
+                if (e.target.classList.contains('drag-item') && e.target !== draggedElement) {
+                    return; // Or handle swap explicitly here if needed
+                }
+                
+                if (itemInTargetZone && itemInTargetZone !== draggedElement) {
+                    // If source is an options list, move the existing item back
+                    const optionsList = findParentOptionsList(targetZone);
+                    if (sourceContainer.classList.contains('matching-options-list') || sourceContainer.classList.contains('map-options-list')) {
+                    optionsList.appendChild(itemInTargetZone);
+                    } 
+                    // If source is another drop zone (swapping)
+                    else if (sourceContainer.classList.contains('drop-zone')) {
+                        sourceContainer.appendChild(itemInTargetZone);
+                    }
+                }
+
+                targetZone.appendChild(draggedElement);
+                if (targetZone.querySelector('.placeholder')) {
+                    targetZone.querySelector('.placeholder').style.display = 'none';
+                }
+                
+                updateAnsweredIndicators();
+            }
+
+            function findParentOptionsList(element) {
+                // Specific for map
+                if (element.closest('#map-drag-container')) {
+                    return document.getElementById('map-options-q11-15');
+                }
+                // Generic for matching
+                const container = element.closest('.matching-container');
+                if (container) {
+                    return container.querySelector('.matching-options-list');
+                }
+                return null;
+            }
+        }
+
+        let transcriptionHighlighted = false;
+        function highlightAnswersInTranscription() {
+            if (transcriptionHighlighted) return;
+
+            const highlightedTranscripts = { 1: '', 2: '', 3: '', 4: '' };
+
+            for (let i = 1; i <= 4; i++) {
+                const partElement = document.querySelector(`#transcription-data [data-part="${i}"]`);
+                if (partElement) highlightedTranscripts[i] = partElement.innerHTML;
+            }
+
+            for (const key in correctAnswers) {
+                const answers = Array.isArray(correctAnswers[key]) ? correctAnswers[key] : [correctAnswers[key]];
+                if (answers.every(answer => /^[A-G]$/.test(answer))) {
+                    continue;
+                }
+
+                const qNum = parseInt(key.match(/\d+/)[0]);
+                let partNumber = 1;
+                if (qNum > 10 && qNum <= 20) partNumber = 2;
+                else if (qNum > 20 && qNum <= 30) partNumber = 3;
+                else if (qNum > 30) partNumber = 4;
+
+                if (!highlightedTranscripts[partNumber]) continue;
+
+                let answersToHighlight = correctAnswers[key];
+                if (!Array.isArray(answersToHighlight)) {
+                    answersToHighlight = [answersToHighlight];
+                }
+
+                for (const answer of answersToHighlight) {
+                    if (/^[A-G]$/.test(answer)) continue;
+                    
+                    let searchTerm = answer.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    searchTerm = searchTerm.replace(/\\\(s\\\)/g, '(s)?');
+                    
+                    const regex = new RegExp(`\\b(${searchTerm})\\b`, 'gi');
+                    
+                    highlightedTranscripts[partNumber] = highlightedTranscripts[partNumber].replace(
+                        regex,
+                        '<span class="highlight">$1</span>'
+                    );
+                }
+            }
+
+            for (let i = 1; i <= 4; i++) {
+                const partElement = document.querySelector(`#transcription-data [data-part="${i}"]`);
+                if(partElement) partElement.innerHTML = highlightedTranscripts[i];
+            }
+            transcriptionHighlighted = true;
+        }
+        
+        function closeContextMenu() {
+            document.getElementById('contextMenu').style.display = 'none';
+            contextElement = null;
+        }
+        
+        // Function to limit checkbox selections
+        window.limitCheckboxes = function(checkbox, name, maxSelections) {
+            const checkboxes = document.querySelectorAll(`input[name="${name}"]`);
+            const checkedBoxes = document.querySelectorAll(`input[name="${name}"]:checked`);
+            
+            if (checkedBoxes.length > maxSelections) {
+                // If we're over the limit, uncheck the current checkbox
+                checkbox.checked = false;
+                return;
+            }
+            
+            updateAnsweredIndicators();
+        };
+        
+        // Global function for selecting cells in tables
+        window.selectCell = function(cell, questionId, value) {
+            // Remove selected from row
+            const row = cell.closest('tr');
+            row.querySelectorAll('.clickable-cell').forEach(c => c.classList.remove('selected'));
+            // Mark cell
+            cell.classList.add('selected');
+            cell.setAttribute('data-selected','true');
+            cell.setAttribute('data-answer',value);
+            updateAnsweredIndicators();
+        };
+    </script>
+</body>
+</html>

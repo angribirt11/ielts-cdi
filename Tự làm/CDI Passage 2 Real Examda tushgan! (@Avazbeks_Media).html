@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Avazbeks_Media Real exam Materials CD format</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --passage-bg: #f8f9fa;
+            --questions-bg: #ffffff;
+            --border-color: #5770ff;
+            --highlight-color: springgreen;
+            /* Changed highlight color */
+
+            /* New Header & Social Colors */
+            --header-bg: #F8F8F8;
+            /* Very light gray for header background */
+            --header-text: #333333;
+            /* Dark text for light header */
+            --telegram-blue: #0088CC;
+            --instagram-pink: #E4405F;
+            --youtube-red: #FF0000;
+
+            /* Button Colors (Red themed) */
+            --button-bg: #28a745;
+            /* Primary button red */
+            --button-hover: #218838;
+            /* Darker red on hover */
+
+            --correct-color: #28a745;
+            /* Standard green */
+            --incorrect-color: #dc3545;
+            /* Standard red */
+            --progress-complete: #28a745;
+            --progress-incomplete: #bdbdbd;
+
+            /* Timer Colors (Red themed) */
+            --timer-bg: #0088CC;
+            /* Very light red/pink */
+            --timer-text: #ffffff;
+            /* Darker red */
+
+            --footer-bg: #f5f5f5;
+        }
+
+        .night-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --passage-bg: #1e1e1e;
+            --questions-bg: #1e1e1e;
+            --border-color: #424242;
+            --highlight-color: #0084ff;
+            /* Darker springgreen for night mode */
+
+            /* Night Mode Header & Social Colors */
+            --header-bg: #1a1a1a;
+            /* Dark gray for header background */
+            --header-text: #ffffff;
+            /* White text for dark header */
+            --telegram-blue: #005f99;
+            /* Darker telegram blue */
+            --instagram-pink: #b2334b;
+            /* Darker instagram pink */
+            --youtube-red: #b20000;
+            /* Darker YouTube red */
+
+            /* Night Mode Button Colors */
+            --button-bg: #990000;
+            /* Darker primary button red */
+            --button-hover: #7a0000;
+            /* Even darker red on hover */
+
+            --correct-color: #218838;
+            /* Darker green */
+            --incorrect-color: #c82333;
+            /* Darker red */
+            --progress-complete: #218838;
+            --progress-incomplete: #616161;
+
+            /* Night Mode Timer Colors */
+            --timer-bg: #0088CC;
+            /* Dark red */
+            --timer-text: #ffcdd2;
+            /* Lighter red */
+
+            --footer-bg: #121212;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            /* Space between social links */
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            /* Space between icon and text */
+            color: white;
+            /* Text color is always white for social links */
+            padding: 8px 15px;
+            border-radius: 50px;
+            /* Pill shape */
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-1px);
+        }
+
+        .social-link i {
+            font-size: 1.2em;
+            /* Makes icon slightly larger than text */
+        }
+
+        /* Specific styling for social links */
+        .social-link.telegram {
+            background-color: var(--telegram-blue);
+        }
+
+        .social-link.telegram:hover {
+            background-color: #007bb5;
+            /* Slightly darker */
+        }
+
+        .social-link.instagram {
+            background-color: var(--instagram-pink);
+        }
+
+        .social-link.instagram:hover {
+            background-color: #d62976;
+            /* Slightly darker */
+        }
+
+        .social-link.youtube {
+            background-color: var(--youtube-red);
+        }
+
+        .social-link.youtube:hover {
+            background-color: #CC0000;
+            /* Slightly darker */
+        }
+
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .timer-container {
+            background-color: var(--timer-bg);
+            color: var(--timer-text);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .timer-controls button {
+            background: none;
+            border: none;
+            color: var(--timer-text);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-controls button:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            /* Darker hover for light timer */
+        }
+
+        .night-mode .timer-controls button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            /* Lighter hover for dark timer */
+        }
+
+        .mode-toggle {
+            background: none;
+            border: none;
+            color: var(--header-text);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 6px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mode-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            /* Darker hover for light header */
+        }
+
+        .night-mode .mode-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            /* Lighter hover for dark header */
+        }
+
+        main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container,
+        .questions-container {
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .passage-container {
+            width: 50%;
+            background-color: var(--passage-bg);
+            border-right: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .questions-container {
+            width: 50%;
+            background-color: var(--questions-bg);
+        }
+
+        .passage-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .passage-text {
+            font-size: 17px;
+        }
+
+        .question-text {
+            font-size: 17px;
+            line-height: 1.8;
+            /* Increased line-height for fill-in-the-blank */
+        }
+
+        .passage-text p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .highlight {
+            background-color: var(--highlight-color);
+            cursor: pointer;
+        }
+
+        .highlight-tooltip {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 25px 0 15px;
+            color: var(--text-color);
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--passage-bg);
+            border-left: 4px solid var(--border-color);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: baseline;
+            /* Align baselines of number and text */
+        }
+
+        .question-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background-color: var(--progress-incomplete);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 10px;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .question.answered .question-number {
+            background-color: var(--progress-complete);
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .option input {
+            margin-right: 8px;
+        }
+
+        /* Styling for the new inline input fields */
+        .fill-in-the-blank {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--text-color);
+            width: 150px;
+            font-family: inherit;
+            font-size: 1em;
+            /* Inherit font size from parent */
+            color: inherit;
+            padding: 0 4px 2px 4px;
+            /* Add some padding */
+            margin: 0 3px;
+            /* Add some margin */
+            vertical-align: baseline;
+            /* Align with the text */
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .fill-in-the-blank:focus {
+            border-bottom-color: var(--button-bg);
+        }
+
+
+        .instructions {
+            font-size: 14px;
+            color: #757575;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        footer {
+            background-color: var(--footer-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .progress-item {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--progress-incomplete);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .progress-item:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-item.completed {
+            background-color: var(--progress-complete);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--button-bg);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--button-bg);
+            /* Use primary button color for border */
+            color: var(--button-bg);
+            /* Use primary button color for text */
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(204, 0, 0, 0.1);
+            /* Light red tint on hover */
+        }
+
+        .night-mode .btn-secondary:hover {
+            background-color: rgba(153, 0, 0, 0.2);
+            /* Darker red tint on hover for night mode */
+        }
+
+
+        .feedback-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feedback-container {
+            background-color: var(--passage-bg);
+            width: 90%;
+            max-width: 900px;
+            height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feedback-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #close-feedback {
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+
+        .feedback-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .feedback-item {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--questions-bg);
+        }
+
+        .feedback-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .feedback-answer {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .correct {
+            color: var(--correct-color);
+        }
+
+        .incorrect {
+            color: var(--incorrect-color);
+        }
+
+        .feedback-explanation {
+            margin-top: 10px;
+            padding: 10px;
+            border-left: 3px solid var(--button-bg);
+            /* Use primary button color for explanation border */
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .feedback-passage {
+            margin-top: 8px;
+            font-style: italic;
+            color: #757575;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            main {
+                flex-direction: column;
+            }
+
+            .passage-container,
+            .questions-container {
+                width: 100%;
+                height: 50%;
+            }
+
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .progress-container {
+                flex-wrap: wrap;
+                max-width: 60%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo-area {
+                flex-wrap: wrap;
+                /* Allow items to wrap to the next line */
+                justify-content: center;
+                /* Center items when wrapped */
+                gap: 8px;
+                /* Adjusted gap for smaller screens */
+            }
+
+            .social-link {
+                padding: 6px 10px;
+                /* Reduced padding for smaller screens */
+                font-size: 13px;
+                /* Reduced font size for smaller screens */
+            }
+
+            .social-link i {
+                font-size: 1.1em;
+                /* Slightly smaller icon */
+            }
+
+            .social-link span {
+                display: inline;
+                /* Ensure text is visible */
+            }
+        }
+
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .header-controls {
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            .progress-container {
+                max-width: 50%;
+            }
+
+            .progress-item {
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .action-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+
+<div class="logo-area">
+<!-- Removed the logo image tag as it was not opening -->
+<a class="social-link telegram" href="https://t.me/Avazbeks_Media" target="_blank" title="Join on Telegram">
+<i class="fab fa-telegram-plane"></i>
+<span>Avazbeks_Media</span>
+</a>
+</div>
+<div class="header-controls">
+<div class="timer-container">
+<i class="fas fa-clock"></i>
+<span id="timer">20:00</span>
+<div class="timer-controls">
+<button id="start-timer" title="Start"><i class="fas fa-play"></i></button>
+<button id="pause-timer" title="Pause"><i class="fas fa-pause"></i></button>
+<button id="reset-timer" title="Reset"><i class="fas fa-redo"></i></button>
+</div>
+</div>
+<button class="mode-toggle" id="night-mode-toggle" title="Toggle Night Mode">
+<i class="fas fa-moon"></i>
+</button>
+</div>
+</header>
+<main>
+    <div class="passage-container" id="passage-container">
+        <div class="passage-content">
+            <h4>READING PASSAGE 2</h4>
+            <div class="instructions">You should spend about 20 minutes on Questions 1-13, which are based on
+                Reading Passage 2.</div>
+            <div class="passage-title"></div>
+            <div class="passage-text" id="passage-text">
+                <p style="text-align:center; font-weight: bold !important;"><b>A Study of Western Celebrity</b><br><i>In our celebrity-obsessed culture, TV shows, Internet blogs, and even newspapers are often full of the latest news, gossip, and scandals about current celebrities.</i></p>
+                    <p><strong>A</strong> It seems that our current society cannot get enough information about the daily lives of celebrities. But how did celebrities become so much an important force in our culture? While people have always shared a certain obsession for the fantastic and the famous, the notion of celebrity, as well as the types of people termed 'celebrities', has evolved greatly throughout the ages. The word 'celebrity' has its roots in the language of the ancient Roman civilization. The word we now know to mean 'a condition of being famous' or 'a famous person' is derived from the Latin word 'celeber', meaning 'frequented or populous'.</p>
+
+                    <p><strong>B</strong> The celebrities of the ancient world were the powerful and awesome deities of Greece and Rome, and the citizens of these civilizations believed in a vast number of immortals who had a direct impact on their lives. It was, therefore, important to know about these figures' personal lives. This need to know led to the creation of myths, which personalized the gods and involved them in ancient celebrity scandals that thrilled and excited the common people.</p>
+                    
+                    <p><strong>C</strong> During ancient times, amateur and professional athletes also began to make an impact on the celebrity culture. Victors in the ancient Olympic Games were treated as heroes and were often elevated to god-like status. In the ancient Roman civilization, gladiators, the equivalent of today's professional athletes — were also revered by the common people for their heroics and seemingly superhuman strength.</p>
+                    
+                    <p><strong>D</strong> As Europe moved into the Dark Ages (the years spanning approximately 400-1300 AD) and a time when athletics and the arts were largely forgotten, monarchs and rulers continued to maintain celebrity status, while religious figures took on newfound fame. The miraculous lives and fascinating deaths of spiritual figures lent excitement to the lives of common people when there was often little else to be excited about, as they faced war, disease, and food shortages.</p>
+                    
+                    <p><strong>E</strong> During the period 1300-1600 AD, or the Renaissance period as it is known, interest in ruling figures faded. As Europe emerged from its long neglect of the arts, there was a greater appreciation for portraits, statues, and stone carvings. This period of appreciation for the arts lent a sense of celebrity to artists who were noted for their works and their achievements. It was a time when artists began to surpass political and religious individuals for supreme celebrity, a trend that would continue into later centuries.</p>
+                    
+                    <p><strong>F</strong> While the figures of the ancient and early modern civilizations were able to achieve moderate and sometimes lasting celebrity within particular cultures, the global reach of their fame was limited. It was not until the 1700s, when technological advances made publishing commercially viable, that the extent of a person's fame could spread further. The increase in the availability of the written word was accompanied by a huge rise in the number of common people who could read, allowing a mass audience to find out about celebrities for the first time. Suddenly, the lives of authors, politicians, war heroes, and other celebrities could now be read about in newspapers around the world. These gave ordinary people the opportunity to become intimately knowledgeable about the figures they most admired.</p>
+                    
+                    <p><strong>G</strong> In the modern era, particularly as radio and film took off in the 1900s, things began to change. First, radio began to make its way into the average home in the 1920s and 1930s. Professional athletes also began to be regarded as stars, as their games and exploits could be broadcast over the air to an entirely new audience. Then, the rise of television in the 1950s only cemented the premier level of celebrity that film stars, athletes, and television actors were beginning to share. This also meant a huge increase in the individual salaries of these celebrities. Even a few animals gained fame through children's TV shows. The emergence of reality television shows in the late 1990s allowed all kinds of people with little ability to enjoy a short burst of fame on the television screen. All you needed, it seemed, was an attractive appearance. Today, reality television programmers make it possible to be famous not for doing anything in particular, but simply for being, with the audience deciding whether someone deserves to become a celebrity or not. As the meaning of celebrity continues to evolve and redefine itself in a quickly changing world, there is no telling who will become of interest next.</p>
+                    
+            </div>
+        </div>
+    </div>
+    <div class="questions-container" id="questions-container">
+        <div class="section-title">Questions 14–20.</div>
+        <div class="instructions">
+            Reading Passage 2 has seven paragraphs, A-G.<br />
+            Choose the correct heading for each section from the list of headings below.<br />
+            Write the correct number, i-viii, in boxes on your answer sheet. <br>
+            </br></div>
+        <div class="question" style="margin-bottom: 10px;">
+            <strong> List of Headings</strong><br>
+            <b>I</b> Why it is necessary to explain the meaning of the word celebrity<br />
+            <b>II</b> The influence of non-human celebrities on societies<br />
+            <b>III</b> The impact of broadcasting on concepts of celebrity<br />
+            <b>IV</b> Creativity having greater value<br />
+            <b>V</b> Admiration for physical achievement<br />
+            <b>VI</b> The advantages of celebrity status in the ancient world<br />
+            <b>VII</b> A result of hardship<br />
+            <b>VIII</b> Literacy and widespread celebrity<br />
+            <b>IX</b> Attitudes of celebrities towards the media<br />
+            <b>X</b> The original definition of celebrity<br />                       
+        </div>
+        <div class="question-group">
+            <div class="question" id="q14">
+                <div class="question-title">
+                    <div class="question-number">14</div>
+                    <div class="question-text">Paragarph A</div>
+                </div>
+                <select name="q14">
+                    <option value="">Select headings...</option>
+                    <option value="I">I</option>
+                    <option value="II">II</option>
+                    <option value="III">III</option>
+                    <option value="IV">IV</option>
+                    <option value="V">V</option>
+                    <option value="VI">VI</option>
+                    <option value="VII">VII</option>
+                    <option value="VIII">VIII</option>
+                    <option value="IX">IX</option>
+                    <option value="X">X</option>
+                </select>
+            </div>
+            <div class="question" id="q15">
+                <div class="question-title">
+                    <div class="question-number">15</div>
+                    <div class="question-text">Paragraph B</div>
+                </div>
+                <select name="q15">
+                    <option value="">Select headings...</option>
+                    <option value="">Select headings...</option>
+                    <option value="I">I</option>
+                    <option value="II">II</option>
+                    <option value="III">III</option>
+                    <option value="IV">IV</option>
+                    <option value="V">V</option>
+                    <option value="VI">VI</option>
+                    <option value="VII">VII</option>
+                    <option value="VIII">VIII</option>
+                    <option value="IX">IX</option>
+                    <option value="X">X</option>
+                </select>
+            </div>
+            <div class="question" id="q16">
+                <div class="question-title">
+                    <div class="question-number">16</div>
+                    <div class="question-text">Paragraph C</div>
+                </div>
+                <select name="q16">
+                    <option value="">Select headings...</option>
+                    <option value="">Select headings...</option>
+                    <option value="I">I</option>
+                    <option value="II">II</option>
+                    <option value="III">III</option>
+                    <option value="IV">IV</option>
+                    <option value="V">V</option>
+                    <option value="VI">VI</option>
+                    <option value="VII">VII</option>
+                    <option value="VIII">VIII</option>
+                    <option value="IX">IX</option>
+                    <option value="X">X</option>
+                </select>
+            </div>
+            <div class="question" id="q17">
+                <div class="question-title">
+                    <div class="question-number">17</div>
+                    <div class="question-text">Paragraph D</div>
+                </div>
+                <select name="q17">
+                    <option value="">Select headings...</option>
+                    <option value="">Select headings...</option>
+                    <option value="I">I</option>
+                    <option value="II">II</option>
+                    <option value="III">III</option>
+                    <option value="IV">IV</option>
+                    <option value="V">V</option>
+                    <option value="VI">VI</option>
+                    <option value="VII">VII</option>
+                    <option value="VIII">VIII</option>
+                    <option value="IX">IX</option>
+                    <option value="X">X</option>
+                </select>
+            </div>
+            <div class="question" id="q18">
+                <div class="question-title">
+                    <div class="question-number">18</div>
+                    <div class="question-text">Paragraph E</div>
+                </div>
+                <select name="q18">
+                    <option value="">Select headings...</option>
+                    <option value="">Select headings...</option>
+                    <option value="I">I</option>
+                    <option value="II">II</option>
+                    <option value="III">III</option>
+                    <option value="IV">IV</option>
+                    <option value="V">V</option>
+                    <option value="VI">VI</option>
+                    <option value="VII">VII</option>
+                    <option value="VIII">VIII</option>
+                    <option value="IX">IX</option>
+                    <option value="X">X</option>
+                </select>
+            </div>
+            <div class="question" id="q19">
+                <div class="question-title">
+                    <div class="question-number">19</div>
+                    <div class="question-text">Paragraph F</div>
+                </div>
+                <select name="q19">
+                    <option value="">Select headings...</option>
+                    <option value="">Select headings...</option>
+                    <option value="I">I</option>
+                    <option value="II">II</option>
+                    <option value="III">III</option>
+                    <option value="IV">IV</option>
+                    <option value="V">V</option>
+                    <option value="VI">VI</option>
+                    <option value="VII">VII</option>
+                    <option value="VIII">VIII</option>
+                    <option value="IX">IX</option>
+                    <option value="X">X</option>
+                </select>
+            </div>    
+                <div class="question" id="q20">
+                    <div class="question-title">
+                        <div class="question-number">20</div>
+                        <div class="question-text">Paragraph G</div>
+                    </div>
+                    <select name="q20">
+                        <option value="">Select headings...</option>
+                        <option value="">Select headings...</option>
+                        <option value="I">I</option>
+                        <option value="II">II</option>
+                        <option value="III">III</option>
+                        <option value="IV">IV</option>
+                        <option value="V">V</option>
+                        <option value="VI">VI</option>
+                        <option value="VII">VII</option>
+                        <option value="VIII">VIII</option>
+                        <option value="IX">IX</option>
+                        <option value="X">X</option>
+                    </select>    
+            </div>
+        </div>
+        <div class="section-title">Questions 21–23.</div>
+            <div class="instructions">
+                Look at the following statements (Questions 21–23) and the list of historical periods in Europe below. 
+                Match each statement with the correct historical period, A–D.<br />
+                <em>Write the correct letter, A–D, in boxes 21–23 on your answer sheet.</em><br />
+            </div>
+            <div class="question" style="margin-bottom: 10px;">
+                <strong>List of Historical Periods</strong><br />
+                <b>A</b> Ancient times<br />
+                <b>B</b> Dark Ages<br />
+                <b>C</b> Renaissance<br />
+                <b>D</b> Modern era
+            </div>
+            <div class="question-group">
+                <div class="question" id="q21">
+                    <div class="question-title">
+                        <div class="question-number">21</div>
+                        <div class="question-text">A wide variety of people achieve a brief period of fame.</div>
+                    </div>
+                    <select name="q21">
+                        <option value="">Select Period...</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                </div>
+                <div class="question" id="q22">
+                    <div class="question-title">
+                        <div class="question-number">22</div>
+                        <div class="question-text">Stories are invented about celebrities' lives.</div>
+                    </div>
+                    <select name="q22">
+                        <option value="">Select Period...</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                </div>
+                <div class="question" id="q23">
+                    <div class="question-title">
+                        <div class="question-number">23</div>
+                        <div class="question-text">The fame of rulers is starting to diminish.</div>
+                    </div>
+                    <select name="q23">
+                        <option value="">Select Period...</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section-title">Questions 24–26</div>
+            <div class="instructions">Complete the notes below.<br>  
+              Choose <b>ONE WORD ONLY</b> from the passage for each answer.<br> 
+              Write your answers in boxes 24–26 on your answer sheet.</div>
+                <p style="text-align:center; font-weight: bold !important;">Celebrities achieve a global status</p>
+            
+                <div class="question-group">
+
+                    <div class="question" id="q24">
+                        <div class="question-title">
+                            <div class="question-number">24</div>
+                            <div class="question-text">                                
+                              The development of the publishing industry in the 1700s signalled the beginning of international fame. A growing number of people could read, which meant they had the chance to become informed about their favourite figures by reading <input type="text" name="q24" class="fill-in-the-blank">.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="question" id="q25">
+                    <div class="question-title">
+                        <div class="question-number">25</div>
+                        <div class="question-text">                                
+                          This exposure to celebrities expanded further when radio and television became popular, and it was mass media attention that resulted in higher status and fame for some celebrities. The recent rise of reality television has also meant that a person’s <input type="text" name="q25" class="fill-in-the-blank">rather than their talent can bring fame.
+                        </div>
+                    </div>
+                </div>
+                <div class="question" id="q26">
+                  <div class="question-title">
+                      <div class="question-number">26</div>
+                      <div class="question-text">                                
+                        With this type of television programme, fame may be entirely dependent on the response of the <input type="text" name="q26" class="fill-in-the-blank">.
+                      </div>
+                  </div>
+                </div>
+            
+    </div>
+</main>
+<footer>
+<div class="progress-container" id="progress-container">
+</div>
+<div class="action-buttons">
+<button class="btn-secondary" id="reset-btn">Reset Answers</button>
+<button class="btn-primary" id="submit-btn">Submit Answers</button>
+</div>
+</footer>
+<div class="feedback-overlay" id="feedback-overlay">
+<div class="feedback-container" id="feedback-container">
+<div class="feedback-header">
+<div class="feedback-title">
+<i class="fas fa-chart-bar"></i> Your Results
+                    <span class="score-display" id="score-display">0/13</span>
+</div>
+<button id="close-feedback" title="Close"><i class="fas fa-times"></i></button>
+</div>
+<div class="feedback-body" id="feedback-body">
+</div>
+</div>
+</div>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+<script>
+// Modified highlight logic with color picker and remove functionality
+let highlightTooltip = null;
+let selectedRange = null;
+
+function createColorPicker(x, y, applyColorCallback) {
+    const colors = ["lightgreen", "yellow", "lightskyblue"];
+    const picker = document.createElement("div");
+    picker.className = "highlight-tooltip";
+    picker.style.top = `${y}px`;
+    picker.style.left = `${x}px`;
+    picker.style.position = "fixed";
+    picker.style.background = "#333";
+    picker.style.color = "white";
+    picker.style.padding = "5px 10px";
+    picker.style.borderRadius = "4px";
+    picker.style.zIndex = 1000;
+    picker.style.display = "flex";
+    colors.forEach(color => {
+        const btn = document.createElement("button");
+        btn.style.backgroundColor = color;
+        btn.style.border = "none";
+        btn.style.width = "20px";
+        btn.style.height = "20px";
+        btn.style.margin = "0 4px";
+        btn.style.borderRadius = "50%";
+        btn.title = `Highlight with ${color}`;
+        btn.addEventListener("click", () => {
+            applyColorCallback(color);
+            picker.remove();
+        });
+        picker.appendChild(btn);
+    });
+    document.body.appendChild(picker);
+    return picker;
+}
+
+function applyHighlight(color) {
+    if (!selectedRange) return;
+    const span = document.createElement("span");
+    span.className = "highlight";
+    span.style.backgroundColor = color;
+    span.setAttribute("data-color", color);
+    span.appendChild(selectedRange.extractContents());
+    selectedRange.insertNode(span);
+    selectedRange = null;
+    window.getSelection().removeAllRanges();
+
+    span.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (highlightTooltip) highlightTooltip.remove();
+        highlightTooltip = document.createElement("div");
+        highlightTooltip.className = "highlight-tooltip";
+        highlightTooltip.style.top = `${e.clientY}px`;
+        highlightTooltip.style.left = `${e.clientX}px`;
+        highlightTooltip.innerHTML = `<button style="color:white;background:red;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">Remove Highlight</button>`;
+        highlightTooltip.querySelector("button").addEventListener("click", function () {
+            const parent = span.parentNode;
+            while (span.firstChild) {
+                parent.insertBefore(span.firstChild, span);
+            }
+            parent.removeChild(span);
+            parent.normalize();
+            highlightTooltip.remove();
+        });
+        document.body.appendChild(highlightTooltip);
+    });
+}
+
+
+function handleMouseUp(e) {
+    const selection = window.getSelection();
+    if (selection.toString().trim() === '') return;
+    if (!e.currentTarget.contains(selection.anchorNode)) return;
+
+    selectedRange = selection.getRangeAt(0).cloneRange();
+    const rect = selectedRange.getBoundingClientRect();
+
+    if (highlightTooltip) highlightTooltip.remove();
+
+    highlightTooltip = createColorPicker(rect.left, rect.top - 40, applyHighlight);
+}
+
+document.getElementById('passage-text').addEventListener('mouseup', handleMouseUp);
+document.getElementById('questions-container').addEventListener('mouseup', handleMouseUp);
+
+document.addEventListener('mousedown', (e) => {
+    if (highlightTooltip && !highlightTooltip.contains(e.target)) {
+        highlightTooltip.remove();
+        highlightTooltip = null;
+        window.getSelection().removeAllRanges();
+    }
+});
+</script>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+<script>
+// === Night Mode Toggle ===
+document.getElementById('night-mode-toggle').addEventListener('click', function () {
+    document.body.classList.toggle('night-mode');
+    const icon = this.querySelector('i');
+    if (document.body.classList.contains('night-mode')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+    } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+    }
+});
+
+// === Submit Answers (FIXED & CASE-INSENSITIVE) ===
+document.getElementById('submit-btn').addEventListener('click', function () {
+    const correctAnswers = {
+        q14: "X", q15: "II", q16: "V", q17: "VII", q18: "IV",
+        q19: "VIII", q20: "III", q21: "D", q22: "A", q23: "C",
+        q24: "newspapers", q25: "appearance", q26: "audience"
+    };
+
+    const explanations = {
+    q14: "The passage explains the origin and meaning of the word 'celebrity', making heading X the most appropriate.",
+    q15: "Paragraph B describes how ancient societies told stories and created myths about gods, matching heading II (non-human celebrity influence).",
+    q16: "This paragraph praises physical accomplishments of Olympic athletes and gladiators, best represented by heading V (physical achievement).",
+    q17: "During the Dark Ages, common people were distracted from hardship by miraculous stories, thus heading VII fits best.",
+    q18: "Paragraph E shows how during the Renaissance, artists gained recognition, indicating a value shift toward creativity — heading IV.",
+    q19: "The rise of printed materials and literacy leading to wide fame matches heading VIII (literacy and widespread celebrity).",
+    q20: "Broadcasting and mass media in the modern era are discussed, clearly fitting heading III (impact of broadcasting).",
+    q21: "Reality television is said to grant temporary fame to anyone, even without skill — fitting the modern era (D).",
+    q22: "In ancient times, myths were invented about gods’ lives, making option A the correct match.",
+    q23: "Paragraph E explains how rulers lost status to artists during the Renaissance, matching period C.",
+    q24: "Paragraph F explains people read about celebrities through newspapers as printing became widespread in the 1700s.",
+    q25: "Paragraph G states that appearance alone — not skill — made people famous on reality shows.",
+    q26: "Also in paragraph G, it says fame now depends on audience response, making 'audience' the correct word."
+};
+
+const passageReferences = {
+    q14: "The word we now know to mean 'a condition of being famous'... is derived from the Latin word 'celeber'.",
+    q15: "This need to know led to the creation of myths, which personalized the gods...",
+    q16: "Victors in the ancient Olympic Games were treated as heroes... gladiators... revered by the common people.",
+    q17: "...religious figures took on newfound fame...lent excitement to the lives of common people...",
+    q18: "...a greater appreciation for portraits, statues...artists began to surpass political and religious individuals...",
+    q19: "...technological advances made publishing...a huge rise in the number of common people who could read...",
+    q20: "...radio began to make its way into the average home...reality television programmers make it possible to be famous...",
+    q21: "...reality television shows...allowed all kinds of people with little ability to enjoy a short burst of fame...",
+    q22: "...the creation of myths...ancient celebrity scandals that thrilled and excited the common people.",
+    q23: "...a time when artists began to surpass political and religious individuals for supreme celebrity...",
+    q24: "...the lives of authors, politicians... could now be read about in newspapers...",
+    q25: "...you needed, it seemed, was an attractive appearance.",
+    q26: "...with the audience deciding whether someone deserves to become a celebrity or not."
+};
+
+
+
+    let score = 0;
+    let feedbackHTML = "";
+
+    for (const [qid, correctValue] of Object.entries(correctAnswers)) {
+        const elems = document.getElementsByName(qid);
+        if (!elems || elems.length === 0) continue;
+
+        let userAnswer = "";
+        const elem = elems[0];
+
+        // Select box (dropdown)
+        if (elem.tagName === "SELECT") {
+            userAnswer = elem.value.trim();
+        }
+        // Radio buttons
+        else if (elem.type === "radio") {
+            for (let r of elems) {
+                if (r.checked) {
+                    userAnswer = r.value.trim();
+                    break;
+                }
+            }
+        }
+        // Text input
+        else if (elem.type === "text" || elem.tagName === "INPUT") {
+            userAnswer = elem.value.trim();
+        }
+
+        // Normalize for comparison (case-insensitive)
+        const isCorrect = userAnswer.toLowerCase() === correctValue.toLowerCase();
+        if (isCorrect) score++;
+
+        feedbackHTML += `
+    <div class="feedback-item">
+        <div class="feedback-question">Q${qid.replace("q", "")}</div>
+        <div class="feedback-answer ${isCorrect ? "correct" : "incorrect"}">
+            Your Answer: ${userAnswer || "(no answer)"}<br/>
+            ${isCorrect ? "✔ Correct" : `✘ Incorrect (Correct: ${correctValue})`}
+        </div>
+        <div class="feedback-explanation">
+            <strong>Explanation:</strong> ${explanations[qid] || "No explanation available."}
+        </div>
+        <div class="feedback-passage">
+            <strong>Relevant passage:</strong> "${passageReferences[qid] || "No passage found."}"
+        </div>
+    </div>`;
+
+    }
+
+    document.getElementById("feedback-body").innerHTML = feedbackHTML;
+    document.getElementById("score-display").textContent = `${score}/13`;
+    document.getElementById("feedback-overlay").style.display = "flex";
+});
+
+
+document.getElementById('close-feedback').addEventListener('click', function () {
+    document.getElementById("feedback-overlay").style.display = "none";
+});
+
+// === Reset Button ===
+document.getElementById('reset-btn').addEventListener('click', function () {
+    const selects = document.querySelectorAll("select");
+    selects.forEach(sel => sel.value = "");
+
+    const radios = document.querySelectorAll("input[type='radio']");
+    radios.forEach(r => r.checked = false);
+
+    const progressItems = document.querySelectorAll('.progress-item.completed');
+    progressItems.forEach(item => item.classList.remove('completed'));
+});
+</script>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+<script>
+function initializeProgressTracker() {
+    const progressContainer = document.getElementById("progress-container");
+    const questions = [{'id': 'q14', 'number': 14}, {'id': 'q15', 'number': 15}, {'id': 'q16', 'number': 16}, {'id': 'q17', 'number': 17}, {'id': 'q18', 'number': 18}, {'id': 'q19', 'number': 19}, {'id': 'q20', 'number': 20}, {'id': 'q21', 'number': 21}, {'id': 'q22', 'number': 22}, {'id': 'q23', 'number': 23}, {'id': 'q24', 'number': 24}, {'id': 'q25', 'number': 25}, {'id': 'q26', 'number': 26}];
+
+    questions.forEach(({id, number}) => {
+        const item = document.createElement("div");
+        item.className = "progress-item";
+        item.textContent = number;
+        item.dataset.qid = id;
+
+        item.addEventListener("click", () => {
+            document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+        });
+
+        progressContainer.appendChild(item);
+    });
+}
+
+function updateProgressStatus() {
+    const progressItems = document.querySelectorAll(".progress-item");
+
+    progressItems.forEach(item => {
+        const qid = item.dataset.qid;
+        const questionElem = document.getElementById(qid);
+        let answered = false;
+
+        if (!questionElem) return;
+
+        const select = questionElem.querySelector("select");
+        const textInput = questionElem.querySelector("input[type='text']");
+        const radios = questionElem.querySelectorAll("input[type='radio']");
+
+        if (select && select.value !== "") {
+            answered = true;
+        } else if (textInput && textInput.value.trim() !== "") {
+            answered = true;
+        } else if (radios.length > 0) {
+            radios.forEach(r => {
+                if (r.checked) answered = true;
+            });
+        }
+
+        // Apply visual change to bottom progress bar
+        if (answered) {
+            item.classList.add("completed");
+        } else {
+            item.classList.remove("completed");
+        }
+
+        // ✅ Apply visual change to question number circle
+        if (answered) {
+            questionElem.classList.add("answered");
+        } else {
+            questionElem.classList.remove("answered");
+        }
+    });
+}
+
+
+
+document.addEventListener("change", updateProgressStatus);
+document.addEventListener("DOMContentLoaded", () => {
+    initializeProgressTracker();
+    updateProgressStatus();
+});
+</script>
+
+<script>
+// === Timer Functionality ===
+let timerInterval;
+let timeRemaining = 20 * 60; // 20 minutes
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+    const seconds = (timeRemaining % 60).toString().padStart(2, '0');
+    document.getElementById("timer").textContent = `${minutes}:${seconds}`;
+}
+
+document.getElementById("start-timer").addEventListener("click", () => {
+    if (timerInterval) return;
+    timerInterval = setInterval(() => {
+        if (timeRemaining > 0) {
+            timeRemaining--;
+            updateTimerDisplay();
+        } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            alert("Time is up!");
+        }
+    }, 1000);
+});
+
+document.getElementById("pause-timer").addEventListener("click", () => {
+    clearInterval(timerInterval);
+    timerInterval = null;
+});
+
+document.getElementById("reset-timer").addEventListener("click", () => {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    timeRemaining = 20 * 60;
+    updateTimerDisplay();
+});
+
+document.addEventListener("DOMContentLoaded", updateTimerDisplay);
+</script>
+</body>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+</html>

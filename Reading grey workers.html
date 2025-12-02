@@ -1,0 +1,3501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Full Reading Practice</title>
+    <style>
+        /* All CSS styles remain exactly the same as in the original */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            line-height: 1.4;
+            font-size: 16px;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 60px;
+        }
+
+        .ielts-logo {
+            display: none;
+        }
+
+        .test-info {
+            display: flex;  
+            align-items: center;
+            gap: 30px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .audio-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+
+        .audio-icon {
+            width: 16px;
+            height: 16px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon></svg>') no-repeat center;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .telegram-link {
+            color: #3e3e3e;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border: 2px solid #3e3e3e;
+            border-radius: 9999px;
+            background-color: #ffffff;
+            line-height: 1;
+        }
+        
+
+        .telegram-link:hover {
+            text-decoration: underline;
+        }
+
+        .telegram-link::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: currentColor;
+            -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23l7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3L3.64 12c-.88-.25-.89-1.37.2-1.64l16.56-6.4c.75-.29 1.4.22 1.2.94l-2.67 12.61c-.22.95-1.13 1.18-1.78.73l-4.5-3.32l-2.23 2.15c-.47.44-1.29.21-1.48-.37z"/></svg>');
+            mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23l7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3L3.64 12c-.88-.25-.89-1.37.2-1.64l16.56-6.4c.75-.29 1.4.22 1.2.94l-2.67 12.61c-.22.95-1.13 1.18-1.78.73l-4.5-3.32l-2.23 2.15c-.47.44-1.29.21-1.48-.37z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        #volume-slider {
+            -webkit-appearance: none;
+            width: 80px;
+            height: 4px;
+            background: #ddd;
+            outline: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        #volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #333;
+            cursor: pointer;
+        }
+
+        #volume-slider::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #333;
+            cursor: pointer;
+            border: none;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            opacity: 0.7;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .icon:hover {
+            opacity: 1;
+        }
+        
+        #play-pause-btn {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .main-container {
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            height: calc(100vh - 60px);
+            position: relative;
+        }
+
+        body::after {
+            content: "@Full Exam Materials";
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) rotate(-20deg);
+            font-size: 72px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #000000;
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+        }
+
+        .panels-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-panel {
+            flex: 1;
+            padding: 20px 20px 100px;
+            overflow-y: auto;
+            min-width: 200px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .passage-panel::-webkit-scrollbar {
+            width: 8px;
+            background: transparent;
+        }
+        
+        .passage-panel::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .passage-panel::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .passage-panel:hover::-webkit-scrollbar-thumb {
+            opacity: 1;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+        .reading-passage h4 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+       
+        .reading-passage p {
+            margin-bottom: 1.2em;
+        }
+
+        .question ul li label {
+            display: block;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+
+        .questions-panel {
+            flex: 1;
+            padding: 20px 20px 100px;
+            overflow-y: auto;
+            min-width: 200px;
+            border-left: 1px solid #e0e0e0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .questions-panel::-webkit-scrollbar {
+            width: 8px;
+            background: transparent;
+        }
+        
+        .questions-panel::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .questions-panel::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .questions-panel:hover::-webkit-scrollbar-thumb {
+            opacity: 1;
+        }
+
+        .resizer {
+            position: relative;
+            background: transparent;
+            cursor: col-resize;
+            flex-shrink: 0;
+            flex-grow: 0;
+            z-index: 5;
+            width: 16px;
+            touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .resizer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 3px;
+            transform: translateX(-50%);
+            background-color: #3e3e3e;
+        }
+        .resizer::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 36px;
+            height: 36px;
+            background-color: #ffffff;
+            border: 2px solid #3e3e3e;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="%233e3e3e" fill="%233e3e3e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4"/><path d="M16 8l4 4-4 4"/><line x1="4" y1="12" x2="20" y2="12"/></svg>');
+            background-repeat: no-repeat;
+            background-size: 60% 60%;
+            background-position: center;
+            pointer-events: none;
+        }
+
+        .left-panel {
+            width: 100%;
+            padding: 20px;
+        }
+
+        .right-panel {
+            display: none;
+            width: 50%;
+            padding: 20px;
+            position: relative;
+        }
+
+        .help-button {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .help-button:hover {
+            background: #357abd;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .people-section {
+            margin-bottom: 30px;
+        }
+
+        .people-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+        }
+
+        .people-table th {
+            text-align: left;
+            padding: 10px;
+            font-weight: bold;
+            border: 1px solid #ddd;
+        }
+
+        .people-table td {
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+        }
+
+        .person-name {
+            font-size: 16px;
+        }
+
+        .question-number {
+            background: white;
+            border: 1px solid #4a90e2;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #4a90e2;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .assigned-responsibility {
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+        }
+
+        .responsibilities-section {
+            margin-bottom: 30px;
+        }
+
+        .responsibility-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .responsibility-item {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: move;
+            font-size: 16px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .responsibility-item:hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+
+        .responsibility-item.dragging {
+            opacity: 0.5;
+        }
+
+        .questions-section {
+            margin-bottom: 20px;
+        }
+
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .instruction {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .map-container {
+            position: relative;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .map-svg {
+            border: 2px solid #333;
+            background: white;
+        }
+
+        .map-room {
+            fill: #f9f9f9;
+            stroke: #333;
+            stroke-width: 1;
+        }
+
+        .map-text {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            text-anchor: middle;
+            fill: #333;
+        }
+
+        .map-number {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            text-anchor: middle;
+            fill: #333;
+        }
+
+        .room-labels {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .room-label {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: move;
+            font-size: 16px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .room-label:hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+
+        .room-label.dragging {
+            opacity: 0.5;
+        }
+
+        .nav-arrows {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            display: flex;
+            gap: 6px;
+            z-index: 101;
+        }
+
+        .nav-arrow {
+            width: 48px;
+            height: 48px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            transition: transform 0.1s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            outline: none;
+        }
+        .nav-arrow.prev { background-color: #4b5563; }
+        .nav-arrow.next { background-color: #000000; }
+
+        .nav-arrow:hover { transform: translateY(-1px); }
+        .nav-arrow:active { transform: translateY(0); }
+        .nav-arrow:focus-visible { box-shadow: 0 0 0 3px rgba(59,130,246,0.4); }
+
+        .nav-arrow:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-row {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            height: 80px;
+            z-index: 100;
+        }
+
+        .footer__questionWrapper___1tZ46 {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+
+        .footer__questionNo___3WNct {
+            background: none;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .footer__questionNo___3WNct:hover {
+            background-color: #f8f9fa;
+        }
+
+        .section-prefix {
+            font-size: 16px;
+        }
+
+        .sectionNr {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .attemptedCount {
+            font-size: 14px;
+            color: #666;
+            margin-left: 5px;
+            font-weight: 400;
+        }
+
+        @media (max-width: 768px) {
+            .attemptedCount {
+                display: none;
+            }
+            
+            .resizer {
+                width: 20px;
+            }
+            
+            .resizer::after {
+                width: 44px;
+                height: 44px;
+            }
+            
+            .drop-zone {
+                min-height: 44px;
+                padding: 10px;
+            }
+            
+            .drag-item {
+                min-height: 44px;
+                padding: 10px;
+                font-size: 16px;
+            }
+            
+            .matching-table td {
+                padding: 12px 8px;
+                min-height: 44px;
+            }
+            
+            .clickable-cell {
+                min-height: 44px;
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 10px 15px;
+                height: 70px;
+            }
+            
+            .timer-container {
+                font-size: 18px;
+            }
+            
+            .telegram-link {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+            
+            .question {
+                margin-bottom: 25px;
+            }
+            
+            .question-prompt {
+                margin-bottom: 20px;
+            }
+            
+            .question-prompt p {
+                font-size: 16px;
+                line-height: 1.5;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .passage-panel, .questions-panel {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            .resizer {
+                display: none;
+            }
+            
+            .footer__questionWrapper___1tZ46 {
+                margin-right: 5px;
+            }
+            
+            .footer__questionNo___3WNct {
+                padding: 10px 12px;
+                font-size: 16px;
+            }
+        }
+
+        .footer__questionWrapper___1tZ46.selected .attemptedCount {
+            display: none;
+        }
+
+        .footer__subquestionWrapper___9GgoP {
+            display: none;
+            gap: 2px;
+            margin-left: 10px;
+        }
+
+        .footer__questionWrapper___1tZ46.selected .footer__subquestionWrapper___9GgoP {
+            display: flex;
+        }
+
+        .subQuestion {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ccc;
+            background: white;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            border-radius: 2px;
+        }
+
+        .subQuestion.answered {
+            background-color: #e9ecef;
+            border-color: #ddd;
+        }
+        .subQuestion.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        .subQuestion.incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .subQuestion:hover {
+            background-color: #f0f0f0;
+            border-color: #999;
+        }
+
+        .subQuestion.active {
+            background-color: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+        }
+
+        .subQuestion.completed {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .footer__deliverButton___3FM07 {
+            margin-left: auto;
+            margin-right: 20px;
+            background-color: #f3f4f6;
+            color: #111827;
+            border: 1px solid #d1d5db;
+            padding: 10px 16px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.08s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            min-width: 160px;
+            justify-content: center;
+        }
+
+        .footer__deliverButton___3FM07:hover {
+            background-color: #ebedf0;
+            border-color: #c7ccd4;
+        }
+
+        .footer__deliverButton___3FM07:active {
+            transform: translateY(1px);
+        }
+
+        .footer__deliverButton___3FM07:focus-visible {
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.35);
+            outline: none;
+        }
+
+        .footer__deliverButton___3FM07:disabled {
+            background: #eef0f3;
+            color: #9ca3af;
+            cursor: not-allowed;
+            border-color: #e5e7eb;
+            box-shadow: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .context-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: none;
+            min-width: 140px;
+        }
+
+        .context-menu-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .context-menu-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .context-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .highlight {
+            background-color: #ffff00;
+        }
+
+        .comment-highlight {
+            background-color: #90EE90;
+            position: relative;
+            cursor: help;
+        }
+
+        .comment-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .comment-highlight:hover .comment-tooltip {
+            opacity: 1;
+        }
+
+        .question {
+            margin-bottom: 40px;
+        }
+        .question p {
+            margin-bottom: 10px;
+        }
+        .question ul, .question .people-table {
+            margin-top: 0;
+        }
+        .question-prompt {
+            margin-bottom: 20px;
+        }
+        .question ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .question ul li {
+            margin-bottom: 5px;
+        }
+        .answer-input {
+            border: 1px solid #bfbfbf;
+            border-radius: 4px;
+            background-color: #fff;
+            padding: 2px 8px;
+            font-size: 16px;
+            text-align: left;
+            font-weight: 700;
+            margin-right: 6px;
+            margin-left: 6px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            height: 28px;
+            min-width: 150px;
+            -webkit-autocomplete: none;
+            -moz-autocomplete: none;
+            autocomplete: none;
+        }
+        
+        input[type="text"], input[type="email"], input[type="password"], input[type="search"], input[type="url"], input[type="tel"], input[type="number"] {
+            -webkit-autocomplete: none;
+            -moz-autocomplete: none;
+            autocomplete: none;
+        }
+        
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        *::-webkit-scrollbar {
+            width: 8px;
+            background: transparent;
+        }
+        
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        *::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        *:hover::-webkit-scrollbar-thumb {
+            opacity: 1;
+        }
+        .answer-input.active-input,
+        .answer-input:focus {
+            border-color: #3581d8;
+            border-width: 2px;
+            outline: none;
+        }
+        .answer-input::placeholder {
+            color: #666;
+            font-weight: 700;
+            text-align: center;
+        }
+        .answer-input.correct {
+            border-color: #28a745;
+            background-color: #e9f7ef;
+        }
+        .answer-input.incorrect {
+            border-color: #dc3545;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .answer-input {
+            z-index: 10;
+            position: relative;
+            pointer-events: auto;
+        }
+        .summary-text .answer-input {
+            width: 120px;
+            height: 24px;
+            font-size: 14px;
+            margin: 0 4px;
+        }
+        .answer-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .answer-inputs .answer-input {
+            width: 200px;
+            height: 30px;
+            font-size: 16px;
+        }
+        .drag-drop-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            align-items: flex-start;
+        }
+        .recommendations-box {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-height: 200px;
+        }
+        .drag-item {
+            background: white;
+            border: 1px solid #9c9c9c;
+            font-weight: 600;
+            padding: 0px 5px;
+            border-radius: 4px;
+            cursor: move;
+            font-size: 16px;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .drag-item:hover {
+            background: #e9ecef;
+        }
+        .drag-item.dragging {
+            opacity: 0.5;
+        }
+        .drag-item.selected {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.5);
+        }
+        .drop-zone {
+            border: 2px dashed #aaa;
+            border-radius: 4px;
+            width: 50%;
+            margin-top: 19px;
+            margin-bottom: 5px;
+            transition: background-color 0.2s, border-color 0.2s;
+            padding: 0.5px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            color: #afafaf;
+            font-weight: 600;
+            height: 27px;
+        }
+        .drop-zone.drag-over {
+            background-color: #e6f4ff;
+            border-color: #4a90e2;
+        }
+        .drop-zone.correct {
+            background-color: #e9f7ef;
+            border-color: #28a745;
+            border-style: solid;
+        }
+        .drop-zone.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            border-style: solid;
+        }
+        .drop-zone.disabled {
+            pointer-events: none;
+        }
+        .drop-zone .drag-item {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            padding: 2px;
+        }
+        .drag-options-container {
+            margin-top: 10px;
+        }
+        .drag-options-container .drag-item {
+            display: block;
+            width: fit-content;
+            font-size: 15px;
+            padding: 0.5px 10px;
+            margin-bottom: 5px;
+        }
+        .drag-options-container .drag-item:last-child {
+            margin-bottom: 0;
+        }
+        .q-number {
+            color: #888;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .questions-container {
+            width: 100%;
+        }
+        audio {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .part-header {
+            background-color: #f1f2ec;
+            padding: 15px 20px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+            margin: 10px 20px;
+            border-radius: 5px;
+        }
+        .part-header p {
+            margin: 0;
+        }
+        .part-header p:first-child {
+            margin-bottom: 5px;
+        }
+
+        .question li.correct {
+            color: #155724;
+            font-weight: bold;
+        }
+        .question li.incorrect {
+            color: #721c24;
+        }
+        .question li.correct::before {
+            content: '✔ ';
+            color: #28a745;
+        }
+        .question li.incorrect::before {
+            content: '✖ ';
+            color: #dc3545;
+        }
+
+        .example-box {
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .timer-container {
+            display: flex;
+            position: relative;
+            cursor: default;
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+            align-items: center;
+        }
+        .timer-container .timer-tooltip {
+            display: none;
+        }
+
+        .timer-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 15px;
+        }
+
+        .timer-controls button {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            padding: 0;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        .timer-controls button:hover {
+            background: #e0e0e0;
+        }
+
+        .timer-controls button svg {
+            width: 20px;
+            height: 20px;
+            fill: #333;
+        }
+
+        .audio-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(40, 40, 40, 0.9);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+        .audio-modal-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            max-width: 500px;
+            padding: 20px;
+        }
+        .audio-modal-content p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #eee;
+        }
+        .audio-modal-icon {
+            margin-bottom: 20px;
+        }
+        .modal-play-btn {
+            background-color: #000;
+            color: white;
+            border: 1px solid white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+        .modal-play-btn:hover {
+            background-color: #333;
+        }
+        #goto-widget {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        #goto-input {
+            width: 80px;
+            padding: 4px 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #goto-btn {
+            padding: 4px 10px;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .tf-question {
+            margin-bottom: 25px;
+            padding: 10px 0px;
+            border-radius: 4px;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .tf-question-line {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 5px 0px;
+            border-radius: 4px;
+        }
+        .tf-question-number, .question-number-box {
+            border: 2px solid #ccc;
+            padding: 2px 8px;
+            margin-right: 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            transition: border-color 0.3s;
+            display: inline-block;
+        }
+        .tf-question.active-question .tf-question-number {
+            border-color: #4a90e2;
+        }
+        .tf-question-text {
+            padding-top: 3px;
+        }
+        .tf-options {
+            padding-left: 5px;
+        }
+        .tf-option {
+            display: block;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            background-color: #fff;
+        }
+        .tf-option:hover {
+            background-color: #f1f7ff;
+            border-color: #c6dcfb;
+        }
+        .tf-option:has(input[type="radio"]:checked) {
+            background-color: #cfe3f9;
+            border-color: #7db3f5;
+        }
+        .tf-option.correct {
+            background-color: #d4edda !important;
+            border-color: #28a745 !important;
+            border-width: 1px;
+        }
+        .tf-option.incorrect {
+            background-color: #f8d7da !important;
+            border-color: #dc3545 !important;
+            border-width: 1px;
+        }
+        body.results-mode .tf-option:has(input[type="radio"]:checked) {
+            box-shadow: none;
+        }
+        .tf-option input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .answer-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 14px;
+            min-width: 120px;
+            cursor: pointer;
+        }
+
+        .answer-select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+        .tf-question.correct .tf-question-line {
+            background-color: #e9f7ef;
+        }
+        .tf-question.incorrect .tf-question-line {
+            background-color: #f8d7da;
+        }
+        .matching-question-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .matching-options-bank {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .matching-questions {
+            flex: 1.5;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .matching-question-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 2px solid transparent;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+        .matching-question-item > span {
+            flex: 1;
+        }
+        .matching-question-item.correct {
+            background-color: #e9f7ef;
+            border-color: #28a745 !important;
+        }
+        .matching-question-item.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545 !important;
+        }
+        .matching-question-item .drop-zone {
+            width: auto;
+            min-width: 200px;
+            flex-shrink: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            font-weight: bold;
+            color: #aaa;
+        }
+        .matching-options-bank .drag-item {
+            font-size: 15px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+            max-width: 700px;
+        }
+
+        .questions-panel {
+            flex: 1;
+            padding: 20px 20px 100px;
+            overflow-y: auto;
+            min-width: 200px;
+            border-left: 1px solid #e0e0e0;
+        }
+        .matching-question-item.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545 !important;
+        }
+        .summary-completion-container {
+            margin-top: 20px;
+        }
+        .summary-text p {
+            line-height: 3.0;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        .summary-text li {
+            line-height: 2.2;
+            margin-bottom: 10px;
+        }
+        .summary-drop-zone {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+            min-width:200px;
+            height: 25px;
+            border: 2px dashed #999;
+            border-radius: 4px;
+            margin: 0 5px;
+            padding: 0 5px;
+            transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+            color: #aaa;
+            font-weight: bold;
+            text-align: center;
+        }
+        .summary-drop-zone.filled {
+            border-color: #4a90e2;
+        }
+        .summary-drop-zone.active-input {
+             border-color: #4a90e2;
+             box-shadow: none;
+        }
+        .summary-drop-zone .drag-item {
+            font-size: 15px;
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .summary-options-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .summary-options-bank .drag-item {
+            flex-grow: 1;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .drop-zone.filled {
+            background-color: transparent;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            padding: 0;
+        }
+        .drop-zone.filled .drag-item {
+            width: auto;
+            height: auto;
+            display: inline-block;
+            border: 2px solid #4a90e2;
+            border-radius: 10px;
+            padding: 4px 10px;
+            font-weight: 700;
+            background: #fff;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.15);
+            cursor: default;
+            white-space: nowrap;
+        }
+        .multi-choice-question {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 3px solid transparent;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .multi-choice-question .question-prompt p > strong:first-child {
+            border: 2px solid #ccc;
+            padding: 2px 8px;
+            margin-right: 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            transition: border-color 0.3s;
+            display: inline-block;
+        }
+        .multi-choice-question.active-question .question-prompt p > strong:first-child {
+            border-color: #4a90e2;
+            border-width: 2px;
+        }
+        .multi-choice-option {
+            padding: 10px 12px;
+            background-color: #fff;
+            transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .multi-choice-option:hover {
+            background-color: #f1f7ff;
+            border-color: #c6dcfb;
+        }
+        .multi-choice-option:has(input:checked) {
+            background-color: #cfe3f9;
+            border-color: #7db3f5;
+        }
+        .multi-choice-option.correct {
+            background-color: #d4edda !important;
+            border-color: #28a745 !important;
+            box-shadow: inset 0 0 0 2px rgba(40, 167, 69, 0.25) !important;
+            border-width: 1px;
+            border-radius: 6px;
+        }
+        .multi-choice-option.incorrect {
+            background-color: #f8d7da !important;
+            border-color: #dc3545 !important;
+            box-shadow: inset 0 0 0 2px rgba(220, 53, 69, 0.25) !important;
+            border-width: 1px;
+            border-radius: 6px;
+        }
+        .tf-option.correct-answer-highlight,
+        .multi-choice-option.correct-answer-highlight {
+            background-color: #d4edda !important;
+            border-color: #28a745 !important;
+        }
+        body.results-mode .multi-choice-option:has(input:checked) { box-shadow: none; }
+        .multi-choice-option label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .multi-choice-option input[type="checkbox"],
+        .multi-choice-option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.3);
+            accent-color: #4a90e2;
+        }
+        .multi-choice-option.correct {
+            background-color: #e9f7ef;
+        }
+        .multi-choice-option.incorrect {
+            background-color: #f8d7da;
+        }
+        .matching-question-item.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545 !important;
+        }
+        .matching-question-item .drop-zone.filled {
+            border-color: #4a90e2;
+        }
+        .matching-question-item .drop-zone {
+            width: 200px;
+            height: 40px;
+        }
+        .paragraph-matching-question {
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+        .paragraph-matching-question .answer-input {
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .matching-form-container {
+            margin-top: 20px;
+        }
+        .matching-form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .matching-form-label {
+            flex-shrink: 0;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.hidden {
+            display: none;
+        }
+        .modal-content {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 14px;
+            width: 92%;
+            max-width: 780px;
+            max-height: 86vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+        }
+        .modal-content h2 {
+            text-align: center;
+            margin-bottom: 18px;
+            color: #111827;
+        }
+        .results-summary {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 16px;
+            text-align: center;
+            border-bottom: 1px solid #eef2f7;
+            padding-bottom: 12px;
+        }
+        .results-summary p {
+            margin: 0;
+            font-size: 14px;
+            color: #374151;
+        }
+        .results-summary p span {
+            display: inline-block;
+            padding: 4px 10px;
+            margin-left: 6px;
+            border-radius: 999px;
+            background: #f3f4f6;
+            font-weight: 700;
+            color: #111827;
+        }
+        .results-details-container {
+            overflow-y: auto;
+            padding-right: 10px;
+            border-radius: 8px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .results-details-container::-webkit-scrollbar {
+            width: 8px;
+            background: transparent;
+        }
+        
+        .results-details-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .results-details-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .results-details-container:hover::-webkit-scrollbar-thumb {
+            opacity: 1;
+        }
+        .result-row {
+            display: grid;
+            grid-template-columns: 56px 1fr 1fr;
+            gap: 12px;
+            padding: 10px 8px;
+            border-bottom: 1px solid #eef2f7;
+            font-size: 15px;
+            align-items: center;
+        }
+        .result-row.correct {
+            background-color: #f3faf5;
+        }
+        .result-row.incorrect {
+            background-color: #fff5f5;
+        }
+        .result-row .q-num {
+            font-weight: 700;
+            color: #111827;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            width: 42px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .result-row .user-ans {
+            color: #374151;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        .result-row .correct-ans {
+            color: #065f46;
+            font-weight: 600;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        .correct-answer-display {
+            font-weight: bold;
+            color: #28a745;
+            margin-left: 10px;
+            font-size: 14px;
+        }
+        
+        .centered-title {
+            text-align: center;
+            font-size: 50px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .matching-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        
+        .matching-table th {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #ddd;
+        }
+        
+        .matching-table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        .matching-table .statement {
+            text-align: left;
+            width: 60%;
+            font-size: 15px;
+        }
+        
+        .matching-table .table-radio {
+            margin: 0;
+            transform: scale(1.2);
+        }
+        
+        .matching-table td:not(.statement) {
+            text-align: center;
+            width: 6.67%;
+            min-width: 60px;
+        }
+        
+        .matching-table th:not(:first-child) {
+            width: 6.67%;
+            min-width: 60px;
+        }
+        
+        .matching-table td:not(.statement):has(input:checked) {
+            background-color: #e3f2fd;
+        }
+        
+        .matching-table input[type="radio"]:checked {
+            accent-color: #007bff;
+        }
+        
+        .matching-table td.correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb;
+        }
+        
+        .matching-table td.incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb;
+        }
+        
+        .matching-table td.correct-answer-highlight {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb;
+        }
+        
+        .matching-table .options-row {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .matching-table .options-row td {
+            font-weight: 500;
+            text-align: center;
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+        
+        .matching-table .options-row td:first-child {
+            text-align: left;
+            font-weight: normal;
+        }
+        
+        .matching-table td.correct-answer-highlight {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb;
+        }
+        
+        .matching-table .clickable-cell {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            min-height: 40px;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+        
+        .matching-table .clickable-cell:hover {
+            background-color: #f0f8ff;
+            border-color: #007bff;
+        }
+        
+        .matching-table .clickable-cell.selected {
+            background-color: #e3f2fd;
+        }
+        
+        .matching-table .clickable-cell.correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb;
+        }
+        
+        .matching-table .clickable-cell.incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb;
+        }
+        
+        .matching-table .clickable-cell::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: transparent;
+            transition: background-color 0.2s ease;
+        }
+        
+        .matching-table .clickable-cell.selected::after {
+        }
+        
+        .explanation-section {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .explanation-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .explanation-content p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        .explanation-content strong {
+            color: #4a90e2;
+            font-weight: 600;
+        }
+        
+        #show-explanation-btn {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        #show-explanation-btn:hover {
+            background-color: #357abd;
+        }
+        
+        .two-column-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .two-column-options .multi-choice-option {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="timer-container">
+            <span class="timer-display">60:00</span>
+            <div class="timer-controls">
+                <button id="timer-toggle-btn" title="Pause/Resume Timer">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8 5v14l11-7L8 5z"/></svg>
+                </button>
+                <button id="timer-reset-btn" title="Reset Timer">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+                </button>
+            </div>
+        </div>
+        <a href="hhttps://t.me/ielts_material_full" target="_blank" class="telegram-link">
+            Full Exam Materials
+        </a>
+    </div>
+
+    <div class="main-container" id="main-container">
+        <div id="passage-header-container">
+            <div id="part-header-1" class="part-header">
+                <p><strong>Part 1</strong></p>
+                <p>Read the text and answer questions 1-13.</p>
+            </div>
+            <div id="part-header-2" class="part-header hidden">
+                <p><strong>Part 2</strong></p>
+                <p>Read the text and answer questions 14-26.</p>
+            </div>
+            <div id="part-header-3" class="part-header hidden">
+                <p><strong>Part 3</strong></p>
+                <p>Read the text and answer questions 27-40.</p>
+            </div>
+        </div>
+        <div class="panels-container">
+            <div class="passage-panel" id="passage-panel">
+                <!-- PASSAGE 1: Grey Workers -->
+                <div id="passage-text-1" class="reading-passage">
+                    <h4 class="text-center">Grey Workers</h4>
+                    <p><strong>A</strong> Given the speed at which their workers are growing greyer, employers know surprisingly little about how productive they are. The general assumption is that the old are paid more in spite of, rather than because of, their extra productivity. That might partly explain why, when employers are under pressure to cut costs, they persuade the 55-year-olds to take early retirement. Earlier this year, Sun Life of Canada, an insurance company, announced that it was offering redundancy to all its British employees aged 50 or over "to bring in new blood".</p>
+                    <p><strong>B</strong> In Japan, says Mariko Fujiwara, an industrial anthropologist who runs a think-tank for Hakuhodo, Japan's second-largest advertising agency, most companies are bringing down the retirement age from the traditional 57 to 50 or thereabouts - and in some cases, such as Nissan, to 45. More than perhaps anywhere else, pay in Japan is linked to seniority. Given that the percentage of workers who have spent more than 32 years with the same employer rose from 11% in 1980 to 42% by 1994, it is hardly surprising that seniority-based wage costs have become the most intractable item on corporate profit-and-loss accounts.</p>
+                    <p><strong>C</strong> In Germany, Patrick Pohl, spokesman for Hoechst, expresses a widely held view: "The company is trying to lower the average age of the workforce. Perhaps the main reason for replacing older workers is that it makes it easier to 'defrost' the corporate culture. Older workers are less willing to try a new way of thinking. Younger workers are cheaper and more flexible." Some German firms are hampered from getting rid of older workers as quickly as they would like. At SGL Carbon, a graphite producer, the average age of workers has been going up not down. The reason, says the company's Ivo Lingnau, is not that SGL values older workers more. It is collective bargaining: the union agreement puts strict limits on the proportion of workers that may retire early.</p>
+                    <p><strong>D</strong> Clearly, when older people do heavy physical work, their age may affect their productivity. But other skills may increase with age, including many that are crucial for good management, such as an ability to handle people diplomatically, to run a meeting or to spot a problem before it blows up. Peter Hicks, who co-ordinates OECD work on the policy implications of ageing, says that plenty of research suggests older people are paid more because they are worth more.</p>
+                    <p><strong>E</strong> And the virtues of the young may be exaggerated. "The few companies that have kept on older workers find they have good judgment and their productivity is good," says Mr Peterson. "Besides, their education standards are much better than those of today's young high-school graduates." Companies may say that older workers are not worth training, because they are reaching the end of their working lives: in fact, young people tend to switch jobs so frequently that offer the worst returns on training. "The median age for employer-driven training is the late 40s and early 50s," says Mr Hicks. "It goes mainly to managers."</p>
+                    <p><strong>F</strong> Take away those seniority-based pay scales, and older workers may become a much more attractive employment proposition. But most companies (and many workers) are uncomfortable with the idea of reducing someone's pay in later life - although workers on piece-rates often earn less over time. So retaining the services of older workers may mean employing them in new ways.</p>
+                    <p><strong>G</strong> One innovation, described in Mr Walker's report on combating age barriers, was devised by IBM Belgium. Faced with the need to cut staff costs, and have decided to concentrate cuts on 55-60-year-olds, IBM set up a separate company called SkillTeam, which re-employed any of the early retired who wanted to go on working up to the age of 60. An employee who joined SkillTeam at the age of 55 on a five-year contract would work for 58% of his time, over the full period, for 88% of his last IBM salary. The company offered services to IBM, thus allowing it to retain access to some of the intellectual capital it would otherwise have lost.</p>
+                    <p><strong>H</strong> The best way to tempt the old to go on working may be to build on such "bridge" jobs: part-time or temporary employment that creates a more gradual transition from full-time work to retirement. Mr Quinn, who has studied the phenomenon, finds that, in the United States, nearly half of all men and women who had been in full-time jobs in middle age moved into such "bridge" jobs at the end of their working lives. In general, it is the best-paid and worst-paid who carry on working: "There are", he says, "two very different types of bridge job-holders - those who continue working because they have to and those who continue working because they want to, even though they could afford to retire."</p>
+                    <p><strong>I</strong> If the job market grows more flexible, the old may find more jobs that suit them. Often, they will be self-employed. Sometimes, they may start their own businesses: a study by David Storey of Warwick University found that, in Britain, 70% of businesses started by people over 55 survived, compared with an average of only 19%. To coax the old back into the job market, work will not only have to pay. It will need to be more fun than touring the country in an Airstream trailer, or seeing the grandchildren, or playing golf. Only then will there be many more Joe Clarks.</p>
+                </div>
+
+                <!-- PASSAGE 2: Computer Provides More Questions Than Answers -->
+                <div id="passage-text-2" class="reading-passage hidden">
+                    <h4 class="text-center">Computer Provides More Questions Than Answers</h4>
+                    <p><strong>A</strong> The island of Antikythera lies 18 miles north of Crete, where the Aegean Sea meets the Mediterranean. Currents there can make shipping treacherous - and one ship bound for ancient Rome never made it. The ship that sank there was a giant cargo vessel measuring nearly 500 feet long. It came to rest about 200 feet below the surface, where it stayed for more than 2,000 years until divers looking for sponges discovered the wreck a little more than a century ago.</p>
+                    <p><strong>B</strong> Inside the hull were a number of bronze and marble statues. From the look of things, the ship seemed to be carrying luxury items, probably made in various Greek islands and bound for wealthy patrons in the growing Roman Empire. The statues were retrieved, along with a lot of other unimportant stuff, and stored. Nine months later, an enterprising archaeologist cleared off a layer of organic material from one of the pieces of junk and found that it looked like a gearwheel. It had inscriptions in Greek characters and seemed to have something to do with astronomy.</p>
+                    <p><strong>C</strong> That piece of "junk" went on to become the most celebrated find from the shipwreck; it is displayed at the National Archaeological Museum of Athens. Research has shown that the wheel was part of a device so sophisticated that its complexity would not be matched for a thousand years - it was also the world's first known analogue computer. The device is so famous that an international conference organized in Athens a couple of weeks ago had only one subject: the Antikythera Mechanism.</p>
+                    <p><strong>D</strong> Every discovery about the device has raised new questions. Who built the device, and for what purpose? Why did the technology behind it disappear for the next thousand years? What does the device tell us about ancient Greek culture? And does the marvelous construction, and the precise knowledge of the movement of the sun and moon and Earth that it implies, tell us how the ancients grappled with ideas about determinism and human destiny?</p>
+                    <p><strong>E</strong> "We have gear trains from the 9th century in Baghdad used for simpler displays of the solar and lunar motions relative to one another - they use eight gears," said François Charette, a historian of science in Germany who wrote an editorial accompanying a new study of the mechanism two weeks ago in the journal Nature. "In this case, we have more than 30 gears. To see it on a computer animation makes it mind-boggling. There is no doubt it was a technological masterpiece."</p>
+                    <p><strong>F</strong> The device was probably built between 100 and 140 BC, and the understanding of astronomy it displays seems to have been based on knowledge developed by the Babylonians around 300-700 BC, said Mike Edmunds, a professor of astrophysics at Cardiff University in Britain. He led a research team that reconstructed what the gear mechanism would have looked like by using advanced three-dimensional-imaging technology. The group also decoded a number of the inscriptions. The mechanism explores the relationship between lunar months - the time it takes for the moon to cycle through its phases, say, full moon to the full moon - and calendar years. The gears had to be cut precisely to reflect this complex relationship; 19 calendar years equal 235 lunar months.</p>
+                    <p><strong>G</strong> By turning the gear mechanism, which included what Edmunds called a beautiful system of epicyclic gears that factored in the elliptical orbit of the moon, a person could check what the sky would have looked like on a date in the past, or how it would appear in the future. The mechanism was encased in a box with doors in front and back covered with inscriptions - a sort of instruction manual. Inside the front door were pointers indicating the date and the position of the sun, moon and zodiac, while opening the back door revealed the relationship between calendar years and lunar months, and a mechanism to predict eclipses.</p>
+                    <p><strong>H</strong> "If they needed to know when eclipses would occur, and this related to the rising and setting of stars and related them to dates and religious experiences, the mechanism would directly help," said Yanis Bitsakis, a physicist at the University of Athens who co-wrote the Nature paper. "It is a mechanical computer. You turn the handle and you have a date on the front." Building it would have been expensive and required the interaction of astronomers, engineers, intellectuals and craftspeople. Charette said the device overturned conventional ideas that the ancient Greeks were primarily ivory tower thinkers who did not deign to muddy their hands with technical stuff. It is a reminder, he said, that while the study of history often focuses on written texts, they can tell us only a fraction of what went on at a particular time.</p>
+                    <p><strong>I</strong> Imagine a future historian encountering philosophy texts written in our time - and an aircraft engine. The books would tell that researcher what a few scholars were thinking today, but the engine would give them a far better window into how technology influenced our everyday lives. Charette said it was unlikely that the device was used by practitioners of astrology, then still in its infancy. More likely, he said, it was bound for a mantelpiece in some rich Roman's home. Given that astronomers of the time already knew how to calculate the positions of the sun and the moon and to predict eclipses without the device, it would have been the equivalent of a device built for a planetarium today - something to spur popular interest or at least claim bragging rights.</p>
+                    <p><strong>J</strong> Why was the technology that went into the device lost? "The time this was built, the jackboot of Rome was coming through," Edmunds said. "The Romans were good at town planning and sanitation but were not known for their interest in science." The fact that the device was so complex, and that it was being shipped with a number of other luxury items, tells Edmunds that it is very unlikely to have been the only one ever made. Its sophistication "is such that it can't have been the only one," Edmunds said. "There must have been a tradition of making them. We're always hopeful a better one will surface." Indeed, he said, he hopes that his study and the renewed interest in the Antikythera Mechanism will prompt second looks by both amateurs and professionals around the world. "The archaeological world may look in their cupboards and maybe say, 'That isn't a bit of rusty old metal in the cupboard.'"</p>
+                </div>
+
+                <!-- PASSAGE 3: Mystery in Easter Island! -->
+                <div id="passage-text-3" class="reading-passage hidden">
+                    <h4 class="text-center">Mystery in Easter Island!</h4>
+                    <p><strong>A</strong> One of the world's most famous yet least visited archaeological sites, Easter Island is a small, hilly, now treeless island of volcanic origin. Located in the Pacific Ocean at 27 degrees south of the equator and some 2200 miles (3600 kilometers) off the coast of Chile, it is considered to be the world's most remote inhabited island. The island is, technically speaking, a single massive volcano rising over ten thousand feet from the Pacific Ocean floor. The island received its most well-known current name, Easter Island, from the Dutch sea captain Jacob Roggeveen who became the first European to visit Easter Sunday, April 5, 1722.</p>
+                    <p><strong>B</strong> In the early 1950s, the Norwegian explorer Thor Heyerdahl popularized the idea that the island had been originally settled by advanced societies of Indians from the coast of South America. Extensive archaeological, ethnographic and linguistic research has conclusively shown this hypothesis to be inaccurate. It is now recognized that the original inhabitants of Easter Island are of Polynesian stock (DNA extracts from skeletons have confirmed this), that they most probably came from the Marquesas or Society islands, and that they arrived as early as 318 AD (carbon dating of reeds from a grave confirms this). At the time of their arrival, much of the island was forested, was teeming with land birds, and was perhaps the most productive breeding site for seabirds in the Polynesia region. Because of the plentiful bird, fish and plant food sources, the human population grew and gave rise to a rich religious and artistic culture.</p>
+                    <p><strong>C</strong> That culture's most famous features are its enormous stone statues called moai, at least 288 of which once stood upon massive stone platforms called ahu. There are some 250 of these ahu platforms spaced approximately one-half mile apart and creating an almost unbroken line around the perimeter of the island. Another 600 moai statues, in various stages of completion, are scattered around the island, either in quarries or along ancient roads between the quarries and the coastal areas where the statues were most often erected. Nearly all the moai are carved from the tough stone of the Rano Raraku volcano. The average statue is 14 feet and 6 inches tall and weighs 14 tons. Some moai were as large as 33 feet and weighed more than 80 tons. Depending upon the size of the statues, it has been estimated that between 50 and 150 people were needed to drag them across the countryside on sledges and rollers made from the island's trees.</p>
+                    <p><strong>D</strong> Scholars are unable to definitively explain the function and use of the moai statues. It is assumed that their carving and erection derived from an idea rooted in similar practices found elsewhere in Polynesia but which evolved in a unique way on Easter Island. Archaeological and iconographic analysis indicates that the statue cult was based on an ideology of male, lineage-based authority incorporating anthropomorphic symbolism. The statues were thus symbols of authority and power, both religious and political. But they were not only symbols. To the people who erected and used them, they were actual repositories of sacred spirit. Carved stone and wooden objects in ancient Polynesian religions, when properly fashioned and ritually prepared, were believed to be charged by a magical spiritual essence called mana. The ahu platforms of Easter Island were the sanctuaries of the people, and the moai statues were the ritually charged sacred objects of those sanctuaries.</p>
+                    <p><strong>E</strong> Besides its more well-known name, Easter Island is also known as Te-Pito-O-Te-Henuab, meaning 'The Navel of the World', and as Mata-Ki-Te-Rani, meaning 'Eyes Looking at Heaven'. These ancient name and a host of mythological details ignored by mainstream archaeologists point to the possibility that the remote island may once have been a geodetic marker and the site of an astronomical observatory of a long-forgotten civilization. In his book, Heaven's Mirror, Graham Hancock suggests that Easter Island may once have been a significant scientific outpost of this antediluvian civilization and that its location had extreme importance in a planet-spanning, mathematically precise grid of sacred sites. Two other alternative scholars, Christopher Knight and Robert Lomas, have extensively studied the location and possible function of these geodetic markers. In their fascinating book, Uriel's Machine, they suggest that one purpose of the geodetic markers was as part of a global network of sophisticated astronomical observatories dedicated to predicting and preparing for future commentary impacts and crystal displacement cataclysms.</p>
+                    <p><strong>F</strong> In the latter years of the 20th century and the first years of the 21st century, various writers and scientists have advanced theories regarding the rapid decline of Easter Island's magnificent civilization around the time of the first European contact. Principal among these theories, and now shown to be inaccurate, is that postulated by Jared Diamond in his book Collapse: How Societies Choose to Fail or Survive. Basically, these theories state that a few centuries after Easter Island's initial colonization the resource needs of the growing population had begun to outpace the island's capacity to renew itself ecologically. By the 1400s the forests had been entirely cut, the rich ground cover had eroded away, the springs had dried up, and the vast flocks of birds coming to roost on the island had disappeared. With no logs to build canoes for offshore fishing, with depleted bird and wildlife food sources, and with declining crop yields because of the erosion of good soil, the nutritional intake of the people plummeted. First famine, then cannibalism, set in. Because the island could no longer feed the chiefs, bureaucrats and priests who kept the complex society running, the resulting chaos triggered a social and cultural collapse. By 1700 the population dropped to between one-quarter and one-tenth of its former number, and many of the statues were toppled during supposed "clan wars" of the 1600 and 1700s.</p>
+                    <p><strong>G</strong> The faulty notions presented in these theories began with the racist assumptions of Thor Heyerdahl and have been perpetuated by writers, such as Jared Diamond, who do not have sufficient archaeological and historical understanding of the actual events which occurred on Easter Island. The real truth regarding the tremendous social devastation which occurred on Easter Island is that it was a direct consequence of the inhumane behavior of many of the first European visitors, particularly the slavers who raped and murdered the islanders, introduced smallpox and other diseases, and brutally removed the natives to mainland South America.</p>
+                </div>
+            </div>
+            <div class="resizer" id="resizer"></div>
+            <div class="questions-panel" id="questions-panel">
+                <!-- QUESTIONS FOR PASSAGE 1 -->
+                <div id="questions-1" class="question-set">
+                    <div class="questions-container">
+                        <!-- Questions 1-4: TRUE/FALSE/NOT GIVEN -->
+                        <div class="question" data-q-start="1" data-q-end="4">
+                            <div class="question-prompt">
+                                <p><strong>Questions 1–4</strong></p>
+                                <p>Do the following statements agree with the information given in Reading Passage 1?</p>
+                                <p>In boxes 1-4 on your answer sheet, write</p>
+                                <ul style="list-style: none; padding-left: 0;">
+                                    <li><strong>TRUE</strong> if the statement is true</li>
+                                    <li><strong>FALSE</strong> if the statement is false</li>
+                                    <li><strong>NOT GIVEN</strong> if the information is not given in the passage</li>
+                                </ul>
+                            </div>
+                            <div class="tf-question" data-q-start="1" data-q-end="1">
+                                <div class="tf-question-line"><span class="tf-question-number">1</span><span class="tf-question-text">Insurance company Sun Life of Canada made the decision that it would hire more Canadian employees rather than British ones in order to get fresh staffs.</span></div>
+                                <div class="tf-options">
+                                    <label class="tf-option"><input type="radio" name="q1" value="TRUE"> TRUE</label>
+                                    <label class="tf-option"><input type="radio" name="q1" value="FALSE"> FALSE</label>
+                                    <label class="tf-option"><input type="radio" name="q1" value="NOT GIVEN"> NOT GIVEN</label>
+                                </div>
+                            </div>
+                            <div class="tf-question" data-q-start="2" data-q-end="2">
+                                <div class="tf-question-line"><span class="tf-question-number">2</span><span class="tf-question-text">Unlike other places, employees in Japan get paid according to the years they are employed.</span></div>
+                                <div class="tf-options">
+                                    <label class="tf-option"><input type="radio" name="q2" value="TRUE"> TRUE</label>
+                                    <label class="tf-option"><input type="radio" name="q2" value="FALSE"> FALSE</label>
+                                    <label class="tf-option"><input type="radio" name="q2" value="NOT GIVEN"> NOT GIVEN</label>
+                                </div>
+                            </div>
+                            <div class="tf-question" data-q-start="3" data-q-end="3">
+                                <div class="tf-question-line"><span class="tf-question-number">3</span><span class="tf-question-text">Elder workers are laid off by some German companies which are refreshing corporate culture.</span></div>
+                                <div class="tf-options">
+                                    <label class="tf-option"><input type="radio" name="q3" value="TRUE"> TRUE</label>
+                                    <label class="tf-option"><input type="radio" name="q3" value="FALSE"> FALSE</label>
+                                    <label class="tf-option"><input type="radio" name="q3" value="NOT GIVEN"> NOT GIVEN</label>
+                                </div>
+                            </div>
+                            <div class="tf-question" data-q-start="4" data-q-end="4">
+                                <div class="tf-question-line"><span class="tf-question-number">4</span><span class="tf-question-text">According to Peter Hicks, companies pay older people more regardless of the contribution they make.</span></div>
+                                <div class="tf-options">
+                                    <label class="tf-option"><input type="radio" name="q4" value="TRUE"> TRUE</label>
+                                    <label class="tf-option"><input type="radio" name="q4" value="FALSE"> FALSE</label>
+                                    <label class="tf-option"><input type="radio" name="q4" value="NOT GIVEN"> NOT GIVEN</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Questions 5-6: Choose TWO letters -->
+                        <div class="question" data-q-start="5" data-q-end="6">
+                            <div class="question-prompt">
+                                <p><strong>Questions 5–6</strong></p>
+                                <p>Choose the correct letter, A, B, C, D, E.</p>
+                                <p>Write your answers in boxes 5-6 on your answer sheet.</p>
+                                <p>According to the passage, there are several advantages to hire elder people, please choose TWO from below:</p>
+                            </div>
+                            <div class="two-column-options">
+                                <div class="multi-choice-option"><label><input type="checkbox" name="q5-6" value="A"> their productivity is more superior than the young.</label></div>
+                                <div class="multi-choice-option"><label><input type="checkbox" name="q5-6" value="B"> paid less compared with younger ones.</label></div>
+                                <div class="multi-choice-option"><label><input type="checkbox" name="q5-6" value="C"> run fast when there is a meeting</label></div>
+                                <div class="multi-choice-option"><label><input type="checkbox" name="q5-6" value="D"> has a better inter-person relationship</label></div>
+                                <div class="multi-choice-option"><label><input type="checkbox" name="q5-6" value="E"> identify problems in an advanced time</label></div>
+                            </div>
+                        </div>
+
+                        <!-- Questions 7-8: Choose TWO letters -->
+                        <div class="question" data-q-start="7" data-q-end="8">
+                            <div class="question-prompt">
+                                <p><strong>Questions 7–8</strong></p>
+                                <p>Choose the correct letter, A, B, C, D, E.</p>
+                                <p>Write your answers in boxes 7-8 on your answer sheet.</p>
+                                <p>According to Mr Peterson, Compared with the elder employee, young graduates have several weaknesses in the workplace, please choose TWO of them below:</p>
+                            </div>
+                            <div class="two-column-options">
+                                <div class="multi-choice-option"><label><input type="checkbox" name="q7-8" value="A"> they are not worth training.</label></div>
+                                <div class="multi-choice-option"><label><input type="checkbox" name="q7-8" value="B"> their productivity is lower than counterparts.</label></div>
+                                <div class="multi-choice-option"><label><input type="checkbox" name="q7-8" value="C"> they change work more often</label></div>
+                                <div class="multi-choice-option"><label><input type="checkbox" name="q7-8" value="D"> their academic criteria is someway behind elders'.</label></div>
+                                <div class="multi-choice-option"><label><input type="checkbox" name="q7-8" value="E"> they are normally high school graduates.</label></div>
+                            </div>
+                        </div>
+
+                        <!-- Questions 9-13: Multiple Choice -->
+                        <div class="question" data-q-start="9" data-q-end="13">
+                            <div class="question-prompt">
+                                <p><strong>Questions 9–13</strong></p>
+                                <p>Choose the correct letter, A, B, C or D.</p>
+                                <p>Write your answers in boxes 9-13 on your answer sheet.</p>
+                            </div>
+                            
+                            <div class="multi-choice-question" data-q-start="9" data-q-end="9">
+                                <div class="question-prompt">
+                                    <p><strong>9.</strong> According to paragraph F, the firms and workers still hold the opinion that:</p>
+                                </div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q9" value="A"> Older workers are more likely to attract other staff</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q9" value="B"> people are not happy if pay gets lower in retiring age.</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q9" value="C"> Older people have more retaining motivation than young people</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q9" value="D"> young people often earn less for their piece-rates salary.</label></div>
+                            </div>
+                            
+                            <div class="multi-choice-question" data-q-start="10" data-q-end="10">
+                                <div class="question-prompt">
+                                    <p><strong>10.</strong> SkillTeam that has been founded by IBM conducted which of the following movement:</p>
+                                </div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q10" value="A"> Ask all the old worker to continue their job on former working hours basis</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q10" value="B"> Carry on the action of cutting off the elder's proportion of employment</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q10" value="C"> Ask employees to work more hours in order to get extra pay</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q10" value="D"> Re-hire old employees and kept the salary a bit lower</label></div>
+                            </div>
+                            
+                            <div class="multi-choice-question" data-q-start="11" data-q-end="11">
+                                <div class="question-prompt">
+                                    <p><strong>11.</strong> Which of the followings is correct according to the research of Mr Quinn:</p>
+                                </div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q11" value="A"> About 50% of all employees in America switched into 'bridge' jobs.</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q11" value="B"> Only the worst-paid continue to work.</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q11" value="C"> More men than women fell into the category of 'bridge' work.</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q11" value="D"> Some old people keep working for their motive rather than an economic incentive.</label></div>
+                            </div>
+                            
+                            <div class="multi-choice-question" data-q-start="12" data-q-end="12">
+                                <div class="question-prompt">
+                                    <p><strong>12.</strong> Which of the followings is correct according to David Storey:</p>
+                                </div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q12" value="A"> 70% business is successful if hire more older people.</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q12" value="B"> Average success of a self-employed business is getting lower.</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q12" value="C"> Self-employed elder people are more likely to survive.</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q12" value="D"> Older people's working hours are more flexible.</label></div>
+                            </div>
+                            
+                            <div class="multi-choice-question" data-q-start="13" data-q-end="13">
+                                <div class="question-prompt">
+                                    <p><strong>13.</strong> What is the main purpose of the author in writing this passage?</p>
+                                </div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q13" value="A"> there must be a successful retiring program for the old</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q13" value="B"> order people should be correctly valued in employment</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q13" value="C"> old people should offer more helping young employees grow.</label></div>
+                                <div class="multi-choice-option"><label><input type="radio" name="q13" value="D"> There are more jobs in the world that only employ older people</label></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QUESTIONS FOR PASSAGE 2 -->
+                <div id="questions-2" class="question-set hidden">
+                    <div class="questions-container">
+                        <!-- Questions 14-18: Paragraph Matching -->
+                        <div class="question" data-q-start="14" data-q-end="18">
+                            <div class="question-prompt">
+                                <p><strong>Questions 14–18</strong></p>
+                                <p>The Reading Passage has ten paragraphs A-J</p>
+                                <p>Which paragraph contains the following information?</p>
+                                <p>Write the correct letter A-J, in boxes 14-18 on your answer sheet.</p>
+                            </div>
+                            <div class="tf-question" data-q-start="14" data-q-end="14">
+                                <div class="tf-question-line"><span class="tf-question-number">14</span><span class="tf-question-text">The content inside the wrecked ship</span></div>
+                                <div class="tf-options">
+                                    <select name="q14" class="answer-select">
+                                        <option value="">Select</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                        <option value="F">F</option>
+                                        <option value="G">G</option>
+                                        <option value="H">H</option>
+                                        <option value="I">I</option>
+                                        <option value="J">J</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="tf-question" data-q-start="15" data-q-end="15">
+                                <div class="tf-question-line"><span class="tf-question-number">15</span><span class="tf-question-text">Ancient astronomers and craftsman might involve</span></div>
+                                <div class="tf-options">
+                                    <select name="q15" class="answer-select">
+                                        <option value="">Select</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                        <option value="F">F</option>
+                                        <option value="G">G</option>
+                                        <option value="H">H</option>
+                                        <option value="I">I</option>
+                                        <option value="J">J</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="tf-question" data-q-start="16" data-q-end="16">
+                                <div class="tf-question-line"><span class="tf-question-number">16</span><span class="tf-question-text">The location of the Antikythera Mechanism</span></div>
+                                <div class="tf-options">
+                                    <select name="q16" class="answer-select">
+                                        <option value="">Select</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                        <option value="F">F</option>
+                                        <option value="G">G</option>
+                                        <option value="H">H</option>
+                                        <option value="I">I</option>
+                                        <option value="J">J</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="tf-question" data-q-start="17" data-q-end="17">
+                                <div class="tf-question-line"><span class="tf-question-number">17</span><span class="tf-question-text">Details of how it was found</span></div>
+                                <div class="tf-options">
+                                    <select name="q17" class="answer-select">
+                                        <option value="">Select</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                        <option value="F">F</option>
+                                        <option value="G">G</option>
+                                        <option value="H">H</option>
+                                        <option value="I">I</option>
+                                        <option value="J">J</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="tf-question" data-q-start="18" data-q-end="18">
+                                <div class="tf-question-line"><span class="tf-question-number">18</span><span class="tf-question-text">Appearance and structure of the mechanism</span></div>
+                                <div class="tf-options">
+                                    <select name="q18" class="answer-select">
+                                        <option value="">Select</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                        <option value="F">F</option>
+                                        <option value="G">G</option>
+                                        <option value="H">H</option>
+                                        <option value="I">I</option>
+                                        <option value="J">J</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Questions 19-22: Summary Completion -->
+                        <div class="question" data-q-start="19" data-q-end="22">
+                            <div class="question-prompt">
+                                <p><strong>Questions 19–22</strong></p>
+                                <p>Complete the following summary of the paragraphs of Reading Passage, using NO MORE THAN TWO WORDS from the Reading Passage for each answer.</p>
+                                <p>Write your answers in boxes 19-22 on your answer sheet.</p>
+                            </div>
+                            <div class="summary-text" style="border: 1px solid #000; padding: 10px; text-align: left;">
+                                <p>An ancient huge sunk <input type="text" class="answer-input" id="q19" placeholder="19" autocomplete="off"> was found accidentally by sponges searcher. The ship loaded with <input type="text" class="answer-input" id="q20" placeholder="20" autocomplete="off"> such as bronze and sculptures. However, an archaeologist found a junk similar to a <input type="text" class="answer-input" id="q21" placeholder="21" autocomplete="off"> which has Greek script on it. This inspiring and elaborated device was found to be the first <input type="text" class="answer-input" id="q22" placeholder="22" autocomplete="off"> in the world.</p>
+                            </div>
+                        </div>
+
+                        <!-- Questions 23-26: Person Matching -->
+                        <div class="question" data-q-start="23" data-q-end="26">
+                            <div class="question-prompt">
+                                <p><strong>Questions 23–26</strong></p>
+                                <p>Use the information in the passage to match the people (listed A-C) with opinions or deeds below.</p>
+                                <p>Write the appropriate letters A-C in boxes 23-26 on your answer sheet.</p>
+                                <p><strong>NB</strong> You may use any letter more than once</p>
+                                <p><strong>A</strong> Yanis Bitsakis<br>
+                                <strong>B</strong> Mike Edmunds<br>
+                                <strong>C</strong> François Charette</p>
+                            </div>
+                            
+                            <div class="tf-question" data-q-start="23" data-q-end="23">
+                                <div class="tf-question-line"><span class="tf-question-number">23</span><span class="tf-question-text">More complicated than the previous device</span></div>
+                                <div class="tf-options">
+                                    <select name="q23" class="answer-select">
+                                        <option value="">Select</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="tf-question" data-q-start="24" data-q-end="24">
+                                <div class="tf-question-line"><span class="tf-question-number">24</span><span class="tf-question-text">Anticipate to find more Antikythera Mechanism in the future</span></div>
+                                <div class="tf-options">
+                                    <select name="q24" class="answer-select">
+                                        <option value="">Select</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="tf-question" data-q-start="25" data-q-end="25">
+                                <div class="tf-question-line"><span class="tf-question-number">25</span><span class="tf-question-text">Antikythera Mechanism was found related to the moon</span></div>
+                                <div class="tf-options">
+                                    <select name="q25" class="answer-select">
+                                        <option value="">Select</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="tf-question" data-q-start="26" data-q-end="26">
+                                <div class="tf-question-line"><span class="tf-question-number">26</span><span class="tf-question-text">Mechanism assisted ancient people to calculate the movement of stars.</span></div>
+                                <div class="tf-options">
+                                    <select name="q26" class="answer-select">
+                                        <option value="">Select</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QUESTIONS FOR PASSAGE 3 -->
+                <div id="questions-3" class="question-set hidden">
+                    <div class="questions-container">
+                        <!-- Questions 27-30: Heading Matching -->
+                        <div class="question" data-q-start="27" data-q-end="30">
+                            <div class="question-prompt">
+                                <p><strong>Questions 27–30</strong></p>
+                                <p>The reading passage has seven paragraphs, A-G</p>
+                                <p>Choose the correct heading for paragraphs A-G from the list below.</p>
+                                <p>Write the correct number, i-xi, in boxes 27-30 on your answer sheet.</p>
+                                <p><strong>NB</strong> There are more headings than paragraphs</p>
+                                <p><strong>List of Headings</strong></p>
+                                <p>i The famous moai<br>
+                                ii The status represented symbols of combined purposes<br>
+                                iii The ancient spots which indicate the scientific application<br>
+                                iv The story of the name<br>
+                                v Early immigrants, rise and prosperity<br>
+                                vi The geology of Easter Island<br>
+                                vii The begin of Thor Heyerdahl's discovery<br>
+                                viii The countering explanation to the misconceptions politically manipulated<br>
+                                ix Symbols of authority and power<br>
+                                x The Navel of the World<br>
+                                xi The Norwegian Invaders' legacy</p>
+                                <p>Example: Paragraph A iv</p>
+                            </div>
+                            
+                            <div class="tf-question" data-q-start="27" data-q-end="27">
+                                <div class="tf-question-line"><span class="tf-question-number">27</span><span class="tf-question-text">Paragraph B</span></div>
+                                <div class="tf-options">
+                                    <select name="q27" class="answer-select">
+                                        <option value="">Select</option>
+                                        <option value="i">i</option>
+                                        <option value="ii">ii</option>
+                                        <option value="iii">iii</option>
+                                        <option value="iv">iv</option>
+                                        <option value="v">v</option>
+                                        <option value="vi">vi</option>
+                                        <option value="vii">vii</option>
+                                        <option value="viii">viii</option>
+                                        <option value="ix">ix</option>
+                                        <option value="x">x</option>
+                                        <option value="xi">xi</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="tf-question" data-q-start="28" data-q-end="28">
+                                <div class="tf-question-line"><span class="tf-question-number">28</span><span class="tf-question-text">Paragraph D</span></div>
+                                <div class="tf-options">
+                                    <select name="q28" class="answer-select">
+                                        <option value="">Select</option>
+                                        <option value="i">i</option>
+                                        <option value="ii">ii</option>
+                                        <option value="iii">iii</option>
+                                        <option value="iv">iv</option>
+                                        <option value="v">v</option>
+                                        <option value="vi">vi</option>
+                                        <option value="vii">vii</option>
+                                        <option value="viii">viii</option>
+                                        <option value="ix">ix</option>
+                                        <option value="x">x</option>
+                                        <option value="xi">xi</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="tf-question" data-q-start="29" data-q-end="29">
+                                <div class="tf-question-line"><span class="tf-question-number">29</span><span class="tf-question-text">Paragraph E</span></div>
+                                <div class="tf-options">
+                                    <select name="q29" class="answer-select">
+                                        <option value="">Select</option>
+                                        <option value="i">i</option>
+                                        <option value="ii">ii</option>
+                                        <option value="iii">iii</option>
+                                        <option value="iv">iv</option>
+                                        <option value="v">v</option>
+                                        <option value="vi">vi</option>
+                                        <option value="vii">vii</option>
+                                        <option value="viii">viii</option>
+                                        <option value="ix">ix</option>
+                                        <option value="x">x</option>
+                                        <option value="xi">xi</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="tf-question" data-q-start="30" data-q-end="30">
+                                <div class="tf-question-line"><span class="tf-question-number">30</span><span class="tf-question-text">Paragraph G</span></div>
+                                <div class="tf-options">
+                                    <select name="q30" class="answer-select">
+                                        <option value="">Select</option>
+                                        <option value="i">i</option>
+                                        <option value="ii">ii</option>
+                                        <option value="iii">iii</option>
+                                        <option value="iv">iv</option>
+                                        <option value="v">v</option>
+                                        <option value="vi">vi</option>
+                                        <option value="vii">vii</option>
+                                        <option value="viii">viii</option>
+                                        <option value="ix">ix</option>
+                                        <option value="x">x</option>
+                                        <option value="xi">xi</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Questions 31-36: TRUE/FALSE/NOT GIVEN -->
+                        <div class="question" data-q-start="31" data-q-end="36">
+                            <div class="question-prompt">
+                                <p><strong>Questions 31–36</strong></p>
+                                <p>Do the following statements agree with the information given in Reading Passage 3?</p>
+                                <p>In boxes 31-36 on your answer sheet write</p>
+                                <ul style="list-style: none; padding-left: 0;">
+                                    <li><strong>TRUE</strong> if the statement is true</li>
+                                    <li><strong>FALSE</strong> if the statement is false</li>
+                                    <li><strong>NOT GIVEN</strong> if the information is not given in the passage</li>
+                                </ul>
+                            </div>
+                            <div class="tf-question" data-q-start="31" data-q-end="31">
+                                <div class="tf-question-line"><span class="tf-question-number">31</span><span class="tf-question-text">The first inhabitants of Easter Island are Polynesian, from the Marquesas or Society islands.</span></div>
+                                <div class="tf-options">
+                                    <label class="tf-option"><input type="radio" name="q31" value="TRUE"> TRUE</label>
+                                    <label class="tf-option"><input type="radio" name="q31" value="FALSE"> FALSE</label>
+                                    <label class="tf-option"><input type="radio" name="q31" value="NOT GIVEN"> NOT GIVEN</label>
+                                </div>
+                            </div>
+                            <div class="tf-question" data-q-start="32" data-q-end="32">
+                                <div class="tf-question-line"><span class="tf-question-number">32</span><span class="tf-question-text">Construction of some moai statues on the island was not finished.</span></div>
+                                <div class="tf-options">
+                                    <label class="tf-option"><input type="radio" name="q32" value="TRUE"> TRUE</label>
+                                    <label class="tf-option"><input type="radio" name="q32" value="FALSE"> FALSE</label>
+                                    <label class="tf-option"><input type="radio" name="q32" value="NOT GIVEN"> NOT GIVEN</label>
+                                </div>
+                            </div>
+                            <div class="tf-question" data-q-start="33" data-q-end="33">
+                                <div class="tf-question-line"><span class="tf-question-number">33</span><span class="tf-question-text">The Moai can be found not only on Easter Island but also elsewhere in Polynesia.</span></div>
+                                <div class="tf-options">
+                                    <label class="tf-option"><input type="radio" name="q33" value="TRUE"> TRUE</label>
+                                    <label class="tf-option"><input type="radio" name="q33" value="FALSE"> FALSE</label>
+                                    <label class="tf-option"><input type="radio" name="q33" value="NOT GIVEN"> NOT GIVEN</label>
+                                </div>
+                            </div>
+                            <div class="tf-question" data-q-start="34" data-q-end="34">
+                                <div class="tf-question-line"><span class="tf-question-number">34</span><span class="tf-question-text">Most archaeologists recognised the religious and astronomical functions for an ancient society.</span></div>
+                                <div class="tf-options">
+                                    <label class="tf-option"><input type="radio" name="q34" value="TRUE"> TRUE</label>
+                                    <label class="tf-option"><input type="radio" name="q34" value="FALSE"> FALSE</label>
+                                    <label class="tf-option"><input type="radio" name="q34" value="NOT GIVEN"> NOT GIVEN</label>
+                                </div>
+                            </div>
+                            <div class="tf-question" data-q-start="35" data-q-end="35">
+                                <div class="tf-question-line"><span class="tf-question-number">35</span><span class="tf-question-text">The structures of Easter Island work as an astronomical outpost for extraterrestrial visitors.</span></div>
+                                <div class="tf-options">
+                                    <label class="tf-option"><input type="radio" name="q35" value="TRUE"> TRUE</label>
+                                    <label class="tf-option"><input type="radio" name="q35" value="FALSE"> FALSE</label>
+                                    <label class="tf-option"><input type="radio" name="q35" value="NOT GIVEN"> NOT GIVEN</label>
+                                </div>
+                            </div>
+                            <div class="tf-question" data-q-start="36" data-q-end="36">
+                                <div class="tf-question-line"><span class="tf-question-number">36</span><span class="tf-question-text">The theory that depleted natural resources leading to the fail of Easter Island actual have a distorted perspective.</span></div>
+                                <div class="tf-options">
+                                    <label class="tf-option"><input type="radio" name="q36" value="TRUE"> TRUE</label>
+                                    <label class="tf-option"><input type="radio" name="q36" value="FALSE"> FALSE</label>
+                                    <label class="tf-option"><input type="radio" name="q36" value="NOT GIVEN"> NOT GIVEN</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Questions 37-40: Summary Completion -->
+                        <div class="question" data-q-start="37" data-q-end="40">
+                            <div class="question-prompt">
+                                <p><strong>Questions 37–40</strong></p>
+                                <p>Complete the following summary of the paragraphs of Reading Passage.</p>
+                                <p>Using NO MORE THAN THREE WORDS from the Reading Passage for each answer.</p>
+                                <p>Write your answers in boxes 37-40 on your answer sheet.</p>
+                            </div>
+                            <div class="summary-text" style="border: 1px solid #000; padding: 10px; text-align: left;">
+                                <p>Many theories speculated that Easter Island's fall around the era of the initial European contact. Some say the resources are depleted by a <input type="text" class="answer-input" id="q37" placeholder="37" autocomplete="off">; The erroneous theories began with a root of the <input type="text" class="answer-input" id="q38" placeholder="38" autocomplete="off"> advanced by some scholars. Early writers did not have adequate <input type="text" class="answer-input" id="q39" placeholder="39" autocomplete="off"> understandings to comprehend the true nature of events on the island. The social devastation was, in fact, a direct result of <input type="text" class="answer-input" id="q40" placeholder="40" autocomplete="off"> of the first European settlers.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <div class="nav-arrows">
+        <button class="nav-arrow prev" onclick="previousQuestion()" id="prevBtn" aria-label="Previous question">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <button class="nav-arrow next" onclick="nextQuestion()" id="nextBtn" aria-label="Next question">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="nav-row perScorableItem" aria-label="Questions">
+        <div class="footer__questionWrapper___1tZ46 multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(1)">
+                <span>
+                    <span aria-hidden="true" class="section-prefix">Part </span>
+                    <span class="sectionNr" aria-hidden="true">1</span>
+                    <span class="attemptedCount" aria-hidden="true">0 of 13</span>
+                </span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion scorable-item" onclick="goToQuestion(1)"><span class="sr-only">Question 1</span><span aria-hidden="true">1</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(2)"><span class="sr-only">Question 2</span><span aria-hidden="true">2</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(3)"><span class="sr-only">Question 3</span><span aria-hidden="true">3</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(4)"><span class="sr-only">Question 4</span><span aria-hidden="true">4</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(5)"><span class="sr-only">Question 5</span><span aria-hidden="true">5</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(6)"><span class="sr-only">Question 6</span><span aria-hidden="true">6</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(7)"><span class="sr-only">Question 7</span><span aria-hidden="true">7</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(8)"><span class="sr-only">Question 8</span><span aria-hidden="true">8</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(9)"><span class="sr-only">Question 9</span><span aria-hidden="true">9</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(10)"><span class="sr-only">Question 10</span><span aria-hidden="true">10</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(11)"><span class="sr-only">Question 11</span><span aria-hidden="true">11</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(12)"><span class="sr-only">Question 12</span><span aria-hidden="true">12</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(13)"><span class="sr-only">Question 13</span><span aria-hidden="true">13</span></button>
+            </div>
+        </div>
+        
+        <div class="footer__questionWrapper___1tZ46 selected multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(2)">
+                <span>
+                    <span aria-hidden="true" class="section-prefix">Part </span>
+                    <span class="sectionNr" aria-hidden="true">2</span>
+                    <span class="attemptedCount" aria-hidden="true">0 of 13</span>
+                </span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion scorable-item" onclick="goToQuestion(14)"><span class="sr-only">Question 14</span><span aria-hidden="true">14</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(15)"><span class="sr-only">Question 15</span><span aria-hidden="true">15</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(16)"><span class="sr-only">Question 16</span><span aria-hidden="true">16</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(17)"><span class="sr-only">Question 17</span><span aria-hidden="true">17</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(18)"><span class="sr-only">Question 18</span><span aria-hidden="true">18</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(19)"><span class="sr-only">Question 19</span><span aria-hidden="true">19</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(20)"><span class="sr-only">Question 20</span><span aria-hidden="true">20</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(21)"><span class="sr-only">Question 21</span><span aria-hidden="true">21</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(22)"><span class="sr-only">Question 22</span><span aria-hidden="true">22</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(23)"><span class="sr-only">Question 23</span><span aria-hidden="true">23</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(24)"><span class="sr-only">Question 24</span><span aria-hidden="true">24</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(25)"><span class="sr-only">Question 25</span><span aria-hidden="true">25</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(26)"><span class="sr-only">Question 26</span><span aria-hidden="true">26</span></button>
+            </div>
+        </div>
+        
+        <div class="footer__questionWrapper___1tZ46 multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(3)">
+                <span>
+                    <span aria-hidden="true" class="section-prefix">Part </span>
+                    <span class="sectionNr" aria-hidden="true">3</span>
+                    <span class="attemptedCount" aria-hidden="true">0 of 14</span>
+                </span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion scorable-item" onclick="goToQuestion(27)"><span class="sr-only">Question 27</span><span aria-hidden="true">27</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(28)"><span class="sr-only">Question 28</span><span aria-hidden="true">28</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(29)"><span class="sr-only">Question 29</span><span aria-hidden="true">29</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(30)"><span class="sr-only">Question 30</span><span aria-hidden="true">30</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(31)"><span class="sr-only">Question 31</span><span aria-hidden="true">31</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(32)"><span class="sr-only">Question 32</span><span aria-hidden="true">32</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(33)"><span class="sr-only">Question 33</span><span aria-hidden="true">33</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(34)"><span class="sr-only">Question 34</span><span aria-hidden="true">34</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(35)"><span class="sr-only">Question 35</span><span aria-hidden="true">35</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(36)"><span class="sr-only">Question 36</span><span aria-hidden="true">36</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(37)"><span class="sr-only">Question 37</span><span aria-hidden="true">37</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(38)"><span class="sr-only">Question 38</span><span aria-hidden="true">38</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(39)"><span class="sr-only">Question 39</span><span aria-hidden="true">39</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(40)"><span class="sr-only">Question 40</span><span aria-hidden="true">40</span></button>
+            </div>
+        </div>
+        
+        <button id="deliver-button" aria-label="Review your answers" class="footer__deliverButton___3FM07">
+            <i class="fa fa fa-check" aria-hidden="true"></i>
+            <span>Check Answers</span>
+        </button>
+    </nav>
+
+    <!-- Context Menu -->
+    <div id="contextMenu" class="context-menu">
+        <div id="menu-highlight" class="context-menu-item" onclick="highlightText()">
+            Highlight
+        </div>
+        <div id="menu-note" class="context-menu-item" onclick="addNote()">
+            Note
+        </div>
+        <div id="menu-clear" class="context-menu-item" onclick="clearHighlight()">
+            Clear
+        </div>
+        <div id="menu-clear-all" class="context-menu-item" onclick="clearAllHighlights()">
+            Clear All
+        </div>
+    </div>
+
+    <div id="results-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeResultsModal()">&times;</button>
+            <h2>Results</h2>
+            <div class="results-summary">
+                <p>Score: <span id="results-score"></span> / 40</p>
+                <p>IELTS Band: <span id="results-band"></span></p>
+            </div>
+            <div id="results-details" class="results-details-container">
+                <!-- Results for each question will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- STATE VARIABLES ---
+        let currentPassage = 1;
+        let currentQuestion = 1;
+        let selectedRange = null;
+        let timeInSeconds = 3600;
+        let timerInterval;
+        let draggedItem = null;
+        let activeQuestionElement = null;
+        let selectedDragItem = null;
+
+        // --- GLOBAL FUNCTIONS ---
+        function getFirstQuestionOfPart(part) {
+            switch(part) {
+                case 1: return 1;
+                case 2: return 14;
+                case 3: return 27;
+                default: return 1;
+            }
+        }
+
+        // --- DOM ELEMENTS ---
+        const timerDisplay = document.querySelector('.timer-display');
+        const timerToggleButton = document.getElementById('timer-toggle-btn');
+        const timerResetButton = document.getElementById('timer-reset-btn');
+        const deliverButton = document.getElementById('deliver-button');
+        const resizer = document.getElementById('resizer');
+        const passagePanel = document.getElementById('passage-panel');
+        const questionsPanel = document.getElementById('questions-panel');
+        const contextMenu = document.getElementById('contextMenu');
+
+        // --- ICON SVGs ---
+        const playIcon = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8 5v14l11-7L8 5z"/></svg>';
+        const pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+
+        // --- ANSWERS ---
+        const correctAnswers = {
+            // Part 1: Grey Workers (1-13)
+            '1': 'FALSE',      // Sun Life of Canada hiring Canadian vs British employees
+            '2': 'TRUE',       // Japan pays according to seniority
+            '3': 'TRUE',       // German companies lay off older workers to refresh culture
+            '4': 'FALSE',      // Peter Hicks says older people are paid more because they're worth more
+            '5-6': ['D', 'E'], // Advantages: better interpersonal relationships & identify problems early
+            '7-8': ['C', 'D'], // Young graduates weaknesses: change jobs often & academic criteria behind
+            '9': 'B',          // Firms/workers uncomfortable with pay reduction in later life
+            '10': 'D',         // SkillTeam re-hired old employees with lower salary
+            '11': 'D',         // Some old people work for motive, not economic incentive
+            '12': 'C',         // Self-employed elder people more likely to survive
+            '13': 'B',         // Main purpose: older people should be correctly valued in employment
+            
+            // Part 2: Computer Provides More Questions Than Answers (14-26)
+            '14': 'B',         // Content inside wrecked ship - Paragraph B
+            '15': 'H',         // Ancient astronomers and craftsmen involved - Paragraph H
+            '16': 'C',         // Location of Antikythera Mechanism - Paragraph C
+            '17': 'B',         // Details of how it was found - Paragraph B
+            '18': 'G',         // Appearance and structure - Paragraph G
+            '19': 'cargo vessel', // Ancient huge sunk cargo vessel
+            '20': 'luxury items', // Ship loaded with luxury items
+            '21': 'gearwheel', // Junk similar to a gearwheel
+            '22': 'analogue computer', // First analogue computer
+            '23': 'C',         // More complicated than previous device - François Charette
+            '24': 'B',         // Anticipate finding more - Mike Edmunds
+            '25': 'B',         // Related to the moon - Mike Edmunds
+            '26': 'A',         // Assisted calculating star movements - Yanis Bitsakis
+            
+            // Part 3: Mystery in Easter Island (27-40)
+            '27': 'v',         // Paragraph B: Early immigrants, rise and prosperity
+            '28': 'ii',        // Paragraph D: Status represented symbols of combined purposes
+            '29': 'iii',       // Paragraph E: Ancient spots indicating scientific application
+            '30': 'viii',      // Paragraph G: Countering explanation to misconceptions
+            '31': 'TRUE',      // First inhabitants are Polynesian
+            '32': 'TRUE',      // Some moai statues not finished
+            '33': 'TRUE',      // Moai found elsewhere in Polynesia
+            '34': 'FALSE',     // Most archaeologists don't recognize astronomical functions
+            '35': 'NOT GIVEN', // Extraterrestrial visitors - not mentioned
+            '36': 'TRUE',      // Depleted resources theory has distorted perspective
+            '37': 'growing population', // Resources depleted by growing population
+            '38': 'racist assumptions', // Erroneous theories began with racist assumptions
+            '39': 'archaeological and historical', // Early writers lacked archaeological/historical understanding
+            '40': 'inhumane behavior' // Social devastation from inhumane behavior
+        };
+
+        // --- INITIALIZATION ---
+        function initialize() {
+            console.log(`🚀 Initializing application...`);
+            startTimer();
+            initializeDragAndDrop();
+            setupCheckboxLimits();
+            console.log(`📋 Setting up initial state - switching to part 1`);
+            switchToPart(1);
+            
+            document.body.addEventListener('input', updateAllIndicators);
+            document.body.addEventListener('change', updateAllIndicators);
+            deliverButton.addEventListener('click', checkAnswers);
+            timerToggleButton.addEventListener('click', toggleTimer);
+            timerResetButton.addEventListener('click', resetTimer);
+
+            // Add click listeners to question containers for navigation
+            document.querySelectorAll('[data-q-start]').forEach(el => {
+                el.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    
+                    const qNum = parseInt(el.dataset.qStart, 10);
+                    const qEnd = parseInt(el.dataset.qEnd, 10);
+                    
+                    console.log(`🖱️ Question container clicked - qNum: ${qNum}, qEnd: ${qEnd}, currentQuestion: ${currentQuestion}`);
+                    
+                    if (isNaN(qNum)) {
+                        console.log(`ℹ️ Container without valid question number, ignoring navigation`);
+                        return;
+                    }
+                    
+                    if (qNum === qEnd || el.classList.contains('tf-question')) {
+                        if (currentQuestion !== qNum) {
+                            console.log(`🚀 Navigating from question ${currentQuestion} to question ${qNum}`);
+                            goToQuestion(qNum);
+                        }
+                    }
+                });
+            });
+            
+            // Add specific click listeners for individual question elements
+            document.querySelectorAll('.tf-question, .summary-text').forEach(el => {
+                el.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const qNum = parseInt(el.dataset.qStart, 10);
+                    console.log(`🎯 Individual question element clicked - qNum: ${qNum}`);
+                    
+                    if (isNaN(qNum)) return;
+                    
+                    if (currentQuestion !== qNum) {
+                        console.log(`🚀 Navigating from question ${currentQuestion} to question ${qNum}`);
+                        goToQuestion(qNum);
+                    }
+                });
+            });
+            
+            // Add specific click listeners for input elements
+            document.querySelectorAll('.answer-input').forEach(input => {
+                input.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const qNum = parseInt(input.id.replace('q', ''), 10);
+                    
+                    if (currentQuestion !== qNum) {
+                        goToQuestion(qNum);
+                    }
+                });
+            });
+
+            // Add click listeners for select elements
+            document.querySelectorAll('.answer-select').forEach(select => {
+                select.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const qNum = parseInt(select.name.replace('q', ''), 10);
+                    
+                    if (currentQuestion !== qNum) {
+                        goToQuestion(qNum);
+                    }
+                });
+            });
+
+            resizer.addEventListener('mousedown', initResize, false);
+            initializeContextMenu();
+        }
+
+        // --- CORE TEST LOGIC ---
+
+        function checkAnswers() {
+            // Disable all inputs to prevent changes
+            const allInputs = document.querySelectorAll('input, select, textarea');
+            allInputs.forEach(input => {
+                input.disabled = true;
+            });
+
+            // Disable submit button
+            deliverButton.disabled = true;
+            deliverButton.style.cursor = 'not-allowed';
+            
+            clearInterval(timerInterval);
+            let score = 0;
+            const totalQuestions = 40;
+            const resultsDetailsContainer = document.getElementById('results-details');
+            resultsDetailsContainer.innerHTML = '';
+
+            // Clear previous markings
+            document.querySelectorAll('.correct, .incorrect, .correct-answer-highlight').forEach(el => {
+                el.classList.remove('correct', 'incorrect', 'correct-answer-highlight');
+            });
+            document.querySelectorAll('.correct-answer-display').forEach(el => el.remove());
+
+            // Special handling for checkbox groups (Questions 5-6 and 7-8)
+            function evaluateCheckboxGroup(groupName, correctAnswersArray, startQ) {
+                const checked = Array.from(document.querySelectorAll(`input[name="${groupName}"]:checked`)).map(el => el.value).sort();
+                const correctSorted = [...correctAnswersArray].sort();
+                const isFullyCorrect = JSON.stringify(checked) === JSON.stringify(correctSorted);
+                
+                // Mark selected labels
+                document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => {
+                    const label = input.closest('.multi-choice-option');
+                    if (!label) return;
+                    label.classList.remove('correct', 'incorrect', 'correct-answer-highlight');
+                    if (input.checked) {
+                        const isAnswerCorrect = correctAnswersArray.includes(input.value);
+                        label.classList.add(isAnswerCorrect ? 'correct' : 'incorrect');
+                    }
+                    // Highlight correct answers that weren't selected
+                    if (!checked.includes(input.value) && correctAnswersArray.includes(input.value)) {
+                        label.classList.add('correct-answer-highlight');
+                    }
+                });
+                
+                return { isFullyCorrect, checked, correctSorted };
+            }
+
+            // Check all questions
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionKey = String(i);
+                const correctAnswer = correctAnswers[questionKey];
+                let userAnswer = '';
+                let isCorrect = false;
+                let userAnswerDisplay = 'Not Answered';
+                const correctAnswerText = Array.isArray(correctAnswer) ? correctAnswer.join(' / ') : correctAnswer;
+
+                // Special handling for checkbox groups
+                if (i === 5 || i === 6) {
+                    const groupEvaluation = evaluateCheckboxGroup('q5-6', correctAnswers['5-6'], 5);
+                    if (i === 5) {
+                        isCorrect = groupEvaluation.isFullyCorrect;
+                        userAnswerDisplay = groupEvaluation.checked.join(', ') || 'Not Answered';
+                        if (isCorrect) score += 2; // Award 2 points for correct pair
+                        
+                        // Add results for both questions 5 and 6
+                        resultsDetailsContainer.innerHTML += `
+                            <div class="result-row ${isCorrect ? '' : 'incorrect'}">
+                                <span class="q-num">5-6</span>
+                                <span class="user-ans">${userAnswerDisplay}</span>
+                                <span class="correct-ans">${groupEvaluation.correctSorted.join(', ')}</span>
+                            </div>`;
+                    }
+                    continue; // Skip individual processing for 5 and 6
+                }
+                
+                if (i === 7 || i === 8) {
+                    const groupEvaluation = evaluateCheckboxGroup('q7-8', correctAnswers['7-8'], 7);
+                    if (i === 7) {
+                        isCorrect = groupEvaluation.isFullyCorrect;
+                        userAnswerDisplay = groupEvaluation.checked.join(', ') || 'Not Answered';
+                        if (isCorrect) score += 2; // Award 2 points for correct pair
+                        
+                        resultsDetailsContainer.innerHTML += `
+                            <div class="result-row ${isCorrect ? '' : 'incorrect'}">
+                                <span class="q-num">7-8</span>
+                                <span class="user-ans">${userAnswerDisplay}</span>
+                                <span class="correct-ans">${groupEvaluation.correctSorted.join(', ')}</span>
+                            </div>`;
+                    }
+                    continue; // Skip individual processing for 7 and 8
+                }
+
+                // Handle text inputs
+                const textInput = document.getElementById(`q${i}`);
+                if (textInput && textInput.tagName === 'INPUT') {
+                    userAnswer = textInput.value.trim();
+                    userAnswerDisplay = userAnswer || 'Not Answered';
+                    
+                    // Normalize for comparison
+                    const normalize = (s) => (s || '').toString().toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
+                    const normUser = normalize(userAnswer);
+                    const normCorrect = normalize(correctAnswer);
+                    
+                    isCorrect = normUser === normCorrect;
+                    
+                    if (isCorrect) {
+                        score++;
+                        textInput.classList.add('correct');
+                    } else {
+                        textInput.classList.add('incorrect');
+                        const correctAnswerSpan = document.createElement('span');
+                        correctAnswerSpan.className = 'correct-answer-display';
+                        correctAnswerSpan.innerHTML = `&nbsp;➜&nbsp;<span class="correct-answer-highlight">${correctAnswer}</span>`;
+                        textInput.parentNode.insertBefore(correctAnswerSpan, textInput.nextSibling);
+                    }
+                }
+                // Handle select inputs
+                else if (document.querySelector(`select[name="q${i}"]`)) {
+                    const selectInput = document.querySelector(`select[name="q${i}"]`);
+                    userAnswer = selectInput.value;
+                    userAnswerDisplay = userAnswer || 'Not Answered';
+                    isCorrect = userAnswer === correctAnswer;
+                    
+                    if (isCorrect) {
+                        score++;
+                        selectInput.classList.add('correct');
+                    } else {
+                        selectInput.classList.add('incorrect');
+                        const correctAnswerSpan = document.createElement('span');
+                        correctAnswerSpan.className = 'correct-answer-display';
+                        correctAnswerSpan.innerHTML = `&nbsp;➜&nbsp;<span class="correct-answer-highlight">${correctAnswer}</span>`;
+                        selectInput.parentNode.insertBefore(correctAnswerSpan, selectInput.nextSibling);
+                    }
+                }
+                // Handle radio button inputs (TRUE/FALSE/NOT GIVEN and MCQs)
+                else if (document.querySelector(`input[name="q${i}"]`)) {
+                    const radioGroup = document.querySelectorAll(`input[name="q${i}"]`);
+                    const checkedRadio = document.querySelector(`input[name="q${i}"]:checked`);
+                    
+                    if (checkedRadio) {
+                        userAnswer = checkedRadio.value;
+                        userAnswerDisplay = userAnswer;
+                        isCorrect = userAnswer === correctAnswer;
+                        
+                        const userLabel = checkedRadio.closest('.tf-option, .multi-choice-option');
+                        if (userLabel) {
+                            userLabel.classList.add(isCorrect ? 'correct' : 'incorrect');
+                        }
+                        
+                        // Highlight correct answer if wrong
+                        if (!isCorrect) {
+                            const correctOption = document.querySelector(`input[name="q${i}"][value="${correctAnswer}"]`);
+                            if (correctOption) {
+                                const correctLabel = correctOption.closest('.tf-option, .multi-choice-option');
+                                if (correctLabel) {
+                                    correctLabel.classList.add('correct-answer-highlight');
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (isCorrect) {
+                        score++;
+                    }
+                }
+
+                // Add result to modal (skip for checkbox groups already added)
+                if (i !== 5 && i !== 6 && i !== 7 && i !== 8) {
+                    const resultRow = `
+                        <div class="result-row ${isCorrect ? '' : 'incorrect'}">
+                            <span class="q-num">${i}</span>
+                            <span class="user-ans">${userAnswerDisplay}</span>
+                            <span class="correct-ans">${correctAnswerText}</span>
+                        </div>`;
+                    resultsDetailsContainer.innerHTML += resultRow;
+                }
+                
+                // Update nav button color
+                const navButton = document.querySelector(`.subQuestion[onclick="goToQuestion(${i})"]`);
+                if (navButton) {
+                    navButton.classList.remove('answered', 'active');
+                    navButton.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+            }
+
+            // Calculate final score and display results
+            document.getElementById('results-score').textContent = score;
+            document.getElementById('results-band').textContent = calculateBandScore(score);
+            document.body.classList.add('results-mode');
+            document.getElementById('results-modal').classList.remove('hidden');
+            
+            // Change button to "My Result" with green styling
+            deliverButton.innerHTML = `<span>My Result</span>`;
+            deliverButton.style.backgroundColor = '#4CAF50';
+            deliverButton.style.color = 'white';
+            deliverButton.style.borderColor = '#4CAF50';
+            deliverButton.disabled = false;
+            deliverButton.style.cursor = 'pointer';
+            deliverButton.removeEventListener('click', checkAnswers);
+            deliverButton.addEventListener('click', showResultsModal);
+            
+            // Highlight correct answers in the passage
+            highlightCorrectAnswersInPassage();
+        }
+
+        function calculateBandScore(score) {
+            if (score >= 39) return '9.0';
+            const mapping = {
+                40: 9.0, 39: 9.0, 38: 8.5, 37: 8.5, 36: 8.0, 35: 8.0, 34: 7.5,
+                33: 7.5, 32: 7.0, 31: 7.0, 30: 7.0, 29: 6.5, 28: 6.5, 27: 6.5,
+                26: 6.0, 25: 6.0, 24: 6.0, 23: 5.5, 22: 5.5, 21: 5.5, 20: 5.5,
+                19: 5.0, 18: 5.0, 17: 5.0, 16: 5.0, 15: 5.0, 14: 4.5, 13: 4.5,
+                12: 4.0, 11: 4.0, 10: 4.0, 9: 3.5, 8: 3.5, 7: 3.0, 6: 3.0,
+                5: 2.5, 4: 2.5
+            };
+            if (score <= 0) return '0.0';
+            if (score === 1) return '1.0';
+            if (score <= 3) return '2.0';
+            if (score <= 5) return '2.5';
+            return mapping[score] || '0.0';
+        }
+
+        function highlightCorrectAnswersInPassage() {
+            // Define highlights for each passage
+            const part1Highlights = [
+                { question: 1, text: "Sun Life of Canada", answer: "FALSE" },
+                { question: 2, text: "pay in Japan is linked to seniority", answer: "TRUE" },
+                { question: 3, text: "defrost the corporate culture", answer: "TRUE" },
+                { question: 4, text: "older people are paid more because they are worth more", answer: "FALSE" },
+                { question: 5, text: "handle people diplomatically", answer: "D" },
+                { question: 6, text: "spot a problem before it blows up", answer: "E" },
+                { question: 7, text: "young people tend to switch jobs so frequently", answer: "C" },
+                { question: 8, text: "education standards are much better", answer: "D" },
+                { question: 9, text: "uncomfortable with the idea of reducing someone's pay in later life", answer: "B" },
+                { question: 10, text: "SkillTeam", answer: "D" },
+                { question: 11, text: "those who continue working because they want to", answer: "D" },
+                { question: 12, text: "70% of businesses started by people over 55 survived", answer: "C" },
+                { question: 13, text: "correctly valued in employment", answer: "B" }
+            ];
+
+            const part2Highlights = [
+                { question: 14, text: "bronze and marble statues", answer: "B" },
+                { question: 15, text: "astronomers, engineers, intellectuals and craftspeople", answer: "H" },
+                { question: 16, text: "displayed at the National Archaeological Museum of Athens", answer: "C" },
+                { question: 17, text: "divers looking for sponges discovered the wreck", answer: "B" },
+                { question: 18, text: "encased in a box with doors", answer: "G" },
+                { question: 19, text: "giant cargo vessel", answer: "cargo vessel" },
+                { question: 20, text: "luxury items", answer: "luxury items" },
+                { question: 21, text: "gearwheel", answer: "gearwheel" },
+                { question: 22, text: "world's first known analogue computer", answer: "analogue computer" },
+                { question: 23, text: "more than 30 gears", answer: "C" },
+                { question: 24, text: "hopeful a better one will surface", answer: "B" },
+                { question: 25, text: "lunar months", answer: "B" },
+                { question: 26, text: "rising and setting of stars", answer: "A" }
+            ];
+
+            const part3Highlights = [
+                { question: 27, text: "Polynesian stock", answer: "v" },
+                { question: 28, text: "symbols of authority and power", answer: "ii" },
+                { question: 29, text: "geodetic marker", answer: "iii" },
+                { question: 30, text: "racist assumptions", answer: "viii" },
+                { question: 31, text: "Polynesian stock", answer: "TRUE" },
+                { question: 32, text: "various stages of completion", answer: "TRUE" },
+                { question: 33, text: "similar practices found elsewhere in Polynesia", answer: "TRUE" },
+                { question: 34, text: "ignored by mainstream archaeologists", answer: "FALSE" },
+                { question: 35, text: "NOT GIVEN", answer: "NOT GIVEN" },
+                { question: 36, text: "faulty notions", answer: "TRUE" },
+                { question: 37, text: "growing population", answer: "growing population" },
+                { question: 38, text: "racist assumptions", answer: "racist assumptions" },
+                { question: 39, text: "archaeological and historical", answer: "archaeological and historical" },
+                { question: 40, text: "inhumane behavior", answer: "inhumane behavior" }
+            ];
+
+            // Function to apply highlights
+            function applyHighlights(passageElement, highlights) {
+                if (!passageElement) return;
+
+                // Clear existing highlights
+                passageElement.querySelectorAll('.answer-highlight').forEach(el => {
+                    const parent = el.parentNode;
+                    parent.replaceChild(document.createTextNode(el.textContent), el);
+                    parent.normalize();
+                });
+
+                // Add new highlights
+                highlights.forEach(item => {
+                    const paragraphs = passageElement.querySelectorAll('p');
+                    paragraphs.forEach(paragraph => {
+                        const html = paragraph.innerHTML;
+                        if (!html || typeof html !== 'string') return;
+                        
+                        if (html.includes(item.text)) {
+                            const escapeRegExp = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                            const re = new RegExp(escapeRegExp(item.text), 'gi');
+                            const replaced = html.replace(
+                                re,
+                                `<span class="answer-highlight" data-question="${item.question}" style="
+                                    background-color: #ffeb3b;
+                                    padding: 2px 4px;
+                                    border-radius: 3px;
+                                    font-weight: bold;
+                                    position: relative;
+                                ">$&<span style="
+                                    position: absolute;
+                                    top: -8px;
+                                    right: -8px;
+                                    background-color: #2196f3;
+                                    color: white;
+                                    border-radius: 50%;
+                                    width: 20px;
+                                    height: 20px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-size: 12px;
+                                    font-weight: bold;
+                                ">${item.question}</span></span>`
+                            );
+                            paragraph.innerHTML = replaced;
+                        }
+                    });
+                });
+            }
+
+            // Apply highlights to each passage
+            applyHighlights(document.getElementById('passage-text-1'), part1Highlights);
+            applyHighlights(document.getElementById('passage-text-2'), part2Highlights);
+            applyHighlights(document.getElementById('passage-text-3'), part3Highlights);
+        }
+
+        // --- UI & NAVIGATION FUNCTIONS ---
+        
+        function switchToPart(partNumber) {
+            console.log(`🔀 switchToPart called with partNumber: ${partNumber}, currentPassage: ${currentPassage}`);
+            
+            currentPassage = partNumber;
+
+            // Hide all passages and questions
+            document.querySelectorAll('.reading-passage, .question-set, .part-header').forEach(el => {
+                el.classList.add('hidden');
+            });
+
+            // Show the correct passage, questions, and header
+            document.getElementById(`passage-text-${partNumber}`).classList.remove('hidden');
+            document.getElementById(`questions-${partNumber}`).classList.remove('hidden');
+            document.getElementById(`part-header-${partNumber}`).classList.remove('hidden');
+
+            // Update bottom navigation 'selected' state
+            document.querySelectorAll('.footer__questionWrapper___1tZ46').forEach((wrapper, index) => {
+                wrapper.classList.toggle('selected', (index + 1) === partNumber);
+            });
+
+            console.log(`✅ switchToPart completed - switched to part ${partNumber}`);
+        }
+        
+        function goToQuestion(questionNumber) {
+            console.log(`🎯 goToQuestion called with questionNumber: ${questionNumber}`);
+            
+            currentQuestion = questionNumber;
+
+            let passageNumber = 1;
+            if (questionNumber >= 14 && questionNumber <= 26) passageNumber = 2;
+            else if (questionNumber >= 27) passageNumber = 3;
+            
+            console.log(`📍 Calculated passageNumber: ${passageNumber} for question ${questionNumber}`);
+            
+            if (currentPassage !== passageNumber) {
+                console.log(`🔄 Switching from part ${currentPassage} to part ${passageNumber} for question ${questionNumber}`);
+                switchToPart(passageNumber);
+            }
+
+            // Remove active style from previous question
+            if (activeQuestionElement) {
+                activeQuestionElement.classList.remove('active-question', 'active-input');
+                const prevBlock = activeQuestionElement.closest('[data-q-start]');
+                if (prevBlock) prevBlock.classList.remove('active-question');
+            }
+
+            // Find and highlight the new question
+            let targetEl = document.getElementById(`q${questionNumber}`);
+            if (targetEl) {
+                activeQuestionElement = targetEl;
+                targetEl.classList.add('active-input');
+                scrollIntoViewIfNeeded(targetEl);
+            } else {
+                targetEl = document.querySelector(`[data-q-start="${questionNumber}"]`);
+                if (targetEl) {
+                    activeQuestionElement = targetEl;
+                    if (targetEl.matches('input[type="text"]') || targetEl.matches('select')) {
+                        targetEl.classList.add('active-input');
+                    } else {
+                        targetEl.classList.add('active-question');
+                    }
+                    scrollIntoViewIfNeeded(targetEl);
+                }
+            }
+
+            updateNavigation();
+            console.log(`✅ goToQuestion completed for question ${questionNumber}`);
+        }
+        
+        function updateNavigation() {
+            console.log(`🔄 updateNavigation called for currentQuestion: ${currentQuestion}`);
+            
+            // Update nav buttons
+            const navButtons = document.querySelectorAll('.subQuestion');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            const activeNav = document.querySelector(`.subQuestion[onclick="goToQuestion(${currentQuestion})"]`);
+            if (activeNav) {
+                activeNav.classList.add('active');
+            }
+
+            // Update active input styling
+            document.querySelectorAll('.answer-input.active-input, .tf-question.active-question, .multi-choice-question.active-question').forEach(el => {
+                el.classList.remove('active-input', 'active-question');
+            });
+            
+            const activeInput = document.getElementById(`q${currentQuestion}`);
+            if (activeInput) {
+                activeInput.classList.add('active-input');
+                if (typeof activeInput.focus === 'function') {
+                    activeInput.focus();
+                }
+            } else {
+                let activeQuestionBlock = document.querySelector(`.tf-question[data-q-start="${currentQuestion}"]`) 
+                    || document.querySelector(`.multi-choice-question[data-q-start="${currentQuestion}"]`) 
+                    || document.querySelector(`[data-q-start="${currentQuestion}"]`);
+                if (activeQuestionBlock) {
+                    activeQuestionBlock.classList.add('active-question');
+                    const firstInput = activeQuestionBlock.querySelector('input, select');
+                    if(firstInput) {
+                        firstInput.classList.add('active-input');
+                        if (typeof firstInput.focus === 'function') {
+                            firstInput.focus();
+                        }
+                    }
+                }
+            }
+        }
+        
+        function updateAllIndicators() {
+            updateAttemptedCount(1, 1, 13);
+            updateAttemptedCount(2, 14, 26);
+            updateAttemptedCount(3, 27, 40);
+            updateAnsweredNav();
+        }
+        
+        function updateAnsweredNav() {
+            const navButtons = document.querySelectorAll('.subQuestion');
+            navButtons.forEach(btn => {
+                const qNum = parseInt(btn.textContent, 10);
+                if (isQuestionAnswered(qNum)) {
+                    btn.classList.add('answered');
+                } else {
+                    btn.classList.remove('answered');
+                }
+            });
+        }
+        
+        function isQuestionAnswered(qNum) {
+            // Handle checkbox groups
+            if (qNum === 5 || qNum === 6) {
+                const checked = document.querySelectorAll('input[name="q5-6"]:checked');
+                return checked.length > 0;
+            }
+            if (qNum === 7 || qNum === 8) {
+                const checked = document.querySelectorAll('input[name="q7-8"]:checked');
+                return checked.length > 0;
+            }
+            
+            // Handle text inputs
+            const textInput = document.getElementById(`q${qNum}`);
+            if (textInput && textInput.value.trim() !== '') {
+                return true;
+            }
+            
+            // Handle select inputs
+            const selectInput = document.querySelector(`select[name="q${qNum}"]`);
+            if (selectInput && selectInput.value !== '') {
+                return true;
+            }
+            
+            // Handle radio inputs
+            const radioInput = document.querySelector(`input[name="q${qNum}"]:checked`);
+            if (radioInput) {
+                return true;
+            }
+            
+            return false;
+        }
+
+        function updateAttemptedCount(part, startQ, endQ) {
+            let answeredCount = 0;
+            for (let i = startQ; i <= endQ; i++) {
+                if (isQuestionAnswered(i)) {
+                    answeredCount++;
+                }
+            }
+            const partHeader = document.querySelector(`.footer__questionNo___3WNct[onclick="switchToPart(${part})"]`);
+            if (partHeader) {
+                const countSpan = partHeader.querySelector('.attemptedCount');
+                if (countSpan) {
+                    countSpan.textContent = `${answeredCount} of ${endQ - startQ + 1}`;
+                }
+            }
+        }
+
+        function scrollIntoViewIfNeeded(element) {
+            const panel = element.closest('.questions-panel, .passage-panel');
+            const panelRect = panel.getBoundingClientRect();
+            const elementRect = element.getBoundingClientRect();
+            if (elementRect.top < panelRect.top || elementRect.bottom > panelRect.bottom) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        // --- TIMER FUNCTIONS ---
+        
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeInSeconds--;
+                const minutes = Math.floor(timeInSeconds / 60);
+                const seconds = timeInSeconds % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                if (timeInSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = "Time's up!";
+                }
+            }, 1000);
+            timerToggleButton.innerHTML = pauseIcon;
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerToggleButton.innerHTML = playIcon;
+        }
+
+        function toggleTimer() {
+            if (timerToggleButton.innerHTML.includes('M6 19h4V5H6v14z')) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function resetTimer() {
+            timeInSeconds = 3600;
+            const minutes = Math.floor(timeInSeconds / 60);
+            const seconds = timeInSeconds % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            startTimer();
+            timerToggleButton.innerHTML = pauseIcon;
+        }
+        
+        // --- DRAG AND DROP FUNCTIONS (kept for compatibility) ---
+        
+        function initializeDragAndDrop() {
+            // This is kept for compatibility but not used in this version
+        }
+        
+        // --- CONTEXT MENU FUNCTIONS ---
+        
+        function initializeContextMenu() {
+            const panels = [passagePanel, questionsPanel];
+            
+            document.addEventListener('selectionchange', () => {
+                const selection = window.getSelection();
+                if (selection && !selection.isCollapsed && selection.toString().trim().length > 0) {
+                    const range = selection.getRangeAt(0);
+                    if (panels.some(panel => panel.contains(range.commonAncestorContainer))) {
+                        selectedRange = range;
+                    }
+                }
+            });
+
+            const showContextMenu = (e) => {
+                const target = e.target;
+                const isClickOnHighlight = target.closest('.highlight, .comment-highlight');
+                const isSelectionActive = selectedRange && selectedRange.toString().trim().length > 0;
+                
+                let showMenu = false;
+
+                if (isClickOnHighlight) {
+                    document.getElementById('menu-highlight').style.display = 'none';
+                    document.getElementById('menu-note').style.display = 'none';
+                    document.getElementById('menu-clear').style.display = 'block';
+                    document.getElementById('menu-clear-all').style.display = 'block';
+                    contextMenu.targetElementForClear = isClickOnHighlight;
+                    showMenu = true;
+                } else if (isSelectionActive && panels.some(panel => panel.contains(selectedRange.commonAncestorContainer))) {
+                    document.getElementById('menu-highlight').style.display = 'flex';
+                    document.getElementById('menu-note').style.display = 'flex';
+                    document.getElementById('menu-clear').style.display = 'none';
+                    document.getElementById('menu-clear-all').style.display = 'block';
+                    showMenu = true;
+                }
+
+                if (showMenu) {
+                    e.preventDefault();
+                    contextMenu.style.display = 'block';
+                    const menuHeight = contextMenu.offsetHeight;
+                    const menuWidth = contextMenu.offsetWidth;
+                    let left = e.pageX;
+                    let top = e.pageY;
+                    if (left + menuWidth > window.innerWidth) left = window.innerWidth - menuWidth - 5;
+                    if (top + menuHeight > window.innerHeight) top = e.pageY - menuHeight - 5;
+                    else top = e.pageY - menuHeight - 5;
+                    
+                    contextMenu.style.left = `${left}px`;
+                    contextMenu.style.top = `${top}px`;
+                }
+            };
+
+            panels.forEach(panel => {
+                panel.addEventListener('contextmenu', showContextMenu);
+            });
+
+            document.addEventListener('click', (e) => {
+                if (contextMenu.style.display === 'block' && !contextMenu.contains(e.target)) {
+                    closeContextMenu();
+                }
+            });
+        }
+
+        function closeContextMenu() {
+            contextMenu.style.display = 'none';
+            selectedRange = null;
+        }
+
+        function unwrapElement(element) {
+            const parent = element.parentNode;
+            if (!parent) return;
+            while (element.firstChild) {
+                parent.insertBefore(element.firstChild, element);
+            }
+            parent.removeChild(element);
+            parent.normalize();
+        }
+
+        // --- GLOBAL FUNCTION EXPOSURE ---
+        window.nextQuestion = () => currentQuestion < 40 && goToQuestion(currentQuestion + 1);
+        window.previousQuestion = () => currentQuestion > 1 && goToQuestion(currentQuestion - 1);
+        window.goToQuestion = goToQuestion;
+        window.switchToPart = switchToPart;
+        window.closeResultsModal = () => {
+            document.getElementById('results-modal').classList.add('hidden');
+            document.body.classList.remove('results-mode');
+        };
+        window.showResultsModal = () => {
+            document.getElementById('results-modal').classList.remove('hidden');
+        };
+        
+        // Context menu functions
+        window.highlightText = () => {
+            if (selectedRange && !selectedRange.collapsed) {
+                const span = document.createElement('span');
+                span.className = 'highlight';
+                span.appendChild(selectedRange.extractContents());
+                selectedRange.insertNode(span);
+            }
+            closeContextMenu();
+            window.getSelection().removeAllRanges();
+        };
+
+        window.addNote = () => {
+            const note = prompt('Enter your note:');
+            if (note && selectedRange && !selectedRange.collapsed) {
+                const span = document.createElement('span');
+                span.className = 'comment-highlight';
+                const tooltip = document.createElement('span');
+                tooltip.className = 'comment-tooltip';
+                tooltip.textContent = note;
+                span.appendChild(selectedRange.extractContents());
+                span.appendChild(tooltip);
+                selectedRange.insertNode(span);
+            }
+            closeContextMenu();
+            window.getSelection().removeAllRanges();
+        };
+
+        window.clearHighlight = () => {
+            const elementToClear = contextMenu.targetElementForClear;
+            if (elementToClear) {
+                unwrapElement(elementToClear);
+            }
+            closeContextMenu();
+            window.getSelection().removeAllRanges();
+        };
+        
+        window.clearAllHighlights = () => {
+            document.querySelectorAll('.highlight, .comment-highlight').forEach(unwrapElement);
+            closeContextMenu();
+            window.getSelection().removeAllRanges();
+        };
+
+        // --- RESIZER FUNCTION ---
+        function initResize(e) {
+            e.preventDefault();
+            const startX = e.clientX;
+            const startWidth = passagePanel.offsetWidth;
+            
+            const doDrag = (e) => {
+                const newWidth = startWidth + e.clientX - startX;
+                if (newWidth > 200 && (document.body.clientWidth - newWidth - resizer.offsetWidth) > 200) {
+                    passagePanel.style.flex = `0 0 ${newWidth}px`;
+                }
+            };
+            const stopDrag = () => {
+                window.removeEventListener('mousemove', doDrag, false);
+                window.removeEventListener('mouseup', stopDrag, false);
+            };
+            
+            window.addEventListener('mousemove', doDrag, false);
+            window.addEventListener('mouseup', stopDrag, false);
+        }
+        
+        // --- CHECKBOX LIMIT FUNCTION ---
+        function setupCheckboxLimits() {
+            const checkboxGroups = [
+                { name: 'q5-6', limit: 2 },
+                { name: 'q7-8', limit: 2 }
+            ];
+            checkboxGroups.forEach(group => {
+                const checkboxes = document.querySelectorAll(`input[name="${group.name}"]`);
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', () => {
+                        const checkedCount = document.querySelectorAll(`input[name="${group.name}"]:checked`).length;
+                        if (checkedCount > group.limit) checkbox.checked = false;
+                        updateAllIndicators();
+                    });
+                });
+            });
+        }
+
+        // --- START THE APP ---
+        initialize();
+    });
+    </script>
+</body>
+</html>

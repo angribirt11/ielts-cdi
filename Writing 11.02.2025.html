@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Writing Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            line-height: 1.4;
+            font-size: 16px;
+            padding-bottom: 90px;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 60px;
+        }
+
+        .timer-container {
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            position: relative;
+            cursor: default;
+            align-items: center;
+        }
+
+        .telegram-link {
+            color: #3e3e3e;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex
+;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border: 2px solid #3e3e3e;
+    border-radius: 9999px;
+    background-color: #ffffff;
+    line-height: 1;
+        }
+
+        
+        .telegram-link:hover {
+            background-color: #f6f6f6;
+        }
+
+        .telegram-link::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: currentColor;
+            -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23l7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3L3.64 12c-.88-.25-.89-1.37.2-1.64l16.56-6.4c.75-.29 1.4.22 1.2.94l-2.67 12.61c-.22.95-1.13 1.18-1.78.73l-4.5-3.32l-2.23 2.15c-.47.44-1.29.21-1.48-.37z"/></svg>');
+            mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23l7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3L3.64 12c-.88-.25-.89-1.37.2-1.64l16.56-6.4c.75-.29 1.4.22 1.2.94l-2.67 12.61c-.22.95-1.13 1.18-1.78.73l-4.5-3.32l-2.23 2.15c-.47.44-1.29.21-1.48-.37z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        body::after {
+            content: "@Avazbeks_media";
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) rotate(-20deg);
+            font-size: 72px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #000000;
+            opacity: 0.02; /* subtle */
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+        }
+
+        .main-container {
+            margin-top: 60px;
+            display: flex;
+            background: #ffffff;
+            height: calc(100vh - 120px);
+            flex-direction: column;
+        }
+
+        .panels-container {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .left-panel {
+            width: 50%;
+            padding: 20px;
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+        }
+
+        .right-panel {
+            width: 50%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .part-header {
+            background-color: #f1f2ec;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            border: 1px solid #e0e0e0;
+            width: auto;
+            text-align: left;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .part-header p {
+            margin: 0;
+        }
+
+        .chart-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .writing-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .writing-textarea {
+            border: 1px solid #ccc;
+            padding: 15px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+            min-height: 300px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .writing-textarea:focus {
+            border-color: #4a90e2;
+        }
+
+        .word-count {
+            text-align: right;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .instructions {
+            margin-bottom: 20px;
+        }
+
+        .instructions p {
+            margin-bottom: 10px;
+        }
+
+        .instructions strong {
+            font-weight: bold;
+        }
+
+        .task-prompt {
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid #000;
+            font-style: italic;
+        }
+
+        .task-prompt p {
+            margin-bottom: 10px;
+        }
+
+        .task-prompt p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Success Message Styles */
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .success-message h3 {
+            color: #28a745;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .success-message p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .success-message .btn {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .success-message .btn:hover {
+            background: #218838;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        /* Bottom Navigation */
+        .nav-row {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            padding: 0;
+            display: flex;
+            align-items: stretch;
+            height: 60px;
+            z-index: 100;
+        }
+
+        .footer__questionWrapper___1tZ46 {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+        }
+
+        .footer__questionWrapper___1tZ46.completed::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #28a745;
+            z-index: 1;
+        }
+
+        .footer__questionNo___3WNct {
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .footer__questionWrapper___1tZ46 .footer__questionNo___3WNct:hover {
+            background-color: #f8f9fa;
+        }
+
+        .footer__questionWrapper___1tZ46.selected .footer__questionNo___3WNct {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .part-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            line-height: 1.2;
+        }
+
+        .footer__questionWrapper___1tZ46.selected .attemptedCount {
+            display: none;
+        }
+
+        .attemptedCount {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        .footer__deliverButton___3FM07 {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s, border-color 0.2s;
+            width: 40px;
+            height: 40px;
+        }
+
+        .footer__deliverButton___3FM07:hover {
+            background-color: #e0e0e0;
+            border-color: #bbb;
+        }
+
+        .fa-check::before {
+            content: "✓";
+            font-size: 18px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .left-panel,
+            .right-panel {
+                width: 100% !important;
+                border-right: none;
+            }
+            
+            .left-panel {
+                border-bottom: 1px solid #e0e0e0;
+            }
+        }
+
+        
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    
+    <div class="header">
+        <div class="timer-container">
+            <span class="timer-display">60:00</span>
+        </div>
+
+        <a href="https://t.me/Avazbeks_Media" target="_blank" class="telegram-link">
+            Avazbeks_Media
+        </a>
+    </div>
+
+    <!-- Test Interface -->
+    <div class="main-container" id="mainContainer">
+        <div id="part-header-1" class="part-header">
+            <p><strong>Part 1</strong></p>
+            <p>You should spend about 20 minutes on this task. Write at least 150 words.</p>
+        </div>
+        <div id="part-header-2" class="part-header hidden">
+            <p><strong>Part 2</strong></p>
+            <p>You should spend about 40 minutes on this task. Write at least 250 words.</p>
+        </div>
+
+        <div class="panels-container">
+            <div class="left-panel">
+                <div id="part-1" class="writing-part">
+                    <div class="task-prompt">
+                        <p><strong>The charts below show the reasons of students to study a particular in a UK university in the year 1987 and 2007.</strong></p>
+                        <p><strong>Summarize the information by selecting and reporting the main points and make comparisons where relevant.</strong></p>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="image-container">
+                            <img src="https://media.zim.vn/683421b5c11e3a3ba459b8d9/de-ielts-writing-task-1-ngay-25-05-2025_xlarge.jpg" alt="Bar chart showing types of music bought in USA in 2010 by age group" style="max-width:60%; height:auto; border:1px solid #ccc;"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="part-2" class="writing-part hidden">
+                    <div class="instructions">
+                        <p><strong>Write about the following topic:</strong></p>
+                        <div class="task-prompt">
+                            <p><em><strong> In many countries, people's eating habits are leading to obesity and other health problems.<br><br> Why do so many people have unhealthy eating habits? What is the most effective way to help people improve their eating habits?</strong></em></p>
+                        </div>
+                        <p>Give reasons for your answer and include any relevant examples from your own knowledge or experience.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="writing-area">
+                    <textarea 
+                        class="writing-textarea" 
+                        id="writingTextarea"
+                        placeholder="Start writing your response here..."
+                        oninput="updateWordCount()"
+                    ></textarea>
+                    <div class="word-count">
+                        Words: <span id="wordCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="overlay" id="overlay"></div>
+    <div class="success-message" id="successMessage">
+        <h3>✅ Writing Saved Successfully!</h3>
+        <p>Your writing has been saved to a file on your desktop. The file contains both Task 1 and Task 2 responses.</p>
+        <button class="btn" onclick="closeSuccessMessage()">Continue</button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="nav-row perScorableItem" aria-label="Questions" id="navigation">
+        <div class="footer__questionWrapper___1tZ46 selected single" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct writing" data-sectionid="part1" tabindex="-1" onclick="switchPart(1)">
+                <div class="part-title">Part 1</div>
+                <div class="attemptedCount">0 of 1</div>
+            </button>
+        </div>
+        <div class="footer__questionWrapper___1tZ46 single" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct writing" data-sectionid="part2" tabindex="0" onclick="switchPart(2)">
+                <div class="part-title">Part 2</div>
+                <div class="attemptedCount">0 of 1</div>
+            </button>
+        </div>
+        <button id="deliver-button" aria-label="Submit Writing" class="footer__deliverButton___3FM07" onclick="submitTest()">
+            <i class="fa fa-check" aria-hidden="true"></i>
+        </button>
+    </nav>
+
+    
+
+    <script>
+        let currentPart = 1;
+        let timeInSeconds = 3600;
+        let timerInterval;
+        let partCompletionStatus = { 1: false, 2: false };
+
+        // Timer functionality
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeInSeconds--;
+                updateTimerDisplay();
+                
+                if (timeInSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time's up! Your test will be submitted automatically.");
+                    submitTest();
+                }
+            }, 1000);
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeInSeconds / 60);
+            const seconds = timeInSeconds % 60;
+            document.querySelector('.timer-display').textContent =
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Test submission function - saves to file
+        function submitTest() {
+            const part1Content = localStorage.getItem('ielts-writing-part-1') || '';
+            const part2Content = localStorage.getItem('ielts-writing-part-2') || '';
+
+            if (!part1Content.trim() && !part2Content.trim()) {
+                alert('Please write your responses before submitting the test.');
+                return;
+            }
+
+            const part1WordCount = part1Content.trim() === '' ? 0 : part1Content.trim().split(/\s+/).length;
+            const part2WordCount = part2Content.trim() === '' ? 0 : part2Content.trim().split(/\s+/).length;
+
+            if (confirm(`Are you sure you want to submit your writing?\n\nPart 1: ${part1WordCount} words\nPart 2: ${part2WordCount} words`)) {
+                clearInterval(timerInterval);
+                saveWritingToFile(part1Content, part2Content);
+            }
+        }
+
+        // Save writing to file function
+        function saveWritingToFile(part1Content, part2Content) {
+            const currentDate = new Date();
+            const dateString = currentDate.toLocaleDateString();
+            const timeString = currentDate.toLocaleTimeString();
+            
+            const fileContent = `IELTS Writing Practice
+Date: ${dateString}
+Time: ${timeString}
+
+=====================================
+TASK 1
+=====================================
+
+Question: The bar chart shows the type of music bought in the USA in 2010, by age group.
+
+Summarize the information by selecting and reporting the main points and make comparisons where relevant.
+
+Word Count: ${part1Content.trim() === '' ? 0 : part1Content.trim().split(/\s+/).length}
+
+Response:
+${part1Content || '[No response provided]'}
+
+=====================================
+TASK 2
+=====================================
+
+Question: Modern buildings change the character and appearance of towns and cities. The government should insist that new buildings be built in traditional styles to protect cultural identity. To what extent do you agree or disagree?
+
+Give reasons for your answer and include any relevant examples from your own knowledge or experience.
+
+Word Count: ${part2Content.trim() === '' ? 0 : part2Content.trim().split(/\s+/).length}
+
+Response:
+${part2Content || '[No response provided]'}
+
+=====================================
+SUMMARY
+=====================================
+Total Words: ${(part1Content.trim() === '' ? 0 : part1Content.trim().split(/\s+/).length) + (part2Content.trim() === '' ? 0 : part2Content.trim().split(/\s+/).length)}
+Task 1 Words: ${part1Content.trim() === '' ? 0 : part1Content.trim().split(/\s+/).length}
+Task 2 Words: ${part2Content.trim() === '' ? 0 : part2Content.trim().split(/\s+/).length}
+`;
+
+            // Create and download the file
+            const blob = new Blob([fileContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `IELTS_Writing_Practice_${currentDate.getFullYear()}-${(currentDate.getMonth()+1).toString().padStart(2,'0')}-${currentDate.getDate().toString().padStart(2,'0')}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            // Show success message
+            showSuccessMessage();
+        }
+
+        // Show success message
+        function showSuccessMessage() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'block';
+        }
+
+        // Close success message
+        function closeSuccessMessage() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        // Test interface functions
+        function checkPartCompletion(partNumber) {
+            const savedContent = localStorage.getItem(`ielts-writing-part-${partNumber}`);
+            if (!savedContent) return false;
+            const wordCount = savedContent.trim() === '' ? 0 : savedContent.trim().split(/\s+/).length;
+            const minWords = partNumber === 1 ? 150 : 250;
+            return wordCount >= minWords;
+        }
+
+        function updateCompletionIndicators() {
+            for (let i = 1; i <= 2; i++) {
+                const isCompleted = checkPartCompletion(i);
+                partCompletionStatus[i] = isCompleted;
+                const wrapper = document.querySelectorAll('.footer__questionWrapper___1tZ46')[i - 1];
+                if (wrapper) {
+                    if (isCompleted) {
+                        wrapper.classList.add('completed');
+                    } else {
+                        wrapper.classList.remove('completed');
+                    }
+                }
+            }
+        }
+
+        function switchPart(partNumber) {
+            const currentContent = document.getElementById('writingTextarea').value;
+            localStorage.setItem(`ielts-writing-part-${currentPart}`, currentContent);
+            
+            currentPart = partNumber;
+            
+            document.querySelectorAll('.writing-part').forEach(part => {
+                part.classList.add('hidden');
+            });
+            document.querySelectorAll('.part-header').forEach(header => {
+                header.classList.add('hidden');
+            });
+            
+            document.getElementById(`part-${partNumber}`).classList.remove('hidden');
+            document.getElementById(`part-header-${partNumber}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.footer__questionWrapper___1tZ46').forEach(wrapper => {
+                wrapper.classList.remove('selected');
+            });
+            
+            const wrappers = document.querySelectorAll('.footer__questionWrapper___1tZ46');
+            if (wrappers[partNumber - 1]) {
+                wrappers[partNumber - 1].classList.add('selected');
+            }
+            
+            document.querySelectorAll('.footer__questionNo___3WNct').forEach((btn, index) => {
+                btn.tabIndex = index === (partNumber - 1) ? -1 : 0;
+            });
+            
+            const savedContent = localStorage.getItem(`ielts-writing-part-${partNumber}`);
+            document.getElementById('writingTextarea').value = savedContent || '';
+            updateWordCount();
+            updateCompletionIndicators();
+        }
+
+        function updateWordCount() {
+            const textarea = document.getElementById('writingTextarea');
+            textarea.style.overflowY = 'hidden';
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+
+            const text = textarea.value.trim();
+            const wordCount = text === '' ? 0 : text.split(/\s+/).length;
+            document.getElementById('wordCount').textContent = wordCount;
+            
+            localStorage.setItem(`ielts-writing-part-${currentPart}`, textarea.value);
+            updateCompletionIndicators();
+            
+            const minWords = currentPart === 1 ? 150 : 250;
+            const isCompleted = wordCount >= minWords;
+            const attemptedCount = document.querySelector(`.footer__questionWrapper___1tZ46:nth-child(${currentPart}) .attemptedCount`);
+            if (attemptedCount) {
+                attemptedCount.textContent = isCompleted ? '1 of 1' : '0 of 1';
+            }
+        }
+
+        // Auto-save functionality
+        setInterval(() => {
+            const content = document.getElementById('writingTextarea').value;
+            localStorage.setItem(`ielts-writing-part-${currentPart}`, content);
+            updateCompletionIndicators();
+        }, 5000);
+
+        // Load saved content on page load (no start screen)
+        window.addEventListener('load', () => {
+            // Show main content immediately
+            document.querySelector('.header').style.display = 'flex';
+            document.querySelector('.main-container').style.display = 'flex';
+            document.querySelector('.nav-row').style.display = 'flex';
+
+            // Start the test timer
+            startTimer();
+
+            const savedContent = localStorage.getItem(`ielts-writing-part-${currentPart}`);
+            if (savedContent) {
+                document.getElementById('writingTextarea').value = savedContent;
+                updateWordCount();
+            }
+            updateCompletionIndicators();
+
+            // Initial resize
+            const textarea = document.getElementById('writingTextarea');
+            textarea.style.overflowY = 'hidden';
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                const content = document.getElementById('writingTextarea').value;
+                localStorage.setItem(`ielts-writing-part-${currentPart}`, content);
+                alert('Content saved!');
+            }
+            
+            if ((e.ctrlKey || e.metaKey) && (e.key === '1' || e.key === '2')) {
+                e.preventDefault();
+                switchPart(parseInt(e.key));
+            }
+        });
+
+        
+    </script>
+</body>
+</html>

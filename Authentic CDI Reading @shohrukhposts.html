@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test - Offline</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ielts-red': '#DC2626',
+                        'ielts-gray': '#F3F4F6',
+                        'ielts-border': '#E5E7EB'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .highlight {
+            background-color: rgb(254 240 138);
+        }
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Enhanced bullet points for flow chart */
+        .flow-chart-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .flow-chart-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        .flow-chart-list li:before {
+            content: '●';
+            color: #DC2626;
+            font-size: 16px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body class="bg-white font-sans">
+    <!-- Test Header -->
+    <header class="bg-white border-b border-gray-200 px-6 py-1 sticky top-0 z-50 shadow-sm">
+        <div class="w-full flex items-center justify-between">
+            <!-- Left section - Logo and Test taker ID -->
+            <div class="flex items-center space-x-8 flex-1 justify-start min-w-0">
+                <h1 class="text-red-600 font-bold text-2xl tracking-wide whitespace-nowrap" data-testid="ielts-logo">IELTS</h1>
+                <span class="text-gray-500 text-sm font-medium whitespace-nowrap" data-testid="test-taker-id">Test taker ID</span>
+            </div>
+
+            <!-- Center section - Telegram link -->
+            <div class="flex-1 flex justify-center px-4">
+                <a href="https://t.me/shohrukhposts" target="_blank" class="text-sm text-blue-600 hover:text-blue-800 font-medium">@shohrukhposts</a>
+            </div>
+
+            <!-- Right section - Timer and navigation icons -->
+            <div class="flex items-center space-x-3 flex-1 justify-end min-w-0">
+                <!-- Timer -->
+                <div class="flex items-center space-x-2 bg-gray-50 px-3 py-1 rounded-lg whitespace-nowrap" data-testid="timer-display">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12,6 12,12 16,14"></polyline>
+                    </svg>
+                    <div id="timer-section" class="flex items-center space-x-1">
+                        <button id="timer-text" class="text-sm font-mono font-semibold text-gray-700 hover:text-gray-900 cursor-pointer transition-colors duration-200" data-testid="timer-text" title="Click to edit time">
+                            60:00
+                        </button>
+                        <button id="timer-toggle" class="p-0.5 hover:bg-gray-200 rounded transition-colors duration-200">
+                            <svg id="play-icon" class="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <polygon points="5,3 19,12 5,21"></polygon>
+                            </svg>
+                            <svg id="pause-icon" class="w-3 h-3 text-gray-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <rect x="6" y="4" width="4" height="16"></rect>
+                                <rect x="14" y="4" width="4" height="16"></rect>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Navigation icons -->
+                <div class="flex items-center space-x-1">
+                    <button class="p-1.5 hover:bg-gray-100 rounded-lg transition-colors duration-200" title="Connection status">
+                        <svg class="w-5 h-5 text-gray-500 hover:text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                            <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                            <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                        </svg>
+                    </button>
+                    <button class="p-1.5 hover:bg-gray-100 rounded-lg transition-colors duration-200" title="Notifications">
+                        <svg class="w-5 h-5 text-gray-500 hover:text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                    </button>
+                    <button class="p-1.5 hover:bg-gray-100 rounded-lg transition-colors duration-200" title="Menu">
+                        <svg class="w-5 h-5 text-gray-500 hover:text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div id="main-container" class="flex-1 flex relative" style="height: calc(100vh - 100px);">
+        <!-- Left Panel - Passage -->
+        <div id="left-panel" class="overflow-auto" style="width: 50%;">
+            <div class="flex-1 p-6 overflow-auto">
+                <div id="part-header" class="bg-gray-100 p-4 rounded mb-6">
+                    <h2 id="part-title" class="font-bold mb-2">Part 1</h2>
+                    <p id="part-instructions" class="text-sm text-gray-700">You should spend about 20 minutes on Questions 1-13 which are based on Reading Passage 1.</p>
+                </div>
+
+                <div class="prose max-w-none">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 id="passage-title" class="text-lg font-bold">CLARENCE BIRDSEYE AND THE DEVELOPMENT OF FROZEN FOOD</h3>
+                        <div class="flex items-center space-x-2 text-sm text-gray-600 bg-blue-50 px-3 py-1 rounded-full">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9,12l2,2 4,-4"></path>
+                            </svg>
+                            <span>Select text to highlight</span>
+                        </div>
+                    </div>
+                    <div id="passage-content" class="text-justify leading-relaxed space-y-4">
+                        <!-- Content will be loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resize Handle -->
+        <div id="resize-handle" class="w-2 bg-gray-200 hover:bg-gray-300 cursor-col-resize transition-colors flex-shrink-0">
+            <div class="w-full h-full flex items-center justify-center">
+                <div class="w-1 h-8 bg-gray-400 rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Questions -->
+        <div id="right-panel" class="overflow-auto flex-1" style="width: 50%;">
+            <div id="questions-container" class="flex-1 p-6 bg-white overflow-auto">
+                <!-- Questions will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Footer -->
+
+  <footer class="bg-white border-t border-gray-200 sticky bottom-0" data-testid="test-footer">
+    <div class="flex justify-between items-center px-4 py-0.5">
+        <!-- Navigation arrows -->
+        <div class="flex items-center space-x-4 mr-6">
+            <button id="prev-part-btn" class="w-8 h-8 bg-red-600 hover:bg-red-700 rounded-full text-white disabled:opacity-50 flex items-center justify-center" disabled>
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <polyline points="15,18 9,12 15,6"></polyline>
+                </svg>
+            </button>
+            <button id="next-part-btn" class="w-8 h-8 bg-red-600 hover:bg-red-700 rounded-full text-white flex items-center justify-center">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Part indicators -->
+        <div id="parts-container" class="flex-1 flex flex-wrap justify-between items-center gap-2 relative">
+            <!-- Part indicators will be loaded dynamically -->
+        </div>
+
+        <!-- Submit button -->
+        <button id="submit-test-btn" class="bg-red-600 text-white px-3 py-1 font-medium hover:bg-red-700 h-8 text-sm rounded ml-4">
+            Submit Test
+        </button>
+    </div>
+    
+</footer>
+
+    <!-- Highlight Buttons -->
+    <div id="highlight-button" class="fixed x-50 bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 px-3 py-1 rounded shadow-lg cursor-pointer text-sm font-medium transition colors hidden">
+        Highlight
+    </div>
+
+    <div id="clear-highlight-button" class="fixed z-50 bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 px-3 py-1 rounded shadow-lg cursor-pointer text-sm font-medium transition-colors hidden">
+        Clear Highlight
+    </div>
+
+    <!-- Submit Confirmation Modal -->
+    <div id="submit-confirmation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h2 class="text-xl font-bold mb-4 text-center">Submit Test</h2>
+            <div class="mb-6">
+                <p class="text-gray-700 text-center">
+                    Are you sure you want to submit your test?
+                </p>
+                <p class="text-sm text-gray-500 text-center mt-2">
+                    Once submitted, you will see the answers and cannot continue the test.
+                </p>
+            </div>
+            <div class="flex gap-3 justify-center">
+                <button id="cancel-submit" class="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50 font-medium">
+                    Cancel
+                </button>
+                <button id="confirm-submit" class="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 font-medium">
+                    Submit Test
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="results-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[80vh] flex flex-col">
+            <h2 class="text-2xl font-bold mb-4">Test Results</h2>
+            <div class="flex-1 overflow-y-auto min-h-0">
+                <div id="results-content">
+                    <!-- Results will be displayed here -->
+                </div>
+            </div>
+            <button id="close-results" class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex-shrink-0">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Test Data
+        const testData = {
+            "id": "ielts-reading-test-1",
+            "title": "IELTS Reading Test",
+            "duration": 60,
+            "parts": [
+                {
+                    "id": 1,
+                    "title": "Part 1",
+                    "instructions": "You should spend about 20 minutes on Questions 1-13 which are based on Reading Passage 1.",
+                    "questionRange": "1–13",
+                    "passage": {
+                        "title": "CLARENCE BIRDSEYE AND THE DEVELOPMENT OF FROZEN FOOD",
+                        "content": "Born in 1886 in New York, the American naturalist Clarence Birdseye had an instinctive curiosity, a love of food, and a strong entrepreneurial streak. At the age of ten, he was hunting, selling live animals and teaching himself taxidermy, the art of preserving and mounting the skins of animals. He studied science in college, but had to drop out because tuition was too expensive. Forced to support himself, he moved out west, where he worked in Montana as an assistant naturalist, capturing small mammals to study the parasites that they often carried in their fur. Eventually, partly as a result of this research, the source of a prevalent disease was isolated.\n\nWithin a few years, Birdseye moved to the arctic tundra of Labrador, in what is now northern Canada, where he worked for several years as a fur trader. He spent much of his time among the local trappers who worked year-round in the wilderness, and he took long journeys with a nine-dog sled to purchase goods that were exported to a company in New York. It appeared that Birdseye relished the challenge that came with the cold climate and required landscape of Labrador.\n\nHowever, the food in Labrador left a great deal to be desired. The bleak climate meant that everything he ate during the winter was either from cans or frozen. When the frozen food was thawed, Birdseye found it to be tasteless. What's more, the texture of the food became mushy and unappetizing. Other fish, there were no fresh sources on the market, and the naturalist took up ice fishing with some of the local Inuit people, carving holes in frozen lakes and casting a line for trout. With air temperatures so far below zero, a fish pulled out of the lake would freeze solid in a matter of seconds. Yet when he thawed out the frozen trout, Birdseye found it tasted much fresher than the usual food he was used to eating. Intriguingly, the young adventurer had made a powerful discovery. He would come to realize that dramatic difference in taste was all due to the speed of the freezing process, or what we call 'flash freezing', and that by replicating the science he could make high quality frozen food.\n\nIn the first decades of the 20th century, the frozen-food business was considered to be the very bottom of the barrel. Frozen food was terrible. In fact, it was even banned in New York State prisons for being beneath the culinary standard of convicts. A key problem was that the food was being frozen at relatively high temperatures, often just a few degrees below freezing. A slow freeze allowed ice to form larger crystals that broke the membranes surrounding and protecting each of the cells within the food. When the food was later thawed, all the crystals melted and the juice would leak out. But flash freezing avoided this problem, plus scientific advances had made it possible to artificially produce temperatures that were much like Birdseye had experienced in Labrador. By the early 1920s, Birdseye had created a flash-freeze process, using cartons of fish, stacked and frozen at minus 40 degrees Celsius.\n\nBirdseye was also concerned about eliminating the little air pockets that in whole fish could harbor bacteria and lead to decomposition. So a key part of his original 1924 process called for removing the bones, which allowed the fish parts to be tightly packed into rectangular fiberboard boxes. Birdseye had to pioneer almost every step involved in this process as well. This included inventing a glue for the packaging boxes, to withstand the changes in temperature, as well as a waterproof foil for the labels. He found that just about anything he froze with his method—fruit, meat, vegetables—would taste remarkably fresh after thawing.\n\nFrozen food was still more than a decade away from becoming common in the average diet across the United States. This required a critical mass of freezers—in supermarkets and home kitchens that wouldn't be available until the late 1940s. In Birdseye's experiments that were so promising in 1929, the company, General Seafood, was acquired by the Postum Cereal Company. His adventures in ice fishing had made him a multimillionaire.\n\nIn our current age of locally sourced food production, frozen food has fallen out of favor with the public. But the advent of flash-frozen food had a positive impact on the American economy and the health of every day people. It extended distribution across the entire country so that fish caught in the North Atlantic could be eaten in distant cities like Denver or Dallas. The produce harvested in summer could be consumed months later. By the mid-20th century, frozen food was a worldwide phenomenon.\n\nIn fact, while nutritionists today would prefer we eat fresh food grown locally, they acknowledge the value of frozen food. And scientists at the University of Chester came to the same conclusion after performing tests on the nutritional value of frozen produce. They found in many cases that frozen fruits and vegetables are more nutritious and healthier than the regular unfrozen variety sold in stores. This is because the moment fruit or vegetable is harvested, it begins to decay. But, as most frozen fruits and vegetables are flash-frozen within hours of their harvest, at their peak of ripeness, this locks in many of the important nutrients. Meanwhile, the unfrozen produce can undergo change while being transported thousands of kilometres over several days.\n\nIn one report, the vitamin C content in raspberries that were frozen for a year was compared to that of unfrozen raspberries stored in a refrigerator for three days. Their levels of vitamin C were nearly the same."
+                    },
+                    "questions": [
+                        { "id": 1, "type": "FLOW_CHART", "text": "he left 1 ................ for financial reasons", "correctAnswer": "college", "explanation": "He left college because he couldn't afford the tuition." },
+                        { "id": 2, "type": "FLOW_CHART", "text": "his work in Montana was a factor in finding the cause of a widespread 2 ............", "correctAnswer": "disease", "explanation": "His research on parasites helped find the cause of a widespread disease." },
+                        { "id": 3, "type": "FLOW_CHART", "text": "he enjoyed the 3 ................ of living in such a harsh environment", "correctAnswer": "challenge", "explanation": "He enjoyed the challenge of the harsh Labrador environment." },
+                        { "id": 4, "type": "FLOW_CHART", "text": "while fishing with the Inuit, he made a 4 ................ that could improve frozen food", "correctAnswer": "discovery", "explanation": "Fishing with the Inuit, he made a discovery about flash-freezing." },
+                        { "id": 5, "type": "FLOW_CHART", "text": "in the early 20th century, the quality of frozen food was so poor that even some 5 ................ couldn't serve it", "correctAnswer": "prisons", "explanation": "Frozen food was banned in NY prisons for being low quality." },
+                        { "id": 6, "type": "FLOW_CHART", "text": "Birdseye found that when food was flash-frozen, the 6 ................ of the cells were kept intact", "correctAnswer": "membranes", "explanation": "Flash-freezing prevents ice crystals from breaking cell membranes." },
+                        { "id": 7, "type": "FLOW_CHART", "text": "Birdseye also created a new kind of 7 ................ and glue for packaging", "correctAnswer": "ink", "explanation": "He invented a new type of ink for packaging labels." },
+                        { "id": 8, "type": "TRUE_FALSE_NOT_GIVEN", "text": "The public today has a positive view of frozen foods.", "options": [{ "value": "true", "label": "TRUE" }, { "value": "false", "label": "FALSE" }, { "value": "not-given", "label": "NOT GIVEN" }], "correctAnswer": "false", "explanation": "The text says frozen food has \"fallen out of favor with the public.\"" },
+                        { "id": 9, "type": "TRUE_FALSE_NOT_GIVEN", "text": "Most North Atlantic fish are caught during the summer.", "options": [{ "value": "true", "label": "TRUE" }, { "value": "false", "label": "FALSE" }, { "value": "not-given", "label": "NOT GIVEN" }], "correctAnswer": "not-given", "explanation": "The passage mentions where the fish is eaten, not when it is caught." },
+                        { "id": 10, "type": "TRUE_FALSE_NOT_GIVEN", "text": "Nutritionists and university scientists disagree about whether frozen food is beneficial.", "options": [{ "value": "true", "label": "TRUE" }, { "value": "false", "label": "FALSE" }, { "value": "not-given", "label": "NOT GIVEN" }], "correctAnswer": "false", "explanation": "Nutritionists and scientists both acknowledge the value of frozen food." },
+                        { "id": 11, "type": "TRUE_FALSE_NOT_GIVEN", "text": "Produce can lose nutrients soon after being picked.", "options": [{ "value": "true", "label": "TRUE" }, { "value": "false", "label": "FALSE" }, { "value": "not-given", "label": "NOT GIVEN" }], "correctAnswer": "true", "explanation": "Produce begins to decay and lose nutrients immediately after harvest." },
+                        { "id": 12, "type": "TRUE_FALSE_NOT_GIVEN", "text": "Most produce that is going to be frozen is picked when it's perfectly ripe.", "options": [{ "value": "true", "label": "TRUE" }, { "value": "false", "label": "FALSE" }, { "value": "not-given", "label": "NOT GIVEN" }], "correctAnswer": "true", "explanation": "Produce is flash-frozen at its peak of ripeness to lock in nutrients." },
+                        { "id": 13, "type": "TRUE_FALSE_NOT_GIVEN", "text": "Raspberries are the best sources of vitamin C.", "options": [{ "value": "true", "label": "TRUE" }, { "value": "false", "label": "FALSE" }, { "value": "not-given", "label": "NOT GIVEN" }], "correctAnswer": "not-given", "explanation": "The text compares vitamin C in raspberries but doesn't call them the best source." }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "title": "Reading Passage 2",
+                    "instructions": "You should spend about 20 minutes on Questions 14-26, which are based on Reading Passage 2 below.",
+                    "questionRange": "14-26",
+                    "passage": {
+                        "title": "The Remarkable Power of Placebos",
+                        "content": "The Remarkable Power of Placebos\n\n<b>A</b> It's one of our most powerful medical treatments, and certainly our most widely effective. In recent years, it's been found to help eliminate or lessen the symptoms associated with clinical depression, irritable bowel syndrome, panic attacks, coughing, and ADHD, among other conditions. This name of this wonderful treatment? It's the 'placebo effect,' the remarkable power of the human brain to unconsciously influence the functioning and perception of the body.\n\n<b>B</b> The term, which is Latin for 'I shall please,' was first used sometime during the 1700s, but the concept itself dates back centuries. Historically, doctors believed that one of their key duties, in addition to curing a patient, was to console him or her, providing a boost to the morale that could help them to get better faster — sometimes in the form of a dummy medicine that had no effect beyond instilling the expectation of improvement in the patient's brain. It's now widely recognized that, while largely ineffective in improving objective symptoms, such as high blood pressure or an infection, for instance, placebos are genuinely effective in treating subjective, self-reported symptoms, including all sorts of pain. Placebos can take all sorts of forms: inert sugar pills, sham surgeries, and saline injections.\n\n<b>C</b> The singular power of expectations has been demonstrated in a variety of studies. In one, for example, patients given a placebo pill that is referred to as a muscle relaxer will experience muscle relaxation, while those given a placebo called a muscle stimulator will experience muscle tension. The flip side of the placebo, the nocebo effect, is just as powerful — negative expectations can cause as much harm as positive ones can do good. In other studies, it's been shown that pills which are red, yellow, or orange in color are more likely to provide a stimulating effect, while blue and green ones are more often perceived as sedating. One study even found that bigger pills are better when it comes to placebo performance.\n\n<b>D</b> The science that underlies all of these studies isn't well understood at this point. Scientists have conducted some imaging research into the brain on placebos, and they've found that ingestion of a placebo billed as a painkiller leads to increased activity in several areas of the cerebral cortex, as compared to an actual painkiller. These areas are involved in so-called 'higher' functions like memory, attention, thought, and consciousness. A pain-killing placebo, it seems, works differently from a painkiller.\n\n<b>E</b> In a recent headache study, conducted by researchers at Harvard Medical School, 66 participants who suffer from chronic migraines were given six envelopes, each containing a pill to be taken after their next migraine attack. Two envelopes were labelled 'Maxalt' — the brand name for the widely used migraine drug rizatriptan — in order to generate positive expectations, while two had no label, to produce neutral expectations, and two were labelled 'placebo,' to generate negative expectations. But for each of the three labels, one envelope held a genuine rizatriptan pill, and one contained a placebo. This allowed the researchers to cross-compare the effectiveness of rizatriptan + positive expectations, rizatriptan alone, and rizatriptan + negative expectations, as well as positive, neutral, and negative expectations in isolation.\n\n<b>F</b> When the scientists analyzed the participants' self-reported pain reductions after taking the pills, the power of the placebo was proven yet again. People who'd taken a placebo pill labelled Maxalt got just as much pain relief as those who'd taken a Maxalt pill labelled as a placebo. Additionally, people who took a Maxalt correctly labelled as Maxalt reported about twice as much pain reduction as those who took a Maxalt pill labelled as placebo. In other words, in treating a complex, chronic form of pain like migraine, the effectiveness of pure expectations was roughly equal to the effectiveness of the pharmaceutical itself.\n\n<b>G</b> For a doctor, harnessing the placebo's power doesn't mean intentionally mislabelling pills. Instead, a doctor could simply provide a slightly more positive message about a treatment, lending the power of expectations to that of pharmaceuticals. \"When doctors set patients' expectations high, Maxalt becomes more effective,\" lead author of the study Rami Burstein said in a press statement. Of course, this sort of intentional expectation-setting needs to be done carefully. Doctors have an ethical obligation not to mislead patients or withhold important information. But that doesn't mean that making sure to provide subtle positive cues about the effectiveness of a medication—especially when those very cues might well make it work more effectively—is a bad idea. As Ted Kaptchuk, one of the study's co-authors, put it, \"the placebo effect is an unacknowledged partner for powerful medications.\""
+                    },
+                    "questions": [
+                        { "id": 14, "type": "PARAGRAPH_MATCHING", "text": "An explanation of the neurological process by which placebos work", "correctAnswer": "D", "explanation": "Paragraph D describes brain imaging research on the placebo effect." },
+                        { "id": 15, "type": "PARAGRAPH_MATCHING", "text": "The origin of the word 'placebo'", "correctAnswer": "B", "explanation": "Paragraph B states the term is Latin for \"I shall please.\"" },
+                        { "id": 16, "type": "PARAGRAPH_MATCHING", "text": "A recommendation as to how medical professionals can take advantage of the placebo effect", "correctAnswer": "G", "explanation": "Paragraph G recommends doctors give positive messages about treatment." },
+                        { "id": 17, "type": "PARAGRAPH_MATCHING", "text": "Mention of how the appearance of placebos can affect how well they work", "correctAnswer": "C", "explanation": "Paragraph C mentions that pill color influences its perceived effect." },
+                        { "id": 18, "type": "SUMMARY_COMPLETION", "text": "It appears that placebos can treat or reduce the .......... of a wide range of conditions.", "correctAnswer": "symptoms", "explanation": "Placebos lessen the symptoms of many conditions." },
+                        { "id": 19, "type": "SUMMARY_COMPLETION", "text": "The placebo effect happens when our .......... has an effect on how our body feels.", "correctAnswer": "brain", "explanation": "The effect is the brain's power to influence the body." },
+                        { "id": 20, "type": "SUMMARY_COMPLETION", "text": "Doctors have long believed it to be their responsibility not only to treat patients' medical conditions, but also to improve their ..........", "correctAnswer": "morale", "explanation": "Doctors believed it was their duty to boost patient morale." },
+                        { "id": 21, "type": "SUMMARY_COMPLETION", "text": "An example of a situation where a placebo has little or no effect is if a patient has an ..........", "correctAnswer": "infection", "explanation": "Placebos are ineffective against objective symptoms like an infection." },
+                        { "id": 22, "type": "SUMMARY_COMPLETION", "text": "It has been shown that patients will feel .......... in their muscles if they are given a placebo called a muscle stimulator.", "correctAnswer": "tension", "explanation": "A placebo called a \"muscle stimulator\" caused muscle tension." },
+                        { "id": 23, "type": "SUMMARY_COMPLETION", "text": "A related phenomenon, known as the .......... effect, convinces people that a treatment will do them harm.", "correctAnswer": "nocebo", "explanation": "The nocebo effect is the harmful result of negative expectations." },
+                        { "id": 24, "type": "SUMMARY_COMPLETION", "text": "Two factors which influence the effectiveness of a placebo pill are its .......... and its size.", "correctAnswer": ["colour", "color"], "explanation": "The color and size of a pill influence its placebo effect." },
+                        { "id": 25, "type": "MULTIPLE_CHOICE_MULTI", "text": "Which TWO findings were observed in the Harvard Medical School study?", "options": [{ "value": "A", "label": "A Placebos taken with the patient's knowledge were reported as less effective than those taken without their knowledge." }, { "value": "B", "label": "B People who took Maxalt without realizing it reported less pain relief than those who were aware of taking it." }, { "value": "C", "label": "C Where pills had misleading labels, the placebo and the genuine drug appeared to produce a similar level of pain relief." }, { "value": "D", "label": "D Maxalt without a label and Maxalt labelled as a placebo appeared to be equally effective." }, { "value": "E", "label": "E People who were given no indication of what they were taking reported the lowest levels of pain relief." }], "correctAnswer": "C", "explanation": "A mislabeled placebo and a mislabeled drug provided similar pain relief." },
+                        { "id": 26, "type": "VIRTUAL_MULTI", "text": "Virtual question for IELTS numbering", "linkedTo": 25, "correctAnswer": "B", "explanation": "Mislabeled Maxalt (real drug) was less effective than correctly labeled Maxalt." },
+                    ]
+                },
+                {
+                    "id": 3,
+                    "title": "Reading Passage 3",
+                    "instructions": "You should spend about 20 minutes on Questions 27-40, which are based on Reading Passage 3 below.",
+                    "questionRange": "27-40",
+                    "passage": {
+                        "title": "Sir Francis Ronalds and Telegraph",
+                        "content": "Sir Francis Ronalds and Telegraph\n\n<b>A.</b> RONALDS, Sir FRANCIS (1788-1873), inventor of the electric telegraph and meteorologist, son of Francis Ronalds, a London merchant, and of his wife, Jane, daughter of William Field, was born in London on 21 Feb. 1788. Ronalds was educated at a private school at Cheshunt by the Rev. E. Cogan. At an early age he displayed a taste for experiment, and he acquired great skill later in practical mechanics and draughtsmanship. Under the influence of Jean Andre de Luc (1727-1817), whose acquaintance he made in 1814, he began to devote himself to practical electricity. In 1814 and 1815 he published several papers on electricity in Tilloch's 'Philosophical Magazine,' one of which records an ingenious use of De Luc's 'electric column' as a motive power for a clock.\n\n<b>B.</b> Ronalds's name is chiefly remembered as the inventor of an electric telegraph. In 1753, when the first proposal for an electric telegraph worked by statical electricity was made by a writer signing 'C. M.' (said to be Charles Morrison) in the 'Scots Magazine', successive advances had been made abroad by Volta, Le Sage, Lomond, Cavallo, Salva, and others; but much was needed to be done to perfect the invention.\n\n<b>C.</b> In 1816 Francis Ronalds, then living at Upper Mall, Hammersmith, built within his back garden two frames to accommodate eight miles of wire for his new invention of an electrostatic telegraph. It used clockwork-driven rotating dials, engraved with letters of the alphabet and numbers, synchronized with each other, at both ends of the circuit. For the past three or four years, encouraged by the Genevan Swiss meteorologist, Jean Andre De Luc, Ronalds had been enthusiastically experimenting with electrostatic clockwork devices. When someone desired to send a message he earthed the wire at his end at the moment when the dial indicated the desired letter. At the receiving end the pith balls would fall together when earthed and the recipient noted the letter showing on his dial at that moment. The system was slow and depended on the two dials staying in step, but Ronalds successfully transmitted and received letters over 150 meters of wire, later he succeeded in sending messages through eight miles of iron wire suspended above his garden in London.\n\n<b>D.</b> After sending messages along his wires on the frame, he developed another version in which the wires were enclosed in glass tubes buried in the ground. At each end of the line was a clockwork mechanism turned synchronously revolving discs with letters on them. A frictional-electricity machine kept the wire continuously charged, while at each end two pith balls hung from the wire on silk threads, and since they were similarly charged from the wire they stayed apart. Ronalds's instrument was of real practical use, and the brilliant idea of using synchronously rotating discs, now employed in the Hughes printing apparatus, was entirely his own. The only defect in his invention was the comparative slowness with which the successive symbols could be transmitted.\n\n<b>E.</b> With communications between London and Portsmouth in mind, he believed his telegraph would work over distances of 800km. In the same year, Ronalds wrote to offer his invention to the Admiralty. In fact, in 1806, Ralph Wedgwood submitted a telegraph based on frictional electricity to the Admiralty, but was told that the semaphore was sufficient for the country. In a pamphlet he suggested the establishment of a telegraph system with public offices in different centers. Francis Ronalds, in 1816, brought a similar telegraph of his invention to the notice of the Admiralty, and was politely informed that 'telegraphs of any kind are now wholly unnecessary,' John Barrow, Secretary to the Admiralty, replied that \"Telegraphs of any kind are now wholly unnecessary; and no other than the one now in use will be adopted.\" (The one in use was a semaphore system. Only a year after the end of the Napoleonic Wars the Admiralty saw no need for improved communications, even though the semaphore was usable only in daylight and good weather.\n\n<b>F.</b> After this disappointment, Ronalds set off for the continent. He travelled throughout Europe and the Eastern Mediterranean, taking notes, sketching and collecting scientific books between 1816 and 1823. He had begun collecting his large library of works on electricity and kindred subjects. The last activity formed the beginnings of the Ronalds Library, left in trust to the IET (now the IET) after his death. In a small pamphlet published in 1823, Ronalds described his invention and listed some of its possible uses, \"Why should not government govern at Portsmouth almost as promptly as in Downing Street? Why should our defalcations escape by default of our foggy climate? Let us have Electrical Conversazione offices communicating with each other all over the kingdom if we can.\" In 1825 he invented and patented a perspective tracing instrument, intended to facilitate drawing from nature, which he improved about 1828, and described in a work called 'Mechanical Perspective.' These instruments seem to be the only ones for which he took out patents.\n\n<b>G.</b> However, Ronalds never patented his invention in electric telegraph. Ronalds seems to have made few or no practical contributions to science. In the meanwhile, one person did benefit from this work- Charles Wheatstone who saw the telegraph as a boy. When Charles Wheatstone was quite a child, his father had seen the Ronalds telegraph at work. Later, the invention of an electric telegraph had been marvellously developed by Wheatstone, who had seen many of the Hammersmith experiments, in conjunction with Mr. William Fothergill Cooke, and these two men together devised and patented in 1837 the first electric telegraph used publicly and commercially. In England. When, in 1855, a controversy arose between Wheatstone and Cooke with regard to their respective shares in the invention, Wheatstone at once acknowledged his direct debt to Ronalds, and Cooke, though less fully, acknowledged the priority of Ronalds's work. Until 1855 Ronalds's share in the invention had been forgotten by the public.\n\n<b>H.</b> Early in 1843 Ronalds was made honorary director and superintendent of the Meteorological Observatory, which was then established at Kew by the British Association for the Advancement of Science. He began work on a system for registering meteorological data using photography and this time was awarded a grant to continue his work. A similar system was developed independently by Charles Brooke, aided like Ronalds by grants from the Royal Society, had invented independently about this time. But the British Association confirmed Ronalds's priority. This was the beginning of automatic, accurate recording of meteorological data and remained in use for some years after Ronalds's death.\n\nI. Ronalds lived long enough to see his prophecies come to fruition and to receive belated official recognition: in 1870, three years before he died, he was knighted by Queen Elizabeth I, for his \"early and remarkable labors in telegraphic investigations.\""
+                    },
+                    "questions": [
+                        { "id": 27, "type": "MATCHING", "text": "When did Francis Ronalds achieve a satisfactory result in the electricity experiment conducted first time?", "options": [{ "value": "A", "label": "A 1753" }, { "value": "B", "label": "B 1806" }, { "value": "C", "label": "C 1816" }, { "value": "D", "label": "D 1823" }, { "value": "E", "label": "E 1825" }, { "value": "F", "label": "F 1837" }, { "value": "G", "label": "G 1843" }], "correctAnswer": "C", "explanation": "He published his first electrical papers in 1814." },
+                        { "id": 28, "type": "MATCHING", "text": "When was the first proposal of an electric telegraph based on static electricity?", "options": [{ "value": "A", "label": "A 1753" }, { "value": "B", "label": "B 1806" }, { "value": "C", "label": "C 1816" }, { "value": "D", "label": "D 1823" }, { "value": "E", "label": "E 1825" }, { "value": "F", "label": "F 1837" }, { "value": "G", "label": "G 1843" }], "correctAnswer": "A", "explanation": "The first proposal for an electrostatic telegraph was in 1753." },
+                        { "id": 29, "type": "MATCHING", "text": "When did Ronalds get patent of his invention firstly?", "options": [{ "value": "A", "label": "A 1753" }, { "value": "B", "label": "B 1806" }, { "value": "C", "label": "C 1816" }, { "value": "D", "label": "D 1823" }, { "value": "E", "label": "E 1825" }, { "value": "F", "label": "F 1837" }, { "value": "G", "label": "G 1843" }], "correctAnswer": "E", "explanation": "He patented a perspective tracing instrument in 1825." },
+                        { "id": 30, "type": "MATCHING", "text": "Ronalds first made it known and revealed the applicable significance of his telegram to public.", "options": [{ "value": "A", "label": "A 1753" }, { "value": "B", "label": "B 1806" }, { "value": "C", "label": "C 1816" }, { "value": "D", "label": "D 1823" }, { "value": "E", "label": "E 1825" }, { "value": "F", "label": "F 1837" }, { "value": "G", "label": "G 1843" }], "correctAnswer": "D", "explanation": "He described his telegraph's uses in a pamphlet in 1823." },
+                        { "id": 31, "type": "MATCHING", "text": "The contribution being done by Ronalds' invention in meteorological data", "options": [{ "value": "A", "label": "A 1753" }, { "value": "B", "label": "B 1806" }, { "value": "C", "label": "C 1816" }, { "value": "D", "label": "D 1823" }, { "value": "E", "label": "E 1825" }, { "value": "F", "label": "F 1837" }, { "value": "G", "label": "G 1843" }], "correctAnswer": "G", "explanation": "He became director of the Kew Observatory in 1843." },
+                        { "id": 32, "type": "SUMMARY_COMPLETION", "text": "What were carved in the experimental dials when doing Ronalds' experiment this in garden?", "correctAnswer": "letters and numbers", "explanation": "The synchronized dials were engraved with letters and numbers." },
+                        { "id": 33, "type": "SUMMARY_COMPLETION", "text": "What were enclosed with the buried telegram wires when Ronalds did the improved experiment?", "correctAnswer": "glass tubes", "explanation": "Wires were enclosed in glass tubes for the buried experiment." },
+                        { "id": 34, "type": "SUMMARY_COMPLETION", "text": "What is the greatest distance Ronalds believed his telegram can send?", "correctAnswer": "800km", "explanation": "He believed his telegraph could work over 800km." },
+                        { "id": 35, "type": "SUMMARY_COMPLETION", "text": "What kind of power supplied to keeping the wire charged continuously?", "correctAnswer": "frictional-electricity machine", "explanation": "This machine kept the wire continuously charged." },
+                        { "id": 36, "type": "SUMMARY_COMPLETION", "text": "There is a commercial use of the telegram?", "correctAnswer": "G", "explanation": "Paragraph G states Cooke & Wheatstone patented the first commercial telegraph." },
+                        { "id": 37, "type": "SUMMARY_COMPLETION", "text": "There is a contributory influence on Ronalds from a fellow he got to know?", "correctAnswer": "A", "explanation": "Paragraph A says he was influenced by Jean Andre de Luc." },
+                        { "id": 38, "type": "SUMMARY_COMPLETION", "text": "Ronalds's proposal was rejected as the preceding reference to another application?", "correctAnswer": "E", "explanation": "Paragraph E says the Admiralty rejected him as their semaphore was \"sufficient.\"" },
+                        { "id": 39, "type": "SUMMARY_COMPLETION", "text": "There existed a drawback of Ronalds's telegram?", "correctAnswer": "D", "explanation": "Paragraph D states the \"only defect\" was the slowness of transmission." },
+                        { "id": 40, "type": "SUMMARY_COMPLETION", "text": "Ronalds's contribution in telegraphic investigations was recognized by authority?", "correctAnswer": "I", "explanation": "Paragraph I states he was knighted for his telegraphic investigations." }
+                    ]
+                }
+            ]
+        };
+
+        // Application State
+        let currentPart = 1;
+        let answers = {};
+        let leftPanelWidth = 50;
+        let isDragging = false;
+        let highlights = {}; // Store highlights per part: { partId: [highlights] }
+        let highlightButton = { show: false, x: 0, y: 0, selectedRange: null };
+        let clearHighlightButton = { show: false, x: 0, y: 0, highlightId: null };
+
+        // Timer State
+        let timeRemaining = testData.duration * 60; // in seconds
+        let isTimerRunning = false;
+        let timerInterval = null;
+
+        // Timer Functions
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timer-text').textContent = formatTime(timeRemaining);
+        }
+
+        function startTimer() {
+            isTimerRunning = true;
+            updateTimerIcons();
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    stopTimer();
+                    alert("Time's up! Your test will be submitted automatically.");
+                    submitTest();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            isTimerRunning = false;
+            updateTimerIcons();
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function toggleTimer() {
+            if (isTimerRunning) {
+                stopTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function updateTimerIcons() {
+            const playIcon = document.getElementById('play-icon');
+            const pauseIcon = document.getElementById('pause-icon');
+            
+            if (isTimerRunning) {
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+            } else {
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            }
+        }
+
+        // Panel Resizing
+        function handleMouseDown(e) {
+            isDragging = true;
+            e.preventDefault();
+        }
+
+        function handleMouseMove(e) {
+            if (!isDragging) return;
+            
+            const container = document.getElementById('main-container');
+            const containerRect = container.getBoundingClientRect();
+            const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+            
+            // Constrain between 20% and 80%
+            const constrainedWidth = Math.max(20, Math.min(80, newWidth));
+            leftPanelWidth = constrainedWidth;
+            
+            document.getElementById('left-panel').style.width = `${leftPanelWidth}%`;
+            document.getElementById('right-panel').style.width = `${100 - leftPanelWidth}%`;
+        }
+
+        function handleMouseUp() {
+            isDragging = false;
+        }
+
+        // Text Highlighting
+        function addHighlight() {
+            if (!highlightButton.selectedRange) return;
+            
+            const targetRange = highlightButton.selectedRange;
+            const selectedText = targetRange.toString().trim();
+            
+            if (selectedText.length === 0) {
+                hideHighlightButton();
+                return;
+            }
+
+            if (targetRange.startContainer !== targetRange.endContainer) {
+                hideHighlightButton();
+                return;
+            }
+
+            if (targetRange.startContainer.nodeType !== Node.TEXT_NODE) {
+                hideHighlightButton();
+                return;
+            }
+
+            const highlightId = `highlight-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+            try {
+                const highlightSpan = document.createElement('span');
+                highlightSpan.setAttribute('data-highlight-id', highlightId);
+                highlightSpan.classList.add('highlight');
+                
+                highlightSpan.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    showClearHighlightButton(e.clientX + 10, e.clientY - 35, highlightId);
+                });
+
+                const contents = targetRange.extractContents();
+                highlightSpan.appendChild(contents);
+                targetRange.insertNode(highlightSpan);
+                
+                // Store highlight data per part
+                if (!highlights[currentPart]) {
+                    highlights[currentPart] = [];
+                }
+                
+                // Find where this highlight belongs
+                const passageContent = document.getElementById('passage-content');
+                const questionsContainer = document.getElementById('questions-container');
+                let isInPassage = false;
+                let isInQuestions = false;
+                let elementIndex = -1;
+                
+                // Check if it's in the passage content
+                let paragraph = targetRange.startContainer;
+                while (paragraph && paragraph.tagName !== 'P' && paragraph.parentElement) {
+                    paragraph = paragraph.parentElement;
+                }
+                
+                if (paragraph && paragraph.tagName === 'P' && passageContent.contains(paragraph)) {
+                    isInPassage = true;
+                    elementIndex = Array.from(passageContent.children).indexOf(paragraph);
+                } else if (questionsContainer.contains(targetRange.startContainer)) {
+                    // For questions, find any parent element that contains the text
+                    let element = targetRange.startContainer;
+                    while (element && element !== questionsContainer && element.parentElement) {
+                        if (element.parentElement === questionsContainer || 
+                            (element.children && element.children.length > 0)) {
+                            isInQuestions = true;
+                            // Store the text content as identifier for questions
+                            elementIndex = selectedText; // Use the selected text as the identifier for questions
+                            break;
+                        }
+                        element = element.parentElement;
+                    }
+                }
+                
+                if (!isInPassage && !isInQuestions) {
+                    throw new Error('Highlighting not supported in this area');
+                }
+                
+                // Create separate storage for question highlights
+                if (!highlights[currentPart]) {
+                    highlights[currentPart] = [];
+                }
+                if (!window.questionHighlights) {
+                    window.questionHighlights = {};
+                }
+                if (!window.questionHighlights[currentPart]) {
+                    window.questionHighlights[currentPart] = [];
+                }
+                
+                if (isInPassage) {
+                    highlights[currentPart].push({
+                        id: highlightId,
+                        text: selectedText,
+                        paragraphIndex: elementIndex
+                    });
+                } else if (isInQuestions) {
+                    window.questionHighlights[currentPart].push({
+                        id: highlightId,
+                        text: selectedText,
+                        identifier: elementIndex
+                    });
+                }
+                
+                window.getSelection()?.removeAllRanges();
+                hideHighlightButton();
+            } catch (error) {
+                console.warn('Could not highlight selected text:', error);
+                hideHighlightButton();
+            }
+        }
+
+        function removeHighlight(highlightId) {
+            const highlightElement = document.getElementById(highlightId);
+            if (highlightElement) {
+                const parent = highlightElement.parentNode;
+                if (parent) {
+                    const textNode = document.createTextNode(highlightElement.textContent || '');
+                    parent.replaceChild(textNode, highlightElement);
+                    parent.normalize();
+                }
+            }
+            
+            // Remove highlight from passage highlights
+            if (highlights[currentPart]) {
+                highlights[currentPart] = highlights[currentPart].filter(h => h.id !== highlightId);
+            }
+            
+            // Remove highlight from question highlights
+            if (window.questionHighlights && window.questionHighlights[currentPart]) {
+                window.questionHighlights[currentPart] = window.questionHighlights[currentPart].filter(h => h.id !== highlightId);
+            }
+            
+            hideClearHighlightButton();
+        }
+
+        function showHighlightButton(x, y, range) {
+            const button = document.getElementById('highlight-button');
+            button.style.left = `${Math.max(10, Math.min(window.innerWidth - 110, x))}px`;
+            button.style.top = `${Math.max(10, y)}px`;
+            button.classList.remove('hidden');
+            
+            highlightButton = { show: true, x, y, selectedRange: range };
+        }
+
+        function hideHighlightButton() {
+            document.getElementById('highlight-button').classList.add('hidden');
+            highlightButton = { show: false, x: 0, y: 0, selectedRange: null };
+        }
+
+        function showClearHighlightButton(x, y, highlightId) {
+            const button = document.getElementById('clear-highlight-button');
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+            button.classList.remove('hidden');
+            
+            clearHighlightButton = { show: true, x, y, highlightId };
+        }
+
+        function hideClearHighlightButton() {
+            document.getElementById('clear-highlight-button').classList.add('hidden');
+            clearHighlightButton = { show: false, x: 0, y: 0, highlightId: null };
+        }
+
+        function restoreHighlights() {
+            // Wait a brief moment for DOM to be ready
+            setTimeout(() => {
+                // Restore passage highlights
+                restorePassageHighlights();
+                // Restore question highlights
+                restoreQuestionHighlights();
+            }, 200);
+        }
+        
+        function restorePassageHighlights() {
+            const passageContent = document.getElementById('passage-content');
+            if (!highlights[currentPart] || highlights[currentPart].length === 0) {
+                return;
+            }
+            
+            // Group highlights by paragraph
+            const highlightsByParagraph = {};
+            highlights[currentPart].forEach(highlight => {
+                if (!highlightsByParagraph[highlight.paragraphIndex]) {
+                    highlightsByParagraph[highlight.paragraphIndex] = [];
+                }
+                highlightsByParagraph[highlight.paragraphIndex].push(highlight);
+            });
+            
+            const paragraphs = Array.from(passageContent.children);
+            
+            // Process each paragraph that has highlights
+            Object.keys(highlightsByParagraph).forEach(paragraphIndex => {
+                const paragraphHighlights = highlightsByParagraph[paragraphIndex];
+                const paraIndex = parseInt(paragraphIndex);
+                
+                if (paraIndex >= 0 && paraIndex < paragraphs.length) {
+                    const paragraph = paragraphs[paraIndex];
+                    let text = paragraph.textContent;
+                    
+                    // Sort highlights by their position in the text (earliest first)
+                    const sortedHighlights = paragraphHighlights
+                        .map(h => ({ ...h, index: text.indexOf(h.text) }))
+                        .filter(h => h.index !== -1)
+                        .sort((a, b) => a.index - b.index);
+                    
+                    if (sortedHighlights.length > 0) {
+                        paragraph.innerHTML = '';
+                        let currentPosition = 0;
+                        
+                        sortedHighlights.forEach((highlight, i) => {
+                            // Add text before highlight
+                            if (highlight.index > currentPosition) {
+                                const beforeText = text.substring(currentPosition, highlight.index);
+                                paragraph.appendChild(document.createTextNode(beforeText));
+                            }
+                            
+                            // Add highlighted span
+                            const highlightSpan = document.createElement('span');
+                            highlightSpan.className = 'bg-yellow-300 cursor-pointer';
+                            highlightSpan.textContent = highlight.text;
+                            highlightSpan.id = highlight.id;
+                            
+                            highlightSpan.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                showClearHighlightButton(e.pageX, e.pageY, highlight.id);
+                            });
+                            
+                            paragraph.appendChild(highlightSpan);
+                            currentPosition = highlight.index + highlight.text.length;
+                        });
+                        
+                        // Add remaining text after last highlight
+                        if (currentPosition < text.length) {
+                            const remainingText = text.substring(currentPosition);
+                            paragraph.appendChild(document.createTextNode(remainingText));
+                        }
+                    }
+                }
+            });
+        }
+        
+        function restoreQuestionHighlights() {
+            const questionsContainer = document.getElementById('questions-container');
+            if (!window.questionHighlights || !window.questionHighlights[currentPart] || 
+                window.questionHighlights[currentPart].length === 0) {
+                return;
+            }
+            
+            // Get all text nodes in the questions container
+            const walker = document.createTreeWalker(
+                questionsContainer,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+            
+            window.questionHighlights[currentPart].forEach(highlight => {
+                // Search for the highlight text in the questions container
+                walker.currentNode = questionsContainer;
+                let textNode;
+                
+                while (textNode = walker.nextNode()) {
+                    const text = textNode.textContent;
+                    const index = text.indexOf(highlight.text);
+                    
+                    if (index !== -1) {
+                        // Found the text - create highlight
+                        const beforeText = text.substring(0, index);
+                        const afterText = text.substring(index + highlight.text.length);
+                        
+                        const highlightSpan = document.createElement('span');
+                        highlightSpan.className = 'bg-yellow-300 cursor-pointer';
+                        highlightSpan.textContent = highlight.text;
+                        highlightSpan.id = highlight.id;
+                        
+                        highlightSpan.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            showClearHighlightButton(e.pageX, e.pageY, highlight.id);
+                        });
+                        
+                        // Replace the text node with before + highlight + after
+                        const parentNode = textNode.parentNode;
+                        if (beforeText) {
+                            parentNode.insertBefore(document.createTextNode(beforeText), textNode);
+                        }
+                        parentNode.insertBefore(highlightSpan, textNode);
+                        if (afterText) {
+                            parentNode.insertBefore(document.createTextNode(afterText), textNode);
+                        }
+                        parentNode.removeChild(textNode);
+                        
+                        // Reset walker since we modified the DOM
+                        break;
+                    }
+                }
+            });
+        }
+
+        // Content Loading
+        function loadPart(partId) {
+            const part = testData.parts.find(p => p.id === partId);
+            if (!part) return;
+
+            // Update header
+            document.getElementById('part-title').textContent = part.title;
+            document.getElementById('part-instructions').textContent = part.instructions;
+            document.getElementById('passage-title').textContent = part.passage.title;
+            
+            // Update passage content
+            const passageContent = document.getElementById('passage-content');
+            passageContent.innerHTML = '';
+            
+            const paragraphs = part.passage.content.split('\n\n');
+            paragraphs.forEach(paragraph => {
+                if (paragraph.trim()) {
+                    const p = document.createElement('p');
+                    p.className = 'mb-4';
+                    p.innerHTML = paragraph;
+                    passageContent.appendChild(p);
+                }
+            });
+
+            // Restore highlights for this part
+            restoreHighlights();
+            
+            // Load questions
+            loadQuestions(part);
+            
+            // Update navigation
+            updateNavigation();
+        }
+
+        function loadQuestions(part) {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            // Group questions by type
+            const flowChartQuestions = part.questions.filter(q => q.type === "FLOW_CHART");
+            const trueFalseQuestions = part.questions.filter(q => q.type === "TRUE_FALSE_NOT_GIVEN");
+            const multipleChoiceQuestions = part.questions.filter(q => q.type === "MULTIPLE_CHOICE");
+            const multipleChoiceMultiQuestions = part.questions.filter(q => q.type === "MULTIPLE_CHOICE_MULTI");
+            const virtualMultiQuestions = part.questions.filter(q => q.type === "VIRTUAL_MULTI");
+            const summaryQuestions = part.questions.filter(q => q.type === "SUMMARY_COMPLETION");
+            const paragraphMatchingQuestions = part.questions.filter(q => q.type === "PARAGRAPH_MATCHING");
+            const matchingQuestions = part.questions.filter(q => q.type === "MATCHING");
+
+            // Flow Chart Questions
+            if (flowChartQuestions.length > 0) {
+                const section = document.createElement('div');
+                section.className = 'mb-6';
+                section.innerHTML = `
+                    <h3 class="font-bold mb-4">Questions ${flowChartQuestions[0].id}–${flowChartQuestions[flowChartQuestions.length - 1].id}</h3>
+                    <p class="text-sm text-gray-700 mb-4">Complete the flow-chart below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</p>
+                    <p class="text-sm text-gray-700 mb-4">Write your answers in boxes 1-5 on your answer sheet.</p>
+                    
+                    <div class="bg-gray-50 p-6 mb-4">
+                        <div class="text-left space-y-3">
+                            <div class="bg-white p-3 text-center">
+                                <strong>Clarence Birdseye and the Frozen Food Industry</strong>
+                            </div>
+                            <div class="text-xl text-center">↓</div>
+                            <div class="bg-white p-3">
+                                <strong>Early adventures</strong>
+                                <ul class="flow-chart-list mt-3 text-sm">
+                                    <li>Birdseye grew up hunting and selling animals</li>
+                                    <li>he left <span class="inline-input" data-question="1"></span> for financial reasons</li>
+                                    <li>his work in Montana was a factor in finding the cause of a widespread <span class="inline-input" data-question="2"></span></li>
+                                    <li>he moved to Labrador, where he bought furs for a New York company</li>
+                                    <li>he enjoyed the <span class="inline-input" data-question="3"></span> of living in such a harsh environment</li>
+                                </ul>
+                            </div>
+                            <div class="text-xl text-center">↓</div>
+                            <div class="bg-white p-3">
+                                <strong>A better way to freeze food</strong>
+                                <ul class="flow-chart-list mt-3 text-sm">
+                                    <li>Birdseye realised that the process of freezing and thawing food changed its taste and texture</li>
+                                    <li>while fishing with the Inuit, he made a <span class="inline-input" data-question="4"></span> that could improve frozen food</li>
+                                    <li>in the early 20th century, the quality of frozen food was so poor that even some <span class="inline-input" data-question="5"></span> couldn't serve it</li>
+                                    <li>Birdseye found that when food was flash-frozen, the <span class="inline-input" data-question="6"></span> of the cells were kept intact</li>
+                                    <li>taking out bones from whole fish minimised the air content of the packaging</li>
+                                    <li>Birdseye also created a new kind of <span class="inline-input" data-question="7"></span> and glue for packaging</li>
+                                    <li>because supermarkets and kitchens lacked freezers, frozen food was not part of the typical American diet before the late 1940s.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(section);
+
+                // Add input fields for flow chart
+                section.querySelectorAll('.inline-input').forEach(span => {
+                    const questionId = parseInt(span.dataset.question);
+                    
+                    // Add ID to the span for navigation
+                    span.id = `question-${questionId}`;
+                    
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'inline-block min-w-32 h-7 border-2 border-gray-400 text-center text-sm bg-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded px-2';
+                    input.placeholder = questionId.toString();
+                    input.value = answers[questionId] || '';
+                    input.addEventListener('input', (e) => {
+                        answers[questionId] = e.target.value;
+                        updateQuestionIndicators();
+                    });
+                    span.appendChild(input);
+                });
+            }
+
+            // True/False Questions
+            if (trueFalseQuestions.length > 0) {
+                const section = document.createElement('div');
+                section.className = 'mb-6';
+                section.innerHTML = `
+                    <h3 class="font-bold mb-4">Questions ${trueFalseQuestions[0].id}–${trueFalseQuestions[trueFalseQuestions.length - 1].id}</h3>
+                    <p class="text-sm text-gray-700 mb-4">Do the following statements agree with the claims of the writer in Reading Passage?</p>
+                    <p class="text-sm text-gray-700 mb-4">
+                        On your answer sheet please write<br/>
+                        <strong>TRUE</strong> if the statement agrees with the writer<br/>
+                        <strong>FALSE</strong> if the statement contradicts with the writer<br/>
+                        <strong>NOT GIVEN</strong> if there is no information about this in the passage.
+                    </p>
+                    <div class="space-y-4" id="true-false-questions"></div>
+                `;
+                container.appendChild(section);
+
+                const questionsDiv = section.querySelector('#true-false-questions');
+                trueFalseQuestions.forEach(question => {
+                    const questionDiv = createTrueFalseQuestion(question);
+                    questionsDiv.appendChild(questionDiv);
+                });
+            }
+
+            // Multiple Choice Questions
+            if (multipleChoiceQuestions.length > 0) {
+                const section = document.createElement('div');
+                section.className = 'mb-6';
+                section.innerHTML = `
+                    <h3 class="font-bold mb-4">Questions ${multipleChoiceQuestions[0].id}–${multipleChoiceQuestions[multipleChoiceQuestions.length - 1].id}</h3>
+                    <p class="text-sm text-gray-700 mb-4">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</p>
+                    <div class="space-y-6" id="multiple-choice-questions"></div>
+                `;
+                container.appendChild(section);
+
+                const questionsDiv = section.querySelector('#multiple-choice-questions');
+                multipleChoiceQuestions.forEach(question => {
+                    const questionDiv = createMultipleChoiceQuestion(question);
+                    questionsDiv.appendChild(questionDiv);
+                });
+            }
+
+            // Summary Completion Questions (11-13)
+            if (summaryQuestions.filter(q => q.id >= 11 && q.id <= 13).length > 0) {
+                const section = document.createElement('div');
+                section.className = 'mb-6';
+                section.innerHTML = `
+                    <h3 class="font-bold mb-4">Questions 11-13</h3>
+                    <p class="text-sm text-gray-700 mb-4">Complete the following summary of the paragraphs of Reading Passage 1, using <strong>NO MORE THAN TWO WORDS</strong> from the Reading Passage for each answer.</p>
+                    <p class="text-sm text-gray-700 mb-4">Write your answers in boxes 11-13 on your answer sheet.</p>
+                    
+                    <div class="bg-gray-50 p-4 mb-4">
+                        <p class="text-sm leading-relaxed">
+                            While experts outperform novices and machines in pattern recognition and problem solving, expert predictions of future behavior or events are seldom as accurate as simple actuarial tables. Why? Some have tried to explain that experts differ when using cognitive <span class="inline-input" data-question="11"></span> to forecast. Researchers believe it is due to <span class="inline-input" data-question="12"></span>. However attempting endeavour of finding answers did not yet produce <span class="inline-input" data-question="13"></span>.
+                        </p>
+                    </div>
+                `;
+                container.appendChild(section);
+
+                // Add input fields
+                section.querySelectorAll('.inline-input').forEach(span => {
+                    const questionId = parseInt(span.dataset.question);
+                    
+                    // Add ID to the span for navigation
+                    span.id = `question-${questionId}`;
+                    
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'inline-block min-w-32 h-7 border-2 border-gray-400 text-center text-sm bg-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded px-2';
+                    input.placeholder = questionId.toString();
+                    input.value = answers[questionId] || '';
+                    input.addEventListener('input', (e) => {
+                        answers[questionId] = e.target.value;
+                        updateQuestionIndicators();
+                    });
+                    span.appendChild(input);
+                });
+            }
+
+
+            // Matching Questions
+            if (matchingQuestions.length > 0) {
+                const section = document.createElement('div');
+                section.className = 'mb-6';
+                section.innerHTML = `
+                    <h3 class="font-bold mb-4">Questions ${matchingQuestions[0].id}–${matchingQuestions[matchingQuestions.length - 1].id}</h3>
+                    <p class="text-sm text-gray-700 mb-4">Matching the <strong>each correct year</strong> to the <strong>historical event</strong> in the passage,</p>
+                    <p class="text-sm text-gray-700 mb-4">and write the correct answer into box of 27-31 in the answer sheet</p>
+                    <div id="matching-questions"></div>
+                `;
+                container.appendChild(section);
+
+                const matchingDiv = section.querySelector('#matching-questions');
+                createMatchingQuestions(matchingDiv, matchingQuestions);
+            }
+
+            // Paragraph Matching Questions (14-17)
+            if (paragraphMatchingQuestions.filter(q => q.id >= 14 && q.id <= 17).length > 0) {
+                const section = document.createElement('div');
+                section.className = 'mb-6';
+                section.innerHTML = `
+                    <h3 class="font-bold mb-4">Questions 14-17</h3>
+                    <p class="text-sm text-gray-700 mb-4">The passage has paragraphs as A-G; which paragraph contains the following information?</p>
+                    <p class="text-sm text-gray-700 mb-4">Write the appropriate letter A-G for box 14-17 on your answer sheet.</p>
+                    <p class="text-sm text-gray-700 mb-4"><strong>NB</strong> You may use any letter more than once.</p>
+                    <div class="space-y-4" id="summary-14-17"></div>
+                `;
+                container.appendChild(section);
+
+                const summaryDiv = section.querySelector('#summary-14-17');
+                paragraphMatchingQuestions.filter(q => q.id >= 14 && q.id <= 17).forEach(question => {
+                    const questionDiv = createParagraphMatchingQuestion(question);
+                    summaryDiv.appendChild(questionDiv);
+                });
+            }
+
+            // Gap Filling Questions (18-24)
+            if (summaryQuestions.filter(q => q.id >= 18 && q.id <= 24).length > 0) {
+                const section = document.createElement('div');
+                section.className = 'mb-6';
+                section.innerHTML = `
+                    <h3 class="font-bold mb-4">Questions 18-24</h3>
+                    <p class="text-sm text-gray-700 mb-4">Complete the summary using the list of words, <strong>A-H</strong>, below.</p>
+                    <p class="text-sm text-gray-700 mb-4">Write the correct letter, <strong>A-H</strong>, in boxes 18-24 on your answer sheet.</p>
+
+                    <div class="bg-gray-50 p-4 mb-4">
+                        <p class="text-sm leading-relaxed">
+                            It appears that placebos can treat or reduce the <span class="inline-input" data-question="18"></span> of a wide range of conditions. The placebo effect happens when our <span class="inline-input" data-question="19"></span> has an effect on how our body feels.
+                        </p>
+                        <p class="text-sm leading-relaxed mt-3">
+                            Doctors have long believed it to be their responsibility not only to treat patients' medical conditions, but also to improve their <span class="inline-input" data-question="20"></span>. An example of a situation where a placebo has little or no effect is if a patient has an <span class="inline-input" data-question="21"></span>.
+                        </p>
+                        <p class="text-sm leading-relaxed mt-3">
+                            It has been shown that patients will feel <span class="inline-input" data-question="22"></span> in their muscles if they are given a placebo called a muscle stimulator. A related phenomenon, known as the <span class="inline-input" data-question="23"></span> effect, convinces people that a treatment will do them harm.
+                        </p>
+                        <p class="text-sm leading-relaxed mt-3">
+                            Two factors which influence the effectiveness of a placebo pill are its <span class="inline-input" data-question="24"></span> and its size.
+                        </p>
+                    </div>
+                `;
+                container.appendChild(section);
+
+                // Add input fields for gap filling
+                section.querySelectorAll('.inline-input').forEach(span => {
+                    const questionId = parseInt(span.dataset.question);
+
+                    // Add ID to the span for navigation
+                    span.id = `question-${questionId}`;
+
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'inline-block min-w-16 h-6 border-2 border-gray-400 text-center text-xs bg-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded px-1';
+                    input.placeholder = questionId.toString();
+                    input.value = answers[questionId] || '';
+                    input.addEventListener('input', (e) => {
+                        answers[questionId] = e.target.value;
+                        updateQuestionIndicators();
+                    });
+                    span.appendChild(input);
+                });
+            }
+
+            // Multiple Choice Multi Questions (25-26)
+            if (multipleChoiceMultiQuestions.length > 0) {
+                const section = document.createElement('div');
+                section.className = 'mb-6';
+                section.innerHTML = `
+                    <h3 class="font-bold mb-4">Questions 25-26</h3>
+                    <p class="text-sm text-gray-700 mb-4">Choose <strong>TWO</strong> letters, <strong>A-E</strong>.</p>
+                    <p class="text-sm text-gray-700 mb-4">Which <strong>TWO</strong> findings were observed in the Harvard Medical School study?</p>
+                    <p class="text-sm text-gray-700 mb-4"><em>Write your answers in boxes 25-26 on your answer sheet.</em></p>
+                    <div class="space-y-4" id="multi-choice-25-26"></div>
+                `;
+                container.appendChild(section);
+
+                const multiDiv = section.querySelector('#multi-choice-25-26');
+                // Only render question 25, but it handles both 25 and 26 answers
+                const question25 = multipleChoiceMultiQuestions.find(q => q.id === 25);
+                if (question25) {
+                    const questionDiv = createMultipleChoiceMultiQuestion(question25);
+                    multiDiv.appendChild(questionDiv);
+                }
+            }
+
+            // Summary Completion Questions (32-35)
+            if (summaryQuestions.filter(q => q.id >= 32 && q.id <= 35).length > 0) {
+                const section = document.createElement('div');
+                section.className = 'mb-6';
+                section.innerHTML = `
+                    <h3 class="font-bold mb-4">Questions 32-35</h3>
+                    <p class="text-sm text-gray-700 mb-4">Choose <strong>NO MORE THAN FOUR WORDS AND/OR A NUMBER</strong> from the passage for each answer.</p>
+                    <p class="text-sm text-gray-700 mb-4">Write your answers in boxes 32-35 on your answer sheet.</p>
+                    <div class="space-y-4" id="summary-32-35"></div>
+                `;
+                container.appendChild(section);
+
+                const summaryDiv = section.querySelector('#summary-32-35');
+                summaryQuestions.filter(q => q.id >= 32 && q.id <= 35).forEach(question => {
+                    const questionDiv = createSummaryQuestion(question);
+                    summaryDiv.appendChild(questionDiv);
+                });
+            }
+
+            // Summary Completion Questions (36-40)
+            if (summaryQuestions.filter(q => q.id >= 36).length > 0) {
+                const section = document.createElement('div');
+                section.className = 'mb-6';
+                section.innerHTML = `
+                    <h3 class="font-bold mb-4">Questions 36-40</h3>
+                    <p class="text-sm text-gray-700 mb-4">The passage has paragraphs as A-I; which paragraph contains the following information?</p>
+                    <p class="text-sm text-gray-700 mb-4">Write the appropriate letter A-I for box 36-40 on your answer sheet.</p>
+                    <div class="space-y-4" id="summary-36-40"></div>
+                `;
+                container.appendChild(section);
+
+                const summaryDiv = section.querySelector('#summary-36-40');
+                summaryQuestions.filter(q => q.id >= 36).forEach(question => {
+                    const questionDiv = createParagraphMatchingQuestion(question);
+                    summaryDiv.appendChild(questionDiv);
+                });
+            }
+        }
+
+        function createTrueFalseQuestion(question) {
+            const div = document.createElement('div');
+            div.className = 'question-item';
+            div.id = `question-${question.id}`;
+            div.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">
+                        ${question.id}
+                    </div>
+                    <div class="flex-1">
+                        <p class="mb-3 text-sm">${question.text}</p>
+                        <div class="flex space-x-6" id="options-${question.id}"></div>
+                    </div>
+                </div>
+            `;
+
+            const optionsDiv = div.querySelector(`#options-${question.id}`);
+            question.options.forEach(option => {
+                const label = document.createElement('label');
+                label.className = 'flex items-center space-x-2 cursor-pointer';
+                label.innerHTML = `
+                    <input type="radio" name="q${question.id}" value="${option.value}" class="w-4 h-4 text-red-600" ${answers[question.id] === option.value ? 'checked' : ''}>
+                    <span class="text-sm">${option.label}</span>
+                `;
+                label.querySelector('input').addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        answers[question.id] = e.target.value;
+                        updateQuestionIndicators();
+                    }
+                });
+                optionsDiv.appendChild(label);
+            });
+
+            return div;
+        }
+
+        function createMultipleChoiceMultiQuestion(question) {
+            const div = document.createElement('div');
+            div.className = 'question-item';
+            div.id = `question-${question.id}`;
+            div.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="flex space-x-1 flex-shrink-0">
+                        <div class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">
+                            25
+                        </div>
+                        <div class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">
+                            26
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <p class="mb-3 text-sm">${question.text}</p>
+                        <div class="space-y-2" id="options-${question.id}"></div>
+                    </div>
+                </div>
+            `;
+
+            const optionsDiv = div.querySelector(`#options-${question.id}`);
+            question.options.forEach(option => {
+                const label = document.createElement('label');
+                label.className = 'flex items-center space-x-2 cursor-pointer';
+                const currentAnswers = answers[question.id] || [];
+                const isChecked = Array.isArray(currentAnswers) && currentAnswers.includes(option.value);
+                label.innerHTML = `
+                    <input type="checkbox" value="${option.value}" class="w-4 h-4 text-red-600" ${isChecked ? 'checked' : ''}>
+                    <span class="text-sm">${option.label}</span>
+                `;
+                optionsDiv.appendChild(label);
+
+                label.querySelector('input').addEventListener('change', (e) => {
+                    // For questions 25-26, sync both question answers
+                    const questionsToSync = question.id === 25 || question.id === 26 ? [25, 26] : [question.id];
+                    
+                    questionsToSync.forEach(qId => {
+                        if (!answers[qId]) {
+                            answers[qId] = [];
+                        }
+                        if (!Array.isArray(answers[qId])) {
+                            answers[qId] = [];
+                        }
+                        
+                        if (e.target.checked) {
+                            // Limit to exactly 2 selections for multi-choice questions
+                            if (answers[qId].length >= 2) {
+                                // If already have 2 selections, remove the first one
+                                answers[qId].shift();
+                            }
+                            if (!answers[qId].includes(option.value)) {
+                                answers[qId].push(option.value);
+                            }
+                        } else {
+                            answers[qId] = answers[qId].filter(val => val !== option.value);
+                        }
+                        
+                        // Update checkbox states to reflect current selection
+                        const allCheckboxes = div.querySelectorAll('input[type="checkbox"]');
+                        allCheckboxes.forEach(cb => {
+                            cb.checked = answers[qId] && answers[qId].includes(cb.value);
+                        });
+                    });
+                    
+                    updateQuestionIndicators();
+                });
+            });
+
+            return div;
+        }
+
+        function createMultipleChoiceQuestion(question) {
+            const div = document.createElement('div');
+            div.className = 'question-item';
+            div.id = `question-${question.id}`;
+            div.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">
+                        ${question.id}
+                    </div>
+                    <div class="flex-1">
+                        <p class="mb-3 text-sm">${question.text}</p>
+                        <div class="space-y-2" id="options-${question.id}"></div>
+                    </div>
+                </div>
+            `;
+
+            const optionsDiv = div.querySelector(`#options-${question.id}`);
+            question.options.forEach(option => {
+                const label = document.createElement('label');
+                label.className = 'flex items-center space-x-2 cursor-pointer';
+                label.innerHTML = `
+                    <input type="radio" name="q${question.id}" value="${option.value}" class="w-4 h-4 text-red-600" ${answers[question.id] === option.value ? 'checked' : ''}>
+                    <span class="text-sm">${option.label}</span>
+                `;
+                label.querySelector('input').addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        answers[question.id] = e.target.value;
+                        updateQuestionIndicators();
+                    }
+                });
+                optionsDiv.appendChild(label);
+            });
+
+            return div;
+        }
+
+        function createSummaryQuestion(question) {
+            const div = document.createElement('div');
+            div.className = 'question-item';
+            div.id = `question-${question.id}`;
+            div.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">
+                        ${question.id}
+                    </div>
+                    <div class="flex-1 flex items-center space-x-3">
+                        <p class="text-sm flex-1">${question.text}</p>
+                        <input type="text" value="${answers[question.id] || ''}" class="w-72 h-10 border-2 border-gray-400 text-sm bg-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded px-3" placeholder="${question.id}">
+                    </div>
+                </div>
+            `;
+
+            div.querySelector('input').addEventListener('input', (e) => {
+                answers[question.id] = e.target.value;
+                updateQuestionIndicators();
+            });
+
+            return div;
+        }
+
+        function createParagraphMatchingQuestion(question) {
+            const div = document.createElement('div');
+            div.className = 'question-item';
+            div.id = `question-${question.id}`;
+            div.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">
+                        ${question.id}
+                    </div>
+                    <div class="flex-1 flex items-center space-x-3">
+                        <p class="text-sm flex-1">${question.text}</p>
+                        <select value="${answers[question.id] || ''}" class="w-20 h-8 border-2 border-gray-400 text-sm bg-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded px-1">
+                            <option value="">${question.id}</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+
+            div.querySelector('select').addEventListener('change', (e) => {
+                answers[question.id] = e.target.value;
+                updateQuestionIndicators();
+            });
+
+            return div;
+        }
+
+        function createMatchingQuestions(container, questions) {
+            // Options box
+            const optionsBox = document.createElement('div');
+            optionsBox.className = 'border-2 border-gray-400 p-4 bg-gray-50 mb-6';
+            optionsBox.innerHTML = `
+                <h4 class="font-bold mb-3">Choose from the following options:</h4>
+                <div class="grid grid-cols-4 gap-2">
+                    <div class="bg-white border-2 border-gray-300 rounded px-2 py-1 text-center cursor-move hover:bg-blue-50 hover:border-blue-400 transition-colors select-none" data-value="A">
+                        <div class="font-bold text-sm">A</div>
+                        <div class="text-xs">1753</div>
+                    </div>
+                    <div class="bg-white border-2 border-gray-300 rounded px-2 py-1 text-center cursor-move hover:bg-blue-50 hover:border-blue-400 transition-colors select-none" data-value="B">
+                        <div class="font-bold text-sm">B</div>
+                        <div class="text-xs">1806</div>
+                    </div>
+                    <div class="bg-white border-2 border-gray-300 rounded px-2 py-1 text-center cursor-move hover:bg-blue-50 hover:border-blue-400 transition-colors select-none" data-value="C">
+                        <div class="font-bold text-sm">C</div>
+                        <div class="text-xs">1816</div>
+                    </div>
+                    <div class="bg-white border-2 border-gray-300 rounded px-2 py-1 text-center cursor-move hover:bg-blue-50 hover:border-blue-400 transition-colors select-none" data-value="D">
+                        <div class="font-bold text-sm">D</div>
+                        <div class="text-xs">1823</div>
+                    </div>
+                    <div class="bg-white border-2 border-gray-300 rounded px-2 py-1 text-center cursor-move hover:bg-blue-50 hover:border-blue-400 transition-colors select-none" data-value="E">
+                        <div class="font-bold text-sm">E</div>
+                        <div class="text-xs">1825</div>
+                    </div>
+                    <div class="bg-white border-2 border-gray-300 rounded px-2 py-1 text-center cursor-move hover:bg-blue-50 hover:border-blue-400 transition-colors select-none" data-value="F">
+                        <div class="font-bold text-sm">F</div>
+                        <div class="text-xs">1837</div>
+                    </div>
+                    <div class="bg-white border-2 border-gray-300 rounded px-2 py-1 text-center cursor-move hover:bg-blue-50 hover:border-blue-400 transition-colors select-none" data-value="G">
+                        <div class="font-bold text-sm">G</div>
+                        <div class="text-xs">1843</div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(optionsBox);
+
+            // Questions
+            const questionsDiv = document.createElement('div');
+            questionsDiv.className = 'space-y-4';
+            
+            questions.forEach(question => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'flex items-center space-x-4';
+                questionDiv.id = `question-${question.id}`;
+                questionDiv.innerHTML = `
+                    <div class="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                        ${question.id}
+                    </div>
+                    <div class="flex-1 text-sm">
+                        ${question.text}
+                    </div>
+                    <div class="drop-zone h-8 border-2 border-gray-400 rounded flex items-center justify-center text-sm bg-white transition-colors border-dashed hover:border-blue-400 hover:bg-blue-50 min-w-16" data-question="${question.id}">
+                        ${answers[question.id] ? `<span class="font-bold text-sm">${answers[question.id]} <button class="text-red-500 hover:text-red-700 text-xs ml-1">×</button></span>` : ''}
+                    </div>
+                `;
+                questionsDiv.appendChild(questionDiv);
+
+                // Add drag and drop functionality
+                const dropZone = questionDiv.querySelector('.drop-zone');
+                
+                dropZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'copy';
+                });
+
+                dropZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    const droppedValue = e.dataTransfer.getData('text/plain');
+                    answers[question.id] = droppedValue;
+                    updateMatchingDisplay(question.id, droppedValue);
+                    updateQuestionIndicators();
+                });
+
+                // Add click functionality for clear button
+                dropZone.addEventListener('click', (e) => {
+                    if (e.target.textContent === '×') {
+                        answers[question.id] = '';
+                        updateMatchingDisplay(question.id, '');
+                        updateQuestionIndicators();
+                    }
+                });
+            });
+
+            container.appendChild(questionsDiv);
+
+            // Add drag functionality to options
+            optionsBox.querySelectorAll('[data-value]').forEach(option => {
+                option.draggable = true;
+                option.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('text/plain', e.target.dataset.value);
+                    e.dataTransfer.effectAllowed = 'copy';
+                });
+            });
+        }
+
+        function updateMatchingDisplay(questionId, value) {
+            const dropZone = document.querySelector(`[data-question="${questionId}"]`);
+            if (value && value.trim() !== '') {
+                // Find the matching option to get the label
+                const matchingOption = document.querySelector(`[data-value="${value}"]`);
+                const displayValue = matchingOption ? matchingOption.textContent.trim() : value;
+                dropZone.innerHTML = `<span class="font-bold text-sm">${displayValue} <button class="text-red-500 hover:text-red-700 text-xs ml-1">×</button></span>`;
+                dropZone.className = 'drop-zone h-8 border-2 border-blue-500 rounded flex items-center justify-center text-sm bg-blue-50 transition-colors px-2';
+            } else {
+                dropZone.innerHTML = '';
+                dropZone.className = 'drop-zone h-8 border-2 border-gray-400 rounded flex items-center justify-center text-sm bg-white transition-colors border-dashed hover:border-blue-400 hover:bg-blue-50 min-w-16';
+            }
+        }
+
+        // Navigation
+        function updateNavigation() {
+            // Update navigation buttons
+            document.getElementById('prev-part-btn').disabled = currentPart === 1;
+            document.getElementById('next-part-btn').disabled = currentPart === testData.parts.length;
+
+            // Update part indicators
+            updatePartIndicators();
+        }
+
+        function updatePartIndicators() {
+            const container = document.getElementById('parts-container');
+            container.innerHTML = '';
+
+            testData.parts.forEach((part, index) => {
+                const isActive = currentPart === part.id;
+                
+                const partDiv = document.createElement('div');
+                partDiv.className = 'flex items-center min-w-0 relative';
+                
+                const partButton = document.createElement('button');
+                partButton.className = `text-base font-medium whitespace-nowrap flex-shrink-0 ${isActive ? 'text-black font-medium' : 'text-gray-400'}`;
+                partButton.textContent = `Part ${part.id}`;
+                partButton.addEventListener('click', () => {
+                    currentPart = part.id;
+                    loadPart(currentPart);
+                });
+                
+                partDiv.appendChild(partButton);
+
+                // Add question indicators if this is the active part
+                if (isActive) {
+                    const questionsDiv = document.createElement('div');
+                    questionsDiv.className = 'flex items-center flex-wrap gap-1 justify-center ml-2';
+                    
+                    part.questions.forEach((question, qIndex) => {
+                        const questionBtn = document.createElement('button');
+                        const answer = answers[question.id];
+                        const isAnswered = answer && (Array.isArray(answer) ? answer.length > 0 : answer.trim() !== '');
+                        
+                        questionBtn.className = `w-6 h-6 text-sm font-medium border rounded flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-pointer ${
+                            isAnswered
+                                ? 'bg-red-600 text-white border-red-600 hover:bg-red-700'
+                                : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                        }`;
+                        questionBtn.textContent = question.id;
+                        questionBtn.style.animationDelay = `${qIndex * 20}ms`;
+                        questionBtn.style.animation = `fadeInScale 0.3s ease-out ${qIndex * 20}ms both`;
+                        
+                        questionBtn.addEventListener('click', () => {
+                            const element = document.getElementById(`question-${question.id}`);
+                            if (element) {
+                                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        });
+                        
+                        questionsDiv.appendChild(questionBtn);
+                    });
+                    
+                    partDiv.appendChild(questionsDiv);
+                }
+                
+                container.appendChild(partDiv);
+            });
+        }
+
+        function updateQuestionIndicators() {
+            updatePartIndicators();
+        }
+
+        function goToPreviousPart() {
+            if (currentPart > 1) {
+                currentPart--;
+                loadPart(currentPart);
+            }
+        }
+
+        function goToNextPart() {
+            if (currentPart < testData.parts.length) {
+                currentPart++;
+                loadPart(currentPart);
+            }
+        }
+
+        // Test Submission
+        function submitTest() {
+            stopTimer();
+            
+            // Calculate results
+            let correctAnswers = 0;
+            let totalQuestions = 0;
+            const results = [];
+
+            testData.parts.forEach(part => {
+                part.questions.forEach(question => {
+                    totalQuestions++;
+                    const userAnswer = answers[question.id] || '';
+                    let isCorrect = false;
+                    
+                    if (question.type === "VIRTUAL_MULTI") {
+                        // Virtual question - check if the specific answer for this question is selected
+                        const linkedAnswer = answers[question.linkedTo] || [];
+                        if (Array.isArray(linkedAnswer)) {
+                            // Q25 gets 1 point if B is selected, Q26 gets 1 point if C is selected
+                            isCorrect = linkedAnswer.includes(question.correctAnswer);
+                        }
+                    } else if (Array.isArray(userAnswer) && !Array.isArray(question.correctAnswer)) {
+                        // Multi-select question with single correct answer (Q25: check if B is selected)
+                        isCorrect = userAnswer.includes(question.correctAnswer);
+                    } else if (Array.isArray(question.correctAnswer) && Array.isArray(userAnswer)) {
+                        // Multi-select questions - check if arrays have same elements
+                        const sortedCorrect = question.correctAnswer.slice().sort();
+                        const sortedUser = userAnswer.slice().sort();
+                        isCorrect = sortedCorrect.length === sortedUser.length && 
+                                   sortedCorrect.every((val, i) => val === sortedUser[i]);
+                    } else if (Array.isArray(question.correctAnswer) && !Array.isArray(userAnswer)) {
+                        // Question with multiple acceptable answers (e.g. "colour" or "color")
+                        isCorrect = question.correctAnswer.some(correctOption => 
+                            userAnswer.toString().toLowerCase().trim() === correctOption.toString().toLowerCase().trim()
+                        );
+                    } else {
+                        // Single answer questions
+                        isCorrect = userAnswer.toString().toLowerCase().trim() === question.correctAnswer.toString().toLowerCase().trim();
+                    }
+                    
+                    if (isCorrect) {
+                        correctAnswers++;
+                    }
+
+                    results.push({
+                        questionId: question.id,
+                        questionText: question.text,
+                        userAnswer: question.type === "VIRTUAL_MULTI" ? 
+                                   (Array.isArray(answers[question.linkedTo]) ? answers[question.linkedTo].join(', ') : '') :
+                                   (Array.isArray(userAnswer) ? userAnswer.join(', ') : userAnswer),
+                        correctAnswer: Array.isArray(question.correctAnswer) ? question.correctAnswer.join(', ') : question.correctAnswer,
+                        isCorrect: isCorrect,
+                        explanation: question.explanation || null
+                    });
+                });
+            });
+
+            const score = Math.round((correctAnswers / totalQuestions) * 100);
+            const timeSpent = (testData.duration * 60) - timeRemaining;
+
+            showResults(score, correctAnswers, totalQuestions, timeSpent, results);
+        }
+
+        function showSubmitConfirmation() {
+            const modal = document.getElementById('submit-confirmation-modal');
+            modal.classList.remove('hidden');
+            // Prevent background scrolling
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideSubmitConfirmation() {
+            const modal = document.getElementById('submit-confirmation-modal');
+            modal.classList.add('hidden');
+            // Restore background scrolling
+            document.body.style.overflow = 'auto';
+        }
+
+        function showResults(score, correctAnswers, totalQuestions, timeSpent, results) {
+            const modal = document.getElementById('results-modal');
+            const content = document.getElementById('results-content');
+            
+            content.innerHTML = `
+                <div class="text-center mb-6">
+                    <div class="text-4xl font-bold text-red-600 mb-2">${score}%</div>
+                    <div class="text-lg text-gray-700">${correctAnswers} out of ${totalQuestions} correct</div>
+                    <div class="text-sm text-gray-500">Time spent: ${Math.floor(timeSpent / 60)}:${(timeSpent % 60).toString().padStart(2, '0')}</div>
+                </div>
+                
+                <div class="flex-1 min-h-0 overflow-y-auto">
+                    <h3 class="font-bold mb-4">Answer Sheet</h3>
+                    <div class="space-y-2">
+                        ${results.map(result => `
+                            <div class="py-3 px-3 rounded ${result.isCorrect ? 'bg-green-50' : 'bg-red-50'} mb-3">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-medium">Q${result.questionId}</span>
+                                    <div class="text-sm">
+                                        <span class="text-gray-600">Your answer: </span>
+                                        <span class="${result.isCorrect ? 'text-green-600' : 'text-red-600'}">${result.userAnswer || '(No answer)'}</span>
+                                        ${!result.isCorrect ? `<span class="text-gray-600"> | Correct: </span><span class="text-green-600">${result.correctAnswer}</span>` : ''}
+                                    </div>
+                                </div>
+                                ${result.explanation ? `<div class="text-sm text-gray-700 bg-white/50 rounded px-2 py-1 mt-2"><strong>Explanation:</strong> ${result.explanation}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            // Prevent background scrolling
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize
+            loadPart(currentPart);
+            updateTimerDisplay();
+
+            // Timer controls
+            document.getElementById('timer-toggle').addEventListener('click', toggleTimer);
+
+            // Panel resizing
+            document.getElementById('resize-handle').addEventListener('mousedown', handleMouseDown);
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+
+            // Navigation
+            document.getElementById('prev-part-btn').addEventListener('click', goToPreviousPart);
+            document.getElementById('next-part-btn').addEventListener('click', goToNextPart);
+            document.getElementById('submit-test-btn').addEventListener('click', function() {
+                // Show custom confirmation modal
+                showSubmitConfirmation();
+            });
+
+            // Highlighting
+            document.getElementById('highlight-button').addEventListener('click', addHighlight);
+            document.getElementById('clear-highlight-button').addEventListener('click', () => {
+                if (clearHighlightButton.highlightId) {
+                    removeHighlight(clearHighlightButton.highlightId);
+                }
+            });
+
+            // Text selection for highlighting
+            document.addEventListener('mouseup', (e) => {
+                // Don't hide buttons if clicking on them
+                if (e.target.closest('#highlight-button') || e.target.closest('#clear-highlight-button')) {
+                    return;
+                }
+
+                const selection = window.getSelection();
+                if (selection && !selection.isCollapsed) {
+                    const selectedText = selection.toString().trim();
+                    if (selectedText.length > 0) {
+                        const range = selection.getRangeAt(0);
+                        const x = e.clientX + 10;
+                        const y = e.clientY - 35;
+                        const clonedRange = range.cloneRange();
+                        showHighlightButton(x, y, clonedRange);
+                    }
+                } else {
+                    hideHighlightButton();
+                }
+
+                if (e.button !== 2) {
+                    hideClearHighlightButton();
+                }
+            });
+
+            document.addEventListener('mousedown', (e) => {
+                if (!e.target.closest('#highlight-button') && !e.target.closest('#clear-highlight-button')) {
+                    hideHighlightButton();
+                    hideClearHighlightButton();
+                }
+            });
+
+            // Submit confirmation modal
+            document.getElementById('cancel-submit').addEventListener('click', () => {
+                hideSubmitConfirmation();
+            });
+            document.getElementById('confirm-submit').addEventListener('click', () => {
+                hideSubmitConfirmation();
+                submitTest();
+            });
+
+            // Results modal
+            document.getElementById('close-results').addEventListener('click', () => {
+                document.getElementById('results-modal').classList.add('hidden');
+                // Restore background scrolling
+                document.body.style.overflow = 'auto';
+            });
+        });
+    </script>
+</body>
+</html>

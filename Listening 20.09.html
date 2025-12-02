@@ -1,0 +1,891 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Avazbeks_Media> https://t.me/Avazbeks_Media</title>
+  <style>
+    :root{--grey:#f1f2ec;--border:#d9d9d9;--ok:#28a745;--bad:#dc3545;--ink:#333}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:Arial,Helvetica,sans-serif;background:#f0f8ff;color:#333;line-height:1.45;
+      padding-bottom:100px;
+    }
+    .header{
+      background:#fff;border-bottom:1px solid #e0e0e0;
+      position:fixed;top:0;left:0;right:0;z-index:100;height:60px;
+      display:flex;align-items:center;justify-content:space-between;padding:12px 20px;
+    }
+    .header h1{font-size:18px;color:#333}
+    .main{margin-top:60px;padding:28px;display:flex;justify-content:center;align-items:flex-start}
+    .wrap{width:100%;max-width:1200px}
+    mark.hl{ background: #ffee58; padding: 0 2px; border-radius: 2px; }
+    .hl-on{ outline: 2px dashed #ffca28; outline-offset: 2px; }
+    .highlight {
+      background-color: yellow;
+    }
+    .highlight-toolbar {
+      position: absolute;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 5px;
+      border-radius: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      display: none;
+      z-index: 2000;
+    }
+    .highlight-toolbar button {
+      background: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      margin-right: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .highlight-toolbar button.remove-button {
+      background: #dc3545;
+    }
+    .part-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px;font-size:18px}
+    .top-note{margin-bottom:14px;color:#444;text-align:center}
+    .card{border:1px solid #111;border-radius:2px;padding:18px 16px;margin-top:12px;background:#f0f8ff}
+    .title{font-weight:700;text-align:center;margin-bottom:10px}
+    .row{display:flex;gap:14px;padding:8px 0;border-bottom:1px solid #e6e6e6}
+    .row:last-child{border-bottom:none}
+    .label{min-width:210px;color:#222}
+    .value{flex:1}
+    .answer,.ans{
+      border:1px solid #888;border-radius:4px;background:#fff;
+      height:26px;line-height:24px;padding:0 8px;min-width:130px;max-width:220px;width:160px;
+      text-align:center;font-size:16px;margin:0 4px
+    }
+    .answer::placeholder,.ans::placeholder{color:#999;font-weight:bold}
+    .small{font-size:14px;color:#555}
+    .subgrid{border-top:1px solid #111;margin-top:14px;padding-top:12px}
+    .part-header{background:#f0f8ff;border:1px solid var(--border);border-radius:6px;padding:16px;text-align:center;margin-bottom:18px}
+    .part-header p{margin:2px 0}
+    .title2{font-weight:700;text-align:center;margin:14px 0 10px}
+    .grid{display:grid;grid-template-columns:2fr 1fr;gap:28px;align-items:start}
+    .map-box{border:1px solid #111;padding:12px;background:#f0f8ff}
+    .map-box img{width:100%;height:auto;display:block}
+    .q-list{border:1px solid #111;padding:14px;background:#f0f8ff}
+    .q-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #eee}
+    .q-item:last-child{border-bottom:none}
+    .q-label{font-size:18px}
+    .hint{margin-top:10px;font-size:14px;color:#666}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    .sub{margin-bottom:6px}
+    .q-block{border:1px solid var(--border);background:#f0f8ff;border-radius:6px;padding:18px 22px;margin-bottom:18px}
+    .qno{font-weight:700;margin-bottom:6px}
+    .opts{display:flex;flex-direction:column;gap:8px;margin-left:18px}
+    label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+    input[type="radio"],input[type="checkbox"]{transform:scale(1.15);margin-top:2px}
+    .muted{color:#666;margin-top:4px}
+    .hr{height:1px;background:#eee;margin:16px 0}
+    h2{font-size:20px;text-align:center;margin:10px 0 14px}
+    h3{font-size:16px;margin:18px 0 10px}
+    ul{margin-left:22px}
+    li{margin:8px 0}
+    .p4input{min-width:130px;width:160px}
+    .note{font-size:14px;color:#666;margin-top:10px}
+    .nav-row{
+      position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e0e0e0;
+      display:flex;align-items:center;height:80px;z-index:100;overflow-x:auto;white-space:nowrap;padding:0 6px;
+    }
+    .footer-question-wrapper{display:flex;align-items:center;margin-right:18px;flex-shrink:0}
+    .footer-question-no{background:none;border:none;padding:10px 12px;font-size:16px;font-weight:600;color:#333;cursor:pointer;display:flex;gap:5px}
+    .subquestion-wrapper{display:none;gap:4px;margin-left:6px}
+    .footer-question-wrapper.active .subquestion-wrapper{display:flex}
+    .sub-question{width:30px;height:30px;border:1px solid #ccc;background:#fff;color:#333;font-size:14px;font-weight:500;display:flex;align-items:center;justify-content:center;border-radius:0;text-decoration:none}
+    .sub-question.correct{background:var(--ok);border-color:var(--ok);color:#fff}
+    .sub-question.incorrect{background:var(--bad);border-color:var(--bad);color:#fff}
+    .sub-question.answered{background:#add8e6;border-color:#0000ff;color:#000}
+    .sub-question.active{background-color:#4a90e2;color:white;border-color:#4a90e2}
+    .correct{background:#d4edda !important;border-color:#28a745 !important;color:#155724 !important}
+    .incorrect{background:#f8d7da !important;border-color:#dc3545 !important;color:#721c24 !important}
+    .correct-answer{margin-left:4px;font-style:italic;font-size:14px;color:#155724;vertical-align:middle}
+    .score-banner{margin:10px 0 18px;padding:10px 14px;border-left:6px solid #28a745;background:#e9f7ef;font-weight:700}
+    .progress{margin:0 0 12px 0;color:#666}
+    .section{display:none}
+    .section.active{display:block}
+  
+/* === MCQ highlight stability patch v2 ===
+   Make labels not rely on flex 'gap', which changes when spans are inserted.
+   Use inline layout with a fixed margin on the control instead. */
+.opts label{ display:inline-block; /* was flex */ white-space:normal; }
+.opts label input[type="radio"], .opts label input[type="checkbox"]{
+  vertical-align:text-top; margin-right:10px; /* preserves spacing reliably */
+}
+/* Keep highlight purely visual with no width change */
+.highlight{ background-color: yellow; padding:0; border:none; outline: none;
+            letter-spacing:inherit; word-spacing:inherit; line-height:inherit;
+            box-decoration-break:clone; }
+
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1><a href="https://t.me/Avazbeks_Media" target="_blank" style="color:#333;text-decoration:none;">Avazbeks_Media</a></h1>
+    <div class="audio-player">
+      <audio controls>
+        <source src="" type="audio/mpeg"/>
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  </div>
+  <div class="main">
+    <div class="wrap">
+      <div id="scoreBanner" class="score-banner" style="display:none;"></div>
+      <div id="progressBox" class="progress">Progress: 0/40 answered</div>
+      <div class="highlight-toolbar" id="highlight-toolbar">
+        <button id="highlight-btn">Highlight</button>
+        <button class="remove-button" id="remove-highlight-btn">Remove</button>
+      </div>
+      <section id="part1" class="section active">
+        <div class="part-head">
+          <div><strong>PART 1</strong></div>
+          <div><em>Questions 1 – 10</em></div>
+        </div>
+        <p class="top-note">Complete the form below.</p>
+        <p class="top-note"><strong>Write ONE WORD AND/OR A NUMBER for each answer.</strong></p>
+        <div class="card">
+          <div class="title">Campsite Reservation Form</div>
+          <div class="table">
+            <div class="row"><div class="label">Name:</div><div class="value">Sandra Kemp</div></div>
+            <div class="row">
+              <div class="label">Park region:</div>
+              <div class="value">
+                <input id="q1" class="answer" type="text" placeholder="1." />
+                California
+              </div>
+            </div>
+            <div class="row">
+              <div class="label">Campground name:</div>
+              <div class="value">
+                <input id="q2" class="answer" type="text" placeholder="2." />
+                Campground
+              </div>
+            </div>
+            <div class="row">
+              <div class="label">Type of site:</div>
+              <div class="value"><input id="q3" class="answer" type="text" placeholder="3." /></div>
+            </div>
+            <div class="row">
+              <div class="label">Type of vehicle:</div>
+              <div class="value">will be driving a <input id="q4" class="answer" type="text" placeholder="4." /></div>
+            </div>
+            <div class="row">
+              <div class="label">Licence plate number:</div>
+              <div class="value"><input id="q5" class="answer" type="text" placeholder="5." /></div>
+            </div>
+            <div class="row"><div class="label">Number of nights:</div><div class="value">two</div></div>
+            <div class="row">
+              <div class="label">Departure date:</div>
+              <div class="value"><input id="q6" class="answer" type="text" placeholder="6." /></div>
+            </div>
+          </div>
+          <div class="subgrid">
+            <div class="row">
+              <div class="label">Bear-proof food container:</div>
+              <div class="value small">size required: <input id="q7" class="answer" type="text" placeholder="7." /></div>
+            </div>
+            <div class="row">
+              <div class="label">Type of nature walk booked:</div>
+              <div class="value">the <input id="q8" class="answer" type="text" placeholder="8." /> walk</div>
+            </div>
+            <div class="row">
+              <div class="label">Type of park pass:</div>
+              <div class="value">the <input id="q9" class="answer" type="text" placeholder="9." /> pass</div>
+            </div>
+            <div class="row">
+              <div class="label">Donation programme selection:</div>
+              <div class="value">the <input id="q10" class="answer" type="text" placeholder="10." /> programme</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="part2" class="section">
+        <div class="part-head">
+          <div><strong>PART 2</strong></div>
+          <div><em>Questions 11 – 20</em></div>
+        </div>
+        <p class="top-note">Questions 11 – 15</p>
+        <p class="top-note">Choose the correct letter, <strong>A</strong>, <strong>B</strong> or <strong>C</strong>.</p>
+        <h2 class="title">Talk to new hotel staff</h2>
+        <div class="q-block" id="q11">
+          <div class="qno">11&nbsp; Why has the manager arrived late at this meeting?</div>
+          <div class="opts">
+            <label><input type="radio" name="q11" value="A"> A He had to complete a report.</label>
+            <label><input type="radio" name="q11" value="B"> B He had to speak to head office.</label>
+            <label><input type="radio" name="q11" value="C"> C He had to take a guest to hospital.</label>
+          </div>
+        </div>
+        <div class="q-block" id="q12">
+          <div class="qno">12&nbsp; What is the main thing the manager is looking for in his staff?</div>
+          <div class="opts">
+            <label><input type="radio" name="q12" value="A"> A experience</label>
+            <label><input type="radio" name="q12" value="B"> B enthusiasm</label>
+            <label><input type="radio" name="q12" value="C"> C good qualifications</label>
+          </div>
+        </div>
+        <div class="q-block" id="q13">
+          <div class="qno">13&nbsp; When did the Ocean Edge Hotel first open?</div>
+          <div class="opts">
+            <label><input type="radio" name="q13" value="A"> A in the 18th century</label>
+            <label><input type="radio" name="q13" value="B"> B in the 19th century</label>
+            <label><input type="radio" name="q13" value="C"> C in the 20th century</label>
+          </div>
+        </div>
+        <div class="q-block" id="q14">
+          <div class="qno">14&nbsp; How long do staff generally remain at the hotel?</div>
+          <div class="opts">
+            <label><input type="radio" name="q14" value="A"> A three years</label>
+            <label><input type="radio" name="q14" value="B"> B five years</label>
+            <label><input type="radio" name="q14" value="C"> C ten years</label>
+          </div>
+        </div>
+        <div class="q-block" id="q15">
+          <div class="qno">15&nbsp; Which group of guests is growing fastest?</div>
+          <div class="opts">
+            <label><input type="radio" name="q15" value="A"> A tourists visiting local attractions</label>
+            <label><input type="radio" name="q15" value="B"> B people staying for one or two nights on business</label>
+            <label><input type="radio" name="q15" value="C"> C people working locally who go home at weekends</label>
+          </div>
+        </div>
+        <div class="part-header">
+          <p><strong>Questions 16 – 20</strong></p>
+          <p>Label the plan below.</p>
+          <p>Write the correct letter, <strong>A–I</strong>, next to questions 16–20.</p>
+        </div>
+        <div class="title2">Plan of hotel: main building</div>
+        <div class="grid">
+          <div class="map-box"><a href="https://ibb.co/Tx4Vr28Q" target="_blank" rel="noopener"><img src="https://i.ibb.co/FL5Sn3wQ/Screenshot-2025-08-08-170739.png" alt="Map – Part 2" style="width:100%;height:auto;border:0;"></a></div>
+          <div class="q-list" aria-labelledby="map-qs">
+            <div class="q-item"><div class="q-label">16. Office</div><input class="ans" id="q16" maxlength="1" placeholder="A–I"></div>
+            <div class="q-item"><div class="q-label">17. Function room</div><input class="ans" id="q17" maxlength="1" placeholder="A–I"></div>
+            <div class="q-item"><div class="q-label">18. Main conference room</div><input class="ans" id="q18" maxlength="1" placeholder="A–I"></div>
+            <div class="q-item"><div class="q-label">19. Meeting room</div><input class="ans" id="q19" maxlength="1" placeholder="A–I"></div>
+            <div class="q-item"><div class="q-label">20. Restaurant</div><input class="ans" id="q20" maxlength="1" placeholder="A–I"></div>
+            <div class="hint">Type one letter (A–I) in each box. Lower/upper case accepted.</div>
+          </div>
+        </div>
+      </section>
+      <section id="part3" class="section">
+        <div class="part-head">
+          <div><strong>PART 3</strong></div>
+          <div><em>Questions 21 – 30</em></div>
+        </div>
+        <p class="sub">Questions 21 – 24</p>
+        <p class="sub">Choose the correct letter, <strong>A</strong>, <strong>B</strong> or <strong>C</strong>.</p>
+        <h2 class="title">Presentation on African art</h2>
+        <div class="q-block" id="q21">
+          <div class="qno">21&nbsp;&nbsp;What first attracted Terence to the topic of Ife sculptures?</div>
+          <div class="opts">
+            <label><input type="radio" name="q21" value="A"> A He read several journal articles.</label>
+            <label><input type="radio" name="q21" value="B"> B He attended an exhibition.</label>
+            <label><input type="radio" name="q21" value="C"> C He spent some time in Nigeria.</label>
+          </div>
+        </div>
+        <div class="q-block" id="q22">
+          <div class="qno">22&nbsp;&nbsp;In his presentation Terence will focus on sculptures featuring</div>
+          <div class="opts">
+            <label><input type="radio" name="q22" value="A"> A abstract designs.</label>
+            <label><input type="radio" name="q22" value="B"> B fish and wild animals.</label>
+            <label><input type="radio" name="q22" value="C"> C people.</label>
+          </div>
+        </div>
+        <div class="q-block" id="q23">
+          <div class="qno">23&nbsp;&nbsp;How did Terence finance his trip to Ife?</div>
+          <div class="opts">
+            <label><input type="radio" name="q23" value="A"> A He received money from an arts organisation.</label>
+            <label><input type="radio" name="q23" value="B"> B His mother and father paid for him.</label>
+            <label><input type="radio" name="q23" value="C"> C He wrote about the trip for a newspaper.</label>
+          </div>
+        </div>
+        <div class="q-block" id="q24">
+          <div class="qno">24&nbsp;&nbsp;What was most memorable for Terence about his trip?</div>
+          <div class="opts">
+            <label><input type="radio" name="q24" value="A"> A helping at an archaeological site</label>
+            <label><input type="radio" name="q24" value="B"> B the professor he met</label>
+            <label><input type="radio" name="q24" value="C"> C the artists he got to know</label>
+          </div>
+        </div>
+        <div class="hr"></div>
+        <div class="q-block" id="q25-26">
+          <div class="qno">Questions 25 and 26</div>
+          <div class="sub">Choose <strong>TWO</strong> letters, <strong>A–E</strong>.</div>
+          <div class="stem">Which <strong>TWO</strong> additions will Terence make to the part of the presentation on the sculptures?</div>
+          <div class="opts" id="q25-26">
+            <label><input type="checkbox" name="q25-26" value="A"> A enlarged pictures of the sculptures</label>
+            <label><input type="checkbox" name="q25-26" value="B"> B more material about the subjects</label>
+            <label><input type="checkbox" name="q25-26" value="C"> C more about his personal opinion of the art works</label>
+            <label><input type="checkbox" name="q25-26" value="D"> D extra information about the techniques used</label>
+            <label><input type="checkbox" name="q25-26" value="E"> E additional information about the artists</label>
+          </div>
+          <div class="muted">Select exactly two.</div>
+        </div>
+        <div class="q-block" id="q27-28">
+          <div class="qno">Questions 27 and 28</div>
+          <div class="sub">Choose <strong>TWO</strong> letters, <strong>A–E</strong>.</div>
+          <div class="stem">Which <strong>TWO</strong> additions will Terence make to the section on history?</div>
+          <div class="opts" id="q27-28">
+            <label><input type="checkbox" name="q27-28" value="A"> A data about the kings in the Ife area</label>
+            <label><input type="checkbox" name="q27-28" value="B"> B extra information about the surrounding region</label>
+            <label><input type="checkbox" name="q27-28" value="C"> C examination of the beliefs of the Ife people</label>
+            <label><input type="checkbox" name="q27-28" value="D"> D an explanation of the development of modern Ife</label>
+            <label><input type="checkbox" name="q27-28" value="E"> E more details of past activities of the Ife people</label>
+          </div>
+          <div class="muted">Select exactly two.</div>
+        </div>
+        <div class="q-block" id="q29-30">
+          <div class="qno">Questions 29 and 30</div>
+          <div class="sub">Choose <strong>TWO</strong> letters, <strong>A–E</strong>.</div>
+          <div class="stem">Which <strong>TWO</strong> features of his research in Nigeria will Terence discuss in his presentation?</div>
+          <div class="opts" id="q29-30">
+            <label><input type="checkbox" name="q29-30" value="A"> A the influence of the sculptures on western artists</label>
+            <label><input type="checkbox" name="q29-30" value="B"> B the uncertainty over who made the sculptures</label>
+            <label><input type="checkbox" name="q29-30" value="C"> C the sources of the materials used for the sculptures</label>
+            <label><input type="checkbox" name="q29-30" value="D"> D the problems he faced in collecting information</label>
+            <label><input type="checkbox" name="q29-30" value="E"> E the original discovery of the sculptures</label>
+          </div>
+          <div class="muted">Select exactly two.</div>
+        </div>
+      </section>
+      <section id="part4" class="section">
+        <div class="part-head">
+          <div><strong>PART 4</strong></div>
+          <div><em>Questions 31 – 40</em></div>
+        </div>
+        <p class="top-note">Complete the notes below.</p>
+        <p class="top-note"><strong>Write ONE WORD ONLY</strong> for each answer.</p>
+        <div class="card">
+          <h2>Reasons for and against urban migration</h2>
+          <h3>Cities today</h3>
+          <ul>
+            <li>account for 3% of our planet's land area</li>
+            <li>produce less <input id="q31" class="answer p4input" placeholder="31."> than non-urban areas</li>
+          </ul>
+          <h3>The advantages of more people moving to the city</h3>
+          <ul>
+            <li>some <input id="q32" class="answer p4input" placeholder="32."> would recover</li>
+            <li>more energy efficient for services like electricity and water</li>
+            <li><input id="q33" class="answer p4input" placeholder="33."> in the city is more environmentally friendly</li>
+            <li>Recycling: energy could be generated from the methane gas from <input id="q34" class="answer p4input" placeholder="34."></li>
+            <li>Population: urban women
+              <ul>
+                <li>start a family much later</li>
+                <li>are more likely to gain <input id="q35" class="answer p4input" placeholder="35."> at work</li>
+              </ul>
+            </li>
+          </ul>
+          <h3>The downsides of living in the city</h3>
+          <ul>
+            <li>possible loss of <input id="q36" class="answer p4input" placeholder="36."> amongst some migrants</li>
+            <li>the higher <input id="q37" class="answer p4input" placeholder="37."> rate among the population</li>
+            <li>the poor quality of the <input id="q38" class="answer p4input" placeholder="38."></li>
+            <li>Economic factors: increased <input id="q39" class="answer p4input" placeholder="39."> in a population leads to more energy consumption</li>
+            <li>citizens may find the quantity of daily <input id="q40" class="answer p4input" placeholder="40."> stressful</li>
+          </ul>
+          <p class="note">Type one word only in each box (no spaces or hyphens).</p>
+        </div>
+      </section>
+    </div>
+  </div>
+  <nav class="nav-row">
+    <div class="footer-question-wrapper active" data-part="1">
+      <button class="footer-question-no" onclick="showPart(1)">Part <strong>1</strong></button>
+      <div class="subquestion-wrapper" style="display:flex">
+        <a class="sub-question" data-q="1" href="#q1">1</a><a class="sub-question" data-q="2" href="#q2">2</a><a class="sub-question" data-q="3" href="#q3">3</a><a class="sub-question" data-q="4" href="#q4">4</a><a class="sub-question" data-q="5" href="#q5">5</a><a class="sub-question" data-q="6" href="#q6">6</a><a class="sub-question" data-q="7" href="#q7">7</a><a class="sub-question" data-q="8" href="#q8">8</a><a class="sub-question" data-q="9" href="#q9">9</a><a class="sub-question" data-q="10" href="#q10">10</a>
+    </div>
+    <div class="footer-question-wrapper" data-part="2">
+      <button class="footer-question-no" onclick="showPart(2)">Part <strong>2</strong></button>
+      <div class="subquestion-wrapper">
+        <a class="sub-question" data-q="11" href="#q11">11</a><a class="sub-question" data-q="12" href="#q12">12</a><a class="sub-question" data-q="13" href="#q13">13</a><a class="sub-question" data-q="14" href="#q14">14</a><a class="sub-question" data-q="15" href="#q15">15</a><a class="sub-question" data-q="16" href="#q16">16</a><a class="sub-question" data-q="17" href="#q17">17</a><a class="sub-question" data-q="18" href="#q18">18</a><a class="sub-question" data-q="19" href="#q19">19</a><a class="sub-question" data-q="20" href="#q20">20</a>
+      </div>
+    </div>
+    <div class="footer-question-wrapper" data-part="3">
+      <button class="footer-question-no" onclick="showPart(3)">Part <strong>3</strong></button>
+      <div class="subquestion-wrapper">
+        <a class="sub-question" data-q="21" href="#q21">21</a><a class="sub-question" data-q="22" href="#q22">22</a><a class="sub-question" data-q="23" href="#q23">23</a><a class="sub-question" data-q="24" href="#q24">24</a><a class="sub-question" data-q="25" href="#q25-26">25</a><a class="sub-question" data-q="26" href="#q25-26">26</a><a class="sub-question" data-q="27" href="#q27-28">27</a><a class="sub-question" data-q="28" href="#q27-28">28</a><a class="sub-question" data-q="29" href="#q29-30">29</a><a class="sub-question" data-q="30" href="#q29-30">30</a>
+      </div>
+    </div>
+    <div class="footer-question-wrapper" data-part="4">
+      <button class="footer-question-no" onclick="showPart(4)">Part <strong>4</strong></button>
+      <div class="subquestion-wrapper">
+        <a class="sub-question" data-q="31" href="#q31">31</a><a class="sub-question" data-q="32" href="#q32">32</a><a class="sub-question" data-q="33" href="#q33">33</a><a class="sub-question" data-q="34" href="#q34">34</a><a class="sub-question" data-q="35" href="#q35">35</a><a class="sub-question" data-q="36" href="#q36">36</a><a class="sub-question" data-q="37" href="#q37">37</a><a class="sub-question" data-q="38" href="#q38">38</a><a class="sub-question" data-q="39" href="#q39">39</a><a class="sub-question" data-q="40" href="#q40">40</a>
+      </div>
+    </div>
+    <button class="footer-question-no" style="margin-left:auto" onclick="submitAnswers()">Submit Answers</button>
+<button id="savePdfBtn" class="footer-question-no" style="display:none;margin-left:8px;" onclick="saveAsPdf()">Save as PDF</button>
+  </nav>
+  <script>
+    // Enforce A–I letter in map inputs
+    document.querySelectorAll('.ans').forEach(inp=>{
+      inp.addEventListener('input', e=>{
+        e.target.value = e.target.value.toUpperCase().replace(/[^A-I]/g,'').slice(0,1);
+        updateProgress();
+      });
+    });
+    // Enforce ONE WORD ONLY in Part 4
+    document.querySelectorAll('.p4input').forEach(inp=>{
+      inp.addEventListener('input', e=>{
+        e.target.value = e.target.value.replace(/[^A-Za-z0-9]/g,'').slice(0,30);
+        updateProgress();
+      });
+    });
+    // Progress counting for text/radio/checkbox
+    document.querySelectorAll('input').forEach(inp=>{
+      inp.addEventListener('input', updateProgress);
+      inp.addEventListener('change', updateProgress);
+    });
+    function showPart(n){
+      document.querySelectorAll('.section').forEach((s,i)=>s.classList.toggle('active', (i===n-1)));
+      document.querySelectorAll('.footer-question-wrapper').forEach((w,i)=>{
+        w.classList.toggle('active', (i===n-1));
+        const sub = w.querySelector('.subquestion-wrapper');
+        if(sub) sub.style.display = (i===n-1)?'flex':'none';
+      });
+    }
+    // Limit choose-two groups
+    [["q25-26",2],["q27-28",2],["q29-30",2]].forEach(([name,limit])=>{
+      document.querySelectorAll(`input[name="${name}"]`).forEach(cb=>{
+        cb.addEventListener('change',()=>{
+          const checks=[...document.querySelectorAll(`input[name="${name}"]:checked`)].length;
+          if(checks>limit){ cb.checked=false; }
+        });
+      });
+    });
+    // Acceptable answers (lowercased)
+    const acceptable = {
+      1: ["southern"],
+      2: ["mountain"],
+      3: ["tent"],
+      4: ["truck"],
+      5: ["ky0918"],
+      6: ["april10th","10thapril","10april","april10"],
+      7: ["small"],
+      8: ["flower"],
+      9: ["one-year","oneyear","year"],
+      10: ["youth"],
+      11: ["a"], 12: ["b"], 13: ["c"], 14: ["b"], 15: ["c"],
+      16: ["i"], 17: ["f"], 18: ["b"], 19: ["h"], 20: ["c"],
+      21: ["b"], 22: ["c"], 23: ["a"], 24: ["b"],
+      "25-26": ["a", "d"],
+      "27-28": ["b", "c"],
+      "29-30": ["b", "e"],
+      31: ["carbon"],
+      32: ["forests","forest"],
+      33: ["transport"],
+      34: ["rubbish","garbage","trash","waste"],
+      35: ["promotion"],
+      36: ["culture"],
+      37: ["crime"],
+      38: ["air"],
+      39: ["wealth"],
+      40: ["traffic"]
+    };
+    function normalise(s){ return (s||"").toString().trim().toLowerCase().replace(/\s+/g,""); }
+    function markNav(q, ok){
+      const link = document.querySelector(`.sub-question[data-q="${q}"]`);
+      if(!link) return;
+      link.classList.remove("correct","incorrect");
+      link.classList.add(ok ? "correct" : "incorrect");
+    }
+    function clearOldSolutionForInput(el){
+      if(!el) return;
+      const parent = el.parentNode;
+      if(parent) parent.querySelectorAll(".correct-answer").forEach(x=>x.remove());
+      el.classList.remove("correct","incorrect");
+    }
+    function showSolutionNextTo(el, text){
+      if(!el) return;
+      const span = document.createElement("span");
+      span.className = "correct-answer";
+      span.textContent = " (Correct: " + text + ")";
+      el.parentNode.insertBefore(span, el.nextSibling);
+    }
+    function submitAnswers(){
+      document.getElementById("scoreBanner").style.display="none";
+      document.getElementById("scoreBanner").textContent="";
+      document.querySelectorAll(".correct,.incorrect").forEach(n=>n.classList.remove("correct","incorrect"));
+      document.querySelectorAll(".correct-answer").forEach(n=>n.remove());
+      document.querySelectorAll(".sub-question").forEach(n=>n.classList.remove("correct","incorrect"));
+      let correct = 0;
+      for(let q=1;q<=10;q++){
+        const el = document.getElementById("q"+q);
+        const val = normalise(el.value);
+        const ok = acceptable[q].includes(val);
+        if(val && ok){ el.classList.add("correct"); correct++; }
+        else { el.classList.add("incorrect"); showSolutionNextTo(el, acceptable[q][0].toUpperCase()); }
+        markNav(q, ok);
+      }
+      for(let q=11;q<=15;q++){
+        const sel = document.querySelector(`input[name="q${q}"]:checked`);
+        const val = normalise(sel ? sel.value : "");
+        const ok = acceptable[q].includes(val);
+        markNav(q, ok);
+        if(ok){ correct++; }
+        const block = sel ? sel.closest(".q-block") : document.getElementById(`q${q}`);
+        if(!ok && block){
+          const span = document.createElement("span");
+          span.className = "correct-answer";
+          span.setAttribute("data-for", q);
+          span.textContent = " (Correct: "+acceptable[q][0].toUpperCase()+")";
+          block.appendChild(span);
+        }
+      }
+      for(let q=16;q<=20;q++){
+        const el = document.getElementById("q"+q);
+        const val = normalise(el.value);
+        const ok = acceptable[q].includes(val);
+        if(val && ok){ el.classList.add("correct"); correct++; }
+        else { el.classList.add("incorrect"); showSolutionNextTo(el, acceptable[q][0].toUpperCase()); }
+        markNav(q, ok);
+      }
+      for(let q=21;q<=24;q++){
+        const sel = document.querySelector(`input[name="q${q}"]:checked`);
+        const val = normalise(sel ? sel.value : "");
+        const ok = acceptable[q].includes(val);
+        markNav(q, ok);
+        if(ok){ correct++; }
+        const block = sel ? sel.closest(".q-block") : document.getElementById(`q${q}`);
+        if(!ok && block){
+          const span = document.createElement("span");
+          span.className = "correct-answer";
+          span.textContent = " (Correct: "+acceptable[q][0].toUpperCase()+")";
+          block.appendChild(span);
+        }
+      }
+      function evaluateSet(name, qA, qB, keyName){
+        const correctAnswers = acceptable[keyName];
+        const chosen = [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(x => normalise(x.value));
+        let numCorrect = 0;
+        chosen.forEach(answer => {
+          if(correctAnswers.includes(answer)){
+            numCorrect++;
+          }
+        });
+        correct += numCorrect;
+        const fullyCorrect = numCorrect === 2 && chosen.length === 2;
+        markNav(qA, fullyCorrect);
+        markNav(qB, fullyCorrect);
+        if(!fullyCorrect){
+          const container = document.getElementById(name);
+          const span = document.createElement("span");
+          span.className = "correct-answer";
+          const pretty = correctAnswers.map(a => a.toUpperCase()).join(" & ");
+          span.textContent = ` (Correct: ${pretty})`;
+          container.appendChild(span);
+        }
+      }
+      evaluateSet("q25-26", 25, 26, "25-26");
+      evaluateSet("q27-28", 27, 28, "27-28");
+      evaluateSet("q29-30", 29, 30, "29-30");
+      for(let q=31;q<=40;q++){
+        const el = document.getElementById("q"+q);
+        const val = normalise(el.value);
+        const ok = acceptable[q].includes(val);
+        if(val && ok){ el.classList.add("correct"); correct++; }
+        else { el.classList.add("incorrect"); showSolutionNextTo(el, acceptable[q][0].toUpperCase()); }
+        markNav(q, ok);
+      }
+      const banner = document.getElementById("scoreBanner");
+      banner.textContent = `Score: ${correct}/40 correct`;
+      banner.style.display = "block";
+    }
+    function updateProgress(){
+      let answered = 0;
+      const textQs = [...Array(10).keys()].map(i=>i+1).concat([...Array(5).keys()].map(i=>i+16),[...Array(10).keys()].map(i=>i+31));
+      textQs.forEach(q=>{
+        const el = document.getElementById("q"+q);
+        if(el && normalise(el.value).length>0) answered++;
+      });
+      [11,12,13,14,15,21,22,23,24].forEach(q=>{
+        if(document.querySelector(`input[name="q${q}"]:checked`)) answered++;
+      });
+      [["q25-26"],["q27-28"],["q29-30"]].forEach(([name])=>{
+        const c = [...document.querySelectorAll(`input[name="${name}"]:checked`)].length;
+        answered += Math.min(2, c);
+      });
+      const box = document.getElementById("progressBox");
+      if(!box.textContent.includes("Score:")) box.textContent = `Progress: ${answered}/40 answered`;
+      for(let q=1;q<=40;q++){
+        let filled = false;
+        if(textQs.includes(q)){
+          const el = document.getElementById("q"+q);
+          filled = el && normalise(el.value).length > 0;
+        }else if([11,12,13,14,15,21,22,23,24].includes(q)){
+          filled = !!document.querySelector(`input[name="q${q}"]:checked`);
+        }else if(q===25 || q===26){
+          const c = [...document.querySelectorAll('input[name="q25-26"]:checked')].length;
+          filled = c > 0;
+        }else if(q===27 || q===28){
+          const c = [...document.querySelectorAll('input[name="q27-28"]:checked')].length;
+          filled = c > 0;
+        }else if(q===29 || q===30){
+          const c = [...document.querySelectorAll('input[name="q29-30"]:checked')].length;
+          filled = c > 0;
+        }
+        const navLink = document.querySelector(`.sub-question[data-q="${q}"]`);
+        if(filled){
+          if(navLink) navLink.classList.add('answered');
+        }else{
+          if(navLink) navLink.classList.remove('answered');
+        }
+      }
+    }
+    document.querySelectorAll('.sub-question').forEach(a=>{
+      a.addEventListener('click',function(){
+        document.querySelectorAll('.sub-question.active').forEach(x=>x.classList.remove('active'));
+        this.classList.add('active');
+        const q = parseInt(this.getAttribute('data-q'),10);
+        const part = q<=10 ? 1 : q<=20 ? 2 : q<=30 ? 3 : 4;
+        showPart(part);
+      });
+    });
+    updateProgress();
+    // Highlighting logic from reference code
+    let selectedHighlight = null;
+    let selectionMenu = null;
+    function clearSelection() {
+      window.getSelection().removeAllRanges();
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      selectionMenu = document.getElementById('highlight-toolbar');
+    });
+    document.addEventListener('mouseup', function(e) {
+      const sel = window.getSelection();
+      if (sel && sel.toString().length > 0) {
+        const range = sel.getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+        const toolbar = selectionMenu;
+        toolbar.style.display = 'block';
+        toolbar.style.top = (rect.top + window.scrollY - toolbar.offsetHeight - 5) + 'px';
+        toolbar.style.left = (rect.left + window.scrollX) + 'px';
+        toolbar.querySelector('#highlight-btn').style.display = 'inline-block';
+        toolbar.querySelector('#remove-highlight-btn').style.display = 'none';
+        window.__selectionRange = range;
+      } else {
+        if (!e.target.classList.contains('highlight')) {
+          selectionMenu.style.display = 'none';
+        }
+      }
+    });
+    document.getElementById('highlight-btn').addEventListener('click', function() {
+      const range = window.__selectionRange;
+      if (range) {
+        const span = document.createElement('span');
+        span.className = 'highlight';
+        range.surroundContents(span);
+        selectionMenu.style.display = 'none';
+        clearSelection();
+      }
+    });
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('highlight')) {
+        selectedHighlight = e.target;
+        const rect = selectedHighlight.getBoundingClientRect();
+        const toolbar = selectionMenu;
+        toolbar.style.display = 'block';
+        toolbar.style.top = (rect.top + window.scrollY - toolbar.offsetHeight - 5) + 'px';
+        toolbar.style.left = (rect.left + window.scrollX) + 'px';
+        toolbar.querySelector('#highlight-btn').style.display = 'none';
+        toolbar.querySelector('#remove-highlight-btn').style.display = 'inline-block';
+      }
+    });
+    document.getElementById('remove-highlight-btn').addEventListener('click', function() {
+      if (selectedHighlight) {
+        const parent = selectedHighlight.parentNode;
+        while (selectedHighlight.firstChild) {
+          parent.insertBefore(selectedHighlight.firstChild, selectedHighlight);
+        }
+        parent.removeChild(selectedHighlight);
+        selectedHighlight = null;
+        selectionMenu.style.display = 'none';
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+
+<script>
+(function(){
+  // Keep a reference to the original submitAnswers, then extend it
+  const __origSubmitAnswers = window.submitAnswers;
+  window.submitAnswers = function(){
+    try { __origSubmitAnswers && __origSubmitAnswers(); } catch(e){ console.error(e); }
+    // Reveal the Save as PDF button
+    const btn = document.getElementById('savePdfBtn');
+    if(btn){ btn.style.display = 'inline-block'; }
+    // Scroll to the top so score is visible
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(_) {}
+  };
+
+  // Generate a PDF of the entire test content
+  
+  // Generate a PDF of the entire test content (all parts, multi-page)
+  window.saveAsPdf = function(){
+    const wrapper = document.querySelector('.wrap') || document.body;
+    const nav = document.querySelector('.nav-row');
+    const header = document.querySelector('.header');
+    const toolbar = document.getElementById('highlight-toolbar');
+
+    // Save original visibility state of sections
+    const sections = Array.from(document.querySelectorAll('.section'));
+    const originalDisplays = sections.map(s => s.style.display);
+    const originalActive = sections.map(s => s.classList.contains('active'));
+
+    // Show ALL sections for PDF
+    sections.forEach(s => { s.style.display = 'block'; });
+
+    // Insert forced page breaks before part 2/3/4
+    const breaks = [];
+    ['#part2','#part3','#part4'].forEach(sel => {
+      const el = document.querySelector(sel);
+      if(el){
+        const br = document.createElement('div');
+        br.className = 'html2pdf__page-break';
+        el.parentNode.insertBefore(br, el);
+        breaks.push(br);
+      }
+    });
+
+    // Temporarily hide floating elements to avoid overlay in the PDF
+    const oldNavDisplay = nav ? nav.style.display : null;
+    const oldHeaderPos = header ? header.style.position : null;
+    const oldToolbarDisplay = toolbar ? toolbar.style.display : null;
+    if(nav){ nav.style.display = 'none'; }
+    if(header){ header.style.position = 'static'; }
+    if(toolbar){ toolbar.style.display = 'none'; }
+
+    // Build a filename with date/time
+    const now = new Date();
+    const pad = n => (n<10? '0'+n : ''+n);
+    const fname = `IELTS_Listening_${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}.pdf`;
+
+    const opt = {
+      margin: [10,10,10,10],
+      filename: fname,
+      html2canvas: { scale: 2, useCORS: true, allowTaint: true, letterRendering: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css','legacy'] }
+    };
+
+    html2pdf().set(opt).from(wrapper).save().then(()=>{
+      // Restore states
+      sections.forEach((s,i) => {
+        s.style.display = originalDisplays[i] || (originalActive[i] ? 'block':'none');
+        if(s.id !== 'part1' && !originalActive[i]){
+          // Ensure only originally active section remains visible
+          if(!originalActive[i]) s.style.display = 'none';
+        }
+      });
+      breaks.forEach(b => b.remove());
+      if(nav){ nav.style.display = (oldNavDisplay || 'flex'); }
+      if(header){ header.style.position = oldHeaderPos || ''; }
+      if(toolbar){ toolbar.style.display = oldToolbarDisplay || 'none'; }
+    }).catch(err=>{
+      console.error('PDF save failed:', err);
+      // Restore on failure too
+      sections.forEach((s,i) => {
+        s.style.display = originalDisplays[i] || (originalActive[i] ? 'block':'none');
+        if(s.id !== 'part1' && !originalActive[i]){
+          if(!originalActive[i]) s.style.display = 'none';
+        }
+      });
+      breaks.forEach(b => b.remove());
+      if(nav){ nav.style.display = (oldNavDisplay || 'flex'); }
+      if(header){ header.style.position = oldHeaderPos || ''; }
+      if(toolbar){ toolbar.style.display = oldToolbarDisplay || 'none'; }
+      alert('Failed to save PDF. Check console for details.');
+    });
+  };
+
+    html2pdf().set(opt).from(wrapper).save().then(()=>{
+      if(nav){ nav.style.display = oldNavDisplay || 'flex'; }
+    }).catch(err=>{
+      console.error('PDF save failed:', err);
+      if(nav){ nav.style.display = oldNavDisplay || 'flex'; }
+      alert('Failed to save PDF. Check console for details.');
+    });
+  };
+})();
+</script>
+
+
+<script>
+// --- Initial nav state & Save button guard ---
+document.addEventListener('DOMContentLoaded', function(){
+  // Ensure only Part 1 sub-questions are expanded
+  document.querySelectorAll('.footer-question-wrapper').forEach(function(wrap){
+    const part = parseInt(wrap.getAttribute('data-part'), 10);
+    const sub = wrap.querySelector('.subquestion-wrapper');
+    if(!sub) return;
+    if(part === 1){
+      wrap.classList.add('active');
+      sub.style.display = 'flex';
+    }else{
+      wrap.classList.remove('active');
+      sub.style.display = 'none';
+    }
+  });
+
+  // Ensure Save button exists (after Submit) and is hidden initially
+  let saveBtn = document.getElementById('savePdfBtn');
+  const submitBtn = document.querySelector('button.footer-question-no[onclick^="submitAnswers"]');
+  if(!saveBtn && submitBtn && submitBtn.parentNode){
+    saveBtn = document.createElement('button');
+    saveBtn.id = 'savePdfBtn';
+    saveBtn.className = 'footer-question-no';
+    saveBtn.style.display = 'none';
+    saveBtn.style.marginLeft = '8px';
+    saveBtn.textContent = 'Save as PDF';
+    saveBtn.addEventListener('click', function(){ if(window.saveAsPdf){ window.saveAsPdf(); } });
+    submitBtn.parentNode.insertBefore(saveBtn, submitBtn.nextSibling);
+  }else if(saveBtn){
+    saveBtn.style.display = 'none'; // hidden until After submit
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Writing Test with Answer Checking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            line-height: 1.4;
+            font-size: 16px;
+            padding-bottom: 90px;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 60px;
+        }
+
+        .timer-container {
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .telegram-link {
+            color: #0088cc;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .telegram-link:hover {
+            text-decoration: underline;
+        }
+
+        .main-container {
+            margin-top: 60px;
+            display: flex;
+            background: #ffffff;
+            height: calc(100vh - 120px);
+            flex-direction: column;
+        }
+
+        .panels-container {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .left-panel {
+            width: 50%;
+            padding: 20px;
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+        }
+
+        .right-panel {
+            width: 50%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .part-header {
+            background-color: #f1f2ec;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            border: 1px solid #e0e0e0;
+            width: auto;
+            text-align: left;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .part-header p {
+            margin: 0;
+        }
+
+        .chart-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .chart-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .chart-svg {
+            border: 2px solid #333;
+            background: white;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .chart-bar {
+            fill: #666;
+        }
+
+        .chart-bar-2017 {
+            fill: #ccc;
+        }
+
+        .chart-text {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            text-anchor: middle;
+            fill: #333;
+        }
+
+        .chart-axis-text {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            text-anchor: middle;
+            fill: #333;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+        }
+
+        .writing-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .writing-textarea {
+            border: 1px solid #ccc;
+            padding: 15px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+            min-height: 300px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .writing-textarea:focus {
+            border-color: #4a90e2;
+        }
+
+        .word-count {
+            text-align: right;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .instructions {
+            margin-bottom: 20px;
+        }
+
+        .instructions p {
+            margin-bottom: 10px;
+        }
+
+        .instructions strong {
+            font-weight: bold;
+        }
+
+        .task-prompt {
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid #000;
+            font-style: italic;
+        }
+
+        .task-prompt p {
+            margin-bottom: 10px;
+        }
+
+        .task-prompt p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Results Screen Styles */
+        .results-container {
+            display: none;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 80px auto 20px;
+            background: white;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .results-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .overall-band {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .band-description {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .score-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #4a90e2;
+        }
+
+        .score-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .criteria-scores {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .criterion {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .criterion-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .criterion-score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a90e2;
+        }
+
+        .criterion-description {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .feedback-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .feedback-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback-list {
+            list-style: none;
+        }
+
+        .feedback-list li {
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .feedback-positive {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+
+        .feedback-negative {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+
+        .feedback-neutral {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+
+        .feedback-icon {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .detailed-analysis {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .analysis-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #6c757d;
+        }
+
+        .analysis-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .analysis-content {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .word-analysis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .word-stat {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .word-stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a90e2;
+        }
+
+        .word-stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #4a90e2;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #357abd;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        /* Bottom Navigation - Updated Layout */
+        .nav-row {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            padding: 0;
+            display: flex;
+            align-items: stretch;
+            height: 60px;
+            z-index: 100;
+        }
+
+        .footer__questionWrapper___1tZ46 {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+        }
+
+        .footer__questionWrapper___1tZ46:last-of-type {
+            border-right: none;
+        }
+
+        .footer__questionWrapper___1tZ46.completed::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #28a745;
+            z-index: 1;
+        }
+
+        .footer__questionNo___3WNct {
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .footer__questionWrapper___1tZ46 .footer__questionNo___3WNct:hover {
+            background-color: #f8f9fa;
+        }
+
+        .footer__questionWrapper___1tZ46.selected .footer__questionNo___3WNct {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .part-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            line-height: 1.2;
+        }
+
+        .footer__questionWrapper___1tZ46.selected .attemptedCount {
+            display: none;
+        }
+
+        .attemptedCount {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        .footer__deliverButton___3FM07 {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s, border-color 0.2s;
+            width: 40px;
+            height: 40px;
+        }
+
+        .footer__deliverButton___3FM07:hover {
+            background-color: #e0e0e0;
+            border-color: #bbb;
+        }
+
+        .footer__deliverButton___3FM07:disabled {
+            background: #e9ecef;
+            color: #6c757d;
+            cursor: not-allowed;
+            border-color: #ddd;
+        }
+
+        .fa-check::before {
+            content: "✓";
+            font-size: 18px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            transition: width 0.3s ease;
+        }
+
+        /* Band Score Colors */
+        .band-9 { color: #28a745; }
+        .band-8 { color: #20c997; }
+        .band-7 { color: #17a2b8; }
+        .band-6 { color: #007bff; }
+        .band-5 { color: #6f42c1; }
+        .band-4 { color: #fd7e14; }
+        .band-3 { color: #dc3545; }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .left-panel,
+            .right-panel {
+                width: 100% !important;
+                border-right: none;
+            }
+            
+            .left-panel {
+                border-bottom: 1px solid #e0e0e0;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .criteria-scores {
+                grid-template-columns: 1fr;
+            }
+            
+            .word-analysis {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .timer-container {
+            display: flex;
+            position: relative;
+            cursor: default;
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+            align-items: center;
+        }
+        .timer-container .timer-tooltip {
+            display: none;
+        }
+
+        .timer-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 15px;
+        }
+
+        .timer-controls button {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            padding: 0;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        .timer-controls button:hover {
+            background: #e0e0e0;
+        }
+
+        .timer-controls button svg {
+            width: 20px;
+            height: 20px;
+            fill: #333;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="timer-container">
+            <span class="timer-display">60:00</span>
+            <div class="timer-controls">
+                <button id="timer-toggle-btn" title="Pause/Resume Timer">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                </button>
+                <button id="timer-reset-btn" title="Reset Timer">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+                </button>
+            </div>
+        </div>
+        <a href="https://t.me/Avazbeks_Media" target="_blank" class="telegram-link">
+            Avazbeks_Media
+        </a>
+        <div style="width: 100px;"></div>
+    </div>
+
+    <!-- Test Interface -->
+    <div class="main-container" id="mainContainer">
+        <div id="part-header-1" class="part-header">
+            <p><strong>Part 1</strong></p>
+            <p>You should spend about 20 minutes on this task. Write at least 150 words.</p>
+        </div>
+        <div id="part-header-2" class="part-header hidden">
+            <p><strong>Part 2</strong></p>
+            <p>You should spend about 40 minutes on this task. Write at least 250 words.</p>
+        </div>
+
+        <div class="panels-container">
+            <div class="left-panel">
+                <div id="part-1" class="writing-part">
+                    <div class="task-prompt">
+                        <p><strong>The table below shows the number of cars made in Argentina, Australia and Thailand from 2003 to 2009.</strong></p>
+                        <p><strong>Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</strong></p>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="image-container">
+                            <img src="https://ieltstrainingonline.com/wp-content/uploads/2019/06/IETLS-Writing-recent-actual-test-070.jpg" alt="Table showing car production in Argentina, Australia and Thailand from 2003 to 2009" style="max-width:100%; height:auto; border:1px solid #ccc;"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="part-2" class="writing-part hidden">
+                    <div class="instructions">
+                        <p><strong>Write about the following topic:</strong></p>
+                        <div class="task-prompt">
+                            <p><em><strong>The animal species are becoming extinct due to human activities on land and in sea. <br><br> What are the reasons and solutions?</strong></em></p>
+                        </div>
+                        <p>Give reasons for your answer and include any relevant examples from your own knowledge or experience.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="writing-area">
+                    <textarea 
+                        class="writing-textarea" 
+                        id="writingTextarea"
+                        placeholder="Start writing your response here..."
+                        oninput="updateWordCount()"
+                    ></textarea>
+                    <div class="word-count">
+                        Words: <span id="wordCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div class="results-container" id="resultsContainer">
+        <div class="results-header">
+            <h1>Results</h1>
+            <div class="overall-band" id="overallBand">7.0</div>
+            <div class="band-description" id="bandDescription">Good User</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 70%"></div>
+            </div>
+        </div>
+
+        <div class="results-grid">
+            <div class="score-card">
+                <h3>📝 Part 1 - Task Achievement</h3>
+                <div class="criteria-scores">
+                    <div class="criterion">
+                        <div class="criterion-name">Task Achievement</div>
+                        <div class="criterion-score" id="part1TaskScore">7</div>
+                        <div class="criterion-description">Covers requirements adequately</div>
+                    </div>
+                    <div class="criterion">
+                        <div class="criterion-name">Coherence & Cohesion</div>
+                        <div class="criterion-score" id="part1CoherenceScore">7</div>
+                        <div class="criterion-description">Logically organized</div>
+                    </div>
+                    <div class="criterion">
+                        <div class="criterion-name">Lexical Resource</div>
+                        <div class="criterion-score" id="part1LexicalScore">6</div>
+                        <div class="criterion-description">Adequate range of vocabulary</div>
+                    </div>
+                    <div class="criterion">
+                        <div class="criterion-name">Grammar & Accuracy</div>
+                        <div class="criterion-score" id="part1GrammarScore">7</div>
+                        <div class="criterion-description">Good variety of structures</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="score-card">
+                <h3>✍️ Part 2 - Essay Writing</h3>
+                <div class="criteria-scores">
+                    <div class="criterion">
+                        <div class="criterion-name">Task Response</div>
+                        <div class="criterion-score" id="part2TaskScore">7</div>
+                        <div class="criterion-description">Addresses all parts of task</div>
+                    </div>
+                    <div class="criterion">
+                        <div class="criterion-name">Coherence & Cohesion</div>
+                        <div class="criterion-score" id="part2CoherenceScore">7</div>
+                        <div class="criterion-description">Clear progression</div>
+                    </div>
+                    <div class="criterion">
+                        <div class="criterion-name">Lexical Resource</div>
+                        <div class="criterion-score" id="part2LexicalScore">7</div>
+                        <div class="criterion-description">Sufficient range and accuracy</div>
+                    </div>
+                    <div class="criterion">
+                        <div class="criterion-name">Grammar & Accuracy</div>
+                        <div class="criterion-score" id="part2GrammarScore">6</div>
+                        <div class="criterion-description">Generally good control</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="word-analysis">
+            <div class="word-stat">
+                <div class="word-stat-number" id="totalWords">425</div>
+                <div class="word-stat-label">Total Words</div>
+            </div>
+            <div class="word-stat">
+                <div class="word-stat-number" id="part1Words">175</div>
+                <div class="word-stat-label">Part 1 Words</div>
+            </div>
+            <div class="word-stat">
+                <div class="word-stat-number" id="part2Words">250</div>
+                <div class="word-stat-label">Part 2 Words</div>
+            </div>
+            <div class="word-stat">
+                <div class="word-stat-number" id="uniqueWords">85%</div>
+                <div class="word-stat-label">Vocabulary Variety</div>
+            </div>
+        </div>
+
+        <div class="feedback-section">
+            <h3>✅ Strengths</h3>
+            <ul class="feedback-list" id="strengthsList">
+                <li class="feedback-positive">
+                    <span class="feedback-icon">✓</span>
+                    <span>Good use of data comparison and trend analysis</span>
+                </li>
+                <li class="feedback-positive">
+                    <span class="feedback-icon">✓</span>
+                    <span>Clear paragraph structure with logical flow</span>
+                </li>
+                <li class="feedback-positive">
+                    <span class="feedback-icon">✓</span>
+                    <span>Appropriate academic vocabulary and linking words</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="feedback-section">
+            <h3>⚠️ Areas for Improvement</h3>
+            <ul class="feedback-list" id="improvementsList">
+                <li class="feedback-negative">
+                    <span class="feedback-icon">!</span>
+                    <span>Some minor grammatical errors affecting clarity</span>
+                </li>
+                <li class="feedback-neutral">
+                    <span class="feedback-icon">→</span>
+                    <span>Could benefit from more varied sentence structures</span>
+                </li>
+                <li class="feedback-neutral">
+                    <span class="feedback-icon">→</span>
+                    <span>Consider using more precise vocabulary for data description</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="detailed-analysis">
+            <h3>📊 Detailed Analysis</h3>
+            <div class="analysis-item">
+                <div class="analysis-title">Task Achievement (Part 1)</div>
+                <div class="analysis-content">
+                    Your response adequately covers the main features of the chart, showing clear comparisons between 1997 and 2017 data. You identified key trends and provided relevant data points. Consider including more specific numerical details to strengthen your analysis.
+                </div>
+            </div>
+            <div class="analysis-item">
+                <div class="analysis-title">Task Response (Part 2)</div>
+                <div class="analysis-content">
+                    You successfully discussed both viewpoints regarding technology's impact on life complexity. Your personal opinion is clearly stated and supported with relevant examples. The essay demonstrates good critical thinking and balanced argumentation.
+                </div>
+            </div>
+            <div class="analysis-item">
+                <div class="analysis-title">Language Use</div>
+                <div class="analysis-content">
+                    Your writing shows good command of English with appropriate academic style. Vocabulary is generally accurate and varied. Grammar structures are mostly correct with good complexity. Focus on eliminating minor errors for higher precision.
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="downloadReport()">Download Report</button>
+            <button class="btn btn-secondary" onclick="retakeTest()">Retake Test</button>
+            <button class="btn btn-secondary" onclick="viewDetailedFeedback()">Detailed Feedback</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="nav-row perScorableItem" aria-label="Questions" id="navigation">
+        <div class="footer__questionWrapper___1tZ46 selected single" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct writing" data-sectionid="part1" tabindex="-1" onclick="switchPart(1)">
+                <div class="part-title">Part 1</div>
+                <div class="attemptedCount">0 of 1</div>
+            </button>
+        </div>
+        <div class="footer__questionWrapper___1tZ46 single" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct writing" data-sectionid="part2" tabindex="0" onclick="switchPart(2)">
+                <div class="part-title">Part 2</div>
+                <div class="attemptedCount">0 of 1</div>
+            </button>
+        </div>
+        <button id="deliver-button" aria-label="Check Answers" class="footer__deliverButton___3FM07" onclick="submitTest()">
+            <i class="fa fa-check" aria-hidden="true"></i>
+        </button>
+    </nav>
+
+    <script>
+        let currentPart = 1;
+        let timeInSeconds = 3600;
+        let timerInterval;
+        let partCompletionStatus = { 1: false, 2: false };
+        const timerToggleButton = document.getElementById('timer-toggle-btn');
+        const timerResetButton = document.getElementById('timer-reset-btn');
+
+        const playIcon = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8 5v14l11-7L8 5z"/></svg>';
+        const pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+
+
+        // Timer functionality
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeInSeconds--;
+                updateTimerDisplay();
+                
+                if (timeInSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time's up! Your test will be submitted automatically.");
+                    submitTest();
+                }
+            }, 1000);
+            timerToggleButton.innerHTML = pauseIcon;
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerToggleButton.innerHTML = playIcon;
+        }
+
+        function toggleTimer() {
+            if (timerInterval) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeInSeconds / 60);
+            const seconds = timeInSeconds % 60;
+            document.querySelector('.timer-display').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function resetTimer() {
+            if (confirm('Are you sure you want to reset the timer?')) {
+                timeInSeconds = 3600;
+                updateTimerDisplay();
+                startTimer();
+            }
+        }
+
+        window.addEventListener('load', () => {
+            startTimer();
+            timerToggleButton.addEventListener('click', toggleTimer);
+            timerResetButton.addEventListener('click', resetTimer);
+        });
+
+        // Answer Analysis Functions
+        function analyzeWriting(text, partNumber) {
+            const words = text.trim().split(/\s+/);
+            const wordCount = text.trim() === '' ? 0 : words.length;
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            const avgWordsPerSentence = sentences.length > 0 ? wordCount / sentences.length : 0;
+            
+            // Basic vocabulary analysis
+            const uniqueWords = new Set(words.map(w => w.toLowerCase().replace(/[^\w]/g, '')));
+            const vocabularyVariety = uniqueWords.size / words.length;
+            
+            // Grammar complexity analysis (simplified)
+            const complexSentenceMarkers = ['although', 'however', 'nevertheless', 'furthermore', 'moreover', 'consequently'];
+            const complexSentences = complexSentenceMarkers.some(marker => 
+                text.toLowerCase().includes(marker)
+            );
+            
+            // Linking words detection
+            const linkingWords = ['firstly', 'secondly', 'in addition', 'furthermore', 'however', 'on the other hand', 'in conclusion'];
+            const hasLinkingWords = linkingWords.some(word => 
+                text.toLowerCase().includes(word)
+            );
+            
+            return {
+                wordCount,
+                sentences: sentences.length,
+                avgWordsPerSentence: Math.round(avgWordsPerSentence * 10) / 10,
+                vocabularyVariety: Math.round(vocabularyVariety * 100),
+                hasComplexSentences: complexSentences,
+                hasLinkingWords: hasLinkingWords,
+                meetsWordRequirement: wordCount >= (partNumber === 1 ? 150 : 250)
+            };
+        }
+
+        function calculateBandScore(analysis, partNumber) {
+            let taskScore = 5;
+            let coherenceScore = 5;
+            let lexicalScore = 5;
+            let grammarScore = 5;
+
+            // Task Achievement/Response scoring
+            if (analysis.meetsWordRequirement) {
+                taskScore += 1;
+                if (analysis.wordCount >= (partNumber === 1 ? 180 : 300)) {
+                    taskScore += 0.5;
+                }
+            }
+
+            // Coherence and Cohesion
+            if (analysis.hasLinkingWords) coherenceScore += 1;
+            if (analysis.sentences >= (partNumber === 1 ? 8 : 12)) coherenceScore += 0.5;
+
+            // Lexical Resource
+            if (analysis.vocabularyVariety >= 70) lexicalScore += 1;
+            if (analysis.vocabularyVariety >= 85) lexicalScore += 0.5;
+
+            // Grammar and Accuracy
+            if (analysis.hasComplexSentences) grammarScore += 1;
+            if (analysis.avgWordsPerSentence >= 15) grammarScore += 0.5;
+
+            // Cap scores at 9
+            taskScore = Math.min(9, taskScore);
+            coherenceScore = Math.min(9, coherenceScore);
+            lexicalScore = Math.min(9, lexicalScore);
+            grammarScore = Math.min(9, grammarScore);
+
+            return {
+                task: Math.round(taskScore * 2) / 2,
+                coherence: Math.round(coherenceScore * 2) / 2,
+                lexical: Math.round(lexicalScore * 2) / 2,
+                grammar: Math.round(grammarScore * 2) / 2
+            };
+        }
+
+        function generateFeedback(analysis, scores, partNumber) {
+            const strengths = [];
+            const improvements = [];
+
+            // Analyze strengths
+            if (analysis.meetsWordRequirement) {
+                strengths.push("Meets word count requirements effectively");
+            }
+            if (analysis.hasLinkingWords) {
+                strengths.push("Good use of cohesive devices and linking words");
+            }
+            if (analysis.vocabularyVariety >= 80) {
+                strengths.push("Demonstrates good vocabulary range and variety");
+            }
+            if (analysis.hasComplexSentences) {
+                strengths.push("Uses complex sentence structures appropriately");
+            }
+            if (scores.task >= 7) {
+                strengths.push(partNumber === 1 ? 
+                    "Effectively describes main features and trends" : 
+                    "Addresses all parts of the task comprehensively"
+                );
+            }
+
+            // Analyze areas for improvement
+            if (!analysis.meetsWordRequirement) {
+                improvements.push(`Write at least ${partNumber === 1 ? 150 : 250} words to meet requirements`);
+            }
+            if (!analysis.hasLinkingWords) {
+                improvements.push("Use more linking words to improve coherence");
+            }
+            if (analysis.vocabularyVariety < 70) {
+                improvements.push("Expand vocabulary range and avoid repetition");
+            }
+            if (analysis.avgWordsPerSentence < 12) {
+                improvements.push("Develop more complex sentence structures");
+            }
+            if (scores.grammar < 7) {
+                improvements.push("Review grammar accuracy and sentence formation");
+            }
+
+            return { strengths, improvements };
+        }
+
+        function getBandDescription(band) {
+            const descriptions = {
+                9: "Expert User",
+                8.5: "Very Good User",
+                8: "Very Good User",
+                7.5: "Good User",
+                7: "Good User",
+                6.5: "Competent User",
+                6: "Competent User",
+                5.5: "Modest User",
+                5: "Modest User",
+                4.5: "Limited User",
+                4: "Limited User"
+            };
+            return descriptions[band] || "Developing User";
+        }
+
+        function displayResults(part1Analysis, part2Analysis, part1Scores, part2Scores) {
+            // Calculate overall band score
+            const overallBand = Math.round(((part1Scores.task + part1Scores.coherence + part1Scores.lexical + part1Scores.grammar +
+                                          part2Scores.task + part2Scores.coherence + part2Scores.lexical + part2Scores.grammar) / 8) * 2) / 2;
+
+            // Update display
+            document.getElementById('overallBand').textContent = overallBand.toFixed(1);
+            document.getElementById('overallBand').className = `overall-band band-${Math.floor(overallBand)}`;
+            document.getElementById('bandDescription').textContent = getBandDescription(overallBand);
+            document.getElementById('progressFill').style.width = `${(overallBand / 9) * 100}%`;
+
+            // Update individual scores
+            document.getElementById('part1TaskScore').textContent = part1Scores.task;
+            document.getElementById('part1CoherenceScore').textContent = part1Scores.coherence;
+            document.getElementById('part1LexicalScore').textContent = part1Scores.lexical;
+            document.getElementById('part1GrammarScore').textContent = part1Scores.grammar;
+
+            document.getElementById('part2TaskScore').textContent = part2Scores.task;
+            document.getElementById('part2CoherenceScore').textContent = part2Scores.coherence;
+            document.getElementById('part2LexicalScore').textContent = part2Scores.lexical;
+            document.getElementById('part2GrammarScore').textContent = part2Scores.grammar;
+
+            // Update word statistics
+            document.getElementById('totalWords').textContent = part1Analysis.wordCount + part2Analysis.wordCount;
+            document.getElementById('part1Words').textContent = part1Analysis.wordCount;
+            document.getElementById('part2Words').textContent = part2Analysis.wordCount;
+            document.getElementById('uniqueWords').textContent = Math.round((part1Analysis.vocabularyVariety + part2Analysis.vocabularyVariety) / 2) + '%';
+
+            // Generate and display feedback
+            const part1Feedback = generateFeedback(part1Analysis, part1Scores, 1);
+            const part2Feedback = generateFeedback(part2Analysis, part2Scores, 2);
+
+            const allStrengths = [...part1Feedback.strengths, ...part2Feedback.strengths];
+            const allImprovements = [...part1Feedback.improvements, ...part2Feedback.improvements];
+
+            // Update strengths list
+            const strengthsList = document.getElementById('strengthsList');
+            strengthsList.innerHTML = '';
+            allStrengths.slice(0, 5).forEach(strength => {
+                const li = document.createElement('li');
+                li.className = 'feedback-positive';
+                li.innerHTML = `<span class="feedback-icon">✓</span><span>${strength}</span>`;
+                strengthsList.appendChild(li);
+            });
+
+            // Update improvements list
+            const improvementsList = document.getElementById('improvementsList');
+            improvementsList.innerHTML = '';
+            allImprovements.slice(0, 5).forEach(improvement => {
+                const li = document.createElement('li');
+                li.className = 'feedback-negative';
+                li.innerHTML = `<span class="feedback-icon">!</span><span>${improvement}</span>`;
+                improvementsList.appendChild(li);
+            });
+
+            // Show results screen
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('navigation').style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'block';
+        }
+
+        // Test submission and checking
+        function submitTest() {
+            const part1Content = localStorage.getItem('ielts-writing-part-1') || '';
+            const part2Content = localStorage.getItem('ielts-writing-part-2') || '';
+
+            if (!part1Content.trim() && !part2Content.trim()) {
+                alert('Please write your responses before submitting the test.');
+                return;
+            }
+
+            const part1WordCount = part1Content.trim() === '' ? 0 : part1Content.trim().split(/\s+/).length;
+            const part2WordCount = part2Content.trim() === '' ? 0 : part2Content.trim().split(/\s+/).length;
+
+            if (confirm(`Are you sure you want to submit and check your test?\n\nPart 1: ${part1WordCount} words\nPart 2: ${part2WordCount} words`)) {
+                clearInterval(timerInterval);
+
+                // Analyze both parts
+                const part1Analysis = analyzeWriting(part1Content, 1);
+                const part2Analysis = analyzeWriting(part2Content, 2);
+
+                // Calculate scores
+                const part1Scores = calculateBandScore(part1Analysis, 1);
+                const part2Scores = calculateBandScore(part2Analysis, 2);
+
+                // Display results
+                displayResults(part1Analysis, part2Analysis, part1Scores, part2Scores);
+            }
+        }
+
+        // Utility functions for results screen
+        function downloadReport() {
+            const reportContent = `
+IELTS Writing Test Results Report
+================================
+Overall Band Score: ${document.getElementById('overallBand').textContent}
+Performance Level: ${document.getElementById('bandDescription').textContent}
+
+Part 1 Scores:
+- Task Achievement: ${document.getElementById('part1TaskScore').textContent}
+- Coherence & Cohesion: ${document.getElementById('part1CoherenceScore').textContent}
+- Lexical Resource: ${document.getElementById('part1LexicalScore').textContent}
+- Grammar & Accuracy: ${document.getElementById('part1GrammarScore').textContent}
+
+Part 2 Scores:
+- Task Response: ${document.getElementById('part2TaskScore').textContent}
+- Coherence & Cohesion: ${document.getElementById('part2CoherenceScore').textContent}
+- Lexical Resource: ${document.getElementById('part2LexicalScore').textContent}
+- Grammar & Accuracy: ${document.getElementById('part2GrammarScore').textContent}
+
+Word Count:
+- Total Words: ${document.getElementById('totalWords').textContent}
+- Part 1: ${document.getElementById('part1Words').textContent} words
+- Part 2: ${document.getElementById('part2Words').textContent} words
+
+Generated on: ${new Date().toLocaleDateString()}
+            `.trim();
+
+            const blob = new Blob([reportContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'IELTS_Writing_Results.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function retakeTest() {
+            if (confirm('This will clear your current responses and start a new test. Are you sure?')) {
+                localStorage.clear();
+                document.getElementById('resultsContainer').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'flex';
+                document.getElementById('navigation').style.display = 'flex';
+                document.getElementById('writingTextarea').value = '';
+                document.getElementById('writingTextarea').disabled = false;
+                document.getElementById('deliver-button').disabled = false;
+                timeInSeconds = 3600;
+                currentPart = 1;
+                switchPart(1);
+                startTimer();
+            }
+        }
+
+        function viewDetailedFeedback() {
+            alert('Detailed feedback feature will provide comprehensive analysis of your writing including specific suggestions for improvement, vocabulary enhancement tips, and grammar corrections.');
+        }
+
+        // Original test interface functions
+        function checkPartCompletion(partNumber) {
+            const savedContent = localStorage.getItem(`ielts-writing-part-${partNumber}`);
+            if (!savedContent) return false;
+            const wordCount = savedContent.trim() === '' ? 0 : savedContent.trim().split(/\s+/).length;
+            const minWords = partNumber === 1 ? 150 : 250;
+            return wordCount >= minWords;
+        }
+
+        function updateCompletionIndicators() {
+            for (let i = 1; i <= 2; i++) {
+                const isCompleted = checkPartCompletion(i);
+                partCompletionStatus[i] = isCompleted;
+                const wrapper = document.querySelectorAll('.footer__questionWrapper___1tZ46')[i - 1];
+                if (wrapper) {
+                    if (isCompleted) {
+                        wrapper.classList.add('completed');
+                    } else {
+                        wrapper.classList.remove('completed');
+                    }
+                }
+            }
+        }
+
+        function switchPart(partNumber) {
+            const currentContent = document.getElementById('writingTextarea').value;
+            localStorage.setItem(`ielts-writing-part-${currentPart}`, currentContent);
+            
+            currentPart = partNumber;
+            
+            document.querySelectorAll('.writing-part').forEach(part => {
+                part.classList.add('hidden');
+            });
+            document.querySelectorAll('.part-header').forEach(header => {
+                header.classList.add('hidden');
+            });
+            
+            document.getElementById(`part-${partNumber}`).classList.remove('hidden');
+            document.getElementById(`part-header-${partNumber}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.footer__questionWrapper___1tZ46').forEach(wrapper => {
+                wrapper.classList.remove('selected');
+            });
+            
+            const wrappers = document.querySelectorAll('.footer__questionWrapper___1tZ46');
+            if (wrappers[partNumber - 1]) {
+                wrappers[partNumber - 1].classList.add('selected');
+            }
+            
+            document.querySelectorAll('.footer__questionNo___3WNct').forEach((btn, index) => {
+                btn.tabIndex = index === (partNumber - 1) ? -1 : 0;
+            });
+            
+            const savedContent = localStorage.getItem(`ielts-writing-part-${partNumber}`);
+            document.getElementById('writingTextarea').value = savedContent || '';
+            updateWordCount();
+            updateCompletionIndicators();
+        }
+
+        function updateWordCount() {
+            const textarea = document.getElementById('writingTextarea');
+            textarea.style.overflowY = 'hidden';
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+
+            const text = textarea.value.trim();
+            const wordCount = text === '' ? 0 : text.split(/\s+/).length;
+            document.getElementById('wordCount').textContent = wordCount;
+            
+            localStorage.setItem(`ielts-writing-part-${currentPart}`, textarea.value);
+            updateCompletionIndicators();
+            
+            const minWords = currentPart === 1 ? 150 : 250;
+            const isCompleted = wordCount >= minWords;
+            const attemptedCount = document.querySelector(`.footer__questionWrapper___1tZ46:nth-child(${currentPart}) .attemptedCount`);
+            if (attemptedCount) {
+                attemptedCount.textContent = isCompleted ? '1 of 1' : '0 of 1';
+            }
+        }
+
+        // Auto-save functionality
+        setInterval(() => {
+            const content = document.getElementById('writingTextarea').value;
+            localStorage.setItem(`ielts-writing-part-${currentPart}`, content);
+            updateCompletionIndicators();
+        }, 5000);
+
+        // Load saved content on page load
+        window.addEventListener('load', () => {
+            const savedContent = localStorage.getItem(`ielts-writing-part-${currentPart}`);
+            if (savedContent) {
+                document.getElementById('writingTextarea').value = savedContent;
+                updateWordCount();
+            }
+            updateCompletionIndicators();
+            // Initial resize
+            const textarea = document.getElementById('writingTextarea');
+            textarea.style.overflowY = 'hidden';
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                const content = document.getElementById('writingTextarea').value;
+                localStorage.setItem(`ielts-writing-part-${currentPart}`, content);
+                alert('Content saved!');
+            }
+            
+            if ((e.ctrlKey || e.metaKey) && (e.key === '1' || e.key === '2')) {
+                e.preventDefault();
+                switchPart(parseInt(e.key));
+            }
+        });
+    </script>
+</body>
+</html>

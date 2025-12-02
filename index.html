@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IELTS Practice Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      font-family: "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      
+      /* Light mode */
+      --color-text: #1b1b1f;
+      --color-text-secondary: #5c5c6d;
+      --color-bg: #f6f5f8;
+      --color-surface: #ffffff;
+      --color-surface-hover: #f3f1fa;
+      --color-border: #d9d5e5;
+      --color-primary: #6750a4;
+      --color-primary-light: #eaddff;
+      --color-primary-dark: #21005d;
+      
+      --md-radius: 12px;
+      --md-radius-lg: 20px;
+    }
+
+    html[data-theme="dark"] {
+      --color-text: #e8e7eb;
+      --color-text-secondary: #a8a8b8;
+      --color-bg: #121218;
+      --color-surface: #1d1b20;
+      --color-surface-hover: #2a2837;
+      --color-border: #49454e;
+      --color-primary: #d0bcff;
+      --color-primary-light: #4a3a7d;
+      --color-primary-dark: #e8def8;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .top-app-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem clamp(1rem, 5vw, 3rem);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(var(--color-surface-rgb), 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    html[data-theme="light"] .top-app-bar {
+      --color-surface-rgb: 255, 255, 255;
+    }
+
+    html[data-theme="dark"] .top-app-bar {
+      --color-surface-rgb: 29, 27, 32;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--color-primary-light);
+      color: var(--color-primary-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      color: var(--color-text);
+      font-weight: 700;
+    }
+
+    .eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      margin: 0 0 0.15rem;
+      font-weight: 600;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .theme-toggle {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: var(--color-surface-hover);
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: background 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      background: var(--color-border);
+    }
+
+    .tonal-btn {
+      border: none;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      background: var(--color-surface-hover);
+      color: var(--color-text);
+      cursor: pointer;
+      transition: background 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .tonal-btn:hover {
+      background: var(--color-border);
+    }
+
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 1.5rem clamp(1rem, 5vw, 3rem);
+    }
+
+    .surface-card {
+      background: var(--color-surface);
+      border-radius: var(--md-radius-lg);
+      padding: 1.25rem;
+      border: 1px solid var(--color-border);
+      transition: border-color 0.2s ease;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--color-text);
+      font-weight: 700;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .gap {
+      gap: 1rem;
+    }
+
+    .field-label {
+      display: block;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .field {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--color-border);
+      padding: 0.65rem 0.9rem;
+      font-family: inherit;
+      background: var(--color-surface);
+      color: var(--color-text);
+      transition: border-color 0.2s ease;
+      font-size: 0.95rem;
+    }
+
+    .field:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+
+    .field-search {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      border-radius: 8px;
+      padding: 0.65rem 0.9rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .field-search:focus-within {
+      border-color: var(--color-primary);
+    }
+
+    .field-search input {
+      border: none;
+      flex: 1;
+      font-size: 0.95rem;
+      font-family: inherit;
+      background: transparent;
+      color: var(--color-text);
+    }
+
+    .field-search input::placeholder {
+      color: var(--color-text-secondary);
+    }
+
+    .field-search input:focus {
+      outline: none;
+    }
+
+    .material-symbol {
+      color: var(--color-text-secondary);
+      font-size: 1.1rem;
+    }
+
+    .chip-set {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .chip {
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      background: transparent;
+      padding: 0.4rem 1rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+    }
+
+    .chip:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .chip.active {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+    }
+
+    .status-line {
+      margin: 0.5rem 0 0;
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+    }
+
+    .list-card {
+      /* Ưu tiên nhiều không gian cho danh sách đề */
+      max-height: none;
+    }
+
+    .quick-stats {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+    }
+
+    .quick-stats span {
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .test-list {
+      /* Dạng lưới nhiều cột, tự co giãn theo độ rộng màn hình */
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .test-row {
+      /* Card đơn giản, full chiều rộng trong ô lưới */
+      padding: 0.9rem 1rem;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: var(--color-surface);
+      transition: all 0.18s ease;
+    }
+
+    .test-row:hover {
+      background: var(--color-surface-hover);
+      border-color: var(--color-border);
+      transform: translateY(-1px);
+    }
+
+    .test-row.active {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-primary) 40%, transparent);
+    }
+
+    .row-main {
+      border: none;
+      background: transparent;
+      padding: 0;
+      text-align: left;
+      cursor: pointer;
+      width: 100%;
+      font-family: inherit;
+    }
+
+    .row-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .row-title {
+      margin: 0;
+      font-weight: 600;
+      color: var(--color-text);
+      font-size: 0.95rem;
+    }
+
+    .row-meta {
+      margin: 0.25rem 0 0;
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+    }
+
+    .row-icon {
+      color: var(--color-border);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* Đã bỏ phần preview nên không cần style riêng cho preview-card nữa */
+
+    .duplicates-card {
+      background: var(--color-surface);
+    }
+
+    .badge {
+      min-width: 28px;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      background: var(--color-primary);
+      color: white;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    .duplicate-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .duplicate-group {
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 0.85rem;
+      background: var(--color-surface-hover);
+    }
+
+    .duplicate-group h3 {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    .duplicate-group p {
+      margin: 0.35rem 0 0;
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+    }
+
+    .duplicate-files {
+      margin-top: 0.65rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.85rem;
+    }
+
+    .duplicate-files span {
+      display: inline-block;
+      background: var(--color-surface);
+      border-radius: 6px;
+      padding: 0.3rem 0.65rem;
+      border: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+    }
+
+    @media (max-width: 1024px) {
+      .app-shell {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-app-bar {
+        padding: 1rem;
+      }
+
+      .brand {
+        gap: 0.5rem;
+      }
+
+      .brand-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+      }
+
+      h1 {
+        font-size: 1.1rem;
+      }
+
+      .app-shell {
+        padding: 1rem;
+      }
+
+      .surface-card {
+        padding: 1rem;
+      }
+
+      .panel-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .panel-head h2 {
+        font-size: 1rem;
+      }
+
+      .test-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-app-bar">
+    <div class="brand">
+      <div class="brand-icon">🎧</div>
+      <div>
+        <p class="eyebrow">IELTS Practice Hub</p>
+        <h1>Bộ đề Listening · Reading · Writing</h1>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Bật/tắt dark mode" title="Bật/tắt dark mode">
+        <span id="themeIcon">🌙</span>
+      </button>
+      <button class="tonal-btn" id="resetFilters" type="button">Xoá lọc</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="column column-left">
+      <section class="surface-card">
+        <header class="panel-head">
+          <div>
+            <p class="eyebrow">Bộ lọc</p>
+            <h2>Tìm nhanh đề bạn cần</h2>
+          </div>
+        </header>
+        <div class="stack gap">
+          <div>
+            <label for="searchInput" class="field-label">Từ khoá</label>
+            <div class="field-search">
+              <span class="material-symbol">⌕</span>
+              <input type="search" id="searchInput" placeholder="Nhập tên bài, ngày thi, …">
+            </div>
+          </div>
+          <div>
+            <label class="field-label">Kỹ năng</label>
+            <div class="chip-set" id="categoryFilters">
+              <button class="chip active" data-category="all">Tất cả</button>
+              <button class="chip" data-category="listening">Listening</button>
+              <button class="chip" data-category="reading">Reading</button>
+              <button class="chip" data-category="writing">Writing</button>
+              <button class="chip" data-category="other">Khác</button>
+            </div>
+          </div>
+          <div>
+            <label for="sortSelect" class="field-label">Sắp xếp</label>
+            <select id="sortSelect" class="field">
+              <option value="az">Tên A → Z</option>
+              <option value="za">Tên Z → A</option>
+              <option value="newest">Ngày mới nhất</option>
+            </select>
+          </div>
+          <p id="statusBar" class="status-line" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section class="surface-card list-card">
+        <header class="panel-head">
+          <div>
+            <p class="eyebrow">Danh sách đề</p>
+            <h2 id="resultCount">Đang chuẩn bị dữ liệu…</h2>
+          </div>
+          <div class="quick-stats" id="quickStats"></div>
+        </header>
+        <div id="testList" class="test-list" role="list" aria-live="polite"></div>
+      </section>
+
+      <section class="surface-card duplicates-card">
+        <header class="panel-head">
+          <div>
+            <p class="eyebrow">Kiểm tra trùng</p>
+            <h2>File giống nhau</h2>
+          </div>
+          <span class="badge" id="duplicateCount">0</span>
+        </header>
+        <div id="duplicateList" class="duplicate-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <template id="testRowTemplate">
+    <article class="test-row">
+      <button class="row-main" type="button">
+        <div class="row-body">
+          <div>
+            <p class="row-title"></p>
+            <p class="row-meta"></p>
+          </div>
+          <span class="row-icon">›</span>
+        </div>
+      </button>
+    </article>
+  </template>
+
+  <script>
+    // Dark mode toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const html = document.documentElement;
+
+    // Kiểm tra theme đã lưu hoặc dùng theme của hệ thống
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+    html.setAttribute('data-theme', initialTheme);
+    updateThemeIcon(initialTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+    });
+
+    function updateThemeIcon(theme) {
+      themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+    }
+  </script>
+  <script src="assets/js/app.js" type="module"></script>
+</body>
+</html>

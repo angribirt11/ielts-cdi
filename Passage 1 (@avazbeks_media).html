@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Real exam IELTS</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<div style="text-align: center; margin: 20px 0;">
+<a href="https://t.me/Avazbeks_Media" style="
+      display: inline-flex;
+      align-items: center;
+      background-color: #ec407a;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-family: sans-serif;
+      font-size: 16px;" target="_blank">
+<i class="fab fa-telegram-plane" style="margin-right: 8px;"></i>
+    Avazbeks_Media – CDI MATERIALS
+  </a>
+</div>
+<style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --passage-bg: #f8f9fa;
+            --questions-bg: #ffffff;
+            --border-color: #e75480;
+            --highlight-color: springgreen;
+            /* Changed highlight color */
+
+            /* New Header & Social Colors */
+            --header-bg: #F8F8F8;
+            /* Very light gray for header background */
+            --header-text: #333333;
+            /* Dark text for light header */
+            --telegram-blue: #e75480;
+            --instagram-pink: #E4405F;
+            --youtube-red: #FF0000;
+
+            /* Button Colors (Red themed) */
+            --button-bg: #28a745;
+            /* Primary button red */
+            --button-hover: #218838;
+            /* Darker red on hover */
+
+            --correct-color: #28a745;
+            /* Standard green */
+            --incorrect-color: #dc3545;
+            /* Standard red */
+            --progress-complete: #28a745;
+            --progress-incomplete: #bdbdbd;
+
+            /* Timer Colors (Red themed) */
+            --timer-bg: #e75480;
+            /* Very light red/pink */
+            --timer-text: #ffffff;
+            /* Darker red */
+
+            --footer-bg: #f5f5f5;
+        }
+
+        .night-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --passage-bg: #1e1e1e;
+            --questions-bg: #1e1e1e;
+            --border-color: #424242;
+            --highlight-color: #0084ff;
+            /* Darker springgreen for night mode */
+
+            /* Night Mode Header & Social Colors */
+            --header-bg: #1a1a1a;
+            /* Dark gray for header background */
+            --header-text: #ffffff;
+            /* White text for dark header */
+            --telegram-blue: #bf3f73;
+            /* Darker telegram blue */
+            --instagram-pink: #b2334b;
+            /* Darker instagram pink */
+            --youtube-red: #b20000;
+            /* Darker YouTube red */
+
+            /* Night Mode Button Colors */
+            --button-bg: #990000;
+            /* Darker primary button red */
+            --button-hover: #7a0000;
+            /* Even darker red on hover */
+
+            --correct-color: #218838;
+            /* Darker green */
+            --incorrect-color: #c82333;
+            /* Darker red */
+            --progress-complete: #218838;
+            --progress-incomplete: #616161;
+
+            /* Night Mode Timer Colors */
+            --timer-bg: #e75480;
+            /* Dark red */
+            --timer-text: #ffcdd2;
+            /* Lighter red */
+
+            --footer-bg: #121212;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            /* Space between social links */
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            /* Space between icon and text */
+            color: white;
+            /* Text color is always white for social links */
+            padding: 8px 15px;
+            border-radius: 50px;
+            /* Pill shape */
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-1px);
+        }
+
+        .social-link i {
+            font-size: 1.2em;
+            /* Makes icon slightly larger than text */
+        }
+
+        /* Specific styling for social links */
+        .social-link.telegram {
+            background-color: var(--telegram-blue);
+        }
+
+        .social-link.telegram:hover {
+            background-color: #d8437e;
+            /* Slightly darker */
+        }
+
+        .social-link.instagram {
+            background-color: var(--instagram-pink);
+        }
+
+        .social-link.instagram:hover {
+            background-color: #d62976;
+            /* Slightly darker */
+        }
+
+        .social-link.youtube {
+            background-color: var(--youtube-red);
+        }
+
+        .social-link.youtube:hover {
+            background-color: #CC0000;
+            /* Slightly darker */
+        }
+
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .timer-container {
+            background-color: var(--timer-bg);
+            color: var(--timer-text);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .timer-controls button {
+            background: none;
+            border: none;
+            color: var(--timer-text);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-controls button:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            /* Darker hover for light timer */
+        }
+
+        .night-mode .timer-controls button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            /* Lighter hover for dark timer */
+        }
+
+        .mode-toggle {
+            background: none;
+            border: none;
+            color: var(--header-text);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 6px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mode-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            /* Darker hover for light header */
+        }
+
+        .night-mode .mode-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            /* Lighter hover for dark header */
+        }
+
+        main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container,
+        .questions-container {
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .passage-container {
+            width: 50%;
+            background-color: var(--passage-bg);
+            border-right: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .questions-container {
+            width: 50%;
+            background-color: var(--questions-bg);
+        }
+
+        .passage-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .passage-text {
+            font-size: 17px;
+        }
+
+        .question-text {
+            font-size: 17px;
+            line-height: 1.8;
+            /* Increased line-height for fill-in-the-blank */
+        }
+
+        .passage-text p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .highlight {
+            background-color: var(--highlight-color);
+            cursor: pointer;
+        }
+
+        .highlight-tooltip {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 25px 0 15px;
+            color: var(--text-color);
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--passage-bg);
+            border-left: 4px solid var(--border-color);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: baseline;
+            /* Align baselines of number and text */
+        }
+
+        .question-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background-color: var(--progress-incomplete);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 10px;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .question.answered .question-number {
+            background-color: var(--progress-complete);
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .option input {
+            margin-right: 8px;
+        }
+
+        /* Styling for the new inline input fields */
+        .fill-in-the-blank {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--text-color);
+            width: 150px;
+            font-family: inherit;
+            font-size: 1em;
+            /* Inherit font size from parent */
+            color: inherit;
+            padding: 0 4px 2px 4px;
+            /* Add some padding */
+            margin: 0 3px;
+            /* Add some margin */
+            vertical-align: baseline;
+            /* Align with the text */
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .fill-in-the-blank:focus {
+            border-bottom-color: var(--button-bg);
+        }
+
+
+        .instructions {
+            font-size: 14px;
+            color: #757575;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        footer {
+            background-color: var(--footer-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .progress-item {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--progress-incomplete);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .progress-item:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-item.completed {
+            background-color: var(--progress-complete);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--button-bg);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--button-bg);
+            /* Use primary button color for border */
+            color: var(--button-bg);
+            /* Use primary button color for text */
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(204, 0, 0, 0.1);
+            /* Light red tint on hover */
+        }
+
+        .night-mode .btn-secondary:hover {
+            background-color: rgba(153, 0, 0, 0.2);
+            /* Darker red tint on hover for night mode */
+        }
+
+
+        .feedback-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feedback-container {
+            background-color: var(--passage-bg);
+            width: 90%;
+            max-width: 900px;
+            height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feedback-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #close-feedback {
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+
+        .feedback-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .feedback-item {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--questions-bg);
+        }
+
+        .feedback-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .feedback-answer {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .correct {
+            color: var(--correct-color);
+        }
+
+        .incorrect {
+            color: var(--incorrect-color);
+        }
+
+        .feedback-explanation {
+            margin-top: 10px;
+            padding: 10px;
+            border-left: 3px solid var(--button-bg);
+            /* Use primary button color for explanation border */
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .feedback-passage {
+            margin-top: 8px;
+            font-style: italic;
+            color: #757575;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            main {
+                flex-direction: column;
+            }
+
+            .passage-container,
+            .questions-container {
+                width: 100%;
+                height: 50%;
+            }
+
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .progress-container {
+                flex-wrap: wrap;
+                max-width: 60%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo-area {
+                flex-wrap: wrap;
+                /* Allow items to wrap to the next line */
+                justify-content: center;
+                /* Center items when wrapped */
+                gap: 8px;
+                /* Adjusted gap for smaller screens */
+            }
+
+            .social-link {
+                padding: 6px 10px;
+                /* Reduced padding for smaller screens */
+                font-size: 13px;
+                /* Reduced font size for smaller screens */
+            }
+
+            .social-link i {
+                font-size: 1.1em;
+                /* Slightly smaller icon */
+            }
+
+            .social-link span {
+                display: inline;
+                /* Ensure text is visible */
+            }
+        }
+
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .header-controls {
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            .progress-container {
+                max-width: 50%;
+            }
+
+            .progress-item {
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .action-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+<div class="logo-area">
+<!-- Removed the logo image tag as it was not opening -->
+</div>
+<div class="header-controls">
+<div class="timer-container">
+<i class="fas fa-clock"></i>
+<span id="timer">20:00</span>
+<div class="timer-controls">
+<button id="start-timer" title="Start"><i class="fas fa-play"></i></button>
+<button id="pause-timer" title="Pause"><i class="fas fa-pause"></i></button>
+<button id="reset-timer" title="Reset"><i class="fas fa-redo"></i></button>
+</div>
+</div>
+<button class="mode-toggle" id="night-mode-toggle" title="Toggle Night Mode">
+<i class="fas fa-moon"></i>
+</button>
+</div>
+</header>
+<main>
+<div class="passage-container" id="passage-container">
+<div class="passage-content">
+<h4>TEST 2 – READING PASSAGE 1</h4>
+<div class="instructions">You should spend about 20 minutes on Questions 1–13, which are based on Reading Passage 1.</div>
+<div class="passage-title">The world's first cities</div>
+<div class="passage-text" id="passage-text">
+<p><strong>The creation of Mesopotamian cities</strong></p>
+<p>The inhabitants of Mesopotamia which now forms part of eastern Syria, southeastern Turkey and Iraq lived for thousands of years on individual farms and in small, isolated communities, working relentlessly just to meet their basic needs. But then, about 6,000 years ago something remarkable happened. The people left the security of their family homes and villages and came together with others to create something far more complex and difficult: the world's first city called Uruk.</p>
+<p>There is not much left now of Uruk, which is about 250 kilometres south of Iraq's capital Baghdad, but enough does remain to show that this initial experiment in urban living was extraordinarily successful. At its height, around 5,000 years ago, Uruk was home to more than 40,000 people. The outlines of the city walls indicate an enclosed area of about 600 hectares.</p>
+<p>The archaeological record of Uruk reveals the intensive building and rebuilding which went on for four or five centuries after the city's initial establishment. In that period the people of Uruk built a dozen or so large public buildings. They would carefully level what had stood before, and then build another structure on top, often trying out a different building material or an innovative technique. They seemed to be searching for ways in which architecture could express the revolutionary new social structures that had come into being there. Soon Uruk was not the only Mesopotamian city. People all across the flat plains of southern Mesopotamia were enjoying many of the benefits of city life. By about 4,500 years ago, 80 per cent of the Mesopotamian population lived in cities over 40 hectares in size, with populations of between 15,000 and 30,000 people. The emergence of these thriving communities, made up mostly of individuals and groups with no blood ties, was unprecedented in human history. Why did these extraordinary advances happen?</p>
+<p><strong>Reasons for the creation of cities in Mesopotamia</strong></p>
+<p>Smaller communities in Mesopotamia sometimes decided to come together to make it easier to defend themselves from their enemies. But the underlying reason for the creation of cities can be found in the harshness of this particular environment. The area was a place of extremes, where narrow strips of fertile river valleys were bounded by thousands of kilometres of desert and unproductive wetlands. As the small amount of rainfall in the region was incapable of sustaining anything but very limited agriculture, it was only through sophisticated irrigation that isolated pieces of land were kept fertile. The Tigris and the Euphrates rivers provided water for irrigation, and were also the basis of a communication system that led to the spread of the latest concepts in farming.</p>
+<p>In such a region, the only way for humans to prosper was by forming groups that could work together. The threat of famine, which could be caused by a prolonged drought or the sudden change in the course of a river, forced people to look outside their families, and work with their neighbours to create an elaborate system of dams, channels and canals to manage water. These projects needed specific skills and labour from outside the farmer's family, and this established more firmly the patterns of dependence that are at the heart of civilisation.</p>
+<p><strong>Changes in the organisation of farming</strong></p>
+<p>The intensive farming that came about in Mesopotamia was more efficient and productive and therefore generated a surplus of food, allowing crops in years of good harvests to be stored as protection against future less successful years. It also allowed more land for the production of a wider range of crops. It created a world where there was a need for traders and for skilled craftsmen: in short, it was the beginning of industry and consumerism. The concept of specialisation emerged within the population with increasing numbers of soldiers, builders, musicians, doctors, fortune tellers all supported directly or indirectly by agriculture. At the same time, this increased the control that powerful institutions, gradually emerging in the early cities, had over the urban population. Although large numbers of people were freed from the struggle of subsistence farming, they were now totally dependent on the institutions that employed them for their daily sustenance.</p>
+<p><strong>The role of the temples</strong></p>
+<p>The earliest and most powerful of these institutions was centred on the religious temple. Ever more temple structures were erected in the form of massive pyramids which had enormous storerooms for the output from the farming estates. Over time, the temples acquired these farms for themselves, and appointed a large number of staff to administer them and to deal with the storage of produce. The temples' greatest advantage was that each citizen was expected to give up some time to work for the temples. This meant that temples could easily store huge amounts of agricultural produce which could be used to buy yet more land. In addition, the revenues generated allowed the temples to serve as primitive kinds of banks making loans to people in difficult economic times.</p>
+<p><strong>The emergence of writing</strong></p>
+<p>We know a surprising amount about these times thanks to the development of an important new technology: writing. In Mesopotamia basic records were inscribed in wet clay, unlike the fragile papyrus used in ancient Egypt and Greece. These first writings were largely lists of people and things, simple bookkeeping. But within several hundred years, writing systems had become more advanced capable of recording concepts as well as lists. The clay tablets used for writing were tough, and the fires that often burnt down the archives where they were stored usually merely baked them for future generations.</p>
+</div>
+</div>
+</div>
+<div class="questions-container" id="questions-container"><div class="section-title">Questions 1–6</div><div class="instructions">Do the following statements agree with the information given in Reading Passage 1?
+In boxes 1–6 on your answer sheet, write
+TRUE if the statement agrees with the information
+FALSE if the statement contradicts the information
+NOT GIVEN if there is no information on this</div><div class="question" id="q1"><div class="question-title"><div class="question-number">1</div><div class="question-text">1. Some physical evidence of Uruk still exists in Iraq.</div></div><div class="options"><label class="option"><input name="q1" type="radio" value="TRUE"/>TRUE</label><label class="option"><input name="q1" type="radio" value="FALSE"/>FALSE</label><label class="option"><input name="q1" type="radio" value="NOT GIVEN"/>NOT GIVEN</label></div></div><div class="question" id="q2"><div class="question-title"><div class="question-number">2</div><div class="question-text">2. The people of Uruk lived in large apartment buildings.</div></div><div class="options"><label class="option"><input name="q2" type="radio" value="TRUE"/>TRUE</label><label class="option"><input name="q2" type="radio" value="FALSE"/>FALSE</label><label class="option"><input name="q2" type="radio" value="NOT GIVEN"/>NOT GIVEN</label></div></div><div class="question" id="q3"><div class="question-title"><div class="question-number">3</div><div class="question-text">3. Builders in Uruk frequently experimented with new construction methods.</div></div><div class="options"><label class="option"><input name="q3" type="radio" value="TRUE"/>TRUE</label><label class="option"><input name="q3" type="radio" value="FALSE"/>FALSE</label><label class="option"><input name="q3" type="radio" value="NOT GIVEN"/>NOT GIVEN</label></div></div><div class="question" id="q4"><div class="question-title"><div class="question-number">4</div><div class="question-text">4. Urban settlements were unusual in Mesopotamia 4,500 years ago.</div></div><div class="options"><label class="option"><input name="q4" type="radio" value="TRUE"/>TRUE</label><label class="option"><input name="q4" type="radio" value="FALSE"/>FALSE</label><label class="option"><input name="q4" type="radio" value="NOT GIVEN"/>NOT GIVEN</label></div></div><div class="question" id="q5"><div class="question-title"><div class="question-number">5</div><div class="question-text">5. The Tigris and the Euphrates rivers were important for the interchange of ideas.</div></div><div class="options"><label class="option"><input name="q5" type="radio" value="TRUE"/>TRUE</label><label class="option"><input name="q5" type="radio" value="FALSE"/>FALSE</label><label class="option"><input name="q5" type="radio" value="NOT GIVEN"/>NOT GIVEN</label></div></div><div class="question" id="q6"><div class="question-title"><div class="question-number">6</div><div class="question-text">6. When there were food shortages, farmers relied mainly on the help of their relatives.</div></div><div class="options"><label class="option"><input name="q6" type="radio" value="TRUE"/>TRUE</label><label class="option"><input name="q6" type="radio" value="FALSE"/>FALSE</label><label class="option"><input name="q6" type="radio" value="NOT GIVEN"/>NOT GIVEN</label></div></div>
+<div class="note-instructions" style="font-family: Arial, sans-serif; margin: 20px;">
+<p><strong>Questions 7–13</strong><br/>
+  Complete the notes below.<br/>
+  Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.<br/>
+  Write your answers in boxes 7–13 on your answer sheet.</p>
+<p style="font-weight: bold;">Early changes in Mesopotamia</p>
+<ul style="list-style-type: disc; padding-left: 20px;">
+<li><strong>Changes in organisation of farming</strong><br/>
+      Improved agricultural methods led to:<br/>
+      – a food <input class="fill-in-the-blank" name="q7" style="width: 180px; display: inline-block; margin: 0 4px;" type="text"/> being used as insurance<br/>
+      – a wider range of crops being grown<br/>
+      – the development of industry and consumerism<br/>
+      – increased specialisation amongst workers<br/>
+      – greater control by institutions
+    </li><br/>
+<li><strong>Temples</strong><br/>
+      – were built in the shape of large <input class="fill-in-the-blank" name="q8" style="width: 180px; display: inline-block; margin: 0 4px;" type="text"/><br/>
+      – had large <input class="fill-in-the-blank" name="q9" style="width: 180px; display: inline-block; margin: 0 4px;" type="text"/> where produce was kept<br/>
+      – many needed <input class="fill-in-the-blank" name="q10" style="width: 180px; display: inline-block; margin: 0 4px;" type="text"/> to manage the farms<br/>
+      – acted as <input class="fill-in-the-blank" name="q11" style="width: 180px; display: inline-block; margin: 0 4px;" type="text"/> in hard economic periods
+    </li><br/>
+<li><strong>The development of writing</strong><br/>
+      – people wrote on surfaces made of <input class="fill-in-the-blank" name="q12" style="width: 180px; display: inline-block; margin: 0 4px;" type="text"/><br/>
+      – written records remained undamaged after <input class="fill-in-the-blank" name="q13" style="width: 180px; display: inline-block; margin: 0 4px;" type="text"/> archives they were kept in
+    </li>
+</ul>
+</div>
+</main>
+<footer>
+<div class="progress-container" id="progress-container">
+</div>
+<div class="action-buttons">
+<button class="btn-secondary" id="reset-btn">Reset Answers</button>
+<button class="btn-primary" id="submit-btn">Submit Answers</button>
+</div>
+</footer>
+<div class="feedback-overlay" id="feedback-overlay">
+<div class="feedback-container" id="feedback-container">
+<div class="feedback-header">
+<div class="feedback-title">
+<i class="fas fa-chart-bar"></i> Your Results
+                    <span class="score-display" id="score-display">0/13</span>
+</div>
+<button id="close-feedback" title="Close"><i class="fas fa-times"></i></button>
+</div>
+<div class="feedback-body" id="feedback-body">
+</div>
+</div>
+</div>
+<script>
+// Modified highlight logic with color picker and remove functionality
+let highlightTooltip = null;
+let selectedRange = null;
+
+function createColorPicker(x, y, applyColorCallback) {
+    const colors = ["#fda4af", "#facc15", "#6ee7b7", "#93c5fd"];
+    const picker = document.createElement("div");
+    picker.className = "highlight-tooltip";
+    picker.style.top = `${y}px`;
+    picker.style.left = `${x}px`;
+    picker.style.position = "fixed";
+    picker.style.background = "#ffffff"; picker.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
+    picker.style.borderRadius = "10px";
+    picker.style.padding = "5px 10px";
+    picker.style.borderRadius = "4px";
+    picker.style.zIndex = 1000;
+    picker.style.display = "flex";
+    colors.forEach(color => {
+        const btn = document.createElement("button");
+        btn.style.backgroundColor = color;
+        btn.style.border = "none";
+        btn.style.width = "28px"; btn.style.height = "28px"; btn.style.margin = "0 6px"; btn.style.borderRadius = "12px"; btn.style.boxShadow = "0 0 5px rgba(0,0,0,0.2)";
+        btn.title = `Highlight with ${color}`;
+        btn.addEventListener("click", () => {
+            applyColorCallback(color);
+            picker.remove();
+        });
+        picker.appendChild(btn);
+    });
+    document.body.appendChild(picker);
+    return picker;
+}
+
+function applyHighlight(color) {
+    if (!selectedRange) return;
+    const span = document.createElement("span");
+    span.className = "highlight";
+    span.style.backgroundColor = color;
+    span.setAttribute("data-color", color);
+    span.appendChild(selectedRange.extractContents());
+    selectedRange.insertNode(span);
+    selectedRange = null;
+    window.getSelection().removeAllRanges();
+
+    span.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (highlightTooltip) highlightTooltip.remove();
+        highlightTooltip = document.createElement("div");
+        highlightTooltip.className = "highlight-tooltip";
+        highlightTooltip.style.top = `${e.clientY}px`;
+        highlightTooltip.style.left = `${e.clientX}px`;
+        highlightTooltip.innerHTML = `<button style="color:white;background:red;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">Remove Highlight</button>`;
+        highlightTooltip.querySelector("button").addEventListener("click", function () {
+            const parent = span.parentNode;
+            while (span.firstChild) {
+                parent.insertBefore(span.firstChild, span);
+            }
+            parent.removeChild(span);
+            parent.normalize();
+            highlightTooltip.remove();
+        });
+        document.body.appendChild(highlightTooltip);
+    });
+}
+
+
+function handleMouseUp(e) {
+    const selection = window.getSelection();
+    if (selection.toString().trim() === '') return;
+    if (!e.currentTarget.contains(selection.anchorNode)) return;
+
+    selectedRange = selection.getRangeAt(0).cloneRange();
+    const rect = selectedRange.getBoundingClientRect();
+
+    if (highlightTooltip) highlightTooltip.remove();
+
+    highlightTooltip = createColorPicker(rect.left, rect.top - 40, applyHighlight);
+}
+
+document.getElementById('passage-text').addEventListener('mouseup', handleMouseUp);
+document.getElementById('questions-container').addEventListener('mouseup', handleMouseUp);
+
+document.addEventListener('mousedown', (e) => {
+    if (highlightTooltip && !highlightTooltip.contains(e.target)) {
+        highlightTooltip.remove();
+        highlightTooltip = null;
+        window.getSelection().removeAllRanges();
+    }
+});
+</script>
+<script>
+// === Night Mode Toggle ===
+document.getElementById('night-mode-toggle').addEventListener('click', function () {
+    document.body.classList.toggle('night-mode');
+    const icon = this.querySelector('i');
+    if (document.body.classList.contains('night-mode')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+    } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+    }
+});
+
+    let score = 0;
+    let feedbackHTML = "";
+
+    for (const [qid, correctValue] of Object.entries(correctAnswers)) {
+        const elems = document.getElementsByName(qid);
+        if (!elems || elems.length === 0) continue;
+
+        let userAnswer = "";
+        const elem = elems[0];
+
+        // Select box (dropdown)
+        if (elem.tagName === "SELECT") {
+            userAnswer = elem.value.trim();
+        }
+        // Radio buttons
+        else if (elem.type === "radio") {
+            for (let r of elems) {
+                if (r.checked) {
+                    userAnswer = r.value.trim();
+                    break;
+                }
+            }
+        }
+        // Text input
+        else if (elem.type === "text" || elem.tagName === "INPUT") {
+            userAnswer = elem.value.trim();
+        }
+
+        // Normalize for comparison (case-insensitive)
+        const isCorrect = userAnswer.toLowerCase() === correctValue.toLowerCase();
+        if (isCorrect) score++;
+
+        feedbackHTML += `
+    <div class="feedback-item">
+        <div class="feedback-question">Q${qid.replace("q", "")}</div>
+        <div class="feedback-answer ${isCorrect ? "correct" : "incorrect"}">
+            Your Answer: ${userAnswer || "(no answer)"}<br/>
+            ${isCorrect ? "✔ Correct" : `✘ Incorrect (Correct: ${correctValue})`}
+        </div>
+        <div class="feedback-explanation">
+            <strong>Explanation:</strong> ${explanations[qid] || "No explanation available."}
+        </div>
+        <div class="feedback-passage">
+            <strong>Relevant passage:</strong> "${passageReferences[qid] || "No passage found."}"
+        </div>
+    </div>`;
+
+    }
+
+    document.getElementById("feedback-body").innerHTML = feedbackHTML;
+    document.getElementById("score-display").textContent = `${score}/13`;
+    document.getElementById("feedback-overlay").style.display = "flex";
+});
+
+
+document.getElementById('close-feedback').addEventListener('click', function () {
+    document.getElementById("feedback-overlay").style.display = "none";
+});
+
+// === Reset Button ===
+document.getElementById('reset-btn').addEventListener('click', function () {
+    const selects = document.querySelectorAll("select");
+    selects.forEach(sel => sel.value = "");
+
+    const radios = document.querySelectorAll("input[type='radio']");
+    radios.forEach(r => r.checked = false);
+
+    const progressItems = document.querySelectorAll('.progress-item.completed');
+    progressItems.forEach(item => item.classList.remove('completed'));
+});
+</script>
+<script>
+function initializeProgressTracker() {
+    const progressContainer = document.getElementById("progress-container");
+    const questions = [{'id': 'q1', 'number': 1}, {'id': 'q2', 'number': 2}, {'id': 'q3', 'number': 3}, {'id': 'q4', 'number': 4}, {'id': 'q5', 'number': 5}, {'id': 'q6', 'number': 6}, {'id': 'q7', 'number': 7}, {'id': 'q8', 'number': 8}, {'id': 'q9', 'number': 9}, {'id': 'q10', 'number': 10}, {'id': 'q11', 'number': 11}, {'id': 'q12', 'number': 12}, {'id': 'q13', 'number': 13}];
+
+    questions.forEach(({id, number}) => {
+        const item = document.createElement("div");
+        item.className = "progress-item";
+        item.textContent = number;
+        item.dataset.qid = id;
+
+        item.addEventListener("click", () => {
+            document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+        });
+
+        progressContainer.appendChild(item);
+    });
+}
+
+function updateProgressStatus() {
+    const progressItems = document.querySelectorAll(".progress-item");
+
+    progressItems.forEach(item => {
+        const qid = item.dataset.qid;
+        const questionElem = document.getElementById(qid);
+        let answered = false;
+
+        if (!questionElem) return;
+
+        const select = questionElem.querySelector("select");
+        const textInput = questionElem.querySelector("input[type='text']");
+        const radios = questionElem.querySelectorAll("input[type='radio']");
+
+        if (select && select.value !== "") {
+            answered = true;
+        } else if (textInput && textInput.value.trim() !== "") {
+            answered = true;
+        } else if (radios.length > 0) {
+            radios.forEach(r => {
+                if (r.checked) answered = true;
+            });
+        }
+
+        // Apply visual change to bottom progress bar
+        if (answered) {
+            item.classList.add("completed");
+        } else {
+            item.classList.remove("completed");
+        }
+
+        // ✅ Apply visual change to question number circle
+        if (answered) {
+            questionElem.classList.add("answered");
+        } else {
+            questionElem.classList.remove("answered");
+        }
+    });
+}
+
+
+
+document.addEventListener("change", updateProgressStatus);
+document.addEventListener("DOMContentLoaded", () => {
+    initializeProgressTracker();
+    updateProgressStatus();
+});
+</script>
+<script>
+// === Timer Functionality ===
+let timerInterval;
+let timeRemaining = 20 * 60; // 20 minutes
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+    const seconds = (timeRemaining % 60).toString().padStart(2, '0');
+    document.getElementById("timer").textContent = `${minutes}:${seconds}`;
+}
+
+document.getElementById("start-timer").addEventListener("click", () => {
+    if (timerInterval) return;
+    timerInterval = setInterval(() => {
+        if (timeRemaining > 0) {
+            timeRemaining--;
+            updateTimerDisplay();
+        } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            alert("Time is up!");
+        }
+    }, 1000);
+});
+
+document.getElementById("pause-timer").addEventListener("click", () => {
+    clearInterval(timerInterval);
+    timerInterval = null;
+});
+
+document.getElementById("reset-timer").addEventListener("click", () => {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    timeRemaining = 20 * 60;
+    updateTimerDisplay();
+});
+
+document.addEventListener("DOMContentLoaded", updateTimerDisplay);
+</script>
+</body>
+</html>

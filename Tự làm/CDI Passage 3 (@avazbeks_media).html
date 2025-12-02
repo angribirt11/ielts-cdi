@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Real exam IELTS</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --passage-bg: #f8f9fa;
+            --questions-bg: #ffffff;
+            --border-color: #5770ff;
+            --highlight-color: springgreen;
+            /* Changed highlight color */
+
+            /* New Header & Social Colors */
+            --header-bg: #F8F8F8;
+            /* Very light gray for header background */
+            --header-text: #333333;
+            /* Dark text for light header */
+            --telegram-blue: #0088CC;
+            --instagram-pink: #E4405F;
+            --youtube-red: #FF0000;
+
+            /* Button Colors (Red themed) */
+            --button-bg: #28a745;
+            /* Primary button red */
+            --button-hover: #218838;
+            /* Darker red on hover */
+
+            --correct-color: #28a745;
+            /* Standard green */
+            --incorrect-color: #dc3545;
+            /* Standard red */
+            --progress-complete: #28a745;
+            --progress-incomplete: #bdbdbd;
+
+            /* Timer Colors (Red themed) */
+            --timer-bg: #0088CC;
+            /* Very light red/pink */
+            --timer-text: #ffffff;
+            /* Darker red */
+
+            --footer-bg: #f5f5f5;
+        }
+
+        .night-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --passage-bg: #1e1e1e;
+            --questions-bg: #1e1e1e;
+            --border-color: #424242;
+            --highlight-color: #0084ff;
+            /* Darker springgreen for night mode */
+
+            /* Night Mode Header & Social Colors */
+            --header-bg: #1a1a1a;
+            /* Dark gray for header background */
+            --header-text: #ffffff;
+            /* White text for dark header */
+            --telegram-blue: #005f99;
+            /* Darker telegram blue */
+            --instagram-pink: #b2334b;
+            /* Darker instagram pink */
+            --youtube-red: #b20000;
+            /* Darker YouTube red */
+
+            /* Night Mode Button Colors */
+            --button-bg: #990000;
+            /* Darker primary button red */
+            --button-hover: #7a0000;
+            /* Even darker red on hover */
+
+            --correct-color: #218838;
+            /* Darker green */
+            --incorrect-color: #c82333;
+            /* Darker red */
+            --progress-complete: #218838;
+            --progress-incomplete: #616161;
+
+            /* Night Mode Timer Colors */
+            --timer-bg: #0088CC;
+            /* Dark red */
+            --timer-text: #ffcdd2;
+            /* Lighter red */
+
+            --footer-bg: #121212;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            /* Space between social links */
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            /* Space between icon and text */
+            color: white;
+            /* Text color is always white for social links */
+            padding: 8px 15px;
+            border-radius: 50px;
+            /* Pill shape */
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-1px);
+        }
+
+        .social-link i {
+            font-size: 1.2em;
+            /* Makes icon slightly larger than text */
+        }
+
+        /* Specific styling for social links */
+        .social-link.telegram {
+            background-color: var(--telegram-blue);
+        }
+
+        .social-link.telegram:hover {
+            background-color: #007bb5;
+            /* Slightly darker */
+        }
+
+        .social-link.instagram {
+            background-color: var(--instagram-pink);
+        }
+
+        .social-link.instagram:hover {
+            background-color: #d62976;
+            /* Slightly darker */
+        }
+
+        .social-link.youtube {
+            background-color: var(--youtube-red);
+        }
+
+        .social-link.youtube:hover {
+            background-color: #CC0000;
+            /* Slightly darker */
+        }
+
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .timer-container {
+            background-color: var(--timer-bg);
+            color: var(--timer-text);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .timer-controls button {
+            background: none;
+            border: none;
+            color: var(--timer-text);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-controls button:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            /* Darker hover for light timer */
+        }
+
+        .night-mode .timer-controls button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            /* Lighter hover for dark timer */
+        }
+
+        .mode-toggle {
+            background: none;
+            border: none;
+            color: var(--header-text);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 6px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mode-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            /* Darker hover for light header */
+        }
+
+        .night-mode .mode-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            /* Lighter hover for dark header */
+        }
+
+        main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container,
+        .questions-container {
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .passage-container {
+            width: 50%;
+            background-color: var(--passage-bg);
+            border-right: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .questions-container {
+            width: 50%;
+            background-color: var(--questions-bg);
+        }
+
+        .passage-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .passage-text {
+            font-size: 17px;
+        }
+
+        .question-text {
+            font-size: 17px;
+            line-height: 1.8;
+            /* Increased line-height for fill-in-the-blank */
+        }
+
+        .passage-text p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .highlight {
+            background-color: var(--highlight-color);
+            cursor: pointer;
+        }
+
+        .highlight-tooltip {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 25px 0 15px;
+            color: var(--text-color);
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--passage-bg);
+            border-left: 4px solid var(--border-color);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: baseline;
+            /* Align baselines of number and text */
+        }
+
+        .question-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background-color: var(--progress-incomplete);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 10px;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .question.answered .question-number {
+            background-color: var(--progress-complete);
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .option input {
+            margin-right: 8px;
+        }
+
+        /* Styling for the new inline input fields */
+        .fill-in-the-blank {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--text-color);
+            width: 150px;
+            font-family: inherit;
+            font-size: 1em;
+            /* Inherit font size from parent */
+            color: inherit;
+            padding: 0 4px 2px 4px;
+            /* Add some padding */
+            margin: 0 3px;
+            /* Add some margin */
+            vertical-align: baseline;
+            /* Align with the text */
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .fill-in-the-blank:focus {
+            border-bottom-color: var(--button-bg);
+        }
+
+
+        .instructions {
+            font-size: 14px;
+            color: #757575;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .summary-box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #fafafa;
+            margin-top: 15px;
+        }
+
+        .summary-box p {
+            font-weight: normal !important;
+        }
+
+        .summary-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        .summary-options span {
+            padding: 5px;
+        }
+
+        .summary-text {
+            line-height: 2.2;
+        }
+
+        .summary-text .gap {
+            display: inline-block;
+            width: 150px;
+        }
+
+        .summary-text .question-input {
+            width: 40px;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
+        }        
+
+        footer {
+            background-color: var(--footer-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .progress-item {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--progress-incomplete);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .progress-item:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-item.completed {
+            background-color: var(--progress-complete);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--button-bg);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--button-bg);
+            /* Use primary button color for border */
+            color: var(--button-bg);
+            /* Use primary button color for text */
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(204, 0, 0, 0.1);
+            /* Light red tint on hover */
+        }
+
+        .night-mode .btn-secondary:hover {
+            background-color: rgba(153, 0, 0, 0.2);
+            /* Darker red tint on hover for night mode */
+        }
+
+
+        .feedback-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feedback-container {
+            background-color: var(--passage-bg);
+            width: 90%;
+            max-width: 900px;
+            height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feedback-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #close-feedback {
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+
+        .feedback-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .feedback-item {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--questions-bg);
+        }
+
+        .feedback-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .feedback-answer {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .correct {
+            color: var(--correct-color);
+        }
+
+        .incorrect {
+            color: var(--incorrect-color);
+        }
+
+        .feedback-explanation {
+            margin-top: 10px;
+            padding: 10px;
+            border-left: 3px solid var(--button-bg);
+            /* Use primary button color for explanation border */
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .feedback-passage {
+            margin-top: 8px;
+            font-style: italic;
+            color: #757575;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            main {
+                flex-direction: column;
+            }
+
+            .passage-container,
+            .questions-container {
+                width: 100%;
+                height: 50%;
+            }
+
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .progress-container {
+                flex-wrap: wrap;
+                max-width: 60%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo-area {
+                flex-wrap: wrap;
+                /* Allow items to wrap to the next line */
+                justify-content: center;
+                /* Center items when wrapped */
+                gap: 8px;
+                /* Adjusted gap for smaller screens */
+            }
+
+            .social-link {
+                padding: 6px 10px;
+                /* Reduced padding for smaller screens */
+                font-size: 13px;
+                /* Reduced font size for smaller screens */
+            }
+
+            .social-link i {
+                font-size: 1.1em;
+                /* Slightly smaller icon */
+            }
+
+            .social-link span {
+                display: inline;
+                /* Ensure text is visible */
+            }
+        }
+
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .header-controls {
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            .progress-container {
+                max-width: 50%;
+            }
+
+            .progress-item {
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .action-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+<header>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+<div class="logo-area">
+<!-- Removed the logo image tag as it was not opening -->
+<a class="social-link telegram" href="https://t.me/Avazbeks_Media" target="_blank" title="Join on Telegram">
+<i class="fab fa-telegram-plane"></i>
+<span>Avazbeks_Media</span>
+</a>
+</div>
+<div class="header-controls">
+<div class="timer-container">
+<i class="fas fa-clock"></i>
+<span id="timer">20:00</span>
+<div class="timer-controls">
+<button id="start-timer" title="Start"><i class="fas fa-play"></i></button>
+<button id="pause-timer" title="Pause"><i class="fas fa-pause"></i></button>
+<button id="reset-timer" title="Reset"><i class="fas fa-redo"></i></button>
+</div>
+</div>
+<button class="mode-toggle" id="night-mode-toggle" title="Toggle Night Mode">
+<i class="fas fa-moon"></i>
+</button>
+</div>
+</header>
+<main>
+    <div class="passage-container" id="passage-container">
+        <div class="passage-content">
+
+            <h4>READING PASSAGE 3</h4>
+            <div class="instructions">You should spend about 20 minutes on Questions 27-40, which are based on
+                Reading Passage 3.</div>
+            <div class="passage-title"></div>
+            <div class="passage-text" id="passage-text">
+                <p style="text-align:center; font-weight: !important;"><b>Flower Power</b><br></p>
+                                
+                <p><b>A</b> Why do people give flowers? To offer condolence to those who are grieving. To express gratitude. To ask for forgiveness. There is something undeniably powerful about giving flowers; in fact, few objects provoke such a universal response. In the US alone, the flower industry is now worth about $5bn a year—suggesting, at the very least, that they service a compelling human need.</p>
+
+                <p><b>B</b> Research at the Department of Psychology at Rutgers State University of New Jersey confirms that flowers are unique among living organisms in their ability to induce changes in our emotional state. As the first part of their research, the Rutgers psychologists studied women in their homes. Each was presented with a variety of gifts such as flowers, fruit, or sweets. The women were unaware that the study was about the effect of gifts on their emotions. They were told that it was a study about their daily moods, and that they would receive a gift in return for taking part. Following the presentation of the gifts, women receiving flowers were assessed as displaying a much more positive mood than those who received other gifts, and this effect lasted for several days. After receiving flowers, participants were more willing to answer questions concerning their social circle and intimate relationships with friends and family. The results suggest that flowers influence our emotional behaviours, as well as having a strong effect on our immediate expression.</p>
+
+                <p><b>C</b> In the second study, the psychologists observed participants being handed single flowers, or no gift at all, in a constrained and stressful situation—inside an elevator. Contrary to expectations regarding gender differences, both men and women presented with flowers were more likely to smile, to stand closer and to initiate conversation. Several subjects who were initially skeptical about the experiment's purpose then learnt that flowers were also being handed out, and returned to the elevator and demanded a flower. The scientists used elevators for this study precisely because typical behaviour in sparsely occupied elevators is for people to retreat to opposite corners. The subjects who received flowers, however, closed up that space to a considerable extent—indicating that the flowers not only induced a strong positive mood but brought a significant affiliation among people who had never previously met.</p>
+
+                <p><b>D</b> The third study involved regularly sending flowers to a selected sample of men and women. The researchers found not only a profound elevation of mood but also reliable improvements in other measures of cognitive function, like memory. In this series of experiments, some participants produced such extraordinary emotional displays that the psychologists were totally unprepared for them. Subjects gave spontaneous hugs and kisses to the people who delivered the flowers, and sent invitations to the psychologists to come to their homes for refreshments.</p>
+
+                <p><b>E</b> Various evolutionary hypotheses attempt to explain the remarkably powerful psychological effect of flowers. One is that our aesthetic preferences for fertile locations and growing things stem from prehistory, when these clues in our environment could mean the difference between starvation and survival. We may have become hardwired to respond positively to flowers because, for early man, finding them in a particular location predicted future food supplies and possibly a better place to rear children. Yet the flaw in this argument is that the showy flowers which humans seem to find most visually attractive are generally found on those plants which yield no edible products.</p>
+
+                <p><b>F</b> The Rutgers psychologists' findings show that the various physical attributes of flowers combine to directly affect our emotions through multi-channel interactions. We have evolved preferences for the particular colours, textures, patterned symmetries, and specific floral odours which influence our moods. Indeed, previous research has established that popular perfumes, which often have a floral 'top-note', will actually reduce depression. The origins of these inclinations may well be as the evolutionary theories suggest: the patterned symmetries of flowers can be detected easily as a recognisable signal within a wide variety of visual arrays, and a response to certain colour tones is important in finding ripe fruit against a leafy background. But, claim the Rutgers team, these preferences have long been separated from their primary evolutionary use, and become rewarding to us more generally. Thus, plants with preferred colours, shapes and odours—despite having no other products—would therefore be protected and dispersed.</p>
+
+                <p><b>G</b> The Rutgers study suggests that flowers may have actually evolved to exploit their peculiar impact on humans. The team's theory proposes a plant-human co-evolution, or even domestication, based on the intense emotional rewards that flowers provide. The idea that flowering plants, with no known food or other basic survival value to man, have co-evolved with us by exploiting an emotional niche instead, is very much like the scenario presented for the evolution of dogs. Flowers may be the plant equivalent of 'companion animals'. If this is true, then there is a very real sense in which, when you next give flowers, they are using you just as much as you are using them.</p>
+
+                
+            </div>
+        </div>
+    </div>
+
+<div class="questions-container" id="questions-container">
+    <div class="section-title">Questions 27–33.</div>
+<div class="instructions">
+    Reading Passage 3 has seven paragraphs, A–G.<br />
+    Choose the correct heading for each paragraph from the list of headings below.<br />
+    Write the correct number, i–viii, in boxes 27–33 on your answer sheet.
+</div>
+
+<div class="question" style="margin-bottom: 10px;">
+    <strong>List of Headings</strong><br>
+    <b>i</b> A negative reaction to receiving flowers<br />
+    <b>ii</b> Some surprisingly strong responses to flowers<br />
+    <b>iii</b> A mutually beneficial relationship?<br />
+    <b>iv</b> Becoming more open about personal matters<br />
+    <b>v</b> Some common social functions of flowers<br />
+    <b>vi</b> Sensory appeal versus practical purpose of flowers<br />
+    <b>vii</b> Bridging the gap between strangers in an enclosed space<br />
+    <b>viii</b> An imperfect theory
+</div>
+
+<div class="question-group">
+    <div class="question" id="q27">
+        <div class="question-title">
+            <div class="question-number">27</div>
+            <div class="question-text">Paragraph A</div>
+        </div>
+        <select name="q27">
+            <option value="">Select heading...</option>
+            <option value="i">i</option>
+            <option value="ii">ii</option>
+            <option value="iii">iii</option>
+            <option value="iv">iv</option>
+            <option value="v">v</option>
+            <option value="vi">vi</option>
+            <option value="vii">vii</option>
+            <option value="viii">viii</option>
+        </select>
+    </div>
+
+    <div class="question" id="q28">
+        <div class="question-title">
+            <div class="question-number">28</div>
+            <div class="question-text">Paragraph B</div>
+        </div>
+        <select name="q28">
+            <option value="">Select heading...</option>
+            <option value="i">i</option>
+            <option value="ii">ii</option>
+            <option value="iii">iii</option>
+            <option value="iv">iv</option>
+            <option value="v">v</option>
+            <option value="vi">vi</option>
+            <option value="vii">vii</option>
+            <option value="viii">viii</option>
+        </select>
+    </div>
+
+    <div class="question" id="q29">
+        <div class="question-title">
+            <div class="question-number">29</div>
+            <div class="question-text">Paragraph C</div>
+        </div>
+        <select name="q29">
+            <option value="">Select heading...</option>
+            <option value="i">i</option>
+            <option value="ii">ii</option>
+            <option value="iii">iii</option>
+            <option value="iv">iv</option>
+            <option value="v">v</option>
+            <option value="vi">vi</option>
+            <option value="vii">vii</option>
+            <option value="viii">viii</option>
+        </select>
+    </div>
+
+    <div class="question" id="q30">
+        <div class="question-title">
+            <div class="question-number">30</div>
+            <div class="question-text">Paragraph D</div>
+        </div>
+        <select name="q30">
+            <option value="">Select heading...</option>
+            <option value="i">i</option>
+            <option value="ii">ii</option>
+            <option value="iii">iii</option>
+            <option value="iv">iv</option>
+            <option value="v">v</option>
+            <option value="vi">vi</option>
+            <option value="vii">vii</option>
+            <option value="viii">viii</option>
+        </select>
+    </div>
+
+    <div class="question" id="q31">
+        <div class="question-title">
+            <div class="question-number">31</div>
+            <div class="question-text">Paragraph E</div>
+        </div>
+        <select name="q31">
+            <option value="">Select heading...</option>
+            <option value="i">i</option>
+            <option value="ii">ii</option>
+            <option value="iii">iii</option>
+            <option value="iv">iv</option>
+            <option value="v">v</option>
+            <option value="vi">vi</option>
+            <option value="vii">vii</option>
+            <option value="viii">viii</option>
+        </select>
+    </div>
+
+    <div class="question" id="q32">
+        <div class="question-title">
+            <div class="question-number">32</div>
+            <div class="question-text">Paragraph F</div>
+        </div>
+        <select name="q32">
+            <option value="">Select heading...</option>
+            <option value="i">i</option>
+            <option value="ii">ii</option>
+            <option value="iii">iii</option>
+            <option value="iv">iv</option>
+            <option value="v">v</option>
+            <option value="vi">vi</option>
+            <option value="vii">vii</option>
+            <option value="viii">viii</option>
+        </select>
+    </div>
+
+    <div class="question" id="q33">
+        <div class="question-title">
+            <div class="question-number">33</div>
+            <div class="question-text">Paragraph G</div>
+        </div>
+        <select name="q33">
+            <option value="">Select heading...</option>
+            <option value="i">i</option>
+            <option value="ii">ii</option>
+            <option value="iii">iii</option>
+            <option value="iv">iv</option>
+            <option value="v">v</option>
+            <option value="vi">vi</option>
+            <option value="vii">vii</option>
+            <option value="viii">viii</option>
+        </select>
+    </div>
+</div>
+
+<div class="section-title">Questions 34–37.</div>
+<div class="instructions">
+    Classify the following statements as referring to:<br />
+    <b>A</b> the first study<br />
+    <b>B</b> the second study<br />
+    <b>C</b> the third study<br /><br />
+    Write the correct letter, A, B, or C, in boxes 34–37 on your answer sheet.
+</div>
+
+<div class="question-group">
+    <div class="question" id="q34">
+        <div class="question-title">
+            <div class="question-number">34</div>
+            <div class="question-text">The study focused on participants' short-term reaction to receiving flowers.</div>
+        </div>
+        <select name="q34">
+            <option value="">Select A, B or C...</option>
+            <option value="A">A – the first study</option>
+            <option value="B">B – the second study</option>
+            <option value="C">C – the third study</option>
+        </select>
+    </div>
+
+    <div class="question" id="q35">
+        <div class="question-title">
+            <div class="question-number">35</div>
+            <div class="question-text">Participants were deliberately misled as to the aim of the study.</div>
+        </div>
+        <select name="q35">
+            <option value="">Select A, B or C...</option>
+            <option value="A">A – the first study</option>
+            <option value="B">B – the second study</option>
+            <option value="C">C – the third study</option>
+        </select>
+    </div>
+
+    <div class="question" id="q36">
+        <div class="question-title">
+            <div class="question-number">36</div>
+            <div class="question-text">Receiving flowers had a notable effect on participants' mental capacities.</div>
+        </div>
+        <select name="q36">
+            <option value="">Select A, B or C...</option>
+            <option value="A">A – the first study</option>
+            <option value="B">B – the second study</option>
+            <option value="C">C – the third study</option>
+        </select>
+    </div>
+
+    <div class="question" id="q37">
+        <div class="question-title">
+            <div class="question-number">37</div>
+            <div class="question-text">Male and female responses were more uniform than expected.</div>
+        </div>
+        <select name="q37">
+            <option value="">Select A, B or C...</option>
+            <option value="A">A – the first study</option>
+            <option value="B">B – the second study</option>
+            <option value="C">C – the third study</option>
+        </select>
+    </div>
+</div>
+
+
+<div class="section-title">Questions 38-40</div>
+            <div class="instructions">Complete the summary of paragraph E below.<br>  
+              Choose <b>ONE WORD ONLY</b> from paragraph E for each answer.<br> 
+              Write your answers in boxes 38-40 on your answer sheet.</div>
+                <p style="text-align:center; font-weight: bold !important;">A possible explanation for the appeal of flowers</p>
+            
+                <div class="question-group">
+
+                    <div class="question" id="q38">
+                        <div class="question-title">
+                            <div class="question-number">38</div>
+                            <div class="question-text">                                
+                                It has been suggested that our intense response to flowers originates in prehistoric times. The presence of flowers might indicate a potential source of <input type="text" name="q38" class="fill-in-the-blank">in a particular location,
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="question" id="q39">
+                    <div class="question-title">
+                        <div class="question-number">39</div>
+                        <div class="question-text">                                
+                            and primitive humans would search for such signs when looking for a suitable site to raise their  <input type="text" name="q39" class="fill-in-the-blank">.
+                        </div>
+                    </div>
+                </div>
+                <div class="question" id="q40">
+                  <div class="question-title">
+                      <div class="question-number">40</div>
+                      <div class="question-text">                                
+                        The interpretation of these signs was essential for the survival of our ancestors. However, the problem with this idea is that the plants producing the most attractive flowers do not usually have fruit which is <input type="text" name="q40" class="fill-in-the-blank">.
+                      </div>
+                  </div>
+                </div>
+        </div>
+</div>
+</main>
+<footer>
+<div class="progress-container" id="progress-container">
+</div>
+<div class="action-buttons">
+<button class="btn-secondary" id="reset-btn">Reset Answers</button>
+<button class="btn-primary" id="submit-btn">Submit Answers</button>
+</div>
+</footer>
+<div class="feedback-overlay" id="feedback-overlay">
+<div class="feedback-container" id="feedback-container">
+<div class="feedback-header">
+<div class="feedback-title">
+<i class="fas fa-chart-bar"></i> Your Results
+                    <span class="score-display" id="score-display">0/14</span>
+</div>
+<button id="close-feedback" title="Close"><i class="fas fa-times"></i></button>
+</div>
+<div class="feedback-body" id="feedback-body">
+</div>
+</div>
+</div>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+<script>
+// Modified highlight logic with color picker and remove functionality
+let highlightTooltip = null;
+let selectedRange = null;
+
+function createColorPicker(x, y, applyColorCallback) {
+    const colors = ["lightgreen", "yellow", "lightskyblue"];
+    const picker = document.createElement("div");
+    picker.className = "highlight-tooltip";
+    picker.style.top = `${y}px`;
+    picker.style.left = `${x}px`;
+    picker.style.position = "fixed";
+    picker.style.background = "#333";
+    picker.style.color = "white";
+    picker.style.padding = "5px 10px";
+    picker.style.borderRadius = "4px";
+    picker.style.zIndex = 1000;
+    picker.style.display = "flex";
+    colors.forEach(color => {
+        const btn = document.createElement("button");
+        btn.style.backgroundColor = color;
+        btn.style.border = "none";
+        btn.style.width = "20px";
+        btn.style.height = "20px";
+        btn.style.margin = "0 4px";
+        btn.style.borderRadius = "50%";
+        btn.title = `Highlight with ${color}`;
+        btn.addEventListener("click", () => {
+            applyColorCallback(color);
+            picker.remove();
+        });
+        picker.appendChild(btn);
+    });
+    document.body.appendChild(picker);
+    return picker;
+}
+
+function applyHighlight(color) {
+    if (!selectedRange) return;
+    const span = document.createElement("span");
+    span.className = "highlight";
+    span.style.backgroundColor = color;
+    span.setAttribute("data-color", color);
+    span.appendChild(selectedRange.extractContents());
+    selectedRange.insertNode(span);
+    selectedRange = null;
+    window.getSelection().removeAllRanges();
+
+    span.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (highlightTooltip) highlightTooltip.remove();
+        highlightTooltip = document.createElement("div");
+        highlightTooltip.className = "highlight-tooltip";
+        highlightTooltip.style.top = `${e.clientY}px`;
+        highlightTooltip.style.left = `${e.clientX}px`;
+        highlightTooltip.innerHTML = `<button style="color:white;background:red;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">Remove Highlight</button>`;
+        highlightTooltip.querySelector("button").addEventListener("click", function () {
+            const parent = span.parentNode;
+            while (span.firstChild) {
+                parent.insertBefore(span.firstChild, span);
+            }
+            parent.removeChild(span);
+            parent.normalize();
+            highlightTooltip.remove();
+        });
+        document.body.appendChild(highlightTooltip);
+    });
+}
+
+
+function handleMouseUp(e) {
+    const selection = window.getSelection();
+    if (selection.toString().trim() === '') return;
+    if (!e.currentTarget.contains(selection.anchorNode)) return;
+
+    selectedRange = selection.getRangeAt(0).cloneRange();
+    const rect = selectedRange.getBoundingClientRect();
+
+    if (highlightTooltip) highlightTooltip.remove();
+
+    highlightTooltip = createColorPicker(rect.left, rect.top - 40, applyHighlight);
+}
+
+document.getElementById('passage-text').addEventListener('mouseup', handleMouseUp);
+document.getElementById('questions-container').addEventListener('mouseup', handleMouseUp);
+
+document.addEventListener('mousedown', (e) => {
+    if (highlightTooltip && !highlightTooltip.contains(e.target)) {
+        highlightTooltip.remove();
+        highlightTooltip = null;
+        window.getSelection().removeAllRanges();
+    }
+});
+</script>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+<script>
+// === Night Mode Toggle ===
+document.getElementById('night-mode-toggle').addEventListener('click', function () {
+    document.body.classList.toggle('night-mode');
+    const icon = this.querySelector('i');
+    if (document.body.classList.contains('night-mode')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+    } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+    }
+});
+
+document.getElementById('submit-btn').addEventListener('click', function () {
+    let correctAnswers = {
+        q27: "v",
+        q28: "iv",
+        q29: "vii",
+        q30: "ii",
+        q31: "viii",
+        q32: "vi",
+        q33: "iii",
+        q34: "B",
+        q35: "A",
+        q36: "C",
+        q37: "B",
+        q38: "Food",
+        q39: "Children",
+        q40: "Edible"
+    };
+
+    let score = 0;
+    let feedbackHTML = "";
+
+    for (const [qid, correct] of Object.entries(correctAnswers)) {
+        let userAnswer = "";
+        const inputs = document.getElementsByName(qid);
+
+        if (!inputs || inputs.length === 0) continue;
+
+        const input = inputs[0];
+
+        // Check for SELECT
+        if (input.tagName === "SELECT") {
+            userAnswer = input.value;
+        }
+        // Check for RADIO
+        else if (input.type === "radio") {
+            for (let r of inputs) {
+                if (r.checked) {
+                    userAnswer = r.value;
+                    break;
+                }
+            }
+        }
+        // Check for TEXT INPUT
+        else if (input.type === "text") {
+            userAnswer = input.value;
+        }
+
+        // Normalize for comparison
+        const normalizedUser = userAnswer.trim().toLowerCase();
+        const normalizedCorrect = correct.trim().toLowerCase();
+        const isCorrect = normalizedUser === normalizedCorrect;
+
+        if (isCorrect) score++;
+
+        feedbackHTML += `
+        <div class="feedback-item">
+            <div class="feedback-question">Q${qid.replace("q", "")}</div>
+            <div class="feedback-answer ${isCorrect ? "correct" : "incorrect"}">
+                Your Answer: ${userAnswer || "(no answer)"}<br/>
+                ${isCorrect ? "✔ Correct" : `✘ Incorrect (Correct: ${correct})`}
+            </div>
+        </div>`;
+    }
+
+    document.getElementById("feedback-body").innerHTML = feedbackHTML;
+    document.getElementById("score-display").textContent = `${score}/14`;
+    document.getElementById("feedback-overlay").style.display = "flex";
+});
+
+document.getElementById('close-feedback').addEventListener('click', function () {
+    document.getElementById("feedback-overlay").style.display = "none";
+});
+
+
+// === Reset Button ===
+document.getElementById('reset-btn').addEventListener('click', function () {
+    const selects = document.querySelectorAll("select");
+    selects.forEach(sel => sel.value = "");
+
+    const radios = document.querySelectorAll("input[type='radio']");
+    radios.forEach(r => r.checked = false);
+
+    const progressItems = document.querySelectorAll('.progress-item.completed');
+    progressItems.forEach(item => item.classList.remove('completed'));
+});
+</script>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+<script>
+function initializeProgressTracker() {
+    const progressContainer = document.getElementById("progress-container");
+    const questions = [
+    { id: 'q27', number: 27 },
+    { id: 'q28', number: 28 },
+    { id: 'q29', number: 29 },
+    { id: 'q30', number: 30 },
+    { id: 'q31', number: 31 },
+    { id: 'q32', number: 32 },
+    { id: 'q33', number: 33 },
+    { id: 'q34', number: 34 },
+    { id: 'q35', number: 35 },
+    { id: 'q36', number: 36 },
+    { id: 'q37', number: 37 },
+    { id: 'q38', number: 38 },
+    { id: 'q39', number: 39 },
+    { id: 'q40', number: 40 }
+];
+
+
+    questions.forEach(({id, number}) => {
+        const item = document.createElement("div");
+        item.className = "progress-item";
+        item.textContent = number;
+        item.dataset.qid = id;
+
+        item.addEventListener("click", () => {
+            document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+        });
+
+        progressContainer.appendChild(item);
+    });
+}
+
+function updateProgressStatus() {
+    const progressItems = document.querySelectorAll(".progress-item");
+
+    progressItems.forEach(item => {
+        const qid = item.dataset.qid;
+        const questionElem = document.getElementById(qid);
+        if (!questionElem) return;
+
+        let answered = false;
+
+        // Check for <select>
+        const select = questionElem.querySelector("select");
+        if (select && select.value !== "") {
+            answered = true;
+        }
+
+        // Check for <input type="radio">
+        const radios = questionElem.querySelectorAll("input[type='radio']");
+        if (!answered && radios.length > 0) {
+            radios.forEach(r => {
+                if (r.checked) answered = true;
+            });
+        }
+
+        // Check for <input type="text"> (fill-in-the-blank)
+        const textInputs = questionElem.querySelectorAll("input[type='text']");
+        if (!answered && textInputs.length > 0) {
+            textInputs.forEach(input => {
+                if (input.value.trim() !== "") answered = true;
+            });
+        }
+
+        // Update .progress-item
+        if (answered) {
+            item.classList.add("completed");
+        } else {
+            item.classList.remove("completed");
+        }
+
+        // Update .question style
+        if (answered) {
+            questionElem.classList.add("answered");
+        } else {
+            questionElem.classList.remove("answered");
+        }
+    });
+}
+
+// Apply on any input/select change
+document.addEventListener("change", updateProgressStatus);
+document.addEventListener("input", updateProgressStatus); // for typing in text inputs
+
+document.addEventListener("DOMContentLoaded", () => {
+    initializeProgressTracker();
+    updateProgressStatus();
+});
+
+</script>
+
+<script>
+// === Timer Functionality ===
+let timerInterval;
+let timeRemaining = 20 * 60; // 20 minutes
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+    const seconds = (timeRemaining % 60).toString().padStart(2, '0');
+    document.getElementById("timer").textContent = `${minutes}:${seconds}`;
+}
+
+document.getElementById("start-timer").addEventListener("click", () => {
+    if (timerInterval) return;
+    timerInterval = setInterval(() => {
+        if (timeRemaining > 0) {
+            timeRemaining--;
+            updateTimerDisplay();
+        } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            alert("Time is up!");
+        }
+    }, 1000);
+});
+
+document.getElementById("pause-timer").addEventListener("click", () => {
+    clearInterval(timerInterval);
+    timerInterval = null;
+});
+
+document.getElementById("reset-timer").addEventListener("click", () => {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    timeRemaining = 20 * 60;
+    updateTimerDisplay();
+});
+
+document.addEventListener("DOMContentLoaded", updateTimerDisplay);
+</script>
+</body>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+</html>
