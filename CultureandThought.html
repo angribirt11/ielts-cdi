@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 2 – The Link Between Culture and Thought</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  h3{margin:8px 0 0}
+  .muted{color:var(--muted)}
+
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+
+  /* Highlights */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1>READING PASSAGE 2 – The Link Between Culture and Thought</h1>
+      <div class="muted">You should spend about 20 minutes on Questions 14–26.</div>
+
+      <div id="passage">
+        <h2>Reading Passage 2</h2>
+        <h3>The Link Between Culture and Thought</h3>
+
+        <p><strong>A.</strong> Fore more than a century, Western philosophers and psychologists have based their
+discussions of thought patterns on one basic principle: that the same processes
+underlie all human thought, whether in the mountains of Tibet or the grasslands of
+Africa. Cultural differences might dictate what people thought about. Teenage boys in
+remote areas of Africa, for example, might discuss cows with the same passion that
+New York teenagers reserved for sports cars. But the strategies people adopted in
+processing information and making sense of the world around them - were, Western
+acholars assumed, the same for everyone.</p>
+
+        <p><strong>B.</strong> However, recent work by a social psychologist at the University of Michigan, is
+turning this long-held view of mental functioning upside down. In a series of studies
+comparing European Americans (representing 'Westerners') to East Asians
+(representing 'Easterners'), Dr. Richard Nisbett and his colleagues have found that
+people who grow up in different cultures do not just think about different things: they
+think differently. Actually, researchers were not the first psychological researchers to
+propose that thought may be embedded in cultural assumptions. For example, Soviet
+psychologists of the 1930's posed logical problems to Uzbek peasants, arguing that
+intellectual tools were influenced by pragmatic circumstances. But University of
+Michigan work has been of interest in academic circles because it tries to define and
+elaborate on cultural differences through a series of tightly controlled laboratory
+experiments. In the broadest sense, the Michigan studies - carried out in the United
+States, Japan, China and Korea -- document a basic contrast between East and West,
+and doing so they raise questions about the assumptions of cognitive psychology that
+have been made for the past half a century.</p>
+
+        <p><strong>C.</strong> In one study, for example, by Dr. Nisbett and Takahiko Masuda, a graduate student
+at Michigan, students from Japan and the United States were shown an animated
+underwater scene, in which one larger "focal" fish swam among smaller fishes and
+other aquatic life. Asked to describe what they saw, the Japanese subjects were much
+more likely to begin by setting the scene, saying for example, "There was a lake or
+pond" or "The bottom was rocky," or "The water was green." Americans, in contrast,
+tended to begin their descriptions with the largest fish, making statements like "There
+was what looked like a trout swimming to the right." Overall, Japanese subjects in the
+study made 70 percent more statements about aspects of the background
+environment than Americans, and twice as many statements about the relationships
+between animate and inanimate objects. A Japanese subject might note, for exampla
+that "The big fish swam past the gray seaweed." And, the greater attention paid by
+East Asians to context and relationship was more than just superficial, the
+researchers found. Shown the same larger fish swimming against a different, novel
+background, Japanese participants had more difficulty recognizing it than Americans. This indicated that their perception of the Japanese was closely dependent upon what
+they saw in the background.</p>
+
+        <p><strong>D.</strong> In another study, Dr. Nisbett and Dr. Incheol Choi, found that Easterners were more
+likely than Westerners to appreciate both sides of an argument. The researchers
+presented groups of Koreans and Americans with very convincing arguments in
+support of a particular position. Both the Koreans and the Americans at first
+expressed strong support for that position. However, when the groups were then
+presented with arguments opposing the initial position, the Korean subjects generally
+modified and decreased their support for that position, while the Americans actually
+increased their original support.</p>
+
+        <p><strong>E.</strong> In yet another study, again focusing on Americans and Koreans, Dr. Nisbett and Dr.
+Ara Norenzayan found indications that when logic and experiential knowledge are in
+conflict, Westerners are more likely than Easterners to stick to the rules of formal
+logic. For example, presented with a logical sequence like, "All animals with fur
+hibernate. Rabbits have fur. Therefore, rabbits hibernate." The Americans were more
+likely to accept the validity of the series of statements. They assumed the conclusion
+must be true because of the logical structure of the arguments. The Korean subjects,
+by contrast, more frequently judged the argument as invalid based on their own
+understanding that it was not actually true -- not all animals with fur do in fact
+hibernate.</p>
+
+        <p><strong>F.</strong> While the cultural disparities traced in the researchers' work are substantial, their
+origins are much less clear. Historical evidence suggests that a divide between
+Eastern and Occidental thinking has existed at least since ancient times. How much of
+this East-West difference is a result of differing social and religious practices,
+different languages or even different geography is anyone's guess. But both styles, Dr.
+Nisbett said, have advantages, and both have limitations. And neither approach is
+written into the genes: many Asian-Americans, born in the United States, are
+indistinguishable in their modes of thought from European-Americans. According to
+Dr. Alan Fiske says, "In my field we discuss the way these different groups talk and
+interact. But these descriptions are qualitative in nature rather than being controlled
+as an experiment would be, so Dr. Nisbett's research is a valuable complement to our
+work." Yet not everyone agrees that all Dr. Nisbett's findings reflect fundamental
+differences in psychological process. Psychologist Dr. Patricia Cheng finds some of
+the findings matched some of her personal experiences. But she says, "I think that
+some differences - the Asian tolerance for contradiction, for example -- are purely
+social." Still, to the extent that the studies reflect real differences in thinking and
+perception, psychologists may have to radically revise their ideas about what is
+universal and what is not, and to develop new models of mental process that take
+cultural influences into account.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+
+<script>
+/* =======================
+   CONFIG (answers included)
+   ======================= */
+const CONFIG = {
+  durationMinutes: 20,
+  showFooterNavigator: true,
+  sections: [
+    /* 14–18 match to paragraph A–F */
+    {
+      type: "matchAF",
+      heading: "Questions 14–18",
+      instructions: [
+        "Reading Passage 2 has six paragraphs, A–F.",
+        "Which paragraph contains the following information?"
+      ],
+      options: ["A","B","C","D","E","F"],
+      items: [
+        { id: 14, prompt: "the point during an experiment when all subjects agreed with a particular point of view", correct: "D" },
+        { id: 15, prompt: "a reference to study on potential effect of a rural life on people's reasoning", correct: "B" },
+        { id: 16, prompt: "a description of how different cultures might view the same scene", correct: "C" },
+        { id: 17, prompt: "examples of what young people think about in widely different geographical contexts", correct: "A" },
+        { id: 18, prompt: "an illustration of people's different reactions after hearing opposing arguments", correct: "D" }
+      ]
+    },
+
+    /* 19–22 match statements to researchers A/B/C */
+    {
+      type: "matchABC",
+      heading: "Questions 19–22",
+      instructions: [
+        "Look at the following statements and the list of researchers below.",
+        "Match each statement with the correct researchers, A, B or C."
+      ],
+      legend: {
+        A: "Takahiko Masuda and Dr. Nisbett",
+        B: "Incheol Choi and Dr. Nisbett",
+        C: "Ara Norenzayan and Dr. Nisbett"
+      },
+      items: [
+        { id: 19, prompt: "Westerners tend to adhere to their beliefs even when they are presented with contradictory evidence.", correct: "B" },
+        { id: 20, prompt: "Visual images can be used to reveal differences in people's thought processes.", correct: "A" },
+        { id: 21, prompt: "Easterners are likely to reject a well‑reasoned argument that they know to be false.", correct: "C" },
+        { id: 22, prompt: "Easterners may find it hard to identify a familiar object in new circumstances.", correct: "A" }
+      ]
+    },
+
+    /* 23–26 sentence completion (ONE WORD ONLY) */
+    {
+      type: "gap1",
+      heading: "Questions 23–26",
+      instructions: [
+        "Complete the sentences below.",
+        "Choose ONE WORD ONLY from the passage for each answer."
+      ],
+      items: [
+        { id: 23, prompt: "Dr. Nisbett does not believe that ______ control the differences between Oriental and Occidental thinking.", correct: ["genes"] },
+        { id: 24, prompt: "Dr. Fiske says that Dr. Nisbett's work is valuable because it consists of experiments and therefore is not ______.", correct: ["qualitative"] },
+        { id: 25, prompt: "Dr. Cheng's own ______ has led her to support some of Dr. Nisbett’s ideas.", correct: ["experience"] },
+        { id: 26, prompt: "Dr. Cheng believes that there is a clear ______ explanation for the fact that contradictions are accepted more readily in Eastern cultures.", correct: ["social"] }
+      ]
+    }
+  ]
+};
+
+/* =======================
+   RENDER (same as template)
+   ======================= */
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+const typesMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+/* Match A–F */
+function renderMatchAF(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  const legend=document.createElement('div'); legend.className='qblock';
+  legend.innerHTML = `<div class="qhead"><strong>Paragraphs</strong></div>
+    <div class="options">${sec.options.map(k=>`<span style="margin-right:10px;"><b>${k}</b></span>`).join('')}</div>`;
+  qroot.appendChild(legend);
+
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const sel=`<select id="q${it.id}" name="q${it.id}">
+      <option value="">—</option>${sec.options.map(k=>`<option value="${k}">${k}</option>`).join('')}
+    </select>`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div><div class="options">${sel}</div>`;
+    qroot.appendChild(b);
+    navIds.push(it.id); answersMap[it.id]=it.correct; typesMap[it.id]='match';
+  });
+}
+
+/* Match A/B/C (researchers) */
+function renderMatchABC(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+
+  const legend=document.createElement('div'); legend.className='qblock';
+  legend.innerHTML = `<div class="qhead"><strong>List of researchers</strong></div>
+  <div class="options"><div><b>A</b> — ${sec.legend.A}</div><div><b>B</b> — ${sec.legend.B}</div><div><b>C</b> — ${sec.legend.C}</div></div>`;
+  qroot.appendChild(legend);
+
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const sel=`<select id="q${it.id}" name="q${it.id}">
+      <option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option>
+    </select>`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div><div class="options">${sel}</div>`;
+    qroot.appendChild(b);
+    navIds.push(it.id); answersMap[it.id]=it.correct; typesMap[it.id]='abc';
+  });
+}
+
+/* ONE-WORD GAPs */
+function renderGAP1(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div>
+                 <div class="options"><input type="text" id="q${it.id}" placeholder="ONE WORD ONLY"></div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct; typesMap[it.id]='gap1';
+  });
+}
+
+/* Build UI */
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='matchAF') renderMatchAF(sec);
+  if (sec.type==='matchABC') renderMatchABC(sec);
+  if (sec.type==='gap1') renderGAP1(sec);
+});
+
+/* Footer chips */
+const footerNav=document.getElementById('footerNav');
+footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+[...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+  const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+  chip.addEventListener('click',()=>{ document.getElementById(`anchor-${id}`).scrollIntoView({behavior:'smooth',block:'center'}); });
+  footerNav.appendChild(chip);
+});
+function markChipAnswered(id, answered){
+  const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered);
+}
+document.addEventListener('change',(e)=>{
+  const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  const id=m?+m[1]:null; if(!id) return;
+  const answered=(e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                 : (e.target.value.trim().length>0);
+  markChipAnswered(id, answered);
+});
+
+/* Timer */
+let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60;
+const timer=document.getElementById('timer');
+const pauseBtn=document.getElementById('pauseBtn');
+const resumeBtn=document.getElementById('resumeBtn');
+let paused=false, iv;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){ if(iv) clearInterval(iv);
+  iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft); if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent=fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+
+function normLower(s){ return (s||'').trim().replace(/\s+/g,' ').toLowerCase(); }
+function submit(){
+  paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const itemsOut=[];
+  const ids=Object.keys(answersMap).map(Number).sort((a,b)=>a-b);
+
+  ids.forEach(key=>{
+    total++;
+    const type=typesMap[key];
+    let user='', ok=false;
+
+    if(type==='match' || type==='abc'){
+      const sel=document.getElementById('q'+key);
+      user = sel? sel.value : '';
+      ok = normLower(user)===normLower(answersMap[key]);
+    } else if(type==='gap1'){
+      const input=document.getElementById('q'+key);
+      user = input? input.value : '';
+      const acc = Array.isArray(answersMap[key]) ? answersMap[key] : [answersMap[key]];
+      ok = acc.map(normLower).includes(normLower(user));
+    }
+
+    if(user) graded++;
+    if(ok) correctCount++;
+    const corr = Array.isArray(answersMap[key])?answersMap[key][0]:answersMap[key];
+    itemsOut.push({label:key, status: ok? '✓ Correct':'✗ Incorrect', user: user||'No answer', correct: String(corr)});
+  });
+
+  document.getElementById('score').innerHTML = `Graded ${graded} of ${total} • Score: ${correctCount}/${graded||total}`;
+  document.getElementById('answers').innerHTML = itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlights */
+const passageCard=document.getElementById('passageCard');
+const pPalette=document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Questions highlight */
+const qCard=document.querySelector('.card.questions');
+const qPalette=document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1 ? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if (node.closest && node.closest('input,textarea,select')) return;
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; });
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* Helper */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container=range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+</script>
+</body>
+</html>

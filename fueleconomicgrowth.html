@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 2 – Does education fuel economic growth?</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  h3{margin:8px 0 0}
+  .muted{color:var(--muted)}
+
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+
+  /* Highlights */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+
+      <div id="passage">
+        <h2>Reading Passage 2</h2>
+        <h3>Does education fuel economic growth?</h3>
+
+        <p><strong>A</strong> Over the last decade, a huge database about the lives of southwest German villagers between 1600 and 1900 has been compiled by a team led by Professor <strong>Sheilagh Ogilvie</strong> at Cambridge University's Faculty of Economics. It includes court records, guild ledgers, parish registers, village censuses, tax lists and — the most recent addition — 9,000 handwritten inventories listing over a million personal possessions belonging to ordinary women and men across three centuries. Ogilvie, who discovered the inventories in the archives of two German communities 30 years ago, believes they may hold the answer to a conundrum that has long puzzled economists: the lack of evidence for a causal link between education and a country's economic growth.</p>
+
+        <p><strong>B</strong> As Ogilvie explains, 'Education helps us to work more productively, invent better technology, and earn more ... surely it must be critical for economic growth? But, if you look back through history, there's no evidence that having a high literacy rate made a country industrialise earlier.' Between 1600 and 1900, England had only mediocre literacy rates by European standards, yet its economy grew fast and it was the first country to industrialise. During this period, Germany and Scandinavia had excellent literacy rates, but their economies grew slowly and they industrialised late. 'Modern cross-country analyses have also struggled to find evidence that education causes economic growth, even though there is plenty of evidence that growth increases education,' she adds.</p>
+
+        <p><strong>C</strong> In the handwritten inventories that Ogilvie is analysing are the belongings of women and men at marriage, remarriage and death. From badger skins to Bibles, sewing machines to scarlet bodices — the villagers' entire worldly goods are included. Inventories of agricultural equipment and craft tools reveal economic activities; ownership of books and education-related objects like pens and slates suggests how people learned. In addition, the tax lists included in the database record the value of farms, workshops, assets and debts; signatures and people's estimates of their age indicate literacy and numeracy levels; and court records reveal obstacles (such as the activities of the guilds*) that stifled industry.</p>
+
+        <p>Previous studies usually had just one way of linking education with economic growth — the presence of schools and printing presses, perhaps, or school enrolment, or the ability to sign names. According to Ogilvie, the database provides multiple indicators for the same individuals, making it possible to analyse links between literacy, numeracy, wealth, and industriousness, for individual women and men over the long term.</p>
+
+        <p class="muted">* guild: an association of artisans or merchants which oversees the practice of their craft or trade in a particular area</p>
+
+        <p><strong>D</strong> Ogilvie and her team have been building the vast database of material possessions on top of their full demographic reconstruction of the people who lived in these two German communities. "We can follow the same people — and their descendants — across 300 years of educational and economic change," she says. Individual lives have unfolded before their eyes. Stories like that of the 24-year-olds <strong>Ana Regina</strong> and <strong>Magdalena Riethmiillerin</strong>, who were chastised in 1707 for reading books in church instead of listening to the sermon. "This tells us they were continuing to develop their reading skills at least a decade after leaving school," explains Ogilvie. The database also reveals the case of <strong>Juliana Schweickherdt</strong>, a 50-year-old spinster living in the small Black Forest community of Wildberg, who was reprimanded in 1752 by the local weavers' guild for 'weaving cloth and combing wool, counter to the guild ordinance'. When Juliana continued taking jobs reserved for male guild members, she was summoned before the guild court and told to pay a fine equivalent to one third of a servant's annual wage. It was a small act of defiance by today's standards, but it reflects a time when laws in Germany and elsewhere regulated people's access to labour markets. The dominance of guilds not only prevented people from using their skills, but also held back even the simplest industrial innovation.</p>
+
+        <p><strong>E</strong> The data-gathering phase of the project has been completed and now, according to Ogilvie, it is time 'to ask the big questions'. One way to look at whether education causes economic growth is to 'hold wealth constant'. This involves following the lives of different people with the same level of wealth over a period of time. If wealth is constant, it is possible to discover whether education was, for example, linked to the cultivation of new crops, or to the adoption of industrial innovations like sewing machines. The team will also ask what aspect of education helped people engage more with productive and innovative activities. Was it, for instance, literacy, numeracy, book ownership, years of schooling? Was there a threshold level — a tipping point — that needed to be reached to affect economic performance?</p>
+
+        <p><strong>F</strong> Ogilvie hopes to start finding answers to these questions over the next few years. One thing is already clear, she says: the relationship between education and economic growth is far from straightforward. 'German-speaking central Europe is an excellent laboratory for testing theories of economic growth,' she explains. Between 1600 and 1900, literacy rates and book ownership were high and yet the region remained poor. It was also the case that local guilds and merchant associations were extremely powerful and legislated against anything that undermined their monopolies. In villages throughout the region, guilds blocked labour migration and resisted changes that might reduce their influence.</p>
+
+        <p>'Early findings suggest that the potential benefits of education for the economy can be held back by other barriers, and this has implications for today,' says Ogilvie. 'Huge amounts are spent improving education in developing countries, but this spending can fail to deliver economic growth if restrictions block people — especially women and the poor — from using their education in economically productive ways. If economic institutions are poorly set up, for instance, education can't lead to growth.'</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">📢 Join my Telegram</button>
+
+<script>
+/* =======================
+   CONFIG
+   ======================= */
+const CONFIG = {
+  title: "READING PASSAGE 2 – Does education fuel economic growth?",
+  subtitle: "You should spend about 20 minutes on Questions 14–26.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  showFooterNavigator: true,
+
+  sections: [
+    /* 14–18 Matching sections */
+    {
+      type: "section_match",
+      heading: "Questions 14–18",
+      instructions: ["Reading Passage 2 has six sections, A–F.", "Which section contains the following information?", "Write the correct letter, A–F, in boxes 14–18 on your answer sheet."],
+      items: [
+        { id: 14, text: "an explanation of the need for research to focus on individuals with a fairly consistent income", correct: "E" },
+        { id: 15, text: "examples of the sources the database has been compiled from", correct: "A" },
+        { id: 16, text: "an account of one individual's refusal to obey an order", correct: "D" },
+        { id: 17, text: "a reference to a region being particularly suited to research into the link between education and economic growth", correct: "F" },
+        { id: 18, text: "examples of the items included in a list of personal possessions", correct: "C" }
+      ]
+    },
+
+    /* 19–22 Summary completion */
+    {
+      type: "summary",
+      heading: "Questions 19–22",
+      instructions: ["Complete the summary below.", "Choose ONE WORD from the passage for each answer.", "Write your answers in boxes 19–22 on your answer sheet."],
+      summaryText: "Demographic reconstruction of two German communities\n\nThe database that Ogilvie and her team has compiled sheds light on the lives of a range of individuals, as well as those of their 19. ........................, over a 300-year period. For example, Ana Regina and Magdalena Riethmiillerin were reprimanded for reading while they should have been paying attention to a 20. ........................ There was also Juliana Schweickherdt, who came to the notice of the weavers' guild in the year 1752 for breaking guild rules. As a punishment, she was later given a 21. ........................ Cases like this illustrate how the guilds could prevent 22. ........................ and stop skilled people from working.",
+      items: [
+        { id: 19, correct: "descendants" },
+        { id: 20, correct: "sermon" },
+        { id: 21, correct: "fine" },
+        { id: 22, correct: "innovation" }
+      ]
+    },
+
+    /* 23–24 Multiple choice */
+    {
+      type: "multi_choice",
+      heading: "Questions 23 and 24",
+      instructions: ["Choose TWO letters, A–E.", "Write the correct letters in boxes 23 and 24 on your answer sheet.", "Which TWO of the following statements does the writer make about literacy rates in Section B?"],
+      options: {
+        A: "Very little research has been done into the link between high literacy rates and improved earnings.",
+        B: "Literacy rates in Germany between 1600 and 1900 were very good.",
+        C: "There is strong evidence that high literacy rates in the modern world result in economic growth.",
+        D: "England is a good example of how high literacy rates helped a country industrialise.",
+        E: "Economic growth can help to improve literacy rates."
+      },
+      correct: ["B", "E"]
+    },
+
+    /* 25–26 Multiple choice */
+    {
+      type: "multi_choice",
+      heading: "Questions 25 and 26",
+      instructions: ["Choose TWO letters, A–E.", "Write the correct letters in boxes 25 and 26 on your answer sheet.", "Which TWO of the following statements does the writer make in Section F about guilds in German-speaking Central Europe between 1600 and 1900?"],
+      options: {
+        A: "They helped young people to learn a skill.",
+        B: "They were opposed to people moving to an area for work.",
+        C: "They kept better records than guilds in other parts of the world.",
+        D: "They opposed practices that threatened their control over a trade.",
+        E: "They predominantly consisted of wealthy merchants."
+      },
+      correct: ["B", "D"]
+    }
+  ]
+};
+
+/* =======================
+   RENDER
+   ======================= */
+document.getElementById('title').textContent = CONFIG.title;
+document.getElementById('subtitle').textContent = CONFIG.subtitle || '';
+
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+/* Section matching renderer */
+function renderSectionMatch(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const sel=`<select id="q${it.id}" name="q${it.id}">
+      <option value="">—</option>
+      <option value="A">A</option>
+      <option value="B">B</option>
+      <option value="C">C</option>
+      <option value="D">D</option>
+      <option value="E">E</option>
+      <option value="F">F</option>
+    </select>`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${sel}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Summary completion renderer */
+function renderSummary(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  
+  const summaryBlock=document.createElement('div'); summaryBlock.className='qblock';
+  let summaryContent = sec.summaryText;
+  
+  sec.items.forEach(item => {
+    const placeholder = `${item.id}. ........................`;
+    if (summaryContent.includes(placeholder)) {
+      summaryContent = summaryContent.replace(placeholder, `<input type="text" id="q${item.id}" name="q${item.id}" style="width:120px;display:inline;" placeholder="Answer ${item.id}">`);
+      navIds.push(item.id);
+      answersMap[item.id] = item.correct || '';
+    }
+  });
+  
+  summaryBlock.innerHTML = summaryContent.replace(/\n/g, '<br>');
+  qroot.appendChild(summaryBlock);
+}
+
+/* Multiple choice renderer */
+function renderMultiChoice(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  
+  const optionsBlock=document.createElement('div'); optionsBlock.className='qblock';
+  const optionsHtml = Object.entries(sec.options).map(([key, value]) => 
+    `<label><input type="checkbox" name="multi_choice_${sec.heading}" value="${key}"> <strong>${key}</strong> ${value}</label>`
+  ).join('');
+  optionsBlock.innerHTML = `<div class="options">${optionsHtml}</div>`;
+  qroot.appendChild(optionsBlock);
+  
+  // Add special handling for multi-choice questions
+  sec.correct.forEach((answer, index) => {
+    const qId = sec.heading.includes('23') ? (23 + index) : (25 + index);
+    navIds.push(qId);
+    answersMap[qId] = answer;
+  });
+}
+
+/* Build UI */
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='section_match') renderSectionMatch(sec);
+  if (sec.type==='summary') renderSummary(sec);
+  if (sec.type==='multi_choice') renderMultiChoice(sec);
+});
+
+/* Footer chips */
+const footerNav=document.getElementById('footerNav');
+(function(){
+  if(!CONFIG.showFooterNavigator){ footerNav.style.display='none'; return; }
+  footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+  [...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+    const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+    chip.addEventListener('click',()=>{ 
+      const anchor = document.getElementById(`anchor-${id}`);
+      if (anchor) {
+        anchor.scrollIntoView({behavior:'smooth',block:'center'}); 
+      }
+    });
+    footerNav.appendChild(chip);
+  });
+})();
+
+function markChipAnswered(id, answered){
+  const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered);
+}
+
+document.addEventListener('change',(e)=>{
+  const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  const id=m?+m[1]:null; if(!id) return;
+  const answered=(e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                 : (e.target.value.trim().length>0);
+  markChipAnswered(id, answered);
+});
+
+/* Timer */
+let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60;
+const timer=document.getElementById('timer');
+const pauseBtn=document.getElementById('pauseBtn');
+const resumeBtn=document.getElementById('resumeBtn');
+let paused=false, iv;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){ if(iv) clearInterval(iv);
+  iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft); if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent=fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+function submit(){
+  paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const itemsOut=[];
+  
+  // Handle multi-choice questions specially
+  const multiChoiceAnswers23 = Array.from(document.querySelectorAll('input[name="multi_choice_Questions 23 and 24"]:checked')).map(cb => cb.value);
+  const multiChoiceAnswers25 = Array.from(document.querySelectorAll('input[name="multi_choice_Questions 25 and 26"]:checked')).map(cb => cb.value);
+  
+  CONFIG.sections.forEach(section => {
+    if (section.type === 'multi_choice') {
+      if (section.heading.includes('23')) {
+        [23, 24].forEach((qId, index) => {
+          const userAnswer = multiChoiceAnswers23[index] || '';
+          const correctAnswer = section.correct[index];
+          total++; graded++;
+          const ok = userAnswer === correctAnswer;
+          if(ok) correctCount++;
+          itemsOut.push({label: qId, status: ok? '✓ Correct' : '✗ Incorrect', user: userAnswer || 'No answer', correct: correctAnswer});
+        });
+      } else if (section.heading.includes('25')) {
+        [25, 26].forEach((qId, index) => {
+          const userAnswer = multiChoiceAnswers25[index] || '';
+          const correctAnswer = section.correct[index];
+          total++; graded++;
+          const ok = userAnswer === correctAnswer;
+          if(ok) correctCount++;
+          itemsOut.push({label: qId, status: ok? '✓ Correct' : '✗ Incorrect', user: userAnswer || 'No answer', correct: correctAnswer});
+        });
+      }
+    }
+  });
+
+  // Handle other question types
+  Object.keys(answersMap).forEach(key=>{
+    if ([23, 24, 25, 26].includes(parseInt(key))) return; // Skip multi-choice, already handled
+    
+    const ans=answersMap[key];
+    const label=key;
+    let user='';
+    const picked=document.querySelector(`input[name="q${key}"]:checked`);
+    if(picked){ user=picked.value; }
+    else if(document.getElementById('q'+key)){ user=document.getElementById('q'+key).value; }
+    const shown=user||'No answer';
+
+    if(String(ans).trim()===''){ total++; itemsOut.push({label, status:'— not graded —', user:shown, correct:'(no key)'}); return; }
+
+    total++; graded++;
+    const ok = shown.trim().toUpperCase() === String(ans).trim().toUpperCase();
+    if(ok) correctCount++;
+    itemsOut.push({label, status: ok? '✓ Correct' : '✗ Incorrect', user:shown, correct:String(ans)});
+  });
+
+  document.getElementById('score').innerHTML = `Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;
+  document.getElementById('answers').innerHTML = itemsOut.sort((a,b) => parseInt(a.label) - parseInt(b.label)).map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlights */
+const passageCard=document.getElementById('passageCard');
+const pPalette=document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Questions highlight */
+const qCard=document.querySelector('.card.questions');
+const qPalette=document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1 ? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if (node.closest && node.closest('input,textarea,select')) return;
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; });
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* Helper */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container=range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+
+/* TG button */
+document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

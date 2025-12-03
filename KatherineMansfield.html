@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 1 — Katherine Mansfield</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  h3{margin:8px 0 0}
+  .muted{color:var(--muted)}
+
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+
+  /* Highlights */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+
+  /* Notes styling */
+  .notes-section{background:#f8f9fa;padding:16px;border-radius:8px;margin:16px 0}
+  .notes-section h3{margin:0 0 12px;color:var(--brand)}
+  .notes-section ul{margin:8px 0;padding-left:20px}
+  .notes-section li{margin:4px 0}
+  .year-marker{font-weight:600;color:var(--brand);margin:12px 0 4px}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+
+      <div id="passage">
+        <h2>Reading Passage 1</h2>
+        <h3>Katherine Mansfield</h3>
+        <p><em>Katherine Mansfield was a modernist writer of short fiction who was born and brought up in New Zealand</em></p>
+
+        <p><strong>Katherine Mansfield Beauchamp Murry</strong> was born in 1888, into a prominent family in Wellington, New Zealand. She became one of New Zealand's best-known writers, using the pen name of <strong>Katherine Mansfield</strong>. The daughter of a banker, and born into a middle-class family, she was also a first cousin of Countess Elizabeth von Arnim, a distinguished novelist in her time. Mansfield had two older sisters and a younger brother. Her father, Harold Beauchamp, went on to become the chairman of the Bank of New Zealand. In 1893, the Mansfield family moved to <strong>Karori</strong>, a suburb of Wellington, where Mansfield would spend the happiest years of her childhood; she later used her memories of this time as an inspiration for her <strong>Prelude</strong> story.</p>
+
+        <p>Her first published stories appeared in the <strong>High School Reporter</strong> and the Wellington Girls' High School magazine in 1898 and 1899. In 1902, she developed strong feelings for a musician who played the cello, <strong>Arnold Trowell</strong>, although her feelings were not, for the most part, returned. Mansfield herself was an accomplished cellist, having received lessons from Trowell's father. Mansfield wrote in her journals of feeling isolated to some extent in New Zealand, and, in general terms of her interest in the <strong>Maori people</strong> (New Zealand's native people), who were often portrayed in a sympathetic light in her later stories, such as <strong>How Pearl Button Was Kidnapped</strong>.</p>
+
+        <p>She moved to London in 1903, where she attended <strong>Queen's College</strong>, along with her two sisters. Mansfield recommenced playing the cello, an occupation that she believed, during her time at Queen's, she would take up professionally. She also began contributing to the college newspaper, with such a dedication to it that she eventually became its editor. She was particularly interested in the works of the French writers of this period and in the 19th-century British writer, <strong>Oscar Wilde</strong>, and she was appreciated amongst fellow students at Queen's for her lively and charismatic approach to life and work. She met fellow writer <strong>Ida Baker</strong>, a South African, at the college, and the pair became lifelong friends. Mansfield did not actively support the suffragette movement in the UK. Women in New Zealand had gained the right to vote in 1893.</p>
+
+        <p>Mansfield first began journeying into the other parts of Europe in the period 1903-1906, mainly to Belgium and Germany. After finishing her schooling in England, she returned to her New Zealand home in <strong>1906</strong>, only then beginning to write short stories in a serious way. She had several works published in <strong>Australia</strong> in a magazine called <strong>Native Comparison</strong>, which was her first paid writing work, and by this time she had her mind set on becoming a professional writer. It was also the first occasion on which she used the pseudonym "K. Mansfield".</p>
+
+        <p>Mansfield rapidly grew discontented with the provincial New Zealand lifestyle, and with her <strong>family</strong>. Two years later she headed again to London. Her father sent her an annual subsidy of £100 for the rest of her life. In later years, she would express both admiration and disdain for New Zealand in her journals.</p>
+
+        <p>In 1911, Mansfield met <strong>John Middleton Murry</strong>, the Oxford scholar and editor of the literary magazine <strong>Rhythm</strong>. They were later to marry in 1918. Mansfield became a co-editor of Rhythm, which was subsequently called <strong>The Blue Review</strong>, in which more of her works were published. She and Murry lived in various houses in England and briefly in Paris. The Blue Review failed to gain enough readers and was no longer published. Their attempt to set up as writers in Paris was cut short by Murry's <strong>bankruptcy</strong>, which resulted from the failure of this and other journals. Life back in England meant frequently changed addresses and very limited funds.</p>
+
+        <p>Between 1915 and 1918, Mansfield moved between England and Bandol, France. She and Murry developed close contact with other well-known <strong>writers</strong> of the time such as D.H. Lawrence, Bertrand Russell and Aldous Huxley. By October 1918 Mansfield had become seriously ill; she had been diagnosed with tuberculosis and was advised to enter a sanatorium. She could no longer spend winters in London. In the autumn of 1918 she was so ill that she decided to go to Ospedale in Italy. It was the publication of <strong>Bliss and Other Stories</strong> in 1920 that was to solidify Mansfield's <strong>reputation</strong> as a writer.</p>
+
+        <p>Mansfield also spent time in Menton, France, as the tenant of her father's cousin at "<strong>The Villa Isola Bella</strong>". There she wrote eight stories including <strong>Miss Brill</strong> and <strong>The Daughters of the Late Colonel</strong>, the latter of which she pronounced to be "...the only story that satisfies me to any extent".</p>
+
+        <p>Mansfield produced a great deal of work in the final years of her life, and much of her prose and poetry remained unpublished at her death in 1923. After her death, her <strong>husband</strong>, Murry, took on the task of editing and publishing her works. His efforts resulted in two additional volumes of short stories, <strong>The Doves' Nest</strong> and <strong>Something Childish</strong>, published in 1923 and 1924 respectively, the publication of her Poems as well as a collection of critical writings (Novels and Novelists) and a number of editions of Mansfield's previously unpublished letters and journals.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">📢 Join my Telegram</button>
+
+<script>
+/* =======================
+   CONFIG
+   ======================= */
+const CONFIG = {
+  title: "READING PASSAGE 1 — Katherine Mansfield",
+  subtitle: "You should spend about 20 minutes on Questions 1—13.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  showFooterNavigator: true,
+
+  sections: [
+    /* 1–6 TRUE/FALSE/NOT GIVEN */
+    {
+      type: "tfng",
+      heading: "Questions 1–6",
+      instructions: [
+        "Do the following statements agree with the information given in Reading Passage 1?",
+        "In boxes 1-6 on your answer sheet, write:",
+        "TRUE if the statement agrees with the information",
+        "FALSE if the statement contradicts the information",
+        "NOT GIVEN if there is no information on this"
+      ],
+      items: [
+        { id: 1, text: "The name Katherine Mansfield, that appears on the writer's book, was exactly the same as her origin name.", correct: "FALSE" },
+        { id: 2, text: "Mansfield won a prize for a story she wrote for the High School Reporter.", correct: "NOT GIVEN" },
+        { id: 3, text: "How Pearl Button Was Kidnapped portrayed Maori people in a favorable way.", correct: "TRUE" },
+        { id: 4, text: "When Mansfield was at Queen's College, she planned to be a professional writer.", correct: "FALSE" },
+        { id: 5, text: "Mansfield was unpopular with the other students at Queen's College.", correct: "FALSE" },
+        { id: 6, text: "In London, Mansfield showed little interest in politics.", correct: "TRUE" }
+      ]
+    },
+
+    /* 7–13 Notes completion */
+    {
+      type: "notes",
+      heading: "Questions 7–13",
+      instructions: [
+        "Complete the notes below",
+        "Choose ONE WORD AND/OR A NUMBER from the passage for each answer",
+        "Write your answers in boxes 7-13 on your answer sheet"
+      ],
+      items: [
+        { id: 7, text: "Year when moved from England back to New Zealand", correct: "1906" },
+        { id: 8, text: "First paid writing work was in a publication based in", correct: "Australia" },
+        { id: 9, text: "Her ___ and the New Zealand way of life made her feel dissatisfied", correct: "family" },
+        { id: 10, text: "___ prevented Mansfield and Murry from staying together in Paris", correct: "bankruptcy" },
+        { id: 11, text: "Spent time with distinguished ___", correct: "writers" },
+        { id: 12, text: "Her ___ was consolidated when Bliss and Other Stories was published", correct: "reputation" },
+        { id: 13, text: "Mansfield's ___ published more of her works after her death", correct: "husband" }
+      ]
+    }
+  ]
+};
+
+/* =======================
+   RENDER
+   ======================= */
+document.getElementById('title').textContent = CONFIG.title;
+document.getElementById('subtitle').textContent = CONFIG.subtitle || '';
+
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+/* TRUE/FALSE/NOT GIVEN renderer */
+function renderTFNG(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const opts=['TRUE','FALSE','NOT GIVEN'].map(k=>`<label><input type="radio" name="q${it.id}" value="${k}"> ${k}</label>`).join('');
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${opts}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Notes renderer */
+function renderNotes(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  
+  const notesContainer = document.createElement('div');
+  notesContainer.className = 'notes-section';
+  notesContainer.innerHTML = `
+    <h3>Katherine Mansfield's adult years</h3>
+    <div class="year-marker">• 7. <input type="text" id="q7" name="q7" placeholder="Enter year" style="width:80px;display:inline-block;margin:0 4px;"></div>
+    <ul>
+      <li>- moved from England back to New Zealand</li>
+      <li>- first paid writing work was in a publication based in 8. <input type="text" id="q8" name="q8" placeholder="Enter answer" style="width:100px;display:inline-block;margin:0 4px;"></li>
+      <li>- her 9. <input type="text" id="q9" name="q9" placeholder="Enter answer" style="width:100px;display:inline-block;margin:0 4px;"> and the New Zealand way of life made her feel dissatisfied</li>
+    </ul>
+    
+    <div class="year-marker">• 1908</div>
+    <ul>
+      <li>- returned to London</li>
+    </ul>
+    
+    <div class="year-marker">• 1911 – 1919</div>
+    <ul>
+      <li>Met John Middleton Murry in 1911</li>
+      <li>- 10. <input type="text" id="q10" name="q10" placeholder="Enter answer" style="width:120px;display:inline-block;margin:0 4px;"> prevented Mansfield and Murry from staying together in Paris</li>
+      <li>- spent time with distinguished 11. <input type="text" id="q11" name="q11" placeholder="Enter answer" style="width:100px;display:inline-block;margin:0 4px;"></li>
+      <li>- from 1916, tuberculosis restricted the time she spent in London</li>
+    </ul>
+    
+    <div class="year-marker">1920</div>
+    <ul>
+      <li>- her 12. <input type="text" id="q12" name="q12" placeholder="Enter answer" style="width:120px;display:inline-block;margin:0 4px;"> was consolidated when Bliss and Other Stories was published</li>
+      <li>- wrote several stories at "Villa Isola Bella"</li>
+    </ul>
+    
+    <div class="year-marker">1923 - 1924</div>
+    <ul>
+      <li>Mansfield's 13. <input type="text" id="q13" name="q13" placeholder="Enter answer" style="width:100px;display:inline-block;margin:0 4px;"> published more of her works after her death</li>
+    </ul>
+  `;
+  qroot.appendChild(notesContainer);
+  
+  // Add answers to map
+  [7, 8, 9, 10, 11, 12, 13].forEach(id => {
+    navIds.push(id);
+    answersMap[id] = sec.items.find(item => item.id === id)?.correct || '';
+  });
+}
+
+/* Build UI */
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='tfng') renderTFNG(sec);
+  if (sec.type==='notes') renderNotes(sec);
+});
+
+/* Footer chips */
+const footerNav=document.getElementById('footerNav');
+(function(){
+  if(!CONFIG.showFooterNavigator){ footerNav.style.display='none'; return; }
+  footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+  [...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+    const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+    chip.addEventListener('click',()=>{ 
+      const anchor = document.getElementById(`anchor-${id}`) || document.getElementById(`q${id}`);
+      if(anchor) anchor.scrollIntoView({behavior:'smooth',block:'center'}); 
+    });
+    footerNav.appendChild(chip);
+  });
+})();
+function markChipAnswered(id, answered){
+  const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered);
+}
+document.addEventListener('change',(e)=>{
+  const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  const id=m?+m[1]:null; if(!id) return;
+  const answered=(e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                 : (e.target.value.trim().length>0);
+  markChipAnswered(id, answered);
+});
+
+/* Timer */
+let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60;
+const timer=document.getElementById('timer');
+const pauseBtn=document.getElementById('pauseBtn');
+const resumeBtn=document.getElementById('resumeBtn');
+let paused=false, iv;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){ if(iv) clearInterval(iv);
+  iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft); if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent=fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+function submit(){
+  paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const itemsOut=[];
+  const ids=Object.keys(answersMap);
+
+  ids.forEach(key=>{
+    const ans=answersMap[key];
+    const label=key;
+    let user='';
+    const picked=document.querySelector(`input[name="q${key}"]:checked`);
+    if(picked){ user=picked.value; }
+    else if(document.getElementById('q'+key)){ user=document.getElementById('q'+key).value; }
+    const shown=user||'No answer';
+
+    if(String(ans).trim()===''){ total++; itemsOut.push({label, status:'— not graded —', user:shown, correct:'(no key)'}); return; }
+
+    total++; graded++;
+    const ok = shown.trim().toLowerCase() === String(ans).trim().toLowerCase();
+    if(ok) correctCount++;
+    itemsOut.push({label, status: ok? '✓ Correct' : '✗ Incorrect', user:shown, correct:String(ans)});
+  });
+
+  document.getElementById('score').innerHTML = `Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;
+  document.getElementById('answers').innerHTML = itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlights */
+const passageCard=document.getElementById('passageCard');
+const pPalette=document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Questions highlight */
+const qCard=document.querySelector('.card.questions');
+const qPalette=document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1 ? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if (node.closest && node.closest('input,textarea,select')) return;
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; });
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* Helper */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container=range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+
+/* TG button */
+document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

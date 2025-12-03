@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Real exam IELTS</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #333333;
+        --passage-bg: #f8f9fa;
+        --questions-bg: #ffffff;
+        --border-color: #5770ff;
+        --highlight-color: springgreen;
+        --header-bg: #F8F8F8;
+        --header-text: #333333;
+        --telegram-blue: #0088CC;
+        --instagram-pink: #E4405F;
+        --youtube-red: #FF0000;
+        --button-bg: #28a745;
+        --button-hover: #218838;
+        --correct-color: #28a745;
+        --incorrect-color: #dc3545;
+        --progress-complete: #28a745;
+        --progress-incomplete: #bdbdbd;
+        --timer-bg: #0088CC;
+        --timer-text: #ffffff;
+        --footer-bg: #f5f5f5;
+        --header-dyn-height: 60px;
+        --footer-dyn-height: 64px;
+        --main-dyn-height: calc(100vh - var(--header-dyn-height) - var(--footer-dyn-height));
+    }
+
+    .night-mode {
+        --bg-color: #121212;
+        --text-color: #e0e0e0;
+        --passage-bg: #1e1e1e;
+        --questions-bg: #1e1e1e;
+        --border-color: #424242;
+        --highlight-color: #0084ff;
+        --header-bg: #1a1a1a;
+        --header-text: #ffffff;
+        --telegram-blue: #005f99;
+        --instagram-pink: #b2334b;
+        --youtube-red: #b20000;
+        --button-bg: #990000;
+        --button-hover: #7a0000;
+        --correct-color: #218838;
+        --incorrect-color: #c82333;
+        --progress-complete: #218838;
+        --progress-incomplete: #616161;
+        --timer-bg: #0088CC;
+        --timer-text: #ffcdd2;
+        --footer-bg: #121212;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    header {
+        background-color: var(--header-bg);
+        color: var(--header-text);
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+    }
+
+    .logo-area {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .social-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .social-link:hover {
+        transform: translateY(-1px);
+    }
+
+    .social-link i {
+        font-size: 1.2em;
+    }
+
+    .social-link.telegram {
+        background-color: var(--telegram-blue);
+    }
+
+    .social-link.telegram:hover {
+        background-color: #007bb5;
+    }
+
+    .social-link.instagram {
+        background-color: var(--instagram-pink);
+    }
+
+    .social-link.instagram:hover {
+        background-color: #d62976;
+    }
+
+    .social-link.youtube {
+        background-color: var(--youtube-red);
+    }
+
+    .social-link.youtube:hover {
+        background-color: #CC0000;
+    }
+
+    .header-controls {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .timer-container {
+        background-color: var(--timer-bg);
+        color: var(--timer-text);
+        padding: 8px 15px;
+        border-radius: 50px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .timer-controls {
+        display: flex;
+        gap: 8px;
+    }
+
+    .timer-controls button {
+        background: none;
+        border: none;
+        color: var(--timer-text);
+        cursor: pointer;
+        font-size: 16px;
+        padding: 4px;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .timer-controls button:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .night-mode .timer-controls button:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .mode-toggle {
+        background: none;
+        border: none;
+        color: var(--header-text);
+        cursor: pointer;
+        font-size: 20px;
+        padding: 6px;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mode-toggle:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .night-mode .mode-toggle:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    main {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .passage-container,
+    .questions-container {
+        height: 100%;
+        overflow-y: auto;
+        padding: 20px;
+    }
+
+    .passage-container {
+        width: 50%;
+        background-color: var(--passage-bg);
+        border-right: 1px solid var(--border-color);
+        position: relative;
+    }
+
+    .questions-container {
+        width: 50%;
+        background-color: var(--questions-bg);
+    }
+
+    .passage-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .passage-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: var(--text-color);
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .passage-text {
+        font-size: 17px;
+    }
+
+    .question-text {
+        font-size: 17px;
+        line-height: 1.8;
+    }
+
+    .passage-text p {
+        margin-bottom: 20px;
+        text-align: justify;
+    }
+
+    .highlight {
+        background-color: var(--highlight-color);
+        cursor: pointer;
+    }
+
+    .highlight-tooltip {
+        position: absolute;
+        background-color: #333;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 14px;
+        z-index: 1000;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 25px 0 15px;
+        color: var(--text-color);
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .question-group {
+        margin-bottom: 30px;
+    }
+
+    .question {
+        margin-bottom: 25px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: var(--passage-bg);
+        border-left: 4px solid var(--border-color);
+    }
+
+    .question-title {
+        font-weight: 600;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: baseline;
+    }
+
+    .question-number {
+        display: inline-block;
+        width: 28px;
+        height: 28px;
+        background-color: var(--progress-incomplete);
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 28px;
+        margin-right: 10px;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .question.answered .question-number {
+        background-color: var(--progress-complete);
+    }
+
+    .options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    .option {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .option input {
+        margin-right: 8px;
+    }
+
+    .fill-in-the-blank {
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid var(--text-color);
+        width: 150px;
+        font-family: inherit;
+        font-size: 1em;
+        color: inherit;
+        padding: 0 4px 2px 4px;
+        margin: 0 3px;
+        vertical-align: baseline;
+        text-align: center;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+
+    .fill-in-the-blank:focus {
+        border-bottom-color: var(--button-bg);
+    }
+
+    .instructions {
+        font-size: 14px;
+        color: #757575;
+        margin-top: 5px;
+        font-style: italic;
+    }
+
+    footer {
+        background-color: var(--footer-bg);
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--border-color);
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .progress-container {
+        display: flex;
+        gap: 8px;
+    }
+
+    .progress-item {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: var(--progress-incomplete);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .progress-item:hover {
+        transform: scale(1.1);
+    }
+
+    .progress-item.completed {
+        background-color: var(--progress-complete);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    }
+
+    .btn-primary {
+        background-color: var(--button-bg);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--button-hover);
+    }
+
+    .btn-secondary {
+        background-color: transparent;
+        border: 1px solid var(--button-bg);
+        color: var(--button-bg);
+    }
+
+    .btn-secondary:hover {
+        background-color: rgba(204, 0, 0, 0.1);
+    }
+
+    .night-mode .btn-secondary:hover {
+        background-color: rgba(153, 0, 0, 0.2);
+    }
+
+    .feedback-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .feedback-container {
+        background-color: var(--passage-bg);
+        width: 90%;
+        max-width: 900px;
+        height: 90%;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .feedback-header {
+        padding: 20px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .feedback-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-color);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #close-feedback {
+        font-size: 24px;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+    .score-display {
+        font-size: 24px;
+        font-weight: 700;
+        margin-left: 10px;
+    }
+
+    .feedback-body {
+        padding: 20px;
+        overflow-y: auto;
+    }
+
+    .feedback-item {
+        margin-bottom: 25px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: var(--questions-bg);
+    }
+
+    .feedback-question {
+        font-weight: 600;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .feedback-answer {
+        margin-bottom: 10px;
+        padding: 8px 12px;
+        border-radius: 4px;
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .correct {
+        color: var(--correct-color);
+    }
+
+    .incorrect {
+        color: var(--incorrect-color);
+    }
+
+    .feedback-explanation {
+        margin-top: 10px;
+        padding: 10px;
+        border-left: 3px solid var(--button-bg);
+        background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    .feedback-passage {
+        margin-top: 8px;
+        font-style: italic;
+        color: #757575;
+    }
+
+    @media (max-width: 900px) {
+        main {
+            flex-direction: column;
+            height: var(--main-dyn-height);
+            overflow: hidden;
+        }
+        
+        .passage-container,
+        .questions-container {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .passage-container,
+        .questions-container {
+            flex: 1 1 0;
+            height: auto;
+        }
+        
+        .passage-container,
+        .questions-container {
+            width: 100%;
+            height: 50%;
+        }
+
+        .passage-container {
+            border-right: none;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .progress-container {
+            flex-wrap: wrap;
+            max-width: 60%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .logo-area {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .social-link {
+            padding: 6px 10px;
+            font-size: 13px;
+        }
+
+        .social-link i {
+            font-size: 1.1em;
+        }
+
+        .social-link span {
+            display: inline;
+        }
+    }
+
+    @media (max-width: 600px) {
+        header {
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        main {
+            height: var(--main-dyn-height);
+            overflow: hidden;
+        }
+
+        .passage-container,
+        .questions-container {
+            padding-bottom: 0 !important;
+        }
+
+        .questions-container {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: calc(var(--footer-dyn-height) + 32px) !important;
+        }
+
+        footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2000;
+            background: var(--footer-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 10px 12px;
+            gap: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .progress-container {
+            width: 100%;
+        }
+
+        .action-buttons {
+            width: 100%;
+            display: flex;
+            gap: 10px;
+        }
+
+        #submit-btn, #reset-btn {
+            flex: 1 1 0;
+            max-width: 100%;
+        }
+    }
+
+    .questions-container::after {
+        content: "";
+        display: block;
+        height: 1px;
+    }
+
+    .wordlist {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 6px;
+        margin-top: 12px;
+    }
+
+    select {
+        min-width: 160px;
+        margin: 0 3px;
+    }
+
+    .wordlist, .word-list, .list-of-words {
+        margin-bottom: 24px !important;
+        padding-bottom: 8px !important;
+    }
+</style>
+</head>
+<body>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+<header>
+    <div class="logo-area">
+        <a class="social-link telegram" href="https://t.me/realexamielts" target="_blank" title="Join on Telegram">
+            <i class="fab fa-telegram-plane"></i>
+            <span>REAL EXAM IELTS - CD IELTS MATERIALS</span>
+        </a>
+    </div>
+    <div class="header-controls">
+        <div class="timer-container">
+            <i class="fas fa-clock"></i>
+            <span id="timer">20:00</span>
+            <div class="timer-controls">
+                <button id="start-timer" title="Start"><i class="fas fa-play"></i></button>
+                <button id="pause-timer" title="Pause"><i class="fas fa-pause"></i></button>
+                <button id="reset-timer" title="Reset"><i class="fas fa-redo"></i></button>
+            </div>
+        </div>
+        <button class="mode-toggle" id="night-mode-toggle" title="Toggle Night Mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+</header>
+<main>
+    <div class="passage-container" id="passage-container">
+        <div class="passage-content">
+            <h4>READING PASSAGE 3</h4>
+            <div class="instructions">You should spend about 20 minutes on Questions 27-40, which are based on
+                Reading Passage 3.</div>
+            <div class="passage-title"></div>
+            <div class="passage-text" id="passage-text">
+                <p style="text-align:center; font-weight: bold !important;"><b>Jean Piaget 1896-1980</b></p>
+                <p style="text-align:center; font-weight:"><i>Seymour Papert looks at the work of the pioneering Swiss philosopher and psychologist</i></p>
+
+                <p>Jean Piaget spent much of his professional life listening to children, watching children and poring over reports of researchers around the world who were doing the same. He found, to put it most succinctly, that children don't think like grown-ups. After thousands of interactions with young people often barely old enough to talk, Piaget began to suspect that behind their cute and seemingly irrational utterances were thought processes that had their own kind of order and their own special logic. Einstein called it a discovery so simple that only a genius could have thought of it.</p>
+
+                <p>Although not an educational reformer, Piaget championed a way of thinking about children that provided the foundation for today's education-reform movements. It was a shift comparable to the way modern anthropology displaced stories of primitive tribes being 'noble savages' and 'cannibals'. One might say that Piaget was the first to take children's thinking seriously.</p>
+
+                <p>He has been revered by generations of teachers inspired by the belief that children are not empty vessels to be filled with knowledge (as traditional pedagogical theory had it) but active builders of knowledge-little scientists who are constantly creating and testing their own hypotheses about the world. And though he may not be as famous as Sigmund Freud or even B F Skinner, his influence on psychology may be longer lasting.</p>
+
+                <p>In 1920, while doing research in a child-psychology laboratory in Paris, Piaget noticed that children of the same age made similar errors on intelligence tests. Fascinated by their reasoning processes, he began to suspect that the key to human knowledge might be discovered by observing how the child's mind develops. On his return to Switzerland he began watching children play, scrupulously recording their words and actions as their minds raced to find reasons for why things are the way they are. In one of his most famous experiments, Piaget asked children, 'What makes the wind?'. A typical dialogue would be:</p>
+
+                <p>Piaget: What makes the wind?<br>
+                Julia: The trees.<br>
+                Piaget: How do you know?<br>
+                Julia: I saw them waving their arms.<br>
+                Piaget: How does that make the wind?<br>
+                Julia: (waving her hand in front of his face): Like this. Only they are bigger. And there are lots of trees.</p>
+
+                <p>Piaget recognised that five-year-old Julia's beliefs, while not correct by any adult criterion, are not 'incorrect' either. They are entirely sensible and coherent within the framework of the child's way of knowing. Classifying them as 'true' or 'false' misses the point and shows a lack of respect for the child. What Piaget was after was a theory that the wind dialogue demonstrated coherence, ingenuity and the practice of a kind of explanatory principle (in this case by referring to body actions) that stands young children in very good stead when they don't know enough or don't have enough skill to handle the kind of explanation that grown-up prefer.</p>
+
+                <p>Piaget was not an educator and never laid down rules about how to intervene in such situations. But his work strongly suggests that the automatic reaction of putting the child right may well be counter-productive. If their theories are always greeted by 'Nice try, but this is how it really is...' they might give up after a while on making theories. As Piaget put it, 'children have real understanding only of that which they invent themselves, and each time that we try to teach them something too quickly, we keep them from inventing it themselves.'</p>
+
+                <p>Disciples of Piaget have a tolerance for-indeed a fascination with-children's primitive laws of physics: that things disappear when they are out of sight; that the moon and the sun follow you around; that big things float and small things sink. Einstein was intrigued by Piaget's findings, especially by the idea that seven-year-olds insist that going faster can take more time-perhaps because this, like Einstein's own theories of relativity, runs so contrary to common sense.</p>
+
+                <p>Although every teacher in training still memorises Piaget's successive stages of childhood development, the greater part of Piaget's work is less well known, perhaps because schools of education regard it as 'too deep' for teachers. Piaget never thought of himself as a child psychologist. His real interest was epistemology-the theory of knowledge-which, like physics, was considered a branch of philosophy until Piaget came along and made it a science.</p>
+
+                <p>Through epistemology, Piaget explored multiple ways of knowing. He acknowledged them and examined them non-judgementally, yet with a philosopher's analytic rigour. Since Piaget, the territory has been widely colonised by those who write about women's ways of knowing, Afrocentric ways of knowing, even the computer's ways of knowing. Indeed, artificial intelligence and the information-processing model of the mind owe more to Piaget than its proponents may realise.</p>
+
+                <p>The core of Piaget is his belief that looking carefully at how knowledge develops in children will elucidate the nature of knowledge in general. Whether this has in fact led to deeper understanding remains, like everything about Piaget, controversial. In the past decade, Piaget has been vigorously challenged by the current fashion of viewing knowledge as an intrinsic property of the brain. Ingenious experiments have demonstrated that newborn infants already have some of the knowledge that Piaget believed children constructed. But for those, like me, who still see Piaget as the giant in the field of cognitive theory, the difference between what the baby brings and what the adult has is so immense that the new discoveries do not significantly reduce the gap, but only increase the mystery.</p>
+            </div>
+        </div>
+    </div>
+    <div class="questions-container" id="questions-container">
+        <div class="section-title">Questions 27-31</div>
+        <div class="instructions">Choose the correct letter, A, B, C, or D.<br>
+            Write the correct letter in boxes 27-31 on your answer sheet.
+        </div>
+        <div class="question-group">
+            <div class="question" id="q27">
+                <div class="question-title">
+                    <div class="question-number">27</div>
+                    <div class="question-text">
+                        In the second paragraph the writer mentions the example of modern anthropology to illustrate
+                    </div>
+                </div>
+                <label><input type="radio" name="q27" value="A"> A the universality of Piaget's insights into the workings of the mind.</label><br>
+                <label><input type="radio" name="q27" value="B"> B the similarity between children's thought processing in different cultures.</label><br>
+                <label><input type="radio" name="q27" value="C"> C how Piaget's work represents a crucial turning-point in our approach to education.</label><br>
+                <label><input type="radio" name="q27" value="D"> D how Piaget's work has aided our understanding of man's evolution from primitive origins.</label><br>
+            </div>
+
+            <div class="question" id="q28">
+                <div class="question-title">
+                    <div class="question-number">28</div>
+                    <div class="question-text">
+                        According to the writer, what point is illustrated by the dialogue about the wind?
+                    </div>
+                </div>
+                <label><input type="radio" name="q28" value="A"> A The factual accuracy of what children say is of minor significance.</label><br>
+                <label><input type="radio" name="q28" value="B"> B Children want to learn about scientific principles.</label><br>
+                <label><input type="radio" name="q28" value="C"> C Children's reasoning processes can be amusing to adults.</label><br>
+                <label><input type="radio" name="q28" value="D"> D Children often pretend that they know the answers to questions.</label><br>
+            </div>
+
+            <div class="question" id="q29">
+                <div class="question-title">
+                    <div class="question-number">29</div>
+                    <div class="question-text">
+                        Piaget believed in the importance of
+                    </div>
+                </div>
+                <label><input type="radio" name="q29" value="A"> A preventing children from making false assumptions.</label><br>
+                <label><input type="radio" name="q29" value="B"> B giving children honest feedback on their hypotheses.</label><br>
+                <label><input type="radio" name="q29" value="C"> C showing children how to formulate their own ideas about the world.</label><br>
+                <label><input type="radio" name="q29" value="D"> D maintaining children's confidence in their ability to interpret the world.</label><br>
+            </div>
+
+            <div class="question" id="q30">
+                <div class="question-title">
+                    <div class="question-number">30</div>
+                    <div class="question-text">
+                        What does the writer suggest in the seventh paragraph?
+                    </div>
+                </div>
+                <label><input type="radio" name="q30" value="A"> A Children's sense of their surroundings changes as they get older.</label><br>
+                <label><input type="radio" name="q30" value="B"> B Children are able to grasp certain complex ideas as well as adults are.</label><br>
+                <label><input type="radio" name="q30" value="C"> C Even apparently irrational ideas can be worthy of interest.</label><br>
+                <label><input type="radio" name="q30" value="D"> D Sometimes the simplest explanations are the best.</label><br>
+            </div>
+
+            <div class="question" id="q31">
+                <div class="question-title">
+                    <div class="question-number">31</div>
+                    <div class="question-text">
+                        The writer's main purpose is to
+                    </div>
+                </div>
+                <label><input type="radio" name="q31" value="A"> A outline Piaget's contribution to a range of scientific fields.</label><br>
+                <label><input type="radio" name="q31" value="B"> B summarise how education has benefited from Piaget's findings.</label><br>
+                <label><input type="radio" name="q31" value="C"> C discuss Piaget's role in the development of 20-century psychology.</label><br>
+                <label><input type="radio" name="q31" value="D"> D express doubts about a number of Piaget's theories.</label><br>
+            </div>
+        </div>
+
+        <div class="section-title">Questions 32-36</div>
+        <div class="instructions">Complete the summary using the list of words, A-I, below.</div>
+
+        <p style="text-align:center; font-weight: bold !important;"><b>Piaget's approach to child development</b></p>
+
+        <p>
+            Piaget maintained that children's mental processes were far more 
+            <select name="q32" id="q32">
+                <option value="">32. Select...</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="H">H</option>
+                <option value="I">I</option>
+            </select>
+            than they might appear. He encouraged the view that a child was not a 'blank slate' waiting to be filled with information, but rather a systematic builder of knowledge who regularly tries out his or her own 
+            <select name="q33" id="q33">
+                <option value="">33. Select...</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="H">H</option>
+                <option value="I">I</option>
+            </select>
+            about the world.
+            Piaget's impact on the area of 
+            <select name="q34" id="q34">
+                <option value="">34. Select...</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="H">H</option>
+                <option value="I">I</option>
+            </select>
+            could well outlast that of more celebrated pioneers of this discipline. Despite doubts cast over his ideas by the current view associating knowledge exclusively with the 
+            <select name="q35" id="q35">
+                <option value="">35. Select...</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="H">H</option>
+                <option value="I">I</option>
+            </select>
+            , the effects of his work are still strong today. His principles are still widely used in the professional development of 
+            <select name="q36" id="q36">
+                <option value="">36. Select...</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="H">H</option>
+                <option value="I">I</option>
+            </select>.
+        </p>
+
+        <!-- A–I Wordlist -->
+        <div class="wordlist">
+            <div><strong>A.</strong> correct</div>
+            <div><strong>B.</strong> theories</div>
+            <div><strong>C.</strong> brain</div>
+            <div><strong>D.</strong> simple</div>
+            <div><strong>E.</strong> teachers</div>
+            <div><strong>F.</strong> psychology</div>
+            <div><strong>G.</strong> logical</div>
+            <div><strong>H.</strong> thought</div>
+            <div><strong>I.</strong> philosophers</div>
+        </div>
+
+        <!-- YES/NO/NOT GIVEN section -->
+        <div class="section-title">Questions 37-40</div>
+        <div class="instructions">Do the following statements agree with the claims of the writer in Reading Passage 3?</div>
+
+        <div class="instructions">
+            In boxes 37-40 on your answer sheet, write:<br>
+            YES if the statement agrees with the claims of the writer<br>
+            NO if the statement contradicts the claims of the writer<br>
+            NOT GIVEN if it is impossible to say what the writer thinks about this
+        </div>
+
+        <div class="question" id="q37">
+            <div class="question-title">
+                <div class="question-number">37</div>
+                <div class="question-text">Piaget's early work in Paris involved innovative research techniques</div>
+            </div>
+            <label><input type="radio" name="q37" value="YES"> YES</label><br>
+            <label><input type="radio" name="q37" value="NO"> NO</label><br>
+            <label><input type="radio" name="q37" value="NOT GIVEN"> NOT GIVEN</label><br>
+        </div>
+
+        <div class="question" id="q38">
+            <div class="question-title">
+                <div class="question-number">38</div>
+                <div class="question-text">Piaget gave clear guidelines as to how adults should give information to children.</div>
+            </div>
+            <label><input type="radio" name="q38" value="YES"> YES</label><br>
+            <label><input type="radio" name="q38" value="NO"> NO</label><br>
+            <label><input type="radio" name="q38" value="NOT GIVEN"> NOT GIVEN</label><br>
+        </div>
+
+        <div class="question" id="q39">
+            <div class="question-title">
+                <div class="question-number">39</div>
+                <div class="question-text">Piaget made a significant contribution to the field of epistemology.</div>
+            </div>
+            <label><input type="radio" name="q39" value="YES"> YES</label><br>
+            <label><input type="radio" name="q39" value="NO"> NO</label><br>
+            <label><input type="radio" name="q39" value="NOT GIVEN"> NOT GIVEN</label><br>
+        </div>
+
+        <div class="question" id="q40">
+            <div class="question-title">
+                <div class="question-number">40</div>
+                <div class="question-text">We still have much to learn about the nature of knowledge.</div>
+            </div>
+            <label><input type="radio" name="q40" value="YES"> YES</label><br>
+            <label><input type="radio" name="q40" value="NO"> NO</label><br>
+            <label><input type="radio" name="q40" value="NOT GIVEN"> NOT GIVEN</label><br>
+        </div>
+    </div>
+</main>
+<footer>
+    <div class="progress-container" id="progress-container">
+    </div>
+    <div class="action-buttons">
+        <button class="btn-secondary" id="reset-btn">Reset Answers</button>
+        <button class="btn-primary" id="submit-btn">Submit Answers</button>
+    </div>
+</footer>
+<div class="feedback-overlay" id="feedback-overlay">
+    <div class="feedback-container" id="feedback-container">
+        <div class="feedback-header">
+            <div class="feedback-title">
+                <i class="fas fa-chart-bar"></i> Your Results
+                <span class="score-display" id="score-display">0/14</span>
+            </div>
+            <button id="close-feedback" title="Close"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="feedback-body" id="feedback-body">
+        </div>
+    </div>
+</div>
+
+<script>
+// === Night Mode Toggle ===
+document.getElementById('night-mode-toggle').addEventListener('click', function () {
+    document.body.classList.toggle('night-mode');
+    const icon = this.querySelector('i');
+    if (document.body.classList.contains('night-mode')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+    } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+    }
+});
+
+// === Submit Answers ===
+document.getElementById('submit-btn').addEventListener('click', function () {
+    const correctAnswers = {
+        q27: "C",
+        q28: "A",
+        q29: "D",
+        q30: "C",
+        q31: "C",
+        q32: "G",
+        q33: "B",
+        q34: "F",
+        q35: "C",
+        q36: "E",
+        q37: "NOT GIVEN",
+        q38: "NO",
+        q39: "YES",
+        q40: "YES"
+    };
+
+    const explanations = {
+        q27: "The second paragraph compares Piaget's shift in thinking about children to the way modern anthropology displaced primitive stereotypes, highlighting how his work represented a crucial turning point in our approach to education.",
+        q28: "The dialogue about the wind shows that children's explanations, while factually inaccurate, have their own internal logic and coherence. The factual accuracy is less important than understanding their thought processes.",
+        q29: "Piaget emphasized maintaining children's confidence in their ability to interpret the world, as shown by his belief that correcting children too quickly could discourage them from developing their own theories.",
+        q30: "The seventh paragraph discusses how Piaget's disciples have a fascination with children's primitive laws of physics, showing that even apparently irrational ideas can be worthy of interest.",
+        q31: "The writer's main purpose is to discuss Piaget's role in the development of 20th-century psychology, as the passage focuses extensively on his psychological theories, their impact on education, and his lasting influence on the field of psychology.",
+        q32: "Piaget maintained that children's mental processes were far more logical than they might appear, despite their seemingly irrational statements.",
+        q33: "Piaget viewed children as active builders of knowledge who regularly try out their own theories about the world.",
+        q34: "Piaget's impact on psychology could well outlast that of more celebrated pioneers like Freud or Skinner.",
+        q35: "Current views associate knowledge exclusively with the brain, challenging some of Piaget's ideas about constructed knowledge.",
+        q36: "Piaget's principles are still widely used in the professional development of teachers.",
+        q37: "The passage mentions Piaget's work in Paris but doesn't specify whether his research techniques were innovative - NOT GIVEN.",
+        q38: "The passage explicitly states that 'Piaget was not an educator and never laid down rules about how to intervene' - NO.",
+        q39: "The passage states that Piaget made epistemology a science and that his work has influenced many fields - YES.",
+        q40: "The final paragraph suggests that despite new discoveries, the mystery of knowledge remains, indicating we still have much to learn - YES."
+    };
+
+    const passageReferences = {
+        q27: "Paragraph 2 — Compares Piaget's shift in thinking about children to modern anthropology's displacement of primitive stereotypes.",
+        q28: "Paragraph 5-6 — The wind dialogue shows children's explanations have internal coherence even when factually inaccurate.",
+        q29: "Paragraph 7 — Piaget believed correcting children too quickly could discourage them from developing their own theories.",
+        q30: "Paragraph 8 — Discusses fascination with children's primitive laws of physics.",
+        q31: "Throughout passage — The text consistently discusses Piaget's psychological theories, his influence on education reform, comparison to other psychologists like Freud and Skinner, and his lasting impact on psychology as a discipline.",
+        q32: "Paragraph 1 — Children's thought processes have their own order and special logic.",
+        q33: "Paragraph 3 — Children as active builders of knowledge who test their own hypotheses.",
+        q34: "Paragraph 3 — His influence on psychology may be longer lasting than more famous psychologists.",
+        q35: "Paragraph 10 — Current view of knowledge as intrinsic property of the brain challenges Piaget.",
+        q36: "Paragraph 9 — Every teacher in training still memorizes Piaget's stages of development.",
+        q37: "Paragraph 4 — Mentions his work in Paris but doesn't detail research methods.",
+        q38: "Paragraph 7 — Explicitly states Piaget never laid down rules for intervention.",
+        q39: "Paragraph 9 — Piaget made epistemology a science and influenced many fields.",
+        q40: "Paragraph 10 — New discoveries increase the mystery of knowledge rather than reducing the gap."
+    };
+
+    let score = 0;
+    let total = 0;
+    let feedbackHTML = "";
+
+    for (const [qid, correctValue] of Object.entries(correctAnswers)) {
+        total++;
+        let userAnswer = "";
+
+        const byName = document.getElementsByName(qid);
+        if (byName && byName.length) {
+            const first = byName[0];
+            if (first.tagName === "SELECT") {
+                userAnswer = first.value.trim();
+            } else if (first.type === "radio") {
+                for (const r of byName) if (r.checked) { userAnswer = r.value.trim(); break; }
+            } else if (first.type === "text") {
+                userAnswer = first.value.trim();
+            }
+        } else {
+            const qEl = document.getElementById(qid);
+            if (qEl) {
+                const sel = qEl.querySelector("select");
+                const txt = qEl.querySelector("input[type='text']");
+                const rds = qEl.querySelectorAll("input[type='radio']");
+                if (sel) userAnswer = sel.value.trim();
+                else if (txt) userAnswer = txt.value.trim();
+                else if (rds.length) {
+                    for (const r of rds) if (r.checked) { userAnswer = r.value.trim(); break; }
+                }
+            }
+        }
+
+        const isCorrect = userAnswer.toLowerCase() === correctValue.toLowerCase();
+        if (isCorrect) score++;
+
+        feedbackHTML += `
+            <div class="feedback-item">
+                <div class="feedback-question">Q${qid.replace("q","")}</div>
+                <div class="feedback-answer ${isCorrect ? "correct" : "incorrect"}">
+                    Your Answer: ${userAnswer || "(no answer)"}<br/>
+                    ${isCorrect ? "✔ Correct" : `✘ Incorrect (Correct: ${correctValue})`}
+                </div>
+                <div class="feedback-explanation"><strong>Explanation:</strong> ${explanations[qid] || ""}</div>
+                <div class="feedback-passage"><strong>Relevant passage:</strong> ${passageReferences[qid] || ""}</div>
+            </div>`;
+    }
+
+    document.getElementById("feedback-body").innerHTML = feedbackHTML;
+    document.getElementById("score-display").textContent = `${score}/${total}`;
+    document.getElementById("feedback-overlay").style.display = "flex";
+});
+
+document.getElementById('close-feedback').addEventListener('click', function () {
+    document.getElementById("feedback-overlay").style.display = "none";
+});
+
+// Reset answers
+document.getElementById('reset-btn').addEventListener('click', function () {
+    document.querySelectorAll("select").forEach(sel => sel.value = "");
+    document.querySelectorAll("input[type='radio']").forEach(r => r.checked = false);
+    document.querySelectorAll("input[type='text']").forEach(t => t.value = "");
+    document.querySelectorAll('.progress-item.completed').forEach(i => i.classList.remove('completed'));
+    updateProgressStatus?.();
+});
+
+// === Highlight functionality ===
+let highlightTooltip = null;
+let selectedRange = null;
+
+function createColorPicker(x, y, applyColorCallback) {
+    const colors = ["lightgreen", "yellow", "lightskyblue"];
+    const picker = document.createElement("div");
+    picker.className = "highlight-tooltip";
+    picker.style.top = `${y}px`;
+    picker.style.left = `${x}px`;
+    picker.style.position = "fixed";
+    picker.style.background = "#333";
+    picker.style.color = "white";
+    picker.style.padding = "5px 10px";
+    picker.style.borderRadius = "4px";
+    picker.style.zIndex = 1000;
+    picker.style.display = "flex";
+    colors.forEach(color => {
+        const btn = document.createElement("button");
+        btn.style.backgroundColor = color;
+        btn.style.border = "none";
+        btn.style.width = "20px";
+        btn.style.height = "20px";
+        btn.style.margin = "0 4px";
+        btn.style.borderRadius = "50%";
+        btn.title = `Highlight with ${color}`;
+        btn.addEventListener("click", () => {
+            applyColorCallback(color);
+            picker.remove();
+        });
+        picker.appendChild(btn);
+    });
+    document.body.appendChild(picker);
+    return picker;
+}
+
+function applyHighlight(color) {
+    if (!selectedRange) return;
+    const span = document.createElement("span");
+    span.className = "highlight";
+    span.style.backgroundColor = color;
+    span.setAttribute("data-color", color);
+    span.appendChild(selectedRange.extractContents());
+    selectedRange.insertNode(span);
+    selectedRange = null;
+    window.getSelection().removeAllRanges();
+
+    span.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (highlightTooltip) highlightTooltip.remove();
+        highlightTooltip = document.createElement("div");
+        highlightTooltip.className = "highlight-tooltip";
+        highlightTooltip.style.top = `${e.clientY}px`;
+        highlightTooltip.style.left = `${e.clientX}px`;
+        highlightTooltip.innerHTML = `<button style="color:white;background:red;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">Remove Highlight</button>`;
+        highlightTooltip.querySelector("button").addEventListener("click", function () {
+            const parent = span.parentNode;
+            while (span.firstChild) {
+                parent.insertBefore(span.firstChild, span);
+            }
+            parent.removeChild(span);
+            parent.normalize();
+            highlightTooltip.remove();
+        });
+        document.body.appendChild(highlightTooltip);
+    });
+}
+
+function handleMouseUp(e) {
+    const selection = window.getSelection();
+    if (selection.toString().trim() === '') return;
+    if (!e.currentTarget.contains(selection.anchorNode)) return;
+
+    selectedRange = selection.getRangeAt(0).cloneRange();
+    const rect = selectedRange.getBoundingClientRect();
+
+    if (highlightTooltip) highlightTooltip.remove();
+
+    highlightTooltip = createColorPicker(rect.left, rect.top - 40, applyHighlight);
+}
+
+document.getElementById('passage-text').addEventListener('mouseup', handleMouseUp);
+document.getElementById('questions-container').addEventListener('mouseup', handleMouseUp);
+
+document.addEventListener('mousedown', (e) => {
+    if (highlightTooltip && !highlightTooltip.contains(e.target)) {
+        highlightTooltip.remove();
+        highlightTooltip = null;
+        window.getSelection().removeAllRanges();
+    }
+});
+
+// === Progress Tracker ===
+function initializeProgressTracker() {
+    const progressContainer = document.getElementById("progress-container");
+    progressContainer.innerHTML = "";
+
+    const nodes = Array.from(document.querySelectorAll('[id^="q"]'))
+        .map(el => {
+            const m = el.id.match(/^q(\d+)$/);
+            return m ? { id: el.id, number: parseInt(m[1], 10) } : null;
+        })
+        .filter(Boolean)
+        .sort((a, b) => a.number - b.number);
+
+    nodes.forEach(({ id, number }) => {
+        const item = document.createElement("div");
+        item.className = "progress-item";
+        item.textContent = number;
+        item.dataset.qid = id;
+
+        item.addEventListener("click", () => {
+            const container = document.getElementById("questions-container");
+            const target = document.getElementById(id);
+            if (!target) return;
+            if (container) {
+                const top = target.offsetTop - 12;
+                container.scrollTo({ top, behavior: "smooth" });
+            } else {
+                target.scrollIntoView({ behavior: "smooth" });
+            }
+        });
+
+        progressContainer.appendChild(item);
+    });
+}
+
+function updateProgressStatus() {
+    document.querySelectorAll(".progress-item").forEach(item => {
+        const qid = item.dataset.qid;
+        const el = document.getElementById(qid);
+        if (!el) return;
+
+        let answered = false;
+
+        if (el.tagName === "SELECT") {
+            answered = el.value !== "";
+        } else {
+            const sel = el.querySelector("select");
+            const txt = el.querySelector("input[type='text']");
+            const rds = el.querySelectorAll("input[type='radio']");
+            if (sel && sel.value !== "") answered = true;
+            else if (txt && txt.value.trim() !== "") answered = true;
+            else if (rds.length) answered = Array.from(rds).some(r => r.checked);
+        }
+
+        item.classList.toggle("completed", answered);
+
+        if (el.classList) {
+            el.classList.toggle("answered", answered);
+        }
+    });
+}
+
+document.addEventListener("change", updateProgressStatus);
+document.addEventListener("DOMContentLoaded", () => {
+    initializeProgressTracker();
+    updateProgressStatus();
+});
+
+// === Timer Functionality ===
+let timerInterval;
+let timeRemaining = 20 * 60; // 20 minutes
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+    const seconds = (timeRemaining % 60).toString().padStart(2, '0');
+    document.getElementById("timer").textContent = `${minutes}:${seconds}`;
+}
+
+document.getElementById("start-timer").addEventListener("click", () => {
+    if (timerInterval) return;
+    timerInterval = setInterval(() => {
+        if (timeRemaining > 0) {
+            timeRemaining--;
+            updateTimerDisplay();
+        } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            alert("Time is up!");
+        }
+    }, 1000);
+});
+
+document.getElementById("pause-timer").addEventListener("click", () => {
+    clearInterval(timerInterval);
+    timerInterval = null;
+});
+
+document.getElementById("reset-timer").addEventListener("click", () => {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    timeRemaining = 20 * 60;
+    updateTimerDisplay();
+});
+
+document.addEventListener("DOMContentLoaded", updateTimerDisplay);
+
+// === Dynamic Height Calculation ===
+(function() {
+    function setDynamicHeights() {
+        var header = document.querySelector('header');
+        var footer = document.querySelector('footer');
+        if (!header || !footer) return;
+        var headerH = header.offsetHeight || 0;
+        var footerH = footer.offsetHeight || 0;
+        document.documentElement.style.setProperty('--header-dyn-height', headerH + 'px');
+        document.documentElement.style.setProperty('--footer-dyn-height', footerH + 'px');
+        document.documentElement.style.setProperty('--main-dyn-height', 'calc(100vh - ' + headerH + 'px - ' + footerH + 'px)');
+    }
+    window.addEventListener('load', setDynamicHeights);
+    window.addEventListener('resize', setDynamicHeights);
+    setTimeout(setDynamicHeights, 300);
+})();
+</script>
+</body>
+</html>

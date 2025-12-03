@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 1 – Computer games</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  h3{margin:8px 0 0}
+  .muted{color:var(--muted)}
+
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+
+  /* Highlights */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+
+      <div id="passage">
+        <h2>Reading Passage 1</h2>
+        <h3>Computer games</h3>
+        <p><em>The early days of the video game business</em></p>
+
+        <p>It's not whether you win or lose, but how you play the game. In the age of computers, that statement takes on new meanings, video game cannot ever really be defeated because, no matter how high the score, It is always the human who tires first or makes the fatal error. But millions of people continue to play, because microelectronic technology has enabled game designers to conveniently and inexpensively transform plain screens into playfields of extraordinary capability. At the same time, a multi-billion dollar industry has grown from very humble beginnings in just a few decades.</p>
+
+        <p>The technological roots of video game can be traced back to 1962, when an MIT (Massachusetts Institute of Technology) graduate student demonstrated Spacewar, a science-fiction fantasy game played on a mainframe computer and a large screen. That game immediately attracted a wide cult following among computer buffs. The next important step came in 1968, when a console was developed that could be used to play game on ordinary televisions. But it was not until the early 1970s that a young University of Utah engineering student named Nolan Bushnell began working with a colleague to develop the technology to the point that adaptation of Spacewar from a large computer into coin-operated from, for use in video game arcades, was becoming economically feasible. Bushnell and his associates began working on such a machine in a converted bedroom workshop, but were unsuccessful. What they ultimately developed instead was a simple tennis-like game that they named <strong>Pong</strong>.</p>
+
+        <p><strong>Pong</strong> took the industry by storm and quickly became the first coin-operated video-game Hit. And soon thereafter commercial Pong-style home video games also appeared. Yet despite early enthusiasm, consumer interest in this area proved less sustained than had been anticipated and, as prices started to drop and losses mounted, most of the early manufacturers withdrew from the field. Profits proved to be just as elusive at Bushnell's company, <strong>Atari</strong>, where a rapidly growing market presence in coin-operated machine and home video required greater injections of capital and more professional management than the company was able to provide. In 1976, the founders of Atari sold their share of the company for a sum that was only equivalent to their sales in that year.</p>
+
+        <p>At that point, coin-operated video games seemed just another passing fad. But the introduction of <strong>Space Invaders</strong>—an arcade model produced by Japanese manufacturer Taito—proved otherwise. With its vibrant <strong>graphics</strong> it was so different from the previous black and white games that Space Invaders immediately captured public interest. There soon followed a rush of popular video that employed the same or better hardware and even more imaginative software. Of these, <strong>Pac-Man</strong> (in 1980) was especially significant, because now <strong>females</strong> began to take an interest.</p>
+
+        <p>By this time, the same software improvement and technological advances (faster microprocessors and larger memories) that permitted designers to produce spectacular audio and visual effects for coin-operated machines were also being applied to home video units. It was thus only a short while before the programmable consoles that had been unpopular for lack of software suddenly began to sell in large numbers: consumers had discovered that they could finally play a reasonable version of their favorite arcade games in the comfort of their own home. The impact on Atari was astounding. Unprofitable for the first three years, Atari had by the end of 1979, become a success. By either self-designing or licensing the most popular arcade concepts for cartridge format for use at home, the company had captured some 80 percent of the worldwide market for home video games.</p>
+
+        <p>All of this, however, was too good to last. By late 1982, the public's fascination with arcade games had begun to low down, and fewer potential best-sellers were becoming available for conversion to cartridges that could be used on an Atari machine. At the same time, the market was flooded with illegal software of all types. It was thus not until the late 1980s that the unstructured nature of the industry, at least on the software side, had stabilized and become restructured in a manner similar, in many respects, to the book publishing business.</p>
+
+        <p>Until 1986, when japan-based Nintendo introduced a more technologically sophisticated and user-friendly game console, the hardware side was also in disarray. But with tight control of software development and marketing, Nintendo was able to revive and then capture up to 80 percent of a once-again booming market in which no significant competition appeared until the early 1990s. By that point, the annual operating profits of Nintendo had already grown to over $1 billion—an amount exceeding the 1991 profits of all the major Hollywood film studios combined. In 1999, sales of game hardware and software, led by <strong>Playstation</strong>, were equal in size (around $7 billion) to US domestic box-office revenues.</p>
+
+        <p>With change the only constant, the game industry has moved on to become what it is today. However, no matter what the technology or the format, the essence of a successful game will always be the same: it is simple to understand and to play on an elementary level, but it is compulsive and maddeningly difficult—in fact, forever impossible—to master fully.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">📢 Join my Telegram</button>
+
+<script>
+/* =======================
+   CONFIG
+   ======================= */
+const CONFIG = {
+  title: "READING PASSAGE 1 – Computer games",
+  subtitle: "You should spend about 20 minutes on Questions 1–13.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  showFooterNavigator: true,
+
+  sections: [
+    /* 1–6 Gap Fill */
+    {
+      type: "gap_fill",
+      heading: "Questions 1–6",
+      instructions: ["Complete the notes below.", "Choose ONE WORD ONLY from the passage for each answer.", "Write your answers in boxes 1–6 on your answer sheet."],
+      title: "A history of video games",
+      items: [
+        { id: 1, prompt: "1970s: Advances in technology led to cheaper ................ and the possibility of coin-operated video games.", correct: "microprocessors" },
+        { id: 2, prompt: "The first successful coin-operated video game was ................ .", correct: "Pong" },
+        { id: 3, prompt: "................ was bought from its original owners.", correct: "Atari" },
+        { id: 4, prompt: "Space Invaders was successful because of its colourful ................ .", correct: "graphics" },
+        { id: 5, prompt: "1980s: Pac-Man was the first game to attract ................ .", correct: "females" },
+        { id: 6, prompt: "1990s: By the end of the decade ................ had become the biggest selling home entertainment product.", correct: "Playstation" }
+      ]
+    },
+
+    /* 7–13 True/False/Not Given */
+    {
+      type: "true_false",
+      heading: "Questions 7–13",
+      instructions: ["Do the following statements agree with the information given in Reading Passage 1?", "In boxes 7–13 on your answer sheet, write", "TRUE if the statement agrees with the information", "FALSE if the statement contradicts the information", "NOT GIVEN if there is no information on this"],
+      items: [
+        { id: 7, text: "Spacewar was unpopular at first.", correct: "FALSE" },
+        { id: 8, text: "Bushnell and his team failed to create a coin-operated version of Spacewar.", correct: "TRUE" },
+        { id: 9, text: "From the beginning the home video game market has been commercially successful.", correct: "FALSE" },
+        { id: 10, text: "Atari was successful for the first time in 1979.", correct: "TRUE" },
+        { id: 11, text: "Video arcade game usage continued strongly in the 1980s.", correct: "FALSE" },
+        { id: 12, text: "The time taken to produce a video game can be compared to producing a book.", correct: "NOT GIVEN" },
+        { id: 13, text: "The qualities needed for a video game to become successful have been researched thoroughly.", correct: "NOT GIVEN" }
+      ]
+    }
+  ]
+};
+
+/* =======================
+   RENDER
+   ======================= */
+document.getElementById('title').textContent = CONFIG.title;
+document.getElementById('subtitle').textContent = CONFIG.subtitle || '';
+
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+/* Gap fill renderer */
+function renderGapFill(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  
+  if(sec.title) {
+    const titleDiv = document.createElement('div');
+    titleDiv.innerHTML = `<h3>${sec.title}</h3>`;
+    qroot.appendChild(titleDiv);
+  }
+
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const input = `<input type="text" id="q${it.id}" name="q${it.id}" placeholder="Enter your answer">`;
+    b.innerHTML=`<div class="qhead">${it.prompt}</div><div class="options">${input}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* True/False/Not Given renderer */
+function renderTrueFalse(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const opts = ['TRUE', 'FALSE', 'NOT GIVEN'].map(option => 
+      `<label><input type="radio" name="q${it.id}" value="${option}"> ${option}</label>`
+    ).join('');
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${opts}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Build UI */
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='gap_fill') renderGapFill(sec);
+  if (sec.type==='true_false') renderTrueFalse(sec);
+});
+
+/* Footer chips */
+const footerNav=document.getElementById('footerNav');
+(function(){
+  if(!CONFIG.showFooterNavigator){ footerNav.style.display='none'; return; }
+  footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+  [...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+    const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+    chip.addEventListener('click',()=>{ document.getElementById(`anchor-${id}`).scrollIntoView({behavior:'smooth',block:'center'}); });
+    footerNav.appendChild(chip);
+  });
+})();
+function markChipAnswered(id, answered){
+  const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered);
+}
+document.addEventListener('change',(e)=>{
+  const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  const id=m?+m[1]:null; if(!id) return;
+  const answered=(e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                 : (e.target.value.trim().length>0);
+  markChipAnswered(id, answered);
+});
+
+/* Timer */
+let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60;
+const timer=document.getElementById('timer');
+const pauseBtn=document.getElementById('pauseBtn');
+const resumeBtn=document.getElementById('resumeBtn');
+let paused=false, iv;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){ if(iv) clearInterval(iv);
+  iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft); if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent=fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+function submit(){
+  paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const itemsOut=[];
+  const ids=Object.keys(answersMap);
+
+  ids.forEach(key=>{
+    const ans=answersMap[key];
+    const label=key;
+    let user='';
+    const picked=document.querySelector(`input[name="q${key}"]:checked`);
+    if(picked){ user=picked.value; }
+    else if(document.getElementById('q'+key)){ user=document.getElementById('q'+key).value; }
+    const shown=user||'No answer';
+
+    if(String(ans).trim()===''){ total++; itemsOut.push({label, status:'— not graded —', user:shown, correct:'(no key)'}); return; }
+
+    total++; graded++;
+    const ok = shown.trim().toUpperCase() === String(ans).trim().toUpperCase();
+    if(ok) correctCount++;
+    itemsOut.push({label, status: ok? '✓ Correct' : '✗ Incorrect', user:shown, correct:String(ans)});
+  });
+
+  document.getElementById('score').innerHTML = `Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;
+  document.getElementById('answers').innerHTML = itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlights */
+const passageCard=document.getElementById('passageCard');
+const pPalette=document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Questions highlight */
+const qCard=document.querySelector('.card.questions');
+const qPalette=document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1 ? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if (node.closest && node.closest('input,textarea,select')) return;
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; });
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* Helper */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container=range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+
+/* TG button */
+document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

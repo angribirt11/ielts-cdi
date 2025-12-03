@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 3 – Let's teach them how to teach</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  h3{margin:8px 0 0}
+  .muted{color:var(--muted)}
+
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+
+  /* Highlights */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+
+      <div id="passage">
+        <h2>Reading Passage 3</h2>
+        <h3>Let's teach them how to teach</h3>
+        <p><em>What matters in schools is teaching. Fortunately, teaching can be taught.</em></p>
+
+        <p>Forget smart uniforms and small classes. The secret to stellar grades and thriving students is teachers. One US study found that in a single year's teaching the top 10% of teachers impart three times as much learning to their pupils as the worst 10%. Another US study suggests that if black pupils were taught by the best quarter of teachers, the gap between their achievement and that of white pupils would disappear. But efforts to ensure that every teacher can teach are hindered by the persistent myth that good teachers are born, not made. Government policies, which often start from the same assumption, seek to raise teaching standards by attracting high-flying graduates to join the profession and prodding bad teachers to leave. Teachers' unions, meanwhile, insist that if only their members were free from centralized policies, excellence would follow.</p>
+
+        <p>The premise that teaching ability is something you either have or don't is mistaken. A new breed of teacher trainers is founding a rigorous science of pedagogy. The aim is to make ordinary teachers great, just as sports coaches help athletes of all abilities to improve their personal best. Done right, this will revolutionize schools and change lives.</p>
+
+        <p>Education has a history of lurching from one 'miracle' solution to the next. The best of them even do some good. The US initiative, Teach for America, has brought energetic new graduates into the profession, and dismissing teachers for bad performance has boosted results in Washington, DC. But each approach has its limits. Teaching is a mass profession: it cannot grab all the top graduates, year after year. When poor teachers are fired, new ones are needed — and they will have come through the same educational system that failed to make fine teachers of their predecessors.</p>
+
+        <p>By contrast, the idea of improving the average teacher could revolutionize the entire profession. Around the world, few newly qualified teachers are well enough prepared for the classroom. A recent report found 31 countries in which more than a quarter of primary school teachers had not reached minimal national standards. In rich countries, the problem is subtler. Teachers qualify following a long, specialized course. This will almost always involve superficial and apparently useless discussions of theory. Some of these courses, including masters degrees in education, have no effect on how well their graduates' pupils end up being taught.</p>
+
+        <p>What teachers fail to learn in universities and teacher training colleges they rarely pick up on the job. They become better teachers in their first few years as they get to grips with real pupils in real classrooms, but after that improvements tail off. This is largely because schools neglect their most important pupils: teachers themselves. Across the Organisation for Economic Cooperation and Development (OECD) club of mostly rich countries, two-fifths of teachers say they have never had a chance to learn by sitting in on another teacher's lessons; nor have they been asked to give feedback on their peers.</p>
+
+        <p>If this is to change, teachers need to learn how to impart knowledge and prepare young minds to receive and retain it. Good teachers set clear goals, enforce high standards of behaviour and manage their lesson time wisely. They use tried-and-tested instructional techniques to ensure that all brains are working all the time, for example asking questions in the classroom with "cold calling" rather than relying on the same eager pupils putting up their hands.</p>
+
+        <p>With teaching like other complex skills, the route to mastery is not abstruse theory but intense, guided practice grounded in subject-matter knowledge and pedagogical methods. Trainees should spend much time in the classroom. The places where pupils do best, for example, Finland, Singapore and Shanghai, put novice teachers through a demanding apprenticeship. In the US, high-performing schools teach trainees in the classroom and bring them on with coaching and feedback.</p>
+
+        <p>Teacher training institutions need to be more rigorous. A century ago medical schools raised the calibre of doctors by introducing systematic curriculums and providing clinical experience. It is essential that teacher training colleges start to collect and publish data on how their graduates perform in the classroom. Courses that produce teachers who go on to do little to improve their pupils' learning should not receive subsidies or see their graduates become teachers. They would then have to improve to survive.</p>
+
+        <p>Big changes are needed in schools, too, to ensure that teachers improve throughout their careers. Teachers in the best ones hone their craft through observation and coaching. They accept critical feedback while their unions should not resist but welcome as only proper for people doing such an important job. The best head teachers hone novice hands by helping them prepare high-quality lessons and arranging for more experienced teachers to cover for them when they need time for further study and practice.</p>
+
+        <p>Money is less important than you might think. Teachers in top-of-the-class Finland, for example, earn about the OECD average. But ensuring that teachers stay in the profession and, in most places, mean paying more. People who thrive on shaping young minds and who want to improve as teachers earn a pay premium. Making teaching an elite career would make it much easier to attract the best graduates.</p>
+
+        <p>Improving the quality of the average teacher would raise the profession's prestige and start a positive cycle in which more talented graduates clamoured to join. But the biggest gains will come from preparing new teachers better, and upgrading the ones already in classrooms.</p>
+
+        <p><em>*Cold calling: a simple technique in which the teacher calls on specific pupils to answer a question, regardless of whether they have raised their hand</em></p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">📢 Join my Telegram</button>
+
+<script>
+/* =======================
+   CONFIG
+   ======================= */
+const CONFIG = {
+  title: "READING PASSAGE 3 – Let's teach them how to teach",
+  subtitle: "You should spend about 20 minutes on Questions 27–40.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  showFooterNavigator: true,
+
+  sections: [
+    /* 27–31 Multiple Choice */
+    {
+      type: "mcq",
+      heading: "Questions 27–31",
+      instructions: [
+        "Choose the correct letter, A, B, C or D.",
+        "Write the correct letter in boxes 27–31 on your answer sheet."
+      ],
+      items: [
+        { 
+          id: 27, 
+          text: "According to the third paragraph, why is dismissing bad teachers a poor solution to problems in educational standards?", 
+          options: {
+            A: "Problems are increasing year on year.",
+            B: "There are not enough top graduates to replace them.",
+            C: "It leads to a poor relationship with teacher unions.",
+            D: "Replacement teachers have the same training as the dismissed ones."
+          }, 
+          correct: "D" 
+        },
+        { 
+          id: 28, 
+          text: "What does the writer say about teacher training institutions in the fourth paragraph?", 
+          options: {
+            A: "Graduating teachers are not ready for the classroom.",
+            B: "Improving a teacher of average talent is a very difficult task.",
+            C: "More theory in teacher training courses is required.",
+            D: "Primary teacher training is not taken seriously."
+          }, 
+          correct: "A" 
+        },
+        { 
+          id: 29, 
+          text: "In their first few years of working, teachers improve in the classroom because they", 
+          options: {
+            A: "are well equipped to build on the theory they learned in college.",
+            B: "have to engage with the realities of the job.",
+            C: "have opportunities to observe and learn from their peers.",
+            D: "enjoy a high level of support from the schools that employ them."
+          }, 
+          correct: "B" 
+        },
+        { 
+          id: 30, 
+          text: "Which of the following does the writer suggest is least effective for teachers to use?", 
+          options: {
+            A: "enforcing strict standards of behaviour",
+            B: "setting high goals which students are aware of",
+            C: "responding to the pupils who raise their hands to answer questions",
+            D: "ensuring that lesson time is properly scheduled and used"
+          }, 
+          correct: "C" 
+        },
+        { 
+          id: 31, 
+          text: "The author suggests that head teachers can assist newly qualified teachers by", 
+          options: {
+            A: "personally undertaking observation.",
+            B: "providing critical feedback.",
+            C: "welcoming union interaction.",
+            D: "working closely with them."
+          }, 
+          correct: "D" 
+        }
+      ]
+    },
+
+    /* 32–36 Yes/No/Not Given */
+    {
+      type: "yes_no",
+      heading: "Questions 32–36",
+      instructions: [
+        "Do the following statements agree with the claims of the writer in Reading Passage 3?",
+        "In boxes 32–36 on your answer sheet, write",
+        "YES if the statement agrees with the claims of the writer",
+        "NO if the statement contradicts the claims of the writer",
+        "NOT GIVEN if it is impossible to say what the writer thinks about this"
+      ],
+      items: [
+        { id: 32, text: "Of the many 'miracle' educational solutions that have been put forward a few have been effective.", correct: "YES" },
+        { id: 33, text: "Understanding educational theories is an essential part of teacher training.", correct: "NO" },
+        { id: 34, text: "Courses producing unsuccessful teachers should be given grants to improve.", correct: "NO" },
+        { id: 35, text: "Education is currently underfunded, which is leading to problems in schools.", correct: "NOT GIVEN" },
+        { id: 36, text: "Good classroom teachers should be paid more to remain in the classroom.", correct: "YES" }
+      ]
+    },
+
+    /* 37–40 Sentence Completion */
+    {
+      type: "sentence_completion",
+      heading: "Questions 37–40",
+      instructions: [
+        "Complete each sentence with the correct ending, A–F, below.",
+        "Write the correct letter, A–F, in boxes 37–40 on your answer sheet."
+      ],
+      endings: {
+        A: "practice will always be more important than theory.",
+        B: "better trainers are the only answer.",
+        C: "more capable graduates could be enticed into the profession.",
+        D: "a teacher who is not outstanding can be improved.",
+        E: "the assistance of teachers' unions is essential.",
+        F: "a better syllabus and more practical involvement will improve results."
+      },
+      items: [
+        { id: 37, stem: "Just as any athlete can be coached for better performance,", correct: "D" },
+        { id: 38, stem: "If teachers are to be taught the complex skills they require,", correct: "F" },
+        { id: 39, stem: "In teaching, as in the medical profession,", correct: "A" },
+        { id: 40, stem: "If the status of teachers were improved,", correct: "C" }
+      ]
+    }
+  ]
+};
+
+/* =======================
+   RENDER
+   ======================= */
+document.getElementById('title').textContent = CONFIG.title;
+document.getElementById('subtitle').textContent = CONFIG.subtitle || '';
+
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+/* MCQ renderer */
+function renderMCQ(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const opts=Object.entries(it.options).map(([k,v])=>`<label><input type="radio" name="q${it.id}" value="${k}"> ${k}. ${v}</label>`).join('');
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${opts}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Yes/No/Not Given renderer */
+function renderYesNo(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const opts = ['YES', 'NO', 'NOT GIVEN'].map(option => 
+      `<label><input type="radio" name="q${it.id}" value="${option}"> ${option}</label>`
+    ).join('');
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${opts}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Sentence Completion renderer */
+function renderSentenceCompletion(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+
+  // Endings list
+  const endingsDiv = document.createElement('div');
+  endingsDiv.className = 'qblock';
+  const endingsList = Object.entries(sec.endings).map(([k,v]) => `<div><b>${k}</b>. ${v}</div>`).join('');
+  endingsDiv.innerHTML = `<div class="qhead"><strong>Endings</strong></div><div class="options">${endingsList}</div>`;
+  qroot.appendChild(endingsDiv);
+
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const sel=`<select id="q${it.id}" name="q${it.id}">
+      <option value="">—</option>${Object.keys(sec.endings).map(k=>`<option value="${k}">${k}</option>`).join('')}
+    </select>`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.stem}</div><div class="options">${sel}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Build UI */
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='mcq') renderMCQ(sec);
+  if (sec.type==='yes_no') renderYesNo(sec);
+  if (sec.type==='sentence_completion') renderSentenceCompletion(sec);
+});
+
+/* Footer chips */
+const footerNav=document.getElementById('footerNav');
+(function(){
+  if(!CONFIG.showFooterNavigator){ footerNav.style.display='none'; return; }
+  footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+  [...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+    const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+    chip.addEventListener('click',()=>{ 
+      const anchor = document.getElementById(`anchor-${id}`);
+      if(anchor) anchor.scrollIntoView({behavior:'smooth',block:'center'}); 
+    });
+    footerNav.appendChild(chip);
+  });
+})();
+
+function markChipAnswered(id, answered){
+  const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered);
+}
+
+document.addEventListener('change',(e)=>{
+  const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  const id=m?+m[1]:null; if(!id) return;
+  const answered=(e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                 : (e.target.value.trim().length>0);
+  markChipAnswered(id, answered);
+});
+
+/* Timer */
+let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60;
+const timer=document.getElementById('timer');
+const pauseBtn=document.getElementById('pauseBtn');
+const resumeBtn=document.getElementById('resumeBtn');
+let paused=false, iv;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){ if(iv) clearInterval(iv);
+  iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft); if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent=fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+function submit(){
+  paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const itemsOut=[];
+  const ids=Object.keys(answersMap);
+
+  ids.forEach(key=>{
+    const ans=answersMap[key];
+    const label=key;
+    let user='';
+    const picked=document.querySelector(`input[name="q${key}"]:checked`);
+    if(picked){ user=picked.value; }
+    else if(document.getElementById('q'+key)){ user=document.getElementById('q'+key).value; }
+    const shown=user||'No answer';
+
+    if(String(ans).trim()===''){ total++; itemsOut.push({label, status:'— not graded —', user:shown, correct:'(no key)'}); return; }
+
+    total++; graded++;
+    const ok = shown.trim().toUpperCase() === String(ans).trim().toUpperCase();
+    if(ok) correctCount++;
+    itemsOut.push({label, status: ok? '✓ Correct' : '✗ Incorrect', user:shown, correct:String(ans)});
+  });
+
+  document.getElementById('score').innerHTML = `Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;
+  document.getElementById('answers').innerHTML = itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlights */
+const passageCard=document.getElementById('passageCard');
+const pPalette=document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Questions highlight */
+const qCard=document.querySelector('.card.questions');
+const qPalette=document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1 ? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if (node.closest && node.closest('input,textarea,select')) return;
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; });
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* Helper */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container=range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+
+/* TG button */
+document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

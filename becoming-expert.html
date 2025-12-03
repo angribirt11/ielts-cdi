@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 1 – Becoming an Expert</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage,.questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:8px;margin:0 0 12px} h2{color:var(--brand);margin:18px 0 8px}
+  .muted{color:var(--muted)} .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px} .qsection{margin-top:14px}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:14px}
+  .results{display:none;margin-top:16px;background:#f8f9fa;border-radius:10px;padding:16px} .results li{margin:6px 0;padding:8px;border-radius:8px;list-style:none}
+  .ok{background:#ecfdf5;color:#065f46}.bad{background:#fef2f2;color:#991b1b}.meta{font-size:13px;color:var(--muted)}
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;padding:6px 10px;border-radius:999px;cursor:pointer}.chip.answered{border-color:#9ca3af;background:#f3f4f6}
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;gap:8px;z-index:10}.timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+</style>
+</head>
+<body>
+<div class="timerWrap"><div class="timer" id="timer">20:00</div><button class="tbtn" id="pauseBtn">⏸️</button><button class="tbtn" id="resumeBtn" disabled>▶️</button></div>
+<div class="palette" id="pPalette"><button class="hbtn" data-color="yellow">Yellow</button><button class="hbtn" data-color="lightgreen">Green</button><button class="hbtn" data-color="lightblue">Blue</button><button class="hbtn" data-color="pink">Pink</button><button class="hbtn" data-color="orange">Orange</button><button class="hbtn" id="clearP">Clear</button></div>
+<div class="palette" id="qPalette"><button class="hbtn" data-color="yellow">Yellow</button><button class="hbtn" data-color="lightgreen">Green</button><button class="hbtn" data-color="lightblue">Blue</button><button class="hbtn" data-color="pink">Pink</button><button class="hbtn" data-color="orange">Orange</button><button class="hbtn" id="clearQ">Clear</button></div>
+
+<div class="container">
+  <div class="card passage" id="passageCard">
+    <h1>READING PASSAGE 1 – Becoming an Expert</h1>
+    <div class="muted">You should spend about 20 minutes on Questions 1–13.</div>
+    <div id="passage">
+      <h2>Becoming an expert</h2>
+      <p><em>What is the nature of exercise and what is the process by which one moves from being a novice, to a journeyman, and eventually to becoming an expert?</em></p>
+      <p>Expertise is commitment coupled with creativity. It takes a considerable amount of time and regular exposure to a large number of cases to become an expert.</p>
+      <p>An individual enters a field of study as a novice. The novice needs to learn the guiding principles and rules of a given task in order to understand that task. Concurrently, the novice needs to be exposed to specific cases, or instances, that test the boundaries of such rules. Generally, a novice will find a mentor to direct them through the process of acquiring new knowledge.</p>
+      <p>In time, and with much practice, the novice begins to distinguish patterns of behavior within cases and, thus becomes a journeyman. With more practice and exposure to increasingly complex cases, the journeyman finds patterns not only within cases but also between cases. The journeyman still maintains regular contact with a mentor to solve specific problems and learn more complex strategies.</p>
+      <p>When a journeyman starts to make and test hypotheses about future behavior based on past experiences, they begin the next transition. Once they creatively generate knowledge, rather than simply matching superficial patterns, they become an expert. At this point, they are confident in their knowledge and no longer need a mentor as a guide; they become responsible for their own knowledge. Once they make predictions based on patterns and test those predictions against actual behavior, they are generating new knowledge.</p>
+      <p>This process is rather like an apprenticeship model. An apprenticeship may seem like a restrictive 18th-century model of education, but it is still a standard method of training for many complex tasks. Academic doctoral programs are based on an apprenticeship model, as are fields like law, music, engineering, and medicine. Graduate students enter such fields of study, find mentors, and begin the long process of becoming independent experts and generating new knowledge in their respective domains.</p>
+      <p>Experts have a deeper understanding of their domains than novices have, and utilize higher-order principles to solve problems. A novice, for example, might group objects together by color or size, whereas an expert would group the same objects according to their function or utility. Experts comprehend the meaning of data and weigh variables with different criteria within their domains better than novices. Experts recognize variables that have the largest influence on a particular problem and focus their attention on those variables.</p>
+      <p>Experts have better domain-specific short-term and long-term memory than novices have. Moreover, experts perform tasks in their domains faster than novices and commit problems differently than novices. Experts spend more time thinking about a problem to fully understand it at the beginning of a task than do novices, who immediately seek to find a solution. Experts use their knowledge of previous cases as context for creating mental models to solve given problems.</p>
+      <p>Better at self-monitoring than novices, experts are more aware of instances where they have committed errors or failed to understand a problem. Experts check the solutions more often than novices and recognize when they are missing information necessary for solving a problem. Experts are aware of the limits of their domain knowledge and apply their domain’s principles and rules to solve problems outside of their experience base.</p>
+      <h2>The contradiction of Expertise</h2>
+      <p>The strengths of expertise can also be weaknesses. Although one would expect experts to be good forecasters, they are not particularly good at making predictions about the future. The performance of experts has been tested against predictions derived from pure statistical analysis of past events to determine if they are better than these models. With more than 200 experiments in different domains, it is clear that the answer is no.</p>
+      <p>Theorists and researchers differ when trying to explain why experts are less accurate forecasters than statistical models. Some have argued that experts, like all humans, are inconsistent when using mental models to make predictions…</p>
+      <p>A number of other researchers point to human bias to explain unreliable expert predictions… the literature shows little consensus regarding the causes or manifestations of human bias.</p>
+      <p>The very method by which one becomes an expert explains why experts are much better at describing, explaining, performing tasks, and problem-solving within their domains than are novices, but with a few exceptions are worse at forecasting than tables based on historical, statistical models.</p>
+    </div>
+  </div>
+
+  <div class="card questions">
+    <h1>Questions</h1>
+    <div id="qroot"></div>
+    <button class="submit" id="submitBtn">Submit Answers</button>
+    <div class="results" id="results"><h2>Your Results</h2><div id="score" class="meta"></div><ul id="answers"></ul></div>
+  </div>
+</div>
+
+<div class="footerNav" id="footerNav"></div>
+
+<script>
+const CONFIG={
+  durationMinutes:20,
+  sections:[
+    {type:"gap1",heading:"Questions 1–5",instructions:["Complete the notes below.","Choose NO MORE THAN THREE WORDS from the passage for each answer."],
+     items:[
+       {id:1,prompt:"Novices have to learn the key ______ and rules of tasks before performing them.",correct:["principles"]},
+       {id:2,prompt:"Usually require the help of a ______.",correct:["mentor"]},
+       {id:3,prompt:"Journeymen recognise different ______ within cases.",correct:["patterns"]},
+       {id:4,prompt:"…in cases that become more and more ______.",correct:["complex"]},
+       {id:5,prompt:"Experts are able to make and ______ predictions.",correct:["test"]}
+     ]},
+    {type:"tfn",heading:"Questions 6–10",instructions:["Do the statements agree with the information? Choose TRUE / FALSE / NOT GIVEN."],
+     items:[
+       {id:6,text:"Novices and experts use the same system to classify objects.",correct:"FALSE"},
+       {id:7,text:"Novices are often required to work on tasks that build memory skills.",correct:"NOT GIVEN"},
+       {id:8,text:"Novices perform tasks more slowly than experts.",correct:"TRUE"},
+       {id:9,text:"Novices begin tasks by looking for an answer straight away.",correct:"TRUE"},
+       {id:10,text:"Experts review their work more efficiently than novices.",correct:"TRUE"}
+     ]},
+    {type:"gap2",heading:"Questions 11–13",instructions:["Complete the summary below.","Choose NO MORE THAN TWO WORDS from the passage for each answer."],
+     items:[
+       {id:11,prompt:"Researchers have conducted a large number of ______ in different areas…",correct:["experiments"]},
+       {id:12,prompt:"Others suggest that forms of ______ may also influence experts…",correct:["bias"]},
+       {id:13,prompt:"…although there is not a great deal of ______ about why or how this happens.",correct:["consensus"]}
+     ]}
+  ]
+};
+
+/* ---------- RENDER (shared) ---------- */
+const qroot=document.getElementById('qroot');const navIds=[];const answersMap={};const typesMap={};
+function header(t){const h=document.createElement('h2');h.className='qsection';h.textContent=t;return h;}
+function renderTFN(sec){qroot.appendChild(header(sec.heading));(sec.instructions||[]).forEach(tx=>{const p=document.createElement('p');p.className='muted';p.textContent=tx;qroot.appendChild(p)});sec.items.forEach(it=>{const b=document.createElement('div');b.className='qblock';b.id='anchor-'+it.id;const opts=['TRUE','FALSE','NOT GIVEN'].map(v=>`<label><input type="radio" name="q${it.id}" value="${v}"> ${v}</label>`).join('');b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${opts}</div>`;qroot.appendChild(b);navIds.push(it.id);answersMap[it.id]=it.correct;typesMap[it.id]='tfn'})}
+function renderGap(sec,maxw){qroot.appendChild(header(sec.heading));(sec.instructions||[]).forEach(tx=>{const p=document.createElement('p');p.className='muted';p.textContent=tx;qroot.appendChild(p)});sec.items.forEach(it=>{const b=document.createElement('div');b.className='qblock';b.id='anchor-'+it.id;b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div><div class="options"><input type="text" id="q${it.id}" placeholder="${maxw?'ONE OR TWO WORDS':'ONE TO THREE WORDS'}"></div>`;qroot.appendChild(b);navIds.push(it.id);answersMap[it.id]=it.correct;typesMap[it.id]=maxw?'gap2':'gap1'})}
+CONFIG.sections.forEach(sec=>{if(sec.type==='tfn')renderTFN(sec);if(sec.type==='gap1')renderGap(sec,false);if(sec.type==='gap2')renderGap(sec,true)});
+const footer=document.getElementById('footerNav');footer.innerHTML='<strong class="muted">Questions:</strong>';[...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{const c=document.createElement('button');c.className='chip';c.id='chip-'+id;c.textContent=id;c.onclick=()=>document.getElementById('anchor-'+id).scrollIntoView({behavior:'smooth',block:'center'});footer.appendChild(c)});
+function markChip(id,ans){const c=document.getElementById('chip-'+id);if(c)c.classList.toggle('answered',!!ans)}
+document.addEventListener('change',e=>{const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);const id=m?+m[1]:null;if(!id)return;const answered=(e.target.type==='radio')?(!!document.querySelector(`input[name='q${id}']:checked`)):(e.target.value.trim().length>0);markChip(id,answered)});
+let timeLeft=20*60,paused=false,iv;const timer=document.getElementById('timer');const pauseBtn=document.getElementById('pauseBtn');const resumeBtn=document.getElementById('resumeBtn');const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;function tick(){if(iv)clearInterval(iv);iv=setInterval(()=>{if(paused)return;timer.textContent=fmt(timeLeft);if(timeLeft<=0){clearInterval(iv);alert("Time's up! Submitting.");submit()}timeLeft--},1000)}timer.textContent=fmt(timeLeft);tick();pauseBtn.onclick=()=>{paused=true;pauseBtn.disabled=true;resumeBtn.disabled=false};resumeBtn.onclick=()=>{paused=false;pauseBtn.disabled=false;resumeBtn.disabled=true};
+document.getElementById('submitBtn').onclick=submit;
+function norm(s){return (s||'').trim().replace(/\s+/g,' ').toLowerCase()}
+function submit(){paused=true;pauseBtn.disabled=true;resumeBtn.disabled=false;let total=0,graded=0,okc=0;const out=[];Object.keys(answersMap).map(k=>isNaN(k)?k:+k).sort((a,b)=>a-b).forEach(k=>{total++;const t=typesMap[k];let user='',ok=false;if(t==='tfn'){const p=document.querySelector(`input[name="q${k}"]:checked`);user=p?p.value:'';ok=norm(user)===norm(answersMap[k])}else{const el=document.getElementById('q'+k);user=el?el.value:'';const acc=Array.isArray(answersMap[k])?answersMap[k]:[answersMap[k]];ok=acc.map(norm).includes(norm(user))}if(user)graded++;if(ok)okc++;const corr=Array.isArray(answersMap[k])?answersMap[k].join(' / '):String(answersMap[k]);out.push({k,user,ok,corr})});document.getElementById('score').innerHTML=`Graded ${graded} of ${total} • Score: ${okc}/${graded||total}`;document.getElementById('answers').innerHTML=out.map(it=>`<li class="${it.ok?'ok':'bad'}">Q${it.k}: ${it.ok?'✓ Correct':'✗ Incorrect'} — Your: <b>${it.user||'No answer'}</b> | Correct: <b>${it.corr}</b></li>`).join('');const r=document.getElementById('results');r.style.display='block';r.scrollIntoView({behavior:'smooth'})}
+/* highlights */
+const pCard=document.getElementById('passageCard'),pPal=document.getElementById('pPalette'),qPal=document.getElementById('qPalette');
+pCard.addEventListener('mouseup',e=>{const s=window.getSelection();if(!s||!s.toString().trim())return;const r=pCard.getBoundingClientRect();pPal.style.left=(e.clientX)+'px';pPal.style.top=(r.top+Math.max(0,e.clientY-r.top-40))+'px';pPal.style.display='block'});document.addEventListener('mousedown',e=>{if(!pPal.contains(e.target))pPal.style.display='none'});pPal.querySelectorAll('.hbtn[data-color]').forEach(b=>b.onclick=()=>{markSel(b.dataset.color,pCard);pPal.style.display='none'});document.getElementById('clearP').onclick=()=>{pCard.querySelectorAll('span.highlight').forEach(n=>{const p=n.parentNode;while(n.firstChild)p.insertBefore(n.firstChild,n);p.removeChild(n);p.normalize()});pPal.style.display='none'};
+const qCard=document.querySelector('.card.questions');qCard.addEventListener('mouseup',e=>{const s=window.getSelection();if(!s||!s.toString().trim())return;const node=s.getRangeAt(0).commonAncestorContainer.parentNode;if(node.closest&&node.closest('input,select'))return;const r=qCard.getBoundingClientRect();qPal.style.left=(e.clientX)+'px';qPal.style.top=(r.top+Math.max(0,e.clientY-r.top-40))+'px';qPal.style.display='block'});document.addEventListener('mousedown',e=>{if(!qPal.contains(e.target))qPal.style.display='none'});qPal.querySelectorAll('.hbtn[data-color]').forEach(b=>b.onclick=()=>{markSel(b.dataset.color,qCard);qPal.style.display='none'});document.getElementById('clearQ').onclick=()=>{qCard.querySelectorAll('span.highlight').forEach(n=>{const p=n.parentNode;while(n.firstChild)p.insertBefore(n.firstChild,n);p.removeChild(n);p.normalize()});qPal.style.display='none'};
+function markSel(color,scope){const sel=window.getSelection();if(!sel||!sel.rangeCount)return;const r=sel.getRangeAt(0);if(!scope.contains(r.commonAncestorContainer))return;const container=r.commonAncestorContainer.nodeType===1?r.commonAncestorContainer:r.commonAncestorContainer.parentNode;if(container.closest&&container.closest('input,select'))return;const frag=r.extractContents();const span=document.createElement('span');span.className='highlight';span.style.backgroundColor=color;span.appendChild(frag);r.insertNode(span);sel.removeAllRanges()}
+</script>
+</body>
+</html>

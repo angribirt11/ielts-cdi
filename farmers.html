@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Reading Passage 2 – Farmers</title>
+<style>
+:root{--brand:#2563eb;--ink:#111827;--bg:#f6f7fb;--muted:#6b7280}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg)}
+.container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+.card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+.passage,.questions{flex:1}
+h1{margin:0 0 10px;border-bottom:2px solid var(--brand);padding-bottom:8px;color:var(--ink)}
+h2{color:var(--brand);margin:18px 0 8px}.muted{color:var(--muted)}
+.qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+.qhead{font-weight:600;margin-bottom:8px}
+select,input[type=text]{width:100%;max-width:520px;padding:8px;border:1px solid #e5e7eb;border-radius:8px}
+.submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:10px;font-weight:600;cursor:pointer;margin-top:10px}
+.results{display:none;margin-top:16px;background:#f8fafc;border-radius:12px;padding:16px}
+.results li{list-style:none;margin:6px 0;padding:8px;border-radius:8px}
+.ok{background:#ecfdf5;color:#065f46}.bad{background:#fef2f2;color:#991b1b}.meta{font-size:13px;color:var(--muted)}
+.footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+.chip{border:1px solid #d1d5db;background:#fff;padding:6px 10px;border-radius:999px;cursor:pointer}.chip.answered{border-color:#9ca3af;background:#f3f4f6}
+.timerWrap{position:fixed;top:16px;right:16px;display:flex;gap:8px;z-index:10}
+.timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:10px;font-weight:700}
+.tbtn{border:1px solid #e5e7eb;background:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
+.palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+.hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+.highlight{background:yellow}
+</style>
+</head>
+<body>
+<div class="timerWrap">
+  <div class="timer" id="timer">20:00</div>
+  <button class="tbtn" id="pauseBtn">⏸️</button>
+  <button class="tbtn" id="resumeBtn" disabled>▶️</button>
+</div>
+
+<div class="palette" id="pPalette">
+  <button class="hbtn" data-color="yellow">Yellow</button><button class="hbtn" data-color="lightgreen">Green</button><button class="hbtn" data-color="lightblue">Blue</button><button class="hbtn" data-color="pink">Pink</button><button class="hbtn" data-color="orange">Orange</button><button class="hbtn" id="clearP">Clear</button>
+</div>
+<div class="palette" id="qPalette">
+  <button class="hbtn" data-color="yellow">Yellow</button><button class="hbtn" data-color="lightgreen">Green</button><button class="hbtn" data-color="lightblue">Blue</button><button class="hbtn" data-color="pink">Pink</button><button class="hbtn" data-color="orange">Orange</button><button class="hbtn" id="clearQ">Clear</button>
+</div>
+
+<div class="container">
+  <div class="card passage" id="passageCard">
+    <h1>READING PASSAGE 2 – Farmers</h1>
+    <div class="muted">You should spend about 20 minutes on Questions 14–26.</div>
+    <div id="passage">
+           <p><strong>A.</strong> The chain of stores known as Farmers began one hundred years ago as a mail order company. Today the Farmers chain employs 3,500 staff across 58 branches making it the most venerable institution of its type in New Zealand. 'Coming to Farmers once a week has become woven into the fabric of New Zealand culture,' says business historian Ian Hunter. By 1960, one in every ten people had an account with the company. It was not only a shop but also hosted the largest annual parade in the country, the Santa parade each Christmas time. Gary Blumenthal, whose family have been customers for three generations, understands well the role Farmers have played in New Zealand culture. 'We were on holiday in Auckland,' he explains, 'and I decided that the lookout tower on top of the Farmers building would be a unique place to fit the ring on my new fiancee's finger.' The couple has been married for 50 years.</p>
+            
+            <p><strong>B.</strong> Farmers' longevity can be attributed to the philosophy fostered by Robert Laidlaw, the Scottish immigrant who established the business. Right from the outset, Laidlaw guaranteed customer satisfaction, and those who were not entirely happy with a purchase would receive a full refund with no questions asked. This was certainly the first time such a guarantee had been made by a New Zealand retailer and was probably one of the first worldwide. Laidlaw believed that the scheme could work if he ensured that every product sold was of the highest quality relative to its price.</p>
+            
+            <p><strong>C.</strong> Another important aspect of the Farmers' philosophy was to internationalize the New Zealand market. By the time the Hobson Street store opened in 1920 in order to sell directly to customers for the first time, Laidlaw had established buying officers in New York and London so as to offer his customers the latest designs. This was a bold move in those days and won Farmers a devoted following. It's also true that whoever you speak to regarding Farmers in the early years, whether managers or workers, they all emphasize how the company represented a large family. Everyone employed by Laidlaw felt they were building something that would ultimately be to the benefit of the whole country. For example, to mark the centenary celebrations, 58 Farmers' stores around the country announced the neighborhood charities they would raise funds for everything from guide dog services to volunteer fire brigades will benefit.</p>
+            
+            <p><strong>D.</strong> Farmers has always had a heart, according to former board chairman Rawdon Busfield. 'One day I was in the Hobson Street store and a woman came in with two small children- they didn't have a lot of money, you could tell. That week we had a special on, a big bar of chocolate for a shilling… But the boy only had a penny. I took the penny and gave him the chocolate.' However, not everything has stayed the same. Farmers was once home to genteel tea rooms, children's playgrounds, and an annual sale to celebrate the birthday of Hector the Parrot- who came to embody the store in the eyes of many shoppers and who died, aged 131, in the 1970s. You could buy houses from Farmers, and its saddle factory supplied the armed forces. In fact, although the company has grown considerably over the years, today it sells a narrower assortment of products than in the past.</p>
+            
+            <p><strong>E.</strong> Walk through a Farmers store today and you'll see big changes. Its most recent branch in the suburb of Albany is filled with bright lights and big brands. The branch sells cosmetics from 16 different international companies and buys from approximately 500 suppliers, of which about 30 percent are locally owned. 'Eight or ten years ago,' says current chief executive Rod McDermott, 'lots of brands wouldn't partner with us. We weren't in trouble as such, but we could have been doing much better because we were focused too much on price and not on fashion. The reorientation of the last decade has seen a great improvement.'</p>
+            
+            <p><strong>F.</strong> Farmers almost didn't pull through one economic crisis. In the mid 1980s, business was booming and the company had stores throughout the country. Then, with sales topping $375 million, it was taken over by Chase Corporation. Lincoln Laidlaw, the son of the company's founder, remembers the dark days following the stock market crash of 1987 and the collapse of the Chase Corporation. 'The business was being divided up,' he says, 'and I believe that the original culture of the store was dispelled and it hasn't been recovered. That's a shame, but the business is still strong. 'For a few turbulent years the stores were controlled first by a consortium of Australian banks, and later a local corporation. In 2003, it went back into 'family' ownership with the purchase by the James Pascoe Group owned by an established New Zealand retail family. Brand power has made Farmers profitable again, according to McDermott. 'And now we're becoming the brand we used to be… It's like the rebirth of an icon.'</p>
+    </div>
+  </div>
+
+  <div class="card questions">
+    <h1>Questions</h1>
+    <div id="qroot"></div>
+    <button class="submit" id="submitBtn">Submit Answers</button>
+    <div class="results" id="results"><h2>Your Results</h2><div id="score" class="meta"></div><ul id="answers"></ul></div>
+  </div>
+</div>
+<div class="footerNav" id="footerNav"></div>
+
+<script>
+const CONFIG={
+  durationMinutes:20,
+  sections:[
+    {type:"whichPara",heading:"Questions 14–18",instructions:["Reading Passage 2 has six paragraphs, A–F.","Which paragraph contains the following information?"],
+      items:[
+        {id:14,correct:"F",text:"a mention of the company being sold"},
+        {id:15,correct:"D",text:"a reference to how the range of goods for sale has become more limited"},
+        {id:16,correct:"B",text:"an example of an innovative offer made by the company’s founder"},
+        {id:17,correct:"A",text:"a description of a romantic event on the shop’s roof"},
+        {id:18,correct:"E",text:"a description of the latest store in the chain"}
+      ]},
+    {type:"gap",heading:"Questions 19–22",instructions:["Complete the sentences below.","Choose NO MORE THAN TWO WORDS."],
+      items:[
+        {id:19,prompt:"Farmers was set up as a/an ______ business before it became a chain.",correct:["mail order"]},
+        {id:20,prompt:"Robert Laidlaw set up ______ overseas so he could sell up-to-date fashions.",correct:["buying officers"]},
+        {id:21,prompt:"According to employees, Farmers was like a/an ______.",correct:["large family"]},
+        {id:22,prompt:"Farmers held a/an ______ once a year in honour of the company’s famous pet.",correct:["sale"]}
+      ]},
+    {type:"peopleIdeas",heading:"Questions 23–26",instructions:["Match each person with the correct idea, A–F.","Write the correct letter A–F."],
+      legend:{A:"The character of the company has changed for the worse.",B:"The store is selling more local products than in the past.",C:"The company believes in offering lower prices than their competitors.",D:"The staff has always believed in generosity.",E:"The store is an integral part of the local way of life.",F:"The store needed to change its approach to business."},
+      items:[
+        {id:23,label:"Ian Hunter",correct:"E"},
+        {id:24,label:"Rawdon Busfield",correct:"D"},
+        {id:25,label:"Rod McDermott",correct:"F"},
+        {id:26,label:"Lincoln Laidlaw",correct:"A"}
+      ]}
+  ]
+};
+/* Render */
+const qroot=document.getElementById('qroot');const nav=[];const KEY={},TYPE={};
+function H(t){const h=document.createElement('h2');h.textContent=t;return h}
+function P(t){const p=document.createElement('p');p.className='muted';p.textContent=t;return p}
+function renderWhichPara(sec){qroot.appendChild(H(sec.heading));sec.instructions.forEach(i=>qroot.appendChild(P(i)));sec.items.forEach(it=>{const b=document.createElement('div');b.className='qblock';b.id='anchor-'+it.id;b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><select id="q${it.id}"><option value="">—</option>${['A','B','C','D','E','F'].map(x=>`<option>${x}</option>`).join('')}</select>`;qroot.appendChild(b);nav.push(it.id);KEY[it.id]=it.correct;TYPE[it.id]='wp'})}
+function renderGap(sec){qroot.appendChild(H(sec.heading));sec.instructions.forEach(i=>qroot.appendChild(P(i)));sec.items.forEach(it=>{const b=document.createElement('div');b.className='qblock';b.id='anchor-'+it.id;b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div><input type="text" id="q${it.id}" placeholder="Answer">`;qroot.appendChild(b);nav.push(it.id);KEY[it.id]=it.correct;TYPE[it.id]='gap'})}
+function renderPeople(sec){qroot.appendChild(H(sec.heading));sec.instructions.forEach(i=>qroot.appendChild(P(i)));const legend=document.createElement('div');legend.className='qblock';legend.innerHTML=`<div class="qhead"><strong>List of Ideas</strong></div>${Object.entries(sec.legend).map(([k,v])=>`<div><b>${k}</b> — ${v}</div>`).join('')}`;qroot.appendChild(legend);sec.items.forEach(it=>{const b=document.createElement('div');b.className='qblock';b.id='anchor-'+it.id;b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.label}</div><select id="q${it.id}"><option value="">—</option>${Object.keys(sec.legend).map(k=>`<option>${k}</option>`).join('')}</select>`;qroot.appendChild(b);nav.push(it.id);KEY[it.id]=it.correct;TYPE[it.id]='pi'})}
+CONFIG.sections.forEach(s=>{if(s.type==='whichPara')renderWhichPara(s);if(s.type==='gap')renderGap(s);if(s.type==='peopleIdeas')renderPeople(s)});
+/* Footer chips */
+const footer=document.getElementById('footerNav');footer.innerHTML='<strong class="muted">Questions:</strong>';nav.sort((a,b)=>a-b).forEach(id=>{const c=document.createElement('button');c.className='chip';c.id='chip-'+id;c.textContent=id;c.onclick=()=>document.getElementById('anchor-'+id).scrollIntoView({behavior:'smooth',block:'center'});footer.appendChild(c)});
+function mark(id,ans){const c=document.getElementById('chip-'+id);if(c)c.classList.toggle('answered',!!ans)}
+document.addEventListener('change',e=>{const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);const id=m?+m[1]:null;if(!id)return;const el=document.getElementById('q'+id);const ans=(el?.tagName==='INPUT')?!!el.value.trim():!!el.value;mark(id,ans)});
+/* Timer & Submit (shared) */
+let t=20*60,paused=false,iv;const timer=document.getElementById('timer'),pauseBtn=document.getElementById('pauseBtn'),resumeBtn=document.getElementById('resumeBtn');const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;function start(){if(iv)clearInterval(iv);iv=setInterval(()=>{if(paused)return;timer.textContent=fmt(t);if(t<=0){clearInterval(iv);alert("Time's up! Submitting.");submit()}t--},1000)}timer.textContent=fmt(t);start();pauseBtn.onclick=()=>{paused=true;pauseBtn.disabled=true;resumeBtn.disabled=false};resumeBtn.onclick=()=>{paused=false;pauseBtn.disabled=false;resumeBtn.disabled=true};
+document.getElementById('submitBtn').onclick=submit;function norm(s){return (s||'').trim().toLowerCase()}
+function submit(){paused=true;pauseBtn.disabled=true;resumeBtn.disabled=false;let total=0,graded=0,okc=0;const out=[];Object.keys(KEY).map(Number).sort((a,b)=>a-b).forEach(k=>{total++;const type=TYPE[k];let user='',ok=false;if(type==='gap'){user=document.getElementById('q'+k).value||'';const acc=Array.isArray(KEY[k])?KEY[k]:[KEY[k]];ok=acc.map(norm).includes(norm(user))}else{user=document.getElementById('q'+k).value||'';ok=norm(user)===norm(KEY[k])}if(user)graded++;if(ok)okc++;out.push({k,user,ok,corr:Array.isArray(KEY[k])?KEY[k].join(' / '):String(KEY[k])})});document.getElementById('score').innerHTML=`Graded ${graded} of ${total} • Score: ${okc}/${graded||total}`;document.getElementById('answers').innerHTML=out.map(it=>`<li class="${it.ok?'ok':'bad'}">Q${it.k}: ${it.ok?'✓ Correct':'✗ Incorrect'} — Your: <b>${it.user||'No answer'}</b> | Correct: <b>${it.corr}</b></li>`).join('');document.getElementById('results').style.display='block';document.getElementById('results').scrollIntoView({behavior:'smooth'})}
+/* Highlights */
+function markSel(color,scope){const sel=window.getSelection();if(!sel||!sel.rangeCount)return;const r=sel.getRangeAt(0);if(!scope.contains(r.commonAncestorContainer))return;const frag=r.extractContents();const span=document.createElement('span');span.className='highlight';span.style.backgroundColor=color;span.appendChild(frag);r.insertNode(span);sel.removeAllRanges()}
+const pCard=document.getElementById('passageCard'),qCard=document.querySelector('.card.questions');const pPal=document.getElementById('pPalette'),qPal=document.getElementById('qPalette');
+pCard.addEventListener('mouseup',e=>{const s=String(window.getSelection());if(!s.trim())return;const r=pCard.getBoundingClientRect();pPal.style.left=e.clientX+'px';pPal.style.top=(r.top+Math.max(0,e.clientY-r.top-40))+'px';pPal.style.display='block'});document.addEventListener('mousedown',e=>{if(!pPal.contains(e.target))pPal.style.display='none'});pPal.querySelectorAll('.hbtn[data-color]').forEach(b=>b.onclick=()=>{markSel(b.dataset.color,pCard);pPal.style.display='none'});document.getElementById('clearP').onclick=()=>{pCard.querySelectorAll('span.highlight').forEach(n=>{const P=n.parentNode;while(n.firstChild)P.insertBefore(n.firstChild,n);P.removeChild(n);P.normalize()});pPal.style.display='none'};
+qCard.addEventListener('mouseup',e=>{const s=String(window.getSelection());if(!s.trim())return;const r=qCard.getBoundingClientRect();qPal.style.left=e.clientX+'px';qPal.style.top=(r.top+Math.max(0,e.clientY-r.top-40))+'px';qPal.style.display='block'});document.addEventListener('mousedown',e=>{if(!qPal.contains(e.target))qPal.style.display='none'});qPal.querySelectorAll('.hbtn[data-color]').forEach(b=>b.onclick=()=>{markSel(b.dataset.color,qCard);qPal.style.display='none'});document.getElementById('clearQ').onclick=()=>{qCard.querySelectorAll('span.highlight').forEach(n=>{const P=n.parentNode;while(n.firstChild)P.insertBefore(n.firstChild,n);P.removeChild(n);P.normalize()});qPal.style.display='none'};
+</script>
+</body>
+</html>

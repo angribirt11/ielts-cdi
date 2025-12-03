@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 2 – Classical music over the centuries</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  h3{margin:8px 0 0}
+  h4{color:var(--brand);margin:16px 0 8px}
+  .muted{color:var(--muted)}
+  .para-label{font-weight:bold;color:var(--brand);margin-right:8px;font-size:18px}
+
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+
+  /* Highlights */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+
+  /* Headings list */
+  .headings-list{background:#f8f9fa;border-radius:8px;padding:12px;margin:10px 0;font-size:14px}
+  .headings-list h4{margin:0 0 8px;color:var(--brand)}
+  .headings-list ul{margin:8px 0;padding-left:20px}
+  .headings-list li{margin:4px 0;line-height:1.4}
+  
+  /* Options list */
+  .options-list{background:#f8f9fa;border-radius:8px;padding:12px;margin:10px 0;font-size:14px}
+  .options-list h4{margin:0 0 8px;color:var(--brand)}
+  .options-list div{margin:4px 0;line-height:1.4}
+  
+  /* Multi-select styling */
+  .multi-select{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:8px}
+  .multi-select label{margin:4px 0}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+
+      <div id="passage">
+        <h2>Reading Passage 2</h2>
+        <h3>Classical music over the centuries</h3>
+
+        <p><span class="para-label">A</span> The production of any great art form, and classical music is no exception, does not usually occur in a society dominated by the basic material demands of food and shelter. Art and music have flourished in those periods of history, and those parts of society, in which the luxury of free time and material wealth has allowed such a culture to take precedence over more material matters. In the medieval European world, it was thus primarily in the closed communities of the church and <strong>monastery</strong>, and royal <strong>courts</strong> that music, literature and learning were able to flourish.</p>
+
+        <p><span class="para-label">B</span> It was until <strong>18th century</strong> that this situation changed to any great extent, and the rise of an economically independent <strong>middle class</strong> meant that concert going became a public activity for anyone who cared to buy a ticket. It is worth remembering that the idea of classical music widely accepted today did not exist until about 300 years ago. Performing music in <strong>concert halls</strong> to a paying <strong>audience</strong>, as something inherently pleasurable and significant, was pretty much unheard of until the 18th century, and not widely established until the 19th. The concert venue, the audience, and the idea of 'masterpieces' of classical music, were all effectively invented during the course of the 18th century in London, Paris, Vienna, Berlin and other European cities where the arts in general were blossoming.</p>
+
+        <p><span class="para-label">C</span> Today, music that was originally written for a concert venue may appear, out of its original context, in an advert or film. Conversely, music written specifically for films is sometimes performed live. But nothing has changed music over the last century more radically than the invention and dissemination of <strong>recording technologies</strong>. However, although <strong>Thomas Edison</strong> originally developed the <strong>phonograph</strong> in 1877, and <strong>wax cylinders</strong> were used as early as 1880s for recording music, commercial recordings of music were not generally available to the majority until <strong>1920s</strong>. From the mid-1980s onwards, the <strong>vinyl</strong> disc gradually gave way to the new technology of the <strong>CD</strong>, but just a decade later, the digital <strong>MP</strong> file was already displacing the CD as the favoured way to produce records music. Yet now, people have more music stored on their phones or computers—which they can call up with the touch of a finger—than would have been contained on all the metres of library shelves of a proud 'record collector' of the 20th century.</p>
+
+        <p><span class="para-label">D</span> Before recording, music was a <strong>social event</strong>—it involved one or more people coming together to make music. The music lasted for as long as the musicians sang or played and then it was over. Therefore, the only music that was heard tended to be composition by recent or living musicians, probably working in the locality; it was rare to hear music from a past generation, distant place or culture. Even when music became professionalized, people who wanted to listen to music went to a specific venue, at a specific time, to hear musicians create a one-off event.</p>
+
+        <p><span class="para-label">E</span> These days, however, technology makes almost all the world's music instantly and constantly available to anyone with access to simple and cheap gadgets designed for playing it. Music thus floats free of any specific occasion or venue. It is no longer restricted to a particular audience or group of musicians. For the first time, music (any music) can be entirely personal affair. This is one of the reasons that the 'classical' label becomes harder to pin down. One of its distinctive aspects—a performance defined by concert halls and <strong>opera houses</strong>—is dissolved by digital recording formats. As a consequence, all music, classical music included, can become any person's <strong>soundtrack</strong> for activities such as commuting, exercising or shopping.</p>
+
+        <p><span class="para-label">F</span> The ubiquity of music as recorded sound means that it's very easy to overlook perhaps the most definitive aspect of the classical music tradition the fact that it is a <strong>written or notated music</strong>. Though classical music may lack a precise definition today and mean quite different things to different people, at its heart is the idea of a music that has remained viable over the years because it was written down in some form. The original of what music historians thinks of as classical music dates from the <strong>ninth century</strong>, when a system of musical <strong>notation</strong> was first developed. Before this time, singers in religious services in cathedrals or monasteries had to learn by heart a huge repertory of chants. The first attempts to notate music were intended to help them remember these. Over the next thousand years, notation became more complex, incorporating such aspects as rhythm and pitch, allowing composers to rework and refine their musical ideas. Put very simply, the history of classical music, in all its varied forms, is the history of a tradition that grew out of the possibilities of musical notation.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">🔔 Join my Telegram</button>
+
+<script>
+/* =======================
+   CONFIG
+   ======================= */
+const CONFIG = {
+  title: "READING PASSAGE 2 – Classical music over the centuries",
+  subtitle: "You should spend about 20 minutes on Questions 14–26.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  showFooterNavigator: true,
+
+  sections: [
+    /* 14–19 Matching Headings */
+    {
+      type: "heading_match",
+      heading: "Questions 14–19",
+      instructions: [
+        "Reading Passage 2 has six paragraphs, A–F.",
+        "Choose the correct heading for each paragraph from the list of headings below.",
+        "Write the correct number, i–vii, in boxes 14–19 on your answer sheet."
+      ],
+      headings: {
+        "i": "Music comes to be enjoyed in a large variety of situations",
+        "ii": "More people gain access to live music",
+        "iii": "A focus on survival limits the practice of classical music",
+        "iv": "A clash of musical styles takes place",
+        "v": "A range of scientific advances brings music to a wider audience",
+        "vi": "Listening to music being limited to live performances",
+        "vii": "How classical music has managed to survive for centuries"
+      },
+      items: [
+        { id: 14, paragraph: "A", correct: "iii" },
+        { id: 15, paragraph: "B", correct: "ii" },
+        { id: 16, paragraph: "C", correct: "v" },
+        { id: 17, paragraph: "D", correct: "vi" },
+        { id: 18, paragraph: "E", correct: "i" },
+        { id: 19, paragraph: "F", correct: "vii" }
+      ]
+    },
+
+    /* 20–21 Two Letters (Recording Technologies) */
+    {
+      type: "multi_choice",
+      heading: "Questions 20 and 21",
+      instructions: [
+        "Choose TWO letters, A–E",
+        "Write the correct letters in boxes 20 and 21 on your answer sheet.",
+        "Which TWO of the following statements does the writer make about recording technologies?"
+      ],
+      select_count: 2,
+      options: {
+        "A": "The vinyl disc was relatively easy to damage",
+        "B": "The sound quality from wax cylinders was inferior to that of the phonograph",
+        "C": "Electronic storage allows people to keep a vast amount of music",
+        "D": "Recorded music sold well immediately after Edison invented the phonograph",
+        "E": "The CD was popular for a relatively brief period"
+      },
+      correct: ["C", "E"],
+      ids: [20, 21]
+    },
+
+    /* 22–23 Two Letters (Musical Notation) */
+    {
+      type: "multi_choice",
+      heading: "Questions 22 and 23",
+      instructions: [
+        "Choose TWO letters, A–E",
+        "Write the correct letters in boxes 22 and 23 on your answer sheet.",
+        "Which TWO of the following statements does the writer make about musical notation?"
+      ],
+      select_count: 2,
+      options: {
+        "A": "The way it is interpreted has changed over time",
+        "B": "It was originally designed as a memory aid",
+        "C": "It is often ignored by classical musicians today",
+        "D": "Classical music could not have survived without it",
+        "E": "Its importance diminished with the arrival of recording"
+      },
+      correct: ["B", "D"],
+      ids: [22, 23]
+    },
+
+    /* 24–26 Summary Completion */
+    {
+      type: "summary_completion",
+      heading: "Questions 24–26",
+      instructions: [
+        "Complete the summary below.",
+        "Choose ONE WORD ONLY from the passage for each answer.",
+        "Write your answers in boxes 24–26 on your answer sheet."
+      ],
+      title: "The impact of today's technology on music",
+      text: "These days, the world's music is instantly and constantly available to almost everyone. Thus, music is no longer tied to a particular location or occasion, nor is it associated with a group of musicians or a specific",
+      items: [
+        { id: 24, gap_after: ". It can become uniquely in its history, completely personal to each and every individual.", correct: "audience" },
+        { text: "Thanks to digital recording, the need for venues such as opera houses or" },
+        { id: 25, gap_after: "where concerts are performed has vanished. Digitization has also made it possible for people to treat music as a", correct: "concert halls" },
+        { id: 26, gap_after: "to their daily activities.", correct: "soundtrack" }
+      ]
+    }
+  ]
+};
+
+/* =======================
+   RENDER
+   ======================= */
+document.getElementById('title').textContent = CONFIG.title;
+document.getElementById('subtitle').textContent = CONFIG.subtitle || '';
+
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+/* Heading Match renderer */
+function renderHeadingMatch(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+
+  const headingsList = document.createElement('div');
+  headingsList.className = 'headings-list';
+  headingsList.innerHTML = `<h4>List of headings</h4>
+    ${Object.entries(sec.headings).map(([k,v])=>`<div><b>${k}</b> ${v}</div>`).join('')}`;
+  qroot.appendChild(headingsList);
+
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const opts=Object.keys(sec.headings).map(k=>`<label><input type="radio" name="q${it.id}" value="${k}"> ${k}</label>`).join('');
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> Paragraph ${it.paragraph}</div><div class="options">${opts}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Multi Choice renderer */
+function renderMultiChoice(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+
+  const optionsList = document.createElement('div');
+  optionsList.className = 'options-list';
+  optionsList.innerHTML = `<h4>Options</h4>
+    ${Object.entries(sec.options).map(([k,v])=>`<div><b>${k}</b> ${v}</div>`).join('')}`;
+  qroot.appendChild(optionsList);
+
+  const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${sec.ids[0]}`;
+  const opts=Object.keys(sec.options).map(k=>`<label><input type="checkbox" name="multi_${sec.ids[0]}" value="${k}"> ${k}</label>`).join('');
+  b.innerHTML=`<div class="qhead"><strong>Select ${sec.select_count} answers:</strong></div><div class="multi-select">${opts}</div>`;
+  qroot.appendChild(b); 
+  
+  sec.ids.forEach(id => {
+    navIds.push(id); 
+    answersMap[id] = sec.correct[sec.ids.indexOf(id)] || '';
+  });
+}
+
+/* Summary Completion renderer */
+function renderSummaryCompletion(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  
+  if(sec.title) {
+    const titleDiv = document.createElement('h3');
+    titleDiv.textContent = sec.title;
+    qroot.appendChild(titleDiv);
+  }
+
+  const summaryDiv = document.createElement('div');
+  summaryDiv.style.lineHeight = '1.8';
+  summaryDiv.style.padding = '16px';
+  summaryDiv.style.background = '#f9fafb';
+  summaryDiv.style.borderRadius = '8px';
+  summaryDiv.style.margin = '12px 0';
+
+  let content = sec.text || '';
+  
+  sec.items.forEach(it => {
+    if(it.id) {
+      const input = `<input type="text" name="q${it.id}" id="q${it.id}" placeholder="word" style="margin: 0 5px; width: 120px; display: inline;">`;
+      content += ` <strong>${it.id}</strong> ${input} ${it.gap_after || ''}`;
+      navIds.push(it.id); answersMap[it.id] = it.correct || '';
+      
+      // Add anchor for navigation
+      const anchor = document.createElement('span');
+      anchor.id = `anchor-${it.id}`;
+      anchor.style.position = 'relative';
+    } else {
+      content += ` ${it.text || ''}`;
+    }
+  });
+
+  summaryDiv.innerHTML = content;
+  qroot.appendChild(summaryDiv);
+}
+
+/* Build UI */
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='heading_match') renderHeadingMatch(sec);
+  if (sec.type==='multi_choice') renderMultiChoice(sec);
+  if (sec.type==='summary_completion') renderSummaryCompletion(sec);
+});
+
+/* Footer chips */
+const footerNav=document.getElementById('footerNav');
+(function(){
+  if(!CONFIG.showFooterNavigator){ footerNav.style.display='none'; return; }
+  footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+  [...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+    const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+    chip.addEventListener('click',()=>{ 
+      const anchor = document.getElementById(`anchor-${id}`) || document.querySelector(`input[name="q${id}"]`);
+      if(anchor) anchor.scrollIntoView({behavior:'smooth',block:'center'}); 
+    });
+    footerNav.appendChild(chip);
+  });
+})();
+
+function markChipAnswered(id, answered){
+  const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered);
+}
+
+document.addEventListener('change',(e)=>{
+  // Handle regular radio and text inputs
+  const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  if(m) {
+    const id=+m[1];
+    const answered=(e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                   : (e.target.value.trim().length>0);
+    markChipAnswered(id, answered);
+    return;
+  }
+  
+  // Handle multi-select checkboxes
+  const multiMatch = String(e.target.name||'').match(/multi_(\d+)/);
+  if(multiMatch) {
+    const baseId = +multiMatch[1];
+    const section = CONFIG.sections.find(s => s.ids && s.ids.includes(baseId));
+    if(section) {
+      const checked = Array.from(document.querySelectorAll(`input[name="multi_${baseId}"]:checked`));
+      section.ids.forEach(id => markChipAnswered(id, checked.length >= section.select_count));
+    }
+  }
+});
+
+/* Timer */
+let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60;
+const timer=document.getElementById('timer');
+const pauseBtn=document.getElementById('pauseBtn');
+const resumeBtn=document.getElementById('resumeBtn');
+let paused=false, iv;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){ if(iv) clearInterval(iv);
+  iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft); if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent=fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+function submit(){
+  paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const itemsOut=[];
+  const ids=Object.keys(answersMap);
+
+  ids.forEach(key=>{
+    const ans=answersMap[key];
+    const label=key;
+    let user='';
+    
+    // Check for regular radio/text inputs
+    const picked=document.querySelector(`input[name="q${key}"]:checked`);
+    if(picked){ user=picked.value; }
+    else if(document.getElementById('q'+key)){ user=document.getElementById('q'+key).value; }
+    else {
+      // Check for multi-select
+      const section = CONFIG.sections.find(s => s.ids && s.ids.includes(+key));
+      if(section) {
+        const checked = Array.from(document.querySelectorAll(`input[name="multi_${section.ids[0]}"]:checked`));
+        const selectedValues = checked.map(c => c.value);
+        const keyIndex = section.ids.indexOf(+key);
+        user = selectedValues[keyIndex] || '';
+      }
+    }
+    
+    const shown=user||'No answer';
+
+    if(String(ans).trim()===''){ total++; itemsOut.push({label, status:'— not graded —', user:shown, correct:'(no key)'}); return; }
+
+    total++; graded++;
+    const ok = shown.trim().toUpperCase() === String(ans).trim().toUpperCase();
+    if(ok) correctCount++;
+    itemsOut.push({label, status: ok? '✓ Correct' : '✗ Incorrect', user:shown, correct:String(ans)});
+  });
+
+  document.getElementById('score').innerHTML = `Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;
+  document.getElementById('answers').innerHTML = itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlights */
+const passageCard=document.getElementById('passageCard');
+const pPalette=document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Questions highlight */
+const qCard=document.querySelector('.card.questions');
+const qPalette=document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1 ? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if (node.closest && node.closest('input,textarea,select')) return;
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none';});
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* Helper */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container=range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+
+/* TG button */
+document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

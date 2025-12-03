@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CDI Reading Platform — Computer Provides More Questions Than Answers (Silver edition)</title>
+<style>
+  /* ===== Silver theme (Light first, Dark optional) ===== */
+  :root{
+    --bg1:#f7f7f9; --bg2:#eef2f7; --bg3:#ffffff;
+    --text:#111827; --muted:#6b7280;
+    --panel:rgba(255,255,255,.78); --panel-border:rgba(17,24,39,.12);
+    --accent:#6b7280; --accent-2:#9ca3af;
+    --good:#10b981; --bad:#ef4444;
+  }
+  .theme-dark{
+    --bg1:#0c0d10; --bg2:#0f1115; --bg3:#0a0b0d;
+    --text:#f3f4f6; --muted:#cbd5e1;
+    --panel:rgba(16,18,23,.65); --panel-border:rgba(243,244,246,.16);
+    --accent:#a7b0bf; --accent-2:#c3cad5;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    color:var(--text);
+    background:linear-gradient(135deg,var(--bg1),var(--bg2) 32%,var(--bg3));
+    overflow:hidden; /* inner panels scroll */
+  }
+
+  /* Header with IELTS label on the RIGHT (no overlap) */
+  header{
+    position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between;
+    padding:16px 20px; gap:10px; flex-wrap:wrap;
+    padding-right:140px; /* reserve room for IELTS label on right */
+  }
+  .ielts-corner{
+    position:absolute; right:16px; top:12px;
+    font-weight:1000; letter-spacing:.02em;
+    font-size:clamp(1.8rem,4vw,2.8rem);
+    color:#E31E24; user-select:none; pointer-events:none;
+  }
+
+  .watermark{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;opacity:.08;pointer-events:none;z-index:0}
+  .watermark h1{transform:rotate(-18deg);letter-spacing:.18em;font-weight:1000;font-size:clamp(2rem,7vw,5.5rem);color:#94a3b8;mix-blend-mode:multiply}
+  .theme-dark .watermark h1{color:#cbd5e1;mix-blend-mode:screen}
+
+  header h2{margin:4px 0 0;font-weight:700;font-size:14px;color:var(--muted)}
+  .chip{display:inline-flex;align-items:center;gap:.45rem;padding:.25rem .6rem;border-radius:999px;font-weight:800;font-size:12px;background:linear-gradient(90deg,#e5e7eb,#f3f4f6);color:#111827;border:1px solid rgba(0,0,0,.06)}
+  .btn{border:0;padding:.65rem .95rem;border-radius:14px;font-weight:800;cursor:pointer;background:#1f2937;color:#fff;transition:.2s}
+  .theme-dark .btn{background:var(--accent);color:#111827}
+  .btn:hover{transform:translateY(-1px);filter:brightness(1.04)}
+
+  /* Main area — grid: height:90%; width:100% (your spec) */
+  .container{height:calc(110vh - 88px);padding:0 16px 18px;position:relative;z-index:1}
+  .grid{display:grid;grid-template-columns:1fr;gap:14px;height:90%;width:100%;margin:0 auto;}
+  @media(min-width:1200px){.grid{grid-template-columns:1fr 1fr}}
+
+  .panel{background:var(--panel);backdrop-filter:blur(12px);border:1px solid var(--panel-border);border-radius:18px;padding:16px;height:90%;overflow:auto;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+  .passage section{margin-bottom:14px}
+  .passage h4{margin:0 0 6px;font-weight:900}
+  .passage p{margin:0;line-height:1.6}
+
+  .qcard{border:1px solid var(--panel-border);border-radius:14px;background:rgba(255,255,255,.7);padding:12px}
+  .theme-dark .qcard{background:rgba(12,12,12,.4)}
+  .inline-input{padding:6px 8px;border-radius:8px;border:1px solid var(--panel-border);background:rgba(120,120,128,.15);color:var(--text);min-width:220px}
+  select.select{padding:8px 10px;border-radius:10px;border:1px solid var(--panel-border);background:rgba(120,120,128,.15);color:var(--text)}
+  .blank-badge{display:inline-block;margin:0 6px 0 2px;padding:1px 6px;border-radius:6px;font-weight:900;border:1px solid rgba(0,0,0,.1);background:linear-gradient(90deg,#e5e7eb,#f3f4f6);color:#111827}
+
+  .ok{color:var(--good);font-weight:900}
+  .no{color:var(--bad);font-weight:900}
+  .submit{width:100%;padding:14px 18px;border-radius:16px;border:0;font-weight:900;cursor:pointer;background:var(--accent);color:#111827;box-shadow:0 12px 30px rgba(107,114,128,.28)}
+  .submit:hover{transform:translateY(-1px)}
+  .scorebox{border:1px solid rgba(107,114,128,.32);background:rgba(156,163,175,.12);padding:14px;border-radius:16px}
+
+  .progress{height:8px;width:260px;border-radius:999px;background:rgba(120,120,128,.35);overflow:hidden}
+  .progress>span{display:block;height:100%;background:var(--accent-2);transition:width .3s ease}
+
+  /* Highlighter */
+  .hl{padding:0 .1em;border-radius:.2em;cursor:text}
+  .hl-yellow{background:#fde68a}.hl-green{background:#bbf7d0}.hl-blue{background:#bfdbfe}.hl-pink{background:#fbcfe8}
+  .theme-dark .hl-yellow{background:rgba(251,191,36,.5)}
+  .theme-dark .hl-green{background:rgba(16,185,129,.35)}
+  .theme-dark .hl-blue{background:rgba(59,130,246,.35)}
+  .theme-dark .hl-pink{background:rgba(236,72,153,.35)}
+  .hl-toolbar{position:fixed;z-index:50;display:flex;gap:6px;align-items:center;background:var(--panel);border:1px solid var(--panel-border);backdrop-filter:blur(10px);padding:6px 8px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+  .hl-btn{width:22px;height:22px;border-radius:6px;border:1px solid var(--panel-border);cursor:pointer}
+  .hl-eraser{font-size:12px;padding:0 6px;height:22px;border-radius:6px;border:1px solid var(--panel-border);background:transparent;color:var(--text);cursor:pointer}
+  .hidden{display:none}
+
+  /* KEYS + LOCATIONS */
+  .loc-badge{display:inline-block;margin-right:6px;font-weight:900;border-radius:6px;padding:2px 6px;border:1px solid rgba(0,0,0,.1);background:linear-gradient(90deg,#e5e7eb,#f3f4f6);color:#111827}
+  #keysBox{border:1px dashed var(--panel-border);background:rgba(255,255,255,.6);padding:12px;border-radius:14px;max-height:260px;overflow:auto}
+  .theme-dark #keysBox{background:rgba(12,12,12,.35)}
+  .muted{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="watermark"><h1>IELTS CENTER AMIR TEMUR</h1></div>
+
+<header>
+  <div class="ielts-corner">IELTS</div>
+  <div>
+    <h1 style="margin:0;font-size:clamp(1.3rem,3vw,2rem);font-weight:1000;letter-spacing:-.02em">
+      CDI Reading Platform — <span style="color:var(--accent)">Computer Provides More Questions Than Answers · Silver edition</span>
+    </h1>
+    <h2>IELTS CENTER AMIR TEMUR · Interactive reading with scoring</h2>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <div id="scoreBadge" style="display:none;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(120,120,128,.14)">
+      <span class="chip" id="chipScore">0 / <span id="totalQ">0</span></span>
+      <div class="progress"><span id="progressBar" style="width:0%"></span></div>
+    </div>
+    <div class="chip" id="timerChip" title="Timer (click to pause/resume)" style="cursor:pointer">⏱ <span id="timerText">20:00</span></div>
+    <button class="btn" id="clearAllBtn" title="Remove all highlights">Clear All Highlights</button>
+    <span style="font-weight:900;font-size:15px;white-space:nowrap;opacity:.9">made by Abdumurod-IELTS</span>
+    <button class="btn" id="themeBtn">Dark</button>
+  </div>
+</header>
+
+<!-- Floating Highlighter toolbar -->
+<div id="hlToolbar" class="hl-toolbar hidden">
+  <button class="hl-btn" style="background:#fde68a" data-color="yellow" title="Highlight yellow"></button>
+  <button class="hl-btn" style="background:#bbf7d0" data-color="green" title="Highlight green"></button>
+  <button class="hl-btn" style="background:#bfdbfe" data-color="blue" title="Highlight blue"></button>
+  <button class="hl-btn" style="background:#fbcfe8" data-color="pink" title="Highlight pink"></button>
+  <button class="hl-eraser" id="hlEraserToggle" title="Eraser mode (click highlights to delete)">🩹 Eraser</button>
+</div>
+
+<div class="container">
+  <div class="grid">
+    <!-- LEFT: PASSAGE -->
+    <div class="panel" id="leftPanel">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <h3 style="margin:0;font-weight:900">Reading Passage 2 — Computer Provides More Questions Than Answers</h3>
+      </div>
+
+      <div class="passage" id="passage">
+        <!-- ================= PASSAGE A–J ================= -->
+        <section id="A"><h4>A</h4><p>The island of Antikythera lies 18 miles north of Crete, where the Aegean Sea meets the Mediterranean. Currents there can make shipping treacherous – and one ship bound for ancient Rome never made it. The ship that sank there was a giant cargo vessel measuring nearly 500 feet long. It came to rest about 200 feet below the surface, where it stayed for more than 2,000 years until divers looking for sponges discovered the wreck a little more than a century ago.</p></section>
+
+        <section id="B"><h4>B</h4><p>Inside the hull were a number of bronze and marble statues. From the look of things, the ship seemed to be carrying luxury items, probably made in various Greek islands and bound for wealthy patrons in the growing Roman Empire. The statues were retrieved, along with a lot of other unimportant stuff, and stored. Nine months later, an enterprising archaeologist cleared off a layer of organic material from one of the pieces of junk and found that it looked like a gearwheel. It had inscriptions in Greek characters and seemed to have something to do with astronomy.</p></section>
+
+        <section id="C"><h4>C</h4><p>That piece of “junk” went on to become the most celebrated find from the shipwreck; it is displayed at the National Archaeological Museum of Athens. Research has shown that the wheel was part of a device so sophisticated that its complexity would not be matched for a thousand years – it was also the world’s first known analog computer. The device is so famous that an international conference organized in Athens a couple of weeks ago had only one subject: the Antikythera Mechanism.</p></section>
+
+        <section id="D"><h4>D</h4><p>Every discovery about the device has raised new questions. Who built the device, and for what purpose? Why did the technology behind it disappear for the next thousand years? What does the device tell us about ancient Greek culture? And does the marvelous construction, and the precise knowledge of the movement of the sun and moon and Earth that it implies, tell us how the ancients grappled with ideas about determinism and human destiny?</p></section>
+
+        <section id="E"><h4>E</h4><p>“We have gear trains from the 9th century in Baghdad used for simpler displays of the solar and lunar motions relative to one another – they use eight gears,” said François Charette, a historian of science in Germany who wrote an editorial accompanying a new study of the mechanism two weeks ago in the journal Nature. “In this case, we have more than 30 gears. To see it on a computer animation makes it mind-boggling. There is no doubt it was a technological masterpiece.”</p></section>
+
+        <section id="F"><h4>F</h4><p>The device was probably built between 100 and 140 BC, and the understanding of astronomy it displays seems to have been based on knowledge developed by the Babylonians around 300–700 BC, said Mike Edmunds, a professor of astrophysics at Cardiff University in Britain. He led a research team that reconstructed what the gear mechanism would have looked like by using advanced three-dimensional-imaging technology. The group also decoded a number of the inscriptions. The mechanism explores the relationship between lunar months – the time it takes for the moon to cycle through its phases, say, full moon to full moon – and calendar years. The gears had to be cut precisely to reflect this complex relationship; 19 calendar years equal 235 lunar months.</p></section>
+
+        <section id="G"><h4>G</h4><p>By turning the gear mechanism, which included what Edmunds called a beautiful system of epicyclic gears that factored in the elliptical orbit of the moon, a person could check what the sky would have looked like on a date in the past, or how it would appear in the future. The mechanism was encased in a box with doors in front and back covered with inscriptions – a sort of instruction manual. Inside the front door were pointers indicating the date and the position of the sun, moon and zodiac, while opening the back door revealed the relationship between calendar years and lunar months, and a mechanism to predict eclipses.</p></section>
+
+        <section id="H"><h4>H</h4><p>“If they needed to know when eclipses would occur, and this related to the rising and setting of stars and related them to dates and religious experiences, the mechanism would directly help,” said Yanis Bitsakis, a physicist at the University of Athens who co-wrote the Nature paper. “It is a mechanical computer. You turn the handle and you have a date on the front.” Building it would have been expensive and required the interaction of astronomers, engineers, intellectuals and craftspeople. Charette said the device overturned conventional ideas that the ancient Greeks were primarily ivory tower thinkers who did not deign to muddy their hands with technical stuff. It is a reminder, he said, that while the study of history often focuses on written texts, they can tell us only a fraction of what went on at a particular time.</p></section>
+
+        <section id="I"><h4>I</h4><p>Imagine a future historian encountering philosophy texts written in our time – and an aircraft engine. The books would tell that researcher what a few scholars were thinking today, but the engine would give them a far better window into how technology influenced our everyday lives. Charette said it was unlikely that the device was used by practitioners of astrology, then still in its infancy. More likely, he said, it was bound for a mantelpiece in some rich Roman’s home. Given that astronomers of the time already knew how to calculate the positions of the sun and the moon and to predict eclipses without the device, it would have been the equivalent of a device built for a planetarium today – something to spur popular interest, or at least claim bragging rights.</p></section>
+
+        <section id="J"><h4>J</h4><p>Why was the technology that went into the device lost? “The time this was built, the jackboot of Rome was coming through,” Edmunds said. “The Romans were good at town planning and sanitation but were not known for their interest in science.” The fact that the device was so complex, and that it was being shipped with a quantity of other luxury items, tells Edmunds that it is very unlikely to have been the only one ever made. Its sophistication “is such that it can’t have been the only one,” Edmunds said. “There must have been a tradition of making them. We’re always hopeful a better one will surface.” Indeed, he said, he hopes that his study and the renewed interest in the Antikythera Mechanism will prompt second looks by both amateurs and professionals around the world. “The archaeological world may look in their cupboards and maybe say, ‘That isn’t a bit of rusty old metal in the cupboard.’”</p></section>
+      </div>
+    </div>
+
+    <!-- RIGHT: QUESTIONS -->
+    <div class="panel" id="rightPanel">
+      <div id="qs" style="display:flex;flex-direction:column;gap:16px">
+
+        <!-- 14–18: Which paragraph contains the information? -->
+        <section>
+          <h3>Questions 14–18 · Which paragraph contains the following information?</h3>
+          <h4 class="muted">Choose a letter <b>A–J</b> for each question.</h4>
+          <div class="qcard" style="display:grid;gap:12px;font-size:14px">
+            <div>14) Content inside the wreck ship
+              <span class="blank-badge">[14]</span>
+              <select class="select" id="q14"><option value=""></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option><option>J</option></select>
+              <span id="m14" class="mark"></span>
+            </div>
+            <div>15) Ancient astronomers and craftsman might involve
+              <span class="blank-badge">[15]</span>
+              <select class="select" id="q15"><option value=""></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option><option>J</option></select>
+              <span id="m15" class="mark"></span>
+            </div>
+            <div>16) The location of Antikythera Mechanism
+              <span class="blank-badge">[16]</span>
+              <select class="select" id="q16"><option value=""></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option><option>J</option></select>
+              <span id="m16" class="mark"></span>
+            </div>
+            <div>17) Details of how it was found
+              <span class="blank-badge">[17]</span>
+              <select class="select" id="q17"><option value=""></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option><option>J</option></select>
+              <span id="m17" class="mark"></span>
+            </div>
+            <div>18) Appearance and structure of the mechanism
+              <span class="blank-badge">[18]</span>
+              <select class="select" id="q18"><option value=""></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option><option>J</option></select>
+              <span id="m18" class="mark"></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 19–22: Summary (NO MORE THAN TWO WORDS) -->
+        <section>
+          <h3>Questions 19–22 · Complete the summary (NO MORE THAN TWO WORDS)</h3>
+          <div class="qcard" style="display:grid;gap:10px;font-size:14px">
+            <p>An ancient huge sunk
+              <span class="blank-badge">[19]</span><input id="q19" class="inline-input" placeholder="TWO WORDS MAX"><span id="mm19"></span>
+              was found accidentally by sponges searcher. The ship loaded with
+              <span class="blank-badge">[20]</span><input id="q20" class="inline-input" placeholder="TWO WORDS MAX"><span id="mm20"></span>
+              such as bronze and sculptures. However, an archaeologist found a junk similar to a
+              <span class="blank-badge">[21]</span><input id="q21" class="inline-input" placeholder="TWO WORDS MAX"><span id="mm21"></span>
+              which has Greek script on it. This inspiring and elaborated device was found to be the first
+              <span class="blank-badge">[22]</span><input id="q22" class="inline-input" placeholder="TWO WORDS MAX"><span id="mm22"></span>
+              in the world.
+            </p>
+          </div>
+        </section>
+
+        <!-- 23–26: Match the people with the opinions -->
+        <section>
+          <h3>Questions 23–26 · Match the people (A–C) with the statements</h3>
+          <h4 class="muted">A Yanis Bitsakis · B Mike Edmunds · C François Charette</h4>
+          <div class="qcard" style="display:grid;gap:12px;font-size:14px">
+            <div>23) More complicated than previous device
+              <span class="blank-badge">[23]</span>
+              <select class="select" id="q23"><option value=""></option><option>A</option><option>B</option><option>C</option></select>
+              <span id="m23" class="mark"></span>
+            </div>
+            <div>24) Anticipate to find more Antikythera Mechanism in the future
+              <span class="blank-badge">[24]</span>
+              <select class="select" id="q24"><option value=""></option><option>A</option><option>B</option><option>C</option></select>
+              <span id="m24" class="mark"></span>
+            </div>
+            <div>25) Antikythera Mechanism was found related to moon
+              <span class="blank-badge">[25]</span>
+              <select class="select" id="q25"><option value=""></option><option>A</option><option>B</option><option>C</option></select>
+              <span id="m25" class="mark"></span>
+            </div>
+            <div>26) Mechanism assisted ancient people to calculate movement of stars
+              <span class="blank-badge">[26]</span>
+              <select class="select" id="q26"><option value=""></option><option>A</option><option>B</option><option>C</option></select>
+              <span id="m26" class="mark"></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Submit + KEYS -->
+        <section>
+          <button class="submit" id="submitBtn">Submit Answers</button>
+          <div id="resultBox" class="scorebox" style="display:none;margin-top:10px">
+            <div style="font-weight:900;color:#1f2937">Your score: <span id="finalScore">0</span> / <span id="finalTotal">0</span></div>
+            <p class="muted" style="margin-top:6px">Green ✓ means correct. You can still adjust answers to improve the score.</p>
+          </div>
+          <button class="submit" id="keysBtn" style="display:none;margin-top:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#111827">KEYS + LOCATIONS</button>
+          <div id="keysBox" class="qcard" style="display:none;margin-top:10px"></div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== Theme toggle ===== */
+(function(){
+  var themeBtn=document.getElementById('themeBtn');
+  if(themeBtn){
+    themeBtn.addEventListener('click',function(){
+      var html=document.documentElement;
+      var dark=html.classList.toggle('theme-dark');
+      themeBtn.textContent=dark?'Light':'Dark';
+    });
+  }
+})();
+
+/* ===== Highlighter logic ===== */
+(function(){
+  var passageEl=document.getElementById('passage');
+  var toolbar=document.getElementById('hlToolbar');
+  var eraser=false;
+  function showToolbar(x,y){ toolbar.style.left=x+'px'; toolbar.style.top=y+'px'; toolbar.classList.remove('hidden'); }
+  function hideToolbar(){ toolbar.classList.add('hidden'); }
+  document.addEventListener('mouseup', function(e){
+    var sel=window.getSelection();
+    if(!sel || sel.isCollapsed){ hideToolbar(); return; }
+    var range=sel.getRangeAt(0);
+    if(!passageEl.contains(range.commonAncestorContainer)){ hideToolbar(); return; }
+    showToolbar(e.pageX+8,e.pageY+8);
+  });
+  toolbar.addEventListener('mousedown', function(e){ e.preventDefault(); });
+  [].slice.call(toolbar.querySelectorAll('.hl-btn')).forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var color=btn.getAttribute('data-color');
+      var sel=window.getSelection(); if(!sel || sel.isCollapsed) return;
+      var range=sel.getRangeAt(0);
+      var span=document.createElement('span'); span.className='hl hl-'+color;
+      try{ range.surroundContents(span); }catch(err){}
+      window.getSelection().removeAllRanges(); hideToolbar();
+    });
+  });
+  var eraserBtn=document.getElementById('hlEraserToggle');
+  if(eraserBtn){
+    eraserBtn.addEventListener('click',function(){
+      eraser=!eraser; eraserBtn.style.opacity=eraser?1:0.8;
+    });
+  }
+  passageEl.addEventListener('click',function(e){
+    if(!eraser) return;
+    var t=e.target;
+    if(t.classList && t.classList.contains('hl')){
+      var parent=t.parentNode; while(t.firstChild) parent.insertBefore(t.firstChild,t); parent.removeChild(t);
+    }
+  });
+  var clearBtn=document.getElementById('clearAllBtn');
+  if(clearBtn){
+    clearBtn.addEventListener('click',function(){
+      [].slice.call(passageEl.querySelectorAll('.hl')).forEach(function(t){
+        var parent=t.parentNode; while(t.firstChild) parent.insertBefore(t.firstChild,t); parent.removeChild(t);
+      });
+    });
+  }
+})();
+
+/* ===== Timer (20:00, auto submit) ===== */
+var timerText=document.getElementById('timerText');
+var timerChip=document.getElementById('timerChip');
+var remaining=20*60, ticking=true, intervalId=null;
+function fmt(s){var m=Math.floor(s/60), sec=s%60; return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');}
+function renderTimer(){ if(timerText) timerText.textContent=fmt(remaining); }
+function tick(){ if(!ticking) return; remaining--; if(remaining<=0){ remaining=0; renderTimer(); stopTimer(); autoSubmitOnTimeout(); return; } renderTimer(); }
+function startTimer(){ if(intervalId) return; intervalId=setInterval(tick,1000); ticking=true; if(timerChip) timerChip.title='Pause timer';}
+function stopTimer(){ if(intervalId){ clearInterval(intervalId); intervalId=null; } ticking=false; if(timerChip) timerChip.title='Resume timer';}
+if(timerChip){ timerChip.addEventListener('click', function(){ if(ticking){ stopTimer(); } else { startTimer(); }}); }
+renderTimer(); startTimer();
+
+/* ===== Keys & Scoring ===== */
+var TOTAL_Q = 13;
+document.getElementById('totalQ').textContent = TOTAL_Q;
+document.getElementById('finalTotal').textContent = TOTAL_Q;
+
+/* 14–18 (paragraph letters A–J) + 23–26 (people A–C) */
+var keyMatch = {
+  14:'B', 15:'H', 16:'C', 17:'A', 18:'G',
+  23:'C', 24:'B', 25:'B', 26:'A'
+};
+
+/* 19–22 (gap fills; accept common variants) */
+var keyGap = {
+  19:['CARGO VESSEL','CARGO SHIP'],
+  20:['LUXURY ITEMS','LUXURY GOODS'],
+  21:['GEARWHEEL','GEAR WHEEL'],
+  22:['ANALOG COMPUTER','ANALOGUE COMPUTER']
+};
+
+/* Helpers */
+function mark(id, ok){var el=document.getElementById(id); if(el){ el.textContent=ok?'✔️':'❌'; el.className=ok?'ok':'no'; }}
+function norm(s){return String(s||'').toUpperCase().trim().replace(/[^\w’'() -]/g,'').replace(/\s+/g,' ');}
+function checkGap(val, bank){var v=norm(val);return (Array.isArray(bank)?bank:[bank]).some(function(k){return norm(k)===v;});}
+
+/* Score all */
+function scoreAll(){
+  var score=0;
+
+  // Paragraph match 14–18
+  [14,15,16,17,18].forEach(function(n){
+    var sel=document.getElementById('q'+n);
+    var v=(sel&&sel.value||'').toUpperCase();
+    var ok=(v===keyMatch[n]); mark('m'+n,ok); if(ok) score++;
+  });
+
+  // Gaps 19–22
+  [19,20,21,22].forEach(function(n){
+    var el=document.getElementById('q'+n); if(!el) return;
+    var ok=checkGap(el.value,keyGap[n]);
+    var t=document.getElementById('mm'+n); if(t){ t.textContent=ok?'✔️':'❌'; t.className=ok?'ok':'no'; }
+    if(ok) score++;
+  });
+
+  // People match 23–26
+  [23,24,25,26].forEach(function(n){
+    var sel2=document.getElementById('q'+n);
+    var v2=(sel2&&sel2.value||'').toUpperCase();
+    var ok2=(v2===keyMatch[n]); mark('m'+n,ok2); if(ok2) score++;
+  });
+
+  return score;
+}
+
+/* Submit + UI */
+var submitBtn=document.getElementById('submitBtn');
+var resultBox=document.getElementById('resultBox');
+var finalScore=document.getElementById('finalScore');
+var scoreBadge=document.getElementById('scoreBadge');
+var chipScore=document.getElementById('chipScore');
+var progressBar=document.getElementById('progressBar');
+var keysBtn=document.getElementById('keysBtn');
+var keysBox=document.getElementById('keysBox');
+var rightPanel=document.getElementById('rightPanel');
+var keysOpen=false;
+
+function afterScoredUI(s,total){
+  finalScore.textContent=s;
+  chipScore.innerHTML=s+' / '+total;
+  progressBar.style.width=Math.round((s/total)*100)+'%';
+  resultBox.style.display='block';
+  scoreBadge.style.display='flex';
+  keysBtn.style.display='inline-block';
+  keysOpen=false; keysBtn.textContent='KEYS + LOCATIONS'; keysBox.style.display='none';
+}
+if(submitBtn){ submitBtn.addEventListener('click',function(){ stopTimer(); var s=scoreAll(); afterScoredUI(s,TOTAL_Q); }); }
+function autoSubmitOnTimeout(){ var s=scoreAll(); afterScoredUI(s,TOTAL_Q);
+  timerChip.style.background='linear-gradient(90deg,#fecaca,#fee2e2)';
+  timerChip.style.border='1px solid rgba(239,68,68,.35)';
+  timerChip.title='Time up';
+}
+
+/* KEYS + sentence-level LOCATIONS */
+function buildKeysHTML(){
+  var lines=[];
+  [14,15,16,17,18].forEach(function(n){ lines.push(n+'. '+keyMatch[n]); });
+  [19,20,21,22].forEach(function(n){ var first=Array.isArray(keyGap[n])?keyGap[n][0]:keyGap[n]; lines.push(n+'. '+first); });
+  [23,24,25,26].forEach(function(n){ lines.push(n+'. '+keyMatch[n]); });
+  return '<strong>Answer Key</strong><br/>'+lines.map(function(l){return '- '+l;}).join('<br/>');
+}
+function insertBadgeAtSentence(pEl, phrase, num){
+  var text=pEl.textContent, lower=text.toLowerCase(), idx=lower.indexOf(phrase.toLowerCase());
+  if(idx===-1) return false;
+  var cuts=['.','!','?']; var start=0;
+  for(var i=idx-1;i>=0;i--){ if(cuts.indexOf(lower[i])>-1){ start=i+1; break; } }
+  while(start<text.length && /\s/.test(text[start])) start++;
+  var range=document.createRange(); var pos=locateTextNodeAtOffset(pEl,start); if(!pos) return false;
+  range.setStart(pos.node,pos.offset); range.collapse(true);
+  var badge=document.createElement('strong'); badge.className='loc-badge'; badge.textContent='['+num+']'; range.insertNode(badge); return true;
+}
+function locateTextNodeAtOffset(container, charIndex){
+  var walker=document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
+  var n,count=0; while((n=walker.nextNode())){ var len=n.nodeValue.length; if(count+len>=charIndex){ return {node:n,offset:charIndex-count}; } count+=len; }
+  return null;
+}
+
+/* Locator phrases to drop [n] next to the answer-carrying sentence */
+var locPhrases = [
+  [14,'bronze and marble statues'],                       // B
+  [15,'astronomers, engineers, intellectuals and craftspeople'], // H
+  [16,'National Archaeological Museum of Athens'],        // C
+  [17,'divers looking for sponges discovered'],           // A
+  [18,'encased in a box with doors'],                     // G
+
+  [23,'more than 30 gears'],                              // E (Charette)
+  [24,'We’re always hopeful a better one will surface'],  // J (Edmunds)
+  [25,'19 calendar years equal 235 lunar months'],        // F (Edmunds)
+  [26,'rising and setting of stars']                      // H (Bitsakis)
+];
+var keysBtnEl=document.getElementById('keysBtn');
+if(keysBtnEl){
+  keysBtnEl.addEventListener('click', function(){
+    keysOpen=!keysOpen;
+    if(keysOpen){
+      keysBtnEl.textContent='HIDE KEYS + LOCATIONS';
+      keysBox.innerHTML=buildKeysHTML(); keysBox.style.display='block';
+      var paras=[].slice.call(document.getElementById('passage').querySelectorAll('p'));
+      locPhrases.forEach(function(pair){
+        var n=pair[0], phrase=pair[1];
+        var p=paras.find(function(el){ return el.textContent.toLowerCase().indexOf(phrase.toLowerCase())>-1; });
+        if(p) insertBadgeAtSentence(p,phrase,n);
+      });
+      rightPanel.scrollTo({top:rightPanel.scrollHeight,behavior:'smooth'});
+    }else{
+      keysBtnEl.textContent='KEYS + LOCATIONS'; keysBox.style.display='none';
+    }
+  });
+}
+</script>
+</body>
+</html>

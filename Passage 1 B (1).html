@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CDI Reading Platform — The Phoenicians (Bronze edition) | IELTS CENTER AMIR TEMUR</title>
+  <style>
+    /* ===== Bronze theme (Light first) ===== */
+    :root{
+      --bg1:#faf7f2; --bg2:#fff7ed; --bg3:#ffffff;
+      --text:#18181b; --muted:#4b5563;
+      --panel:rgba(255,255,255,.78); --panel-border:rgba(24,24,27,.12);
+      --accent:#b45309; --accent-2:#d97706;
+      --good:#10b981; --bad:#ef4444;
+    }
+    .theme-dark{
+      --bg1:#0b0b0c; --bg2:#101112; --bg3:#0a0a0a;
+      --text:#fafafa; --muted:#cbd5e1;
+      --panel:rgba(16,16,17,.6); --panel-border:rgba(250,250,250,.18);
+      --accent:#eab308; --accent-2:#f59e0b;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:linear-gradient(135deg,var(--bg1),var(--bg2) 32%,var(--bg3));
+      overflow:hidden;
+    }
+
+    .watermark{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;opacity:.1;pointer-events:none;z-index:0}
+    .watermark h1{transform:rotate(-18deg);letter-spacing:.18em;font-weight:1000;font-size:clamp(2.4rem,8vw,6rem);color:#6b7280;mix-blend-mode:multiply}
+    .theme-dark .watermark h1{color:#e5e7eb;mix-blend-mode:screen}
+
+    header{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;flex-wrap:wrap;gap:10px}
+    header h2{margin:4px 0 0;font-weight:700;font-size:14px;color:var(--muted)}
+
+    .chip{display:inline-flex;align-items:center;gap:.45rem;padding:.25rem .6rem;border-radius:999px;font-weight:800;font-size:12px;background:linear-gradient(90deg,#f5d0a7,#fde9c9);color:#111827;border:1px solid rgba(0,0,0,.06)}
+    .btn{border:0;padding:.65rem .95rem;border-radius:14px;font-weight:800;cursor:pointer;background:#0f172a;color:#fff;transition:.2s transform,.2s filter}
+    .theme-dark .btn{background:var(--accent);color:#111827}
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+
+    .container{height:calc(110vh - 88px);padding:0 20px 24px;position:relative;z-index:1}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px;height:90%}
+    @media(min-width:1200px){.grid{grid-template-columns:1fr 1fr}}
+
+    .panel{background:var(--panel);backdrop-filter:blur(12px);border:1px solid var(--panel-border);border-radius:18px;padding:18px;height:90%;overflow:auto;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+
+    /* Highlighter */
+    .hl{padding:0 .1em;border-radius:.2em;cursor:text}
+    .hl-yellow{background:#fde68a}.hl-green{background:#bbf7d0}.hl-blue{background:#bfdbfe}.hl-pink{background:#fbcfe8}
+    .hl-toolbar{position:fixed;z-index:50;display:flex;gap:6px;align-items:center;background:var(--panel);border:1px solid var(--panel-border);backdrop-filter:blur(10px);padding:6px 8px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+    .hl-btn{width:22px;height:22px;border-radius:6px;border:1px solid var(--panel-border);cursor:pointer}
+    .hl-eraser{font-size:12px;padding:0 6px;height:22px;border-radius:6px;border:1px solid var(--panel-border);background:transparent;color:var(--text);cursor:pointer}
+    .hidden{display:none}
+
+    .inline-input{padding:6px 8px;border-radius:8px;border:1px solid var(--panel-border);background:rgba(120,120,128,.15);color:var(--text);min-width:160px}
+    .qcard{border:1px solid var(--panel-border);border-radius:14px;background:rgba(255,255,255,.7);padding:12px}
+    .theme-dark .qcard{background:rgba(12,12,12,.4)}
+    .ok{color:var(--good);font-weight:900}
+    .no{color:var(--bad);font-weight:900}
+    .submit{width:100%;padding:14px 18px;border-radius:16px;border:0;font-weight:900;cursor:pointer;background:var(--accent);color:#111827;box-shadow:0 12px 30px rgba(180,83,9,.28)}
+    .submit:hover{transform:translateY(-1px)}
+    .scorebox{border:1px solid rgba(180,83,9,.32);background:rgba(217,119,6,.12);padding:14px;border-radius:16px}
+
+    .progress{height:8px;width:260px;border-radius:999px;background:rgba(120,120,128,.35);overflow:hidden}
+    .progress>span{display:block;height:100%;background:var(--accent-2);transition:width .3s ease}
+
+    #keysBox{border:1px dashed var(--panel-border);background:rgba(255,255,255,.6);padding:12px;border-radius:14px;max-height:260px;overflow:auto}
+    .theme-dark #keysBox{background:rgba(12,12,12,.35)}
+    .loc-badge{display:inline-block;margin-right:6px;font-weight:900;border-radius:6px;padding:2px 6px;border:1px solid rgba(0,0,0,.1);background:linear-gradient(90deg,#f5d0a7,#fde9c9);color:#111827}
+
+    .passage section{margin-bottom:16px}
+    .passage h4{margin:0 0 6px;font-weight:800}
+    .passage p{margin:0;line-height:1.6}
+  </style>
+</head>
+<body>
+  <div class="watermark"><h1>IELTS CENTER AMIR TEMUR</h1></div>
+
+  <header>
+    <div>
+      <h1 style="margin:0;font-size:clamp(1.4rem,3vw,2rem);font-weight:1000;letter-spacing:-.02em">
+        CDI Reading Platform — <span style="color:var(--accent)">The Phoenicians · Bronze edition</span>
+      </h1>
+      <h2>IELTS CENTER AMIR TEMUR · Interactive reading with scoring</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end">
+      <div id="scoreBadge" style="display:none;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(120,120,128,.14)">
+        <span class="chip" id="chipScore">0 / 13</span>
+        <div class="progress"><span id="progressBar" style="width:0%"></span></div>
+      </div>
+
+      <!-- Timer -->
+      <div class="chip" id="timerChip" title="Timer (click to pause/resume)" style="cursor:pointer">
+        ⏱ <span id="timerText">20:00</span>
+      </div>
+
+      <!-- Clear All Highlights -->
+      <button class="btn" id="clearAllBtn" title="Remove all highlights">Clear All Highlights</button>
+
+      <span style="font-weight:900;font-size:15px;white-space:nowrap;opacity:.9">made by Abdumurod-IELTS TM</span>
+      <button class="btn" id="themeBtn">Dark</button>
+    </div>
+  </header>
+
+  <!-- Floating highlighter toolbar -->
+  <div id="hlToolbar" class="hl-toolbar hidden">
+    <button class="hl-btn" style="background:#fde68a" data-color="yellow" title="Highlight yellow"></button>
+    <button class="hl-btn" style="background:#bbf7d0" data-color="green" title="Highlight green"></button>
+    <button class="hl-btn" style="background:#bfdbfe" data-color="blue" title="Highlight blue"></button>
+    <button class="hl-btn" style="background:#fbcfe8" data-color="pink" title="Highlight pink"></button>
+    <button class="hl-eraser" id="hlEraserToggle" title="Eraser mode (click highlights to delete)">🩹 Eraser</button>
+  </div>
+
+  <div class="container">
+    <div class="grid">
+      <!-- LEFT: PASSAGE -->
+      <div class="panel" id="leftPanel">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <h3 style="margin:0;font-weight:900">Reading Passage 1 — The Phoenicians: an almost forgotten people</h3>
+          <span class="chip"></span>
+        </div>
+        <div class="passage" id="passage">
+          <!-- Full passage with anchors for KEYS + LOCATIONS -->
+          <section id="p1"><h4>Paragraph 1</h4><p>The Phoenicians inhabited the region of modern Lebanon and Syria from about 3000 BC. They became the greatest traders of the pre-classical world, and were the first people to establish a large colonial network. Both of these activities were based on <span id="loc1">seafaring</span>, an ability the Phoenicians developed from the example of their maritime predecessors, the Minoans of Crete.</p></section>
+          <section id="p2"><h4>Paragraph 2</h4><p>An Egyptian narrative of about 1080 BC, the Story of Wen-Amen, provides an insight into the scale of their trading activity. One of the characters is Wereket-El, a Phoenician <span id="loc2">merchant</span> living at Tanis in Egypt’s Nile delta. As many as 50 ships carry out his business, plying back and forth between the Nile and the Phoenician port of Sidon.</p></section>
+          <section id="p3"><h4>Paragraph 3</h4><p>The most prosperous period for Phoenicia was the 10th century BC, when the surrounding region was stable. Hiram, the king of the Phoenician city of Tyre, was an ally and business partner of Solomon, King of Israel. For Solomon’s <span id="loc3">temple</span> in Jerusalem, Hiram provided <span id="loc4">craftsmen</span> with particular skills that were needed for this major construction project. He also supplied materials – particularly <span id="loc5">timber</span>, including cedar from the forests of Lebanon. And the two kings went into trade in <span id="loc6">partnership</span>. They sent out Phoenician vessels on long expeditions (of up to three years for the return trip) to bring back gold, sandalwood, ivory, monkeys and peacocks from Ophir. This is an unidentified place, probably on the east coast of Africa or the west coast of India.</p></section>
+          <section id="p4"><h4>Paragraph 4</h4><p>Phoenicia was famous for its luxury goods. The cedar wood was not only exported as top-quality timber for architecture and shipbuilding. It was also carved by the Phoenicians, and the same skill was adapted to even more precious work in <span id="loc7">ivory</span>. The rare and expensive dye for cloth, Tyrian purple, complemented another famous local product, fine linen. The metalworkers of the region, particularly those working in gold, were famous. Tyre and Sidon were also known for their glass.</p></section>
+          <section id="p5"><h4>Paragraph 5</h4><p>These were the main products which the Phoenicians exported. In addition, as traders and middlemen, they took a <span id="loc8">commission</span> on a much greater range of precious goods that they transported from elsewhere.</p></section>
+          <section id="p6"><h4>Paragraph 6</h4><p>The extensive trade of Phoenicia required much book-keeping and correspondence, and it was in the field of writing that the Phoenicians made their most lasting contribution to world history. The scripts in use in the world up to the second millennium BC (in Egypt, Mesopotamia or China) all required the writer to learn a large number of separate characters – each of them expressing either a whole word or an element of its meaning. By contrast, the Phoenicians, in about 1500 BC, developed an entirely new approach to writing. The marks made (with a pointed tool called a stylus, on damp clay) now attempted to capture the sound of a word. This required an alphabet of individual letters.</p></section>
+          <section id="p7"><h4>Paragraph 7</h4><p>The trading and seafaring skills of the Phoenicians resulted in a network of colonies, spreading westwards through the Mediterranean. The first was probably Citium, in Cyprus, established in the 9th century BC. But the main expansion came from the 8th century BC onwards, when pressure from Assyria to the east disrupted the patterns of trade on the Phoenician coast.</p></section>
+          <section id="p8"><h4>Paragraph 8</h4><p>Trading colonies were developed on the string of islands in the centre of the Mediterranean – Crete, Sicily, Malta, Sardinia, Ibiza – and also on the coast of north Africa. The African colonies clustered in particular around the great promontory which, with Sicily opposite, forms the narrowest channel on the main Mediterranean sea route. This is the site of Carthage.</p></section>
+          <section id="p9"><h4>Paragraph 9</h4><p>Carthage was the largest of the towns founded by the Phoenicians on the north African coast, and it rapidly assumed a leading position among the neighbouring colonies. The traditional date of its founding is 814 BC, but archaeological evidence suggests that it was probably settled a little over a century later.</p></section>
+          <section id="p10"><h4>Paragraph 10</h4><p>The subsequent spread and growth of Phoenician colonies in the western Mediterranean, and even out to the <span id="loc11">Atlantic</span> coasts of Africa and Spain, was as much the achievement of Carthage as of the original Phoenician trading cities such as Tyre and Sidon. But no doubt links were maintained with the homeland, and new colonists continued to travel west.</p></section>
+          <section id="p11"><h4>Paragraph 11</h4><p>From the 8th century BC, many of the coastal cities of Phoenicia came under the control of a succession of imperial powers, each of them defeated and replaced in the region by the next: first the <span id="loc12">Assyrians</span>, then the <span id="loc12b">Babylonians</span>, <span id="loc12c">Persians</span> and <span id="loc12d">Macedonian Greeks</span>.</p></section>
+          <section id="p12"><h4>Paragraph 12</h4><p>In 64 BC, the area of Phoenicia became part of the Roman province of Syria. The Phoenicians as an identifiable people then faded from history, merging into the populations of modern Lebanon and northern Syria.</p></section>
+        </div>
+      </div>
+
+      <!-- RIGHT: QUESTIONS -->
+      <div class="panel" id="rightPanel">
+        <div id="qs" style="display:flex;flex-direction:column;gap:16px">
+          <!-- 1–8 ONE WORD ONLY -->
+          <section>
+            <h3 class="section-title">Questions 1–8 · ONE WORD ONLY</h3>
+            <p class="muted">Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+            <div class="qcard" style="font-size:14px">
+              <ul style="margin:0 0 0 18px; padding:0; list-style:disc; display:grid; gap:10px">
+                <li>The Phoenicians’ skill at (<strong>1</strong>) <input id="q1" class="inline-input" placeholder="ONE WORD"/> <span id="m1"></span> helped them to trade.</li>
+                <li>In an ancient story, a (<strong>2</strong>) <input id="q2" class="inline-input" placeholder="ONE WORD"/> <span id="m2"></span> from Phoenicia, who lived in Egypt, owned 50 ships.</li>
+                <li>A king of Israel built a (<strong>3</strong>) <input id="q3" class="inline-input" placeholder="ONE WORD"/> <span id="m3"></span> using supplies from Phoenicia.</li>
+                <li>Phoenicia supplied Solomon with skilled (<strong>4</strong>) <input id="q4" class="inline-input" placeholder="ONE WORD"/> <span id="m4"></span>.</li>
+                <li>The main material that Phoenicia sent to Israel was (<strong>5</strong>) <input id="q5" class="inline-input" placeholder="ONE WORD"/> <span id="m5"></span>.</li>
+                <li>The kings of Phoenicia and Israel formed a business (<strong>6</strong>) <input id="q6" class="inline-input" placeholder="ONE WORD"/> <span id="m6"></span> in order to carry out trade.</li>
+                <li>Phoenicians carved (<strong>7</strong>) <input id="q7" class="inline-input" placeholder="ONE WORD"/> <span id="m7"></span>, as well as cedar.</li>
+                <li>The Phoenicians also earned a (<strong>8</strong>) <input id="q8" class="inline-input" placeholder="ONE WORD"/> <span id="m8"></span> for shipping goods.</li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- 9–13 TRUE / FALSE / NOT GIVEN -->
+          <section>
+            <h3 class="section-title">Questions 9–13 · TRUE / FALSE / NOT GIVEN</h3>
+            <p class="muted">Do the following statements agree with the information in the passage?</p>
+            <div class="qcard" style="display:grid;gap:10px;font-size:14px">
+              <div>
+                <div style="display:flex;gap:10px;align-items:center"><span class="qnum">9</span><span>Problems with Assyria led to the establishment of a number of Phoenician colonies.</span></div>
+                <div style="margin-top:6px">
+                  <label><input type="radio" name="q9" value="TRUE"> TRUE</label>
+                  <label style="margin-left:12px"><input type="radio" name="q9" value="FALSE"> FALSE</label>
+                  <label style="margin-left:12px"><input type="radio" name="q9" value="NOT GIVEN"> NOT GIVEN</label>
+                  <span id="m9" class="mark" style="margin-left:8px"></span>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;gap:10px;align-items:center"><span class="qnum">10</span><span>Carthage was an enemy town which the Phoenicians won in battle.</span></div>
+                <div style="margin-top:6px">
+                  <label><input type="radio" name="q10" value="TRUE"> TRUE</label>
+                  <label style="margin-left:12px"><input type="radio" name="q10" value="FALSE"> FALSE</label>
+                  <label style="margin-left:12px"><input type="radio" name="q10" value="NOT GIVEN"> NOT GIVEN</label>
+                  <span id="m10" class="mark" style="margin-left:8px"></span>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;gap:10px;align-items:center"><span class="qnum">11</span><span>Phoenicians reached the Atlantic Ocean.</span></div>
+                <div style="margin-top:6px">
+                  <label><input type="radio" name="q11" value="TRUE"> TRUE</label>
+                  <label style="margin-left:12px"><input type="radio" name="q11" value="FALSE"> FALSE</label>
+                  <label style="margin-left:12px"><input type="radio" name="q11" value="NOT GIVEN"> NOT GIVEN</label>
+                  <span id="m11" class="mark" style="margin-left:8px"></span>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;gap:10px;align-items:center"><span class="qnum">12</span><span>Parts of Phoenicia were conquered by a series of empires.</span></div>
+                <div style="margin-top:6px">
+                  <label><input type="radio" name="q12" value="TRUE"> TRUE</label>
+                  <label style="margin-left:12px"><input type="radio" name="q12" value="FALSE"> FALSE</label>
+                  <label style="margin-left:12px"><input type="radio" name="q12" value="NOT GIVEN"> NOT GIVEN</label>
+                  <span id="m12" class="mark" style="margin-left:8px"></span>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;gap:10px;align-items:center"><span class="qnum">13</span><span>The Phoenicians welcomed Roman control of the area.</span></div>
+                <div style="margin-top:6px">
+                  <label><input type="radio" name="q13" value="TRUE"> TRUE</label>
+                  <label style="margin-left:12px"><input type="radio" name="q13" value="FALSE"> FALSE</label>
+                  <label style="margin-left:12px"><input type="radio" name="q13" value="NOT GIVEN"> NOT GIVEN</label>
+                  <span id="m13" class="mark" style="margin-left:8px"></span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Submit + Keys -->
+          <section>
+            <button class="submit" id="submitBtn">Submit Answers</button>
+            <div id="resultBox" class="scorebox" style="display:none;margin-top:10px">
+              <div style="font-weight:900;color:#7c2d12">Your score: <span id="finalScore">0</span> / 13</div>
+              <p class="muted" style="margin-top:6px">Green ✓ means correct. You can still adjust answers to improve the score.</p>
+            </div>
+            <button class="submit" id="keysBtn" style="display:none;margin-top:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#111827">KEYS + LOCATIONS</button>
+            <div id="keysBox" style="display:none;margin-top:10px"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ===== Theme (Light default) ===== */
+    const themeBtn=document.getElementById('themeBtn');
+    const root=document.documentElement;
+    function setTheme(mode){
+      root.classList.toggle('theme-dark',mode==='dark');
+      root.classList.toggle('theme-light',mode==='light');
+      themeBtn.textContent = (mode==='dark'?'Light':'Dark');
+    }
+    setTheme('light');
+    themeBtn.addEventListener('click',()=>setTheme(root.classList.contains('theme-dark')?'light':'dark'));
+
+    /* ===== Highlighter with Eraser + Clear All ===== */
+    const hlToolbar=document.getElementById('hlToolbar');
+    const hlEraserToggle=document.getElementById('hlEraserToggle');
+    const clearAllBtn=document.getElementById('clearAllBtn');
+    const allowedRoots=[document.getElementById('passage'), document.getElementById('qs')];
+    let eraserMode=false;
+
+    function withinAllowed(node){return allowedRoots.some(r=>r && r.contains(node))}
+    function showToolbarNearSelection(){
+      if(eraserMode){ hlToolbar.classList.remove('hidden'); return; }
+      const sel=window.getSelection();
+      if(!sel || sel.rangeCount===0 || sel.isCollapsed){ hlToolbar.classList.add('hidden'); return; }
+      const range=sel.getRangeAt(0);
+      if(!(withinAllowed(range.startContainer) && withinAllowed(range.endContainer))){ hlToolbar.classList.add('hidden'); return; }
+      const rect=range.getBoundingClientRect();
+      const top=Math.max(8, rect.top + window.scrollY - 42);
+      const left=Math.max(8, rect.left + window.scrollX);
+      hlToolbar.style.top=top+'px';
+      hlToolbar.style.left=left+'px';
+      hlToolbar.classList.remove('hidden');
+    }
+    function applyHighlight(color){
+      const sel=window.getSelection();
+      if(!sel || sel.rangeCount===0 || sel.isCollapsed) return;
+      const range=sel.getRangeAt(0);
+      if(!(withinAllowed(range.startContainer) && withinAllowed(range.endContainer))) return;
+      const span=document.createElement('span');
+      span.className='hl hl-'+color;
+      const frag=range.extractContents();
+      span.appendChild(frag);
+      range.insertNode(span);
+      sel.removeAllRanges();
+      hlToolbar.classList.add('hidden');
+    }
+    // Toggle eraser mode
+    hlEraserToggle.addEventListener('click', ()=>{
+      eraserMode=!eraserMode;
+      hlEraserToggle.style.background = eraserMode ? 'rgba(239,68,68,.15)' : 'transparent';
+      hlEraserToggle.textContent = eraserMode ? '🩹 Eraser (ON)' : '🩹 Eraser';
+      if(eraserMode){ hlToolbar.classList.remove('hidden'); }
+    });
+    // Click any highlight to erase when in eraser mode
+    document.addEventListener('click',(e)=>{
+      if(eraserMode && e.target.classList && e.target.classList.contains('hl')){
+        const node=e.target; const p=node.parentNode;
+        while(node.firstChild){ p.insertBefore(node.firstChild,node); }
+        p.removeChild(node);
+      }
+    });
+    // Clear all highlights
+    clearAllBtn.addEventListener('click', ()=>{
+      document.querySelectorAll('.hl').forEach(node=>{
+        const p=node.parentNode; while(node.firstChild){ p.insertBefore(node.firstChild,node); } p.removeChild(node);
+      });
+    });
+    // Toolbar behavior
+    [...hlToolbar.querySelectorAll('[data-color]')].forEach(btn=>btn.addEventListener('click',()=>applyHighlight(btn.getAttribute('data-color'))));
+    document.addEventListener('mouseup', showToolbarNearSelection);
+    document.addEventListener('keyup', (e)=>{ if(e.key==='Escape'){ hlToolbar.classList.add('hidden'); eraserMode=false; hlEraserToggle.textContent='🩹 Eraser'; hlEraserToggle.style.background='transparent'; } });
+
+    /* ===== Timer (20:00, pause/resume, auto-submit) ===== */
+    const timerText=document.getElementById('timerText');
+    const timerChip=document.getElementById('timerChip');
+    let remaining=20*60;    // seconds
+    let ticking=true;
+    let intervalId=null;
+
+    function formatTime(s){
+      const m=Math.floor(s/60), sec=s%60;
+      return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+    }
+    function renderTimer(){ timerText.textContent=formatTime(remaining); }
+    function tick(){
+      if(!ticking) return;
+      remaining--;
+      if(remaining<=0){
+        remaining=0; renderTimer();
+        stopTimer();
+        autoSubmitOnTimeout();
+        return;
+      }
+      renderTimer();
+    }
+    function startTimer(){
+      if(intervalId) return;
+      intervalId=setInterval(tick,1000);
+      ticking=true; timerChip.title='Pause timer';
+    }
+    function stopTimer(){
+      if(intervalId){ clearInterval(intervalId); intervalId=null; }
+      ticking=false; timerChip.title='Resume timer';
+    }
+    function toggleTimer(){ if(ticking){ stopTimer(); } else { startTimer(); } }
+    timerChip.addEventListener('click', toggleTimer);
+    renderTimer(); startTimer();
+
+    /* ===== Keys & scoring ===== */
+    const gapKey={1:['seafaring'],2:['merchant'],3:['temple'],4:['craftsmen'],5:['timber','cedar'],6:['partnership'],7:['ivory'],8:['commission']};
+    const tfnKey={9:'TRUE',10:'FALSE',11:'TRUE',12:'TRUE',13:'NOT GIVEN'};
+
+    const locationMap={
+      1:'#loc1',2:'#loc2',3:'#loc3',4:'#loc4',5:'#loc5',6:'#loc6',7:'#loc7',8:'#loc8',
+      9:'#p7 h4',10:'#p9 h4',11:'#loc11',12:'#p11 h4',13:'#p12 h4'
+    };
+
+    function norm(s){return String(s||'').toLowerCase().trim().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,' ')}
+    function check(val, bank){const v=norm(val);return (Array.isArray(bank)?bank:[bank]).some(k=>norm(k)===v)}
+    function mark(id, ok){const el=document.getElementById(id); if(!el) return; el.textContent=ok?'✔️':'❌'; el.className=ok?'ok':'no'; el.setAttribute('aria-label', ok?'correct':'incorrect');}
+
+    function scoreAll(){
+      let s=0;
+      for(let n=1;n<=8;n++){const inp=document.getElementById('q'+n); const ok=check(inp && inp.value, gapKey[n]); mark('m'+n, ok); if(ok) s++;}
+      for(let n=9;n<=13;n++){const choice=[...document.querySelectorAll('input[name="q'+n+'"]')].find(r=>r.checked)?.value||''; const ok=(String(choice).toUpperCase()===tfnKey[n]); mark('m'+n, ok); if(ok) s++;}
+      return s;
+    }
+
+    const submitBtn=document.getElementById('submitBtn');
+    const resultBox=document.getElementById('resultBox');
+    const finalScore=document.getElementById('finalScore');
+    const scoreBadge=document.getElementById('scoreBadge');
+    const chipScore=document.getElementById('chipScore');
+    const progressBar=document.getElementById('progressBar');
+    const keysBtn=document.getElementById('keysBtn');
+    const keysBox=document.getElementById('keysBox');
+    const rightPanel=document.getElementById('rightPanel');
+    let keysOpen=false;
+
+    function afterScoredUI(s,total){
+      finalScore.textContent=s;
+      chipScore.textContent=s+' / '+total;
+      progressBar.style.width=Math.round((s/total)*100)+'%';
+      resultBox.style.display='block';
+      scoreBadge.style.display='flex';
+      keysBtn.style.display='inline-block';
+      keysOpen=false;
+      keysBtn.textContent='KEYS + LOCATIONS';
+      keysBox.style.display='none';
+    }
+
+    submitBtn.addEventListener('click',()=>{
+      stopTimer();
+      const s=scoreAll();
+      afterScoredUI(s,13);
+    });
+
+    function autoSubmitOnTimeout(){
+      const s=scoreAll();
+      afterScoredUI(s,13);
+      // Visual nudge
+      timerChip.style.background='linear-gradient(90deg,#fecaca,#fee2e2)';
+      timerChip.style.border='1px solid rgba(239,68,68,.35)';
+      timerChip.textContent='Time up';
+      keysBtn.style.display='inline-block';
+    }
+
+    function injectBadge(targetSel, num){
+      const target=document.querySelector(targetSel);
+      if(!target) return;
+      if(target.previousElementSibling && target.previousElementSibling.classList?.contains('loc-badge')) return;
+      const b=document.createElement('strong');
+      b.className='loc-badge';
+      b.textContent='['+num+']';
+      target.parentNode.insertBefore(b, target);
+    }
+    function addLocations(){ Object.keys(locationMap).forEach(k=>injectBadge(locationMap[k], k)); }
+
+    function buildKeysHTML(){
+      const lines=[];
+      for(let n=1;n<=8;n++) lines.push(n+'. '+(Array.isArray(gapKey[n])?gapKey[n][0]:gapKey[n]));
+      for(let n=9;n<=13;n++) lines.push(n+'. '+tfnKey[n]);
+      return '<strong>Answer Key</strong><br/>'+lines.map(l=>'- '+l).join('<br/>');
+    }
+
+    keysBtn.addEventListener('click', ()=>{
+      keysOpen = !keysOpen;
+      if(keysOpen){
+        keysBtn.textContent='HIDE KEYS + LOCATIONS';
+        keysBox.innerHTML=buildKeysHTML();
+        keysBox.style.display='block';
+        addLocations();
+        rightPanel.scrollTo({ top: rightPanel.scrollHeight, behavior:'smooth' });
+      }else{
+        keysBtn.textContent='KEYS + LOCATIONS';
+        keysBox.style.display='none';
+      }
+    });
+  </script>
+</body>
+</html>

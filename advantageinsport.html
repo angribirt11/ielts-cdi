@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 2 – What is an unfair advantage in sport?</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  h3{margin:8px 0 0}
+  .muted{color:var(--muted)}
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+  /* Highlights */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1>READING PASSAGE 2 – What is an unfair advantage in sport?</h1>
+      <div class="muted">You should spend about 20 minutes on Questions 14–26.</div>
+
+      <div id="passage">
+        <h2>Reading Passage 2</h2>
+        <h3>What is an unfair advantage in sport?<br><small>Olympic athletes increasingly depend on technology to help them win – but is that fair?</small></h3>
+
+        <p><strong>A.</strong> What happened to the Australian athlete Ron Clarke in the 10,000 metres at the Mexico City Olympics of 1968 is now virtually forgotten, though at the time it was headline news. Clarke was the greatest distance runner in history – he had broken more world records than anybody else. But in front of 55,000 horrified spectators, the exhausted Clarke collapsed on the track with just half a lap to go. He had been leading at a brisk pace. Then, as the leading group suddenly stepped up a gear, a gap opened up. Clarke remembers nothing of his last lap, which he ran in 90 seconds. ‘Normally I would run it in 64,’ he said. He was administered oxygen and stretchered off the track.</p>
+
+        <p><strong>B.</strong> Mexico City is surrounded by mountains and is over 2,240 metres above sea level. That the altitude would have an impact on the Games was predicted. Clarke had raised the issue himself, but had been told by the Australian team that it wouldn’t be a problem. However, the Mexico Games demonstrated that the relationship between athletic performance and altitude needed further investigation.</p>
+
+        <p><strong>C.</strong> Although there were few standout performances in distance running at the Mexico Games, they marked a turning point: the start of an astonishing period of dominance by runners from East Africa. Since then, Kenyan and Ethiopian athletes have been almost unbeatable at the longer distances, consistently winning gold and silver medals. The record books confirm how entrenched this pattern has become. The names of the seven fastest men in history at 5,000 metres and 10,000 metres are all from Kenya or Ethiopia. Between 1997 and 2011 the 10,000 metres world record was smashed five times, dropping from 26:31.32 to 26:17.53. Each time, a Kenyan or Ethiopian was responsible. While there may be many reasons for the pre-eminence of East Africans, one factor is surely that many of these athletes have lived most of their lives in thin air.</p>
+
+        <p><strong>D.</strong> At high altitudes, a number of physiological alterations occur: most importantly, more red blood cells and haemoglobin are produced. This, in turn, increases the capacity of the blood to carry oxygen, which feeds the muscles and gives an advantage to athletes when they return to sea level. However, it is impossible to train very effectively at altitude: aerobic capacity and cardiorespiratory function both suffer at altitude. As a result, the consensus is that the optimum approach is to ‘live high, train low’. In the 1990s, some athletes experimented with moving home to high-altitude locations, and then travelling down each day to train. But this proved impractical: many hours each day driving up and down winding, treacherous roads.</p>
+
+        <p><strong>E.</strong> That’s where the altitude tent – sometimes called the hypoxic tent – comes in. Around two decades ago, two different scientists had the same exciting thought. If they could artificially control the atmosphere within a confined space, they could simulate high altitude at sea level and spare athletes the time and expense of travelling to higher ground. Altitude tents have improved over the years: they’re not as hot or as noisy as the early prototypes, and are much cheaper too. They are also perfectly legal. World Anti-Doping Agency (WADA) and IOC rulings have made it fine for athletes to sleep in them in preparation for an event.</p>
+
+        <p><strong>F.</strong> However, it is not the case that all new technologies gain approval. In 2008, a staggering 105 world records were broken in swimming, the vast majority achieved by competitors wearing the new Speedo LZR Racer suit. These suits use a high-tech fabric tested in NASA’s wind tunnels, which reduces drag and improves buoyancy. The LZR was originally approved by FINA, the international swimming body. But as better suits were produced by Speedo and other manufacturers, and more records were broken, they became increasingly controversial. In a 2009 ruling, FINA changed its mind, banning all suits made with this high-tech fabric.</p>
+
+        <p><strong>G.</strong> ‘Faster, higher, stronger’ is integral to the logic of athletics in general, and the Olympics in particular. Athletes believe they need records all the time. In some events, it’s acceptable to use the technology; in others, it is banned. But whatever the outcome, rulings should not appear arbitrary: arguments have to be examined and weighed, and the rules of logic ought to apply.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+
+<script>
+/* =======================
+   CONFIG (answers included)
+   ======================= */
+const CONFIG = {
+  durationMinutes: 20,
+  showFooterNavigator: true,
+  sections: [
+    /* 14–20 Choose heading i–ix */
+    {
+      type: "headings",
+      heading: "Questions 14–20",
+      instructions: [
+        "Reading Passage 2 has seven paragraphs, A–G.",
+        "Choose the correct heading for each paragraph from the list of headings below.",
+        "Write the correct number, i–ix."
+      ],
+      legend: {
+        i:"Early research into athletes' physiology",
+        ii:"A convenient method of acclimatization",
+        iii:"The need for a rational approach",
+        iv:"Changes in the body",
+        v:"The athletes who break the rules",
+        vi:"Well-founded concerns",
+        vii:"The surprising outcome of a race",
+        viii:"The reversal of a decision",
+        ix:"The runners who dominate"
+      },
+      items: [
+        { id: 14, prompt: "Paragraph A", correct: "vii" },
+        { id: 15, prompt: "Paragraph B", correct: "vi" },
+        { id: 16, prompt: "Paragraph C", correct: "ix" },
+        { id: 17, prompt: "Paragraph D", correct: "iv" },
+        { id: 18, prompt: "Paragraph E", correct: "ii" },
+        { id: 19, prompt: "Paragraph F", correct: "viii" },
+        { id: 20, prompt: "Paragraph G", correct: "iii" }
+      ]
+    },
+
+    /* 21–22 Choose TWO letters A–E */
+    {
+      type: "two_of_five",
+      heading: "Questions 21–22",
+      instructions: [
+        "Choose TWO letters, A–E.",
+        "Which TWO of the following statements about Ron Clarke are made in the passage?"
+      ],
+      legend: {
+        A:"Clarke was not performing well immediately prior to the Mexico Games.",
+        B:"The worries Clarke had before the Mexico Games were not taken into account.",
+        C:"Clarke's experiences at the Mexico Games are widely talked about today.",
+        D:"At one stage of the Mexico Games 10,000 metres, Clarke was near the front.",
+        E:"Clarke was the only runner at the Mexico Games who appeared to be affected by the altitude."
+      },
+      correct: ["B","D"]
+    },
+
+    /* 23–26 ONE WORD ONLY */
+    {
+      type: "gap1",
+      heading: "Questions 23–26",
+      instructions: [
+        "Complete the summary below.",
+        "Choose ONE WORD ONLY from the passage for each answer."
+      ],
+      items: [
+        { id: 23, prompt: "WADA concluded that the altitude tent was not contrary to the ______ of the sport.", correct: ["spirit"] },
+        { id: 24, prompt: "The LZR swimsuit cuts down ______.", correct: ["drag"] },
+        { id: 25, prompt: "Athletes think they have to continually set fresh ______.", correct: ["records"] },
+        { id: 26, prompt: "This is made possible by better ______ and training.", correct: ["techniques"] }
+      ]
+    }
+  ]
+};
+
+/* =======================
+   RENDER ENGINE (same shell)
+   ======================= */
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+const typesMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+/* Headings i–ix */
+function renderHeadings(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+
+  const legend=document.createElement('div'); legend.className='qblock';
+  legend.innerHTML = `<div class="qhead"><strong>List of Headings</strong></div>
+  <div class="options">
+    ${Object.entries(sec.legend).map(([k,v])=>`<div><b>${k}.</b> ${v}</div>`).join('')}
+  </div>`;
+  qroot.appendChild(legend);
+
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const sel=`<select id="q${it.id}" name="q${it.id}">
+      <option value="">—</option>${Object.keys(sec.legend).map(k=>`<option value="${k}">${k}</option>`).join('')}
+    </select>`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div><div class="options">${sel}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct; typesMap[it.id]='head';
+  });
+}
+
+/* Two-of-five (multi-select) */
+function renderTwoOfFive(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+
+  const legend=document.createElement('div'); legend.className='qblock';
+  legend.innerHTML = `<div class="qhead"><strong>Options</strong></div>
+    <div class="options">${Object.entries(sec.legend).map(([k,v])=>`<div><b>${k}</b> — ${v}</div>`).join('')}</div>`;
+  qroot.appendChild(legend);
+
+  const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-21`;
+  b.innerHTML = `<div class="qhead"><strong>21–22.</strong> Select <b>two</b> letters.</div>
+    <div class="options">
+      ${Object.keys(sec.legend).map(k=>`<label><input type="checkbox" name="q21_22" value="${k}"> ${k}</label>`).join('')}
+    </div>`;
+  qroot.appendChild(b);
+  navIds.push(21,22); answersMap["21_22"]=sec.correct; typesMap["21_22"]='two';
+}
+
+/* ONE-WORD gaps */
+function renderGAP1(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    b.innerHTML = `<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div>
+                   <div class="options"><input type="text" id="q${it.id}" placeholder="ONE WORD ONLY"></div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct; typesMap[it.id]='gap1';
+  });
+}
+
+/* Build UI */
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='headings') renderHeadings(sec);
+  if (sec.type==='two_of_five') renderTwoOfFive(sec);
+  if (sec.type==='gap1') renderGAP1(sec);
+});
+
+/* Footer chips */
+const footerNav=document.getElementById('footerNav');
+footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+[...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+  const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+  chip.addEventListener('click',()=>{ document.getElementById(`anchor-${id}`).scrollIntoView({behavior:'smooth',block:'center'}); });
+  footerNav.appendChild(chip);
+});
+function markChipAnswered(id, answered){
+  const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered);
+}
+document.addEventListener('change',(e)=>{
+  if(e.target.name==='q21_22'){
+    const checked=[...document.querySelectorAll("input[name='q21_22']:checked")].length;
+    markChipAnswered(21, checked>0); markChipAnswered(22, checked>0);
+    return;
+  }
+  const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  const id=m?+m[1]:null; if(!id) return;
+  const answered=(e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                 : (e.target.value.trim().length>0);
+  markChipAnswered(id, answered);
+});
+
+/* Timer */
+let timeLeft=Math.max(1,20)*60;
+const timer=document.getElementById('timer');
+const pauseBtn=document.getElementById('pauseBtn');
+const resumeBtn=document.getElementById('resumeBtn');
+let paused=false, iv;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){ if(iv) clearInterval(iv);
+  iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft); if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent=fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+function normLower(s){ return (s||'').trim().replace(/\s+/g,' ').toLowerCase(); }
+function submit(){
+  paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const out=[];
+  const ids=[14,15,16,17,18,19,20,"21_22",23,24,25,26];
+
+  ids.forEach(key=>{
+    total++;
+    const type=typesMap[key];
+    let user='', ok=false;
+
+    if(type==='head'){
+      const el=document.getElementById('q'+key);
+      user = el? el.value : '';
+      ok = normLower(user)===normLower(answersMap[key]);
+    } else if(type==='two'){
+      const sel=[...document.querySelectorAll("input[name='q21_22']:checked")].map(x=>x.value.toUpperCase()).sort().join(',');
+      user = sel || '';
+      const corr=[...answersMap[key]].sort().join(',');
+      ok = sel===corr;
+    } else if(type==='gap1'){
+      const el=document.getElementById('q'+key);
+      user = el? el.value : '';
+      const acc = Array.isArray(answersMap[key])?answersMap[key]:[answersMap[key]];
+      ok = acc.map(normLower).includes(normLower(user));
+    }
+
+    if(user) graded++;
+    if(ok) correctCount++;
+    const corrDisp = Array.isArray(answersMap[key])?answersMap[key].join(' / '):String(answersMap[key]);
+    out.push({label:key, status: ok? '✓ Correct':'✗ Incorrect', user: user||'No answer', correct: corrDisp});
+  });
+
+  document.getElementById('score').innerHTML = `Graded ${graded} of ${total} • Score: ${correctCount}/${graded||total}`;
+  document.getElementById('answers').innerHTML = out.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlights */
+const passageCard=document.getElementById('passageCard');
+const pPalette=document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Questions highlight */
+const qCard=document.querySelector('.card.questions');
+const qPalette=document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1 ? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if (node.closest && node.closest('input,textarea,select')) return;
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; });
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 3 – The new way to be a fifth-grader</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  .muted{color:var(--muted)}
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:420px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+      <div id="passage">
+        <h2>Reading Passage 3</h2>
+        <h3>The new way to be a fifth-grader — by Clive Thompson</h3>
+
+        <p>Khan Academy is changing the rules of education.</p>
+        <p>I peer over his shoulder at his laptop screen to see the math problem the fifth-grader is pondering. It’s a trigonometry problem. Carpenter, a serious-faced ten-year-old, pauses for a second, fidgets, then clicks on “0 degrees.” The computer tells him that he’s correct. “It took a while for me to work it out,” he admits sheepishly. The software then generates another problem, followed by another, until eventually he’s done ten in a row.</p>
+        <p>Last November, his teacher, Kami Thordarson, began using Khan Academy in her class. It is an educational website on which students can watch some 2,400 videos… As a student, you can review a video as many times as you want… Once you’ve mastered a video, you can move on to the next one.</p>
+        <p>Initially, Thordarson thought Khan Academy would merely be a helpful supplement to her normal instruction. But it quickly became far more than that. She is now on her way to “flipping” the way her class works. This involves replacing some of her lectures with Khan’s videos, which students can watch at home. Then in class, they focus on working on the problem areas together. The idea is to invert the normal rhythms of school, so that lectures are viewed in the children’s own time and homework is done at school… And Khan Academy provides teachers with a dashboard application that lets them see the instant a student gets stuck.</p>
+        <p>For years, teachers like Thordarson have complained about the frustrations of teaching to the “middle” of the class… Since the rise of personal computers in the 1980s, educators have hoped that technology could save the day… but the effort has been in vain. The one-to-one instruction it requires is prohibitively expensive.</p>
+        <p>Khan never intended to overhaul the school curricula… Nevertheless, some of his fans believe that he has stumbled onto the solution to education’s middle-of-the-class mediocrity. Most notable among them is Bill Gates… Students have pointed out that Khan is particularly good at explaining all the hidden, small steps in math problems—steps that teachers often gloss over.</p>
+        <p>However, not all educators are enamoured with Khan and his site. Gary Stager… thinks Khan Academy is not innovative at all… “Schools have become joyless test-prep factories,” he says, and Khan Academy caters to this dismal trend.</p>
+        <p>Sylvia Martinez… says flipping the classroom isn’t an entirely new idea and doubts that it would work for the majority of pupils…</p>
+        <p>Another limitation of Khan’s site is that the drilling software can only handle questions where the answers are unambiguously right or wrong… Khan and Gates admit there is no easy way to automate the teaching of writing— even though it is just as critical as math.</p>
+        <p>Even if Khan is truly liberating students to advance at their own pace, it is not clear that schools will be able to cope… Ben Kamens has heard from teachers who… loved the idea but wondered whether they could modify it “to stop students from becoming this advanced.”</p>
+        <p>Khan’s success has injected him into the heated wars over school reform… In essence, Khan doesn’t want to change the way institutions teach; he wants to change how people learn… One member of Khan’s staff is spearheading a drive to translate the videos into ten major languages. It’s classic start-up logic: do something novel, do it with speed, and the people who love it will find you.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">📢 Join my Telegram</button>
+
+<script>
+/* =======================
+   CONFIG
+   ======================= */
+const CONFIG = {
+  title: "READING PASSAGE 3 – The new way to be a fifth-grader",
+  subtitle: "You should spend about 20 minutes on Questions 27–40.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  showFooterNavigator: true,
+  tfLabels: { YES:'YES (✓)', NO:'NO (✗)', 'NOT GIVEN':'NOT GIVEN (?)' },
+
+  sections: [
+    /* 27–31 Multiple choice */
+    {
+      type: "mcq",
+      heading: "Questions 27–31",
+      instructions: ["Choose the correct letter, A, B, C or D."],
+      items: [
+        { id: 27, text: "What do you learn about the student in the first paragraph?", options:{
+          A:"He has not used the maths software before.",
+          B:"He did not expect his answer to the problem to be correct.",
+          C:"He was not initially doing the right maths problem.",
+          D:"He did not immediately know how to solve the maths problem."
+        }, correct: "D" },
+        { id: 28, text: "What does the writer say about the content of the Khan Academy videos?", options:{
+          A:"They have been produced in a professional manner.",
+          B:"They include a mix of verbal and visual features.",
+          C:"Some of the maths problems are too easy.",
+          D:"Some of the explanations are too brief."
+        }, correct: "B" },
+        { id: 29, text: "What does 'this reversal' refer to (line ~40)?", options:{
+          A:"Going back to spending fewer hours in school",
+          B:"Students being asked to explain answers to teachers",
+          C:"Swapping the activities done in the class and at home",
+          D:"The sudden improvement in students' maths performance"
+        }, correct: "C" },
+        { id: 30, text: "What does the writer say about teaching to the 'middle' of the class?", options:{
+          A:"Teachers become too concerned about weaker students.",
+          B:"Technology has not until now provided a solution to the problem.",
+          C:"Educators have been unwilling to deal with the issues.",
+          D:"Students in this category quickly become bored."
+        }, correct: "B" },
+        { id: 31, text: "Students praise Khan’s videos because they…", options:{
+          A:"show the extent of his mathematical knowledge.",
+          B:"deal with a huge range of maths problems.",
+          C:"provide teaching at different ability levels.",
+          D:"cover details that are often omitted in class."
+        }, correct: "D" }
+      ]
+    },
+
+    /* 32–36 YES/NO/NOT GIVEN */
+    {
+      type: "tfyn",
+      heading: "Questions 32–36",
+      instructions: [
+        "Do the following statements agree with the claims of the writer?",
+        "Choose YES, NO or NOT GIVEN."
+      ],
+      items: [
+        { id: 32, text: "Thordarson’s first impressions of how she would use Khan Academy turned out to be wrong.", correct: "YES" },
+        { id: 33, text: "Khan wished to completely change the way courses are taught in schools.", correct: "NO" },
+        { id: 34, text: "School grade levels are based on the idea of students progressing at different rates.", correct: "NO" },
+        { id: 35, text: "Some principals have invited Khan into their schools to address students.", correct: "NOT GIVEN" },
+        { id: 36, text: "Khan has given advice to other people involved in start-up projects.", correct: "NOT GIVEN" }
+      ]
+    },
+
+    /* 37–40 Sentence endings A–G */
+    {
+      type: "endings",
+      heading: "Questions 37–40",
+      instructions: ["Complete each sentence with the correct ending (A–G)."],
+      endings: {
+        A:"is only suited to subjects where questions have exact answers.",
+        B:"can teach both the strongest and the weakest pupils in a class.",
+        C:"means the teaching of other school subjects will have to be changed.",
+        D:"only prepares students to pass exams.",
+        E:"could cause student achievement to improve too quickly.",
+        F:"requires all students to own the necessary technology.",
+        G:"is unlikely to have a successful outcome for most students."
+      },
+      items: [
+        { id: 37, prompt: "Bill Gates thinks Khan Academy", correct: "B" },
+        { id: 38, prompt: "According to Gary Stager, Khan Academy", correct: "D" },
+        { id: 39, prompt: "Sylvia Martinez regrets that Khan Academy", correct: "G" },
+        { id: 40, prompt: "Ben Kamens has been told that Khan Academy", correct: "E" }
+      ]
+    }
+  ]
+};
+
+/* =======================
+   RENDER
+   ======================= */
+document.getElementById('title').textContent = CONFIG.title;
+document.getElementById('subtitle').textContent = CONFIG.subtitle || '';
+
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+/* MCQ renderer */
+function renderMCQ(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const opts=Object.entries(it.options).map(([k,v])=>`<label><input type="radio" name="q${it.id}" value="${k}"> ${k}. ${v}</label>`).join('');
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${opts}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* YES/NO/NG renderer */
+function renderTFYN(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const sel = `<select id="q${it.id}" name="q${it.id}">
+      <option value="">—</option>
+      ${['YES','NO','NOT GIVEN'].map(v=>`<option value="${v}">${CONFIG.tfLabels?.[v]||v}</option>`).join('')}
+    </select>`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${sel}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Endings renderer */
+function renderEndings(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+
+  const list=document.createElement('div');
+  list.className='qblock';
+  list.innerHTML=`<div class="qhead"><strong>Endings (A–G)</strong></div>
+  <div class="options">${Object.entries(sec.endings).map(([k,v])=>`<div><b>${k}</b> — ${v}</div>`).join('')}</div>`;
+  qroot.appendChild(list);
+
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const sel=`<select id="q${it.id}" name="q${it.id}">
+      <option value="">—</option>${Object.keys(sec.endings).map(k=>`<option value="${k}">${k}</option>`).join('')}
+    </select>`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div><div class="options">${sel}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='mcq') renderMCQ(sec);
+  if (sec.type==='tfyn') renderTFYN(sec);
+  if (sec.type==='endings') renderEndings(sec);
+});
+
+/* Footer chips */
+const footerNav=document.getElementById('footerNav');
+(function buildFooter(){
+  if(!CONFIG.showFooterNavigator){ footerNav.style.display='none'; return; }
+  footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+  [...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+    const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+    chip.addEventListener('click',()=>{ document.getElementById(`anchor-${id}`).scrollIntoView({behavior:'smooth',block:'center'}); });
+    footerNav.appendChild(chip);
+  });
+})();
+function markChipAnswered(id, answered){
+  const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered);
+}
+document.addEventListener('change',(e)=>{
+  const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  const id=m?+m[1]:null; if(!id) return;
+  const answered=(e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                 : (e.target.value.trim().length>0);
+  markChipAnswered(id, answered);
+});
+
+/* Timer */
+let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60;
+const timer=document.getElementById('timer');
+const pauseBtn=document.getElementById('pauseBtn');
+const resumeBtn=document.getElementById('resumeBtn');
+let paused=false, iv;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){ if(iv) clearInterval(iv);
+  iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft); if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent=fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+function submit(){
+  paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const itemsOut=[];
+  const ids=Object.keys(answersMap);
+
+  ids.forEach(key=>{
+    const ans=answersMap[key];
+    const label=key;
+    let user='';
+    const picked=document.querySelector(`input[name="q${key}"]:checked`);
+    if(picked){ user=picked.value; }
+    else if(document.getElementById('q'+key)){ user=document.getElementById('q'+key).value; }
+    const shown=user||'No answer';
+
+    if(String(ans).trim()===''){ total++; itemsOut.push({label, status:'— not graded —', user:shown, correct:'(no key)'}); return; }
+
+    total++; graded++;
+    const ok=shown.trim().toUpperCase()===String(ans).trim().toUpperCase();
+    if(ok) correctCount++;
+    itemsOut.push({label, status: ok? '✓ Correct' : '✗ Incorrect', user:shown, correct:String(ans)});
+  });
+
+  document.getElementById('score').innerHTML=`Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;
+  document.getElementById('answers').innerHTML=itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlight – Passage */
+const passageCard=document.getElementById('passageCard');
+const pPalette=document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Highlight – Questions */
+const qCard=document.querySelector('.card.questions');
+const qPalette=document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node=sel.getRangeAt(0).commonAncestorContainer.nodeType===1? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if(node.closest && node.closest('input,textarea,select')) return;
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; });
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* Helper */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container=range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+
+/* minor: telegram btn */
+document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

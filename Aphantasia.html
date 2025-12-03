@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 1 – Aphantasia</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  .muted{color:var(--muted)}
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:420px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+  /* Highlighters */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+      <div id="passage">
+        <h2>Reading Passage 1</h2>
+
+        <p><em>Close your eyes and imagine walking along a sandy beach and then gazing over the horizon as the Sun rises. How clear is the image that springs to mind?</em></p>
+
+        <p>Most people can readily conjure images inside their head – known as their mind’s eye. But this year scientists have described a condition, aphantasia, in which some people are unable to visualise mental images.</p>
+
+        <p>Niel Kenmuir, from Lancaster, has always had a blind mind’s eye. He knew he was different even in childhood. “My stepfather, when I couldn’t sleep, told me to count sheep, and he explained what he meant, I tried to do it and I couldn’t,” he says. “I couldn’t see any sheep jumping over fences, there was nothing to count.”</p>
+
+        <p>Our memories are often tied up in images, thinking back to a wedding or first day at school. As a result, Niel admits, some aspects of his memory are “terrible”, but he is very good at remembering facts. And, like others with aphantasia, he struggles to recognise faces. Yet he does not see aphantasia as a disability, but simply a different way of experiencing life.</p>
+
+        <h3><strong>Mind’s eye blind</strong></h3>
+
+        <p>Ironically, Niel now works in a bookshop, although he largely sticks to the non-fiction aisles. His condition begs the question what is going on inside his picture-less mind. I asked him what happens when he tries to picture his fiancée. “This is the hardest thing to describe, what happens in my head when I think about things,” he says. “When I think about my fiancée there is no image, but I am definitely thinking about her, I know today she has her hair up at the back, she’s brunette. But I’m not describing an image I am looking at, I’m remembering features about her, that’s the strangest thing and maybe that is a source of some regret.”</p>
+
+        <p>The response from his mates is a very sympathetic: “You’re weird.” But while Niel is very relaxed about his inability to picture things, it is often a cause of distress for others. One person who took part in a study into aphantasia said he had started to feel “isolated” and “alone” after discovering that other people could see images in their heads. Being unable to reminisce about his mother years after her death led to him being “extremely distraught”.</p>
+
+        <h3><strong>The super-visualiser</strong></h3>
+
+        <p>At the other end of the spectrum is children’s book illustrator, Lauren Beard, whose work on the Fairytale Hairdresser series will be familiar to many six-year-olds. Her career relies on the vivid images that leap into her mind’s eye when she reads text from her author. When I met her in her box-room studio in Manchester, she was working on a dramatic scene in the next book. The text describes a baby perilously climbing onto a chandelier.</p>
+
+        <p>“Straightaway I can visualise this grand glass chandelier in some sort of French kind of ballroom, and the little baby just swinging off it and really heavy thick curtains,” she says. “I think I have a strong imagination, so I can create the world and then keep adding to it so it gets sort of bigger and bigger in my mind and the characters too they sort of evolve. I couldn’t really imagine what it’s like to not imagine, I think it must be a bit of a shame really.”</p>
+
+        <p>Not many people have mental imagery as <strong>vibrant</strong> as Lauren or as blank as Niel. They are the two extremes of visualisation. Adam Zeman, a professor of cognitive and behavioural neurology, wants to compare the lives and experiences of people with aphantasia and its <strong>polar-opposite</strong> hyperphantasia. His team, based at the University of Exeter, coined the term aphantasia this year in a study in the journal <em>Cortex</em>.</p>
+
+        <p>Prof Zeman tells the BBC: “People who have contacted us say they are really delighted that this has been recognised and has been given a name, because they have been trying to explain to people for years that there is this oddity that they find hard to convey to others.” How we imagine is clearly very subjective – one person’s vivid scene could be another’s <strong>grainy picture</strong>. But Prof Zeman is certain that aphantasia is real. People often report being able to dream in pictures, and there have been reported cases of people losing the ability to think in images after a brain injury.</p>
+
+        <p>He is <strong>adamant</strong> that aphantasia is “not a disorder” and says it may affect up to one in 50 people. But he adds: “I think it makes quite an important difference to their experience of life because many of us spend our lives with <strong>imagery hovering</strong> somewhere in the mind’s eye which we inspect from time to time, it’s a variability of human experience.”</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">📢 Join my Telegram</button>
+
+<script>
+/* ============== CONFIG ============== */
+const CONFIG = {
+  title: "READING PASSAGE 1 – Aphantasia: A life without mental images",
+  subtitle: "You should spend about 20 minutes on Questions 1–13.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  showFooterNavigator: true,
+  tfLabels: { TRUE:'TRUE (✓)', FALSE:'FALSE (✗)', 'NOT GIVEN':'NOT GIVEN (?)' },
+
+  sections: [
+    {
+      type: "tf",
+      heading: "Questions 1–8",
+      instructions: [
+        "Do the following statements agree with the information in the passage?",
+        "Choose TRUE, FALSE or NOT GIVEN from the dropdown."
+      ],
+      items: [
+        { id: 1, text: "Aphantasia is a condition, which describes people, for whom it is hard to visualise mental images.", correct: "FALSE" },
+        { id: 2, text: "Niel Kenmuir was unable to count sheep in his head.", correct: "TRUE" },
+        { id: 3, text: "People with aphantasia struggle to remember personal traits and clothes of different people.", correct: "NOT GIVEN" },
+        { id: 4, text: "Niel regrets that he cannot portray an image of his fiancee in his mind.", correct: "TRUE" },
+        { id: 5, text: "Inability to picture things in someone's head is often a cause of distress for a person.", correct: "TRUE" },
+        { id: 6, text: "All people with aphantasia start to feel 'isolated' or 'alone' at some point of their lives.", correct: "NOT GIVEN" },
+        { id: 7, text: "Lauren Beard's career depends on her imagination.", correct: "TRUE" },
+        { id: 8, text: "The author met Lauren Beard when she was working on a comedy scene in her next book.", correct: "FALSE" }
+      ]
+    },
+    {
+      type: "gap",
+      heading: "Questions 9–13",
+      instructions: ["Complete the sentences below.","NO MORE THAN TWO WORDS."],
+      items: [
+        { id: 9,  prompt: "Only a small fraction of people have imagination as _______ as Lauren does.", correct: "Vibrant" },
+        { id: 10, prompt: "Hyperphantasia is _______ _______ to aphantasia.", correct: "Polar-opposite" },
+        { id: 11, prompt: "One person's vivid scene could be another person's _______ _______.", correct: "Grainy picture" },
+        { id: 12, prompt: "Prof Zeman is _______ that aphantasia is not an illness.", correct: "Adamant" },
+        { id: 13, prompt: "Many people spend their lives with _______ _______ somewhere in the mind's eye.", correct: "Imagery hovering" }
+      ]
+    }
+  ]
+};
+
+/* ============== RENDER ============== */
+document.getElementById('title').textContent = CONFIG.title;
+document.getElementById('subtitle').textContent = CONFIG.subtitle || '';
+
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+function renderTF(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+
+  sec.items.forEach(it=>{
+    const b = document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    b.innerHTML = `<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div>`;
+    const sel = document.createElement('select'); sel.name=`q${it.id}`; sel.id=`q${it.id}`;
+    sel.innerHTML = `<option value="">—</option>`+['TRUE','FALSE','NOT GIVEN'].map(v=>`<option value="${v}">${CONFIG.tfLabels[v]||v}</option>`).join('');
+    const o = document.createElement('div'); o.className='options'; o.appendChild(sel);
+    b.appendChild(o); qroot.appendChild(b);
+    navIds.push(it.id); answersMap[it.id]=it.correct??'';
+  });
+}
+function renderGap(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+
+  sec.items.forEach(it=>{
+    const b = document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    b.innerHTML = `<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div>
+                   <div class="options"><input type="text" id="q${it.id}" name="q${it.id}" placeholder="your answer"></div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct??'';
+  });
+}
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='tf') renderTF(sec);
+  if (sec.type==='gap') renderGap(sec);
+});
+
+/* Footer chips */
+const footerNav = document.getElementById('footerNav');
+(function buildFooter(){
+  if (!CONFIG.showFooterNavigator){ footerNav.style.display='none'; return; }
+  footerNav.innerHTML = '<strong class="muted">Questions:</strong>';
+  [...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+    const chip = document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+    chip.addEventListener('click',()=>{ document.getElementById(`anchor-${id}`).scrollIntoView({behavior:'smooth',block:'center'}); });
+    footerNav.appendChild(chip);
+  });
+})();
+function markChipAnswered(id, answered){
+  const chip = document.getElementById(`chip-${id}`);
+  if (chip) chip.classList.toggle('answered', !!answered);
+}
+document.addEventListener('change', (e)=>{
+  const m = String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  const id = m? +m[1] : null; if(!id) return;
+  const answered = (e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                 : (e.target.type==='checkbox') ? (document.querySelectorAll(`input[name='q${id}']:checked`).length>0)
+                 : (e.target.value.trim().length>0);
+  markChipAnswered(id, answered);
+});
+
+/* Timer */
+let timeLeft = Math.max(1, +CONFIG.durationMinutes || 20) * 60;
+const timer = document.getElementById('timer');
+const pauseBtn = document.getElementById('pauseBtn');
+const resumeBtn = document.getElementById('resumeBtn');
+let paused = false; let iv;
+const fmt = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){
+  if (iv) clearInterval(iv);
+  iv = setInterval(()=>{ if (paused) return; timer.textContent=fmt(timeLeft); if (timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent = fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+function submit(){
+  paused = true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const itemsOut=[];
+  const ids = Object.keys(answersMap);
+
+  ids.forEach(key=>{
+    const ans = answersMap[key];
+    const label = key;
+
+    let user='';
+    if (document.getElementById('q'+key)){
+      user = document.getElementById('q'+key).value;
+    } else {
+      const picked = document.querySelector(`input[name="q${key}"]:checked`); user = picked? picked.value : '';
+    }
+    const userShown = user || 'No answer';
+
+    if (String(ans).trim()===''){ total++; itemsOut.push({label, status:'— not graded —', user:userShown, correct:'(no key)'}); return; }
+
+    total++; graded++;
+    const correctText = Array.isArray(ans)? ans.join(', ') : ans;
+    const ok = userShown.trim().toUpperCase() === String(ans).trim().toUpperCase();
+    if (ok) correctCount++;
+    itemsOut.push({label, status: ok? '✓ Correct' : '✗ Incorrect', user:userShown, correct:correctText});
+  });
+
+  document.getElementById('score').innerHTML = `Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;
+  document.getElementById('answers').innerHTML = itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlight – Passage */
+const passageCard = document.getElementById('passageCard');
+const pPalette = document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Highlight – Questions */
+const qCard = document.querySelector('.card.questions');
+const qPalette = document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1 ? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if (node.closest && node.closest('input,textarea,select')) return; // don't highlight inside inputs
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; });
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* Helper */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container = range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+
+/* minor: telegram btn */
+document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

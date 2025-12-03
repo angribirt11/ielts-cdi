@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test - Dolls Through the Ages</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: radial-gradient(1200px 600px at 10% 0%, #eef2ff, transparent),
+                        radial-gradient(1200px 600px at 90% 100%, #dbeafe, transparent),
+                        #f1f5f9;
+            overflow: hidden;
+            color: #1f2937;
+        }
+        .test-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .test-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #d1d5db;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .header__logo img {
+            height: 48px;
+            transition: transform 0.3s ease;
+        }
+        .header__logo img:hover {
+            transform: scale(1.1);
+        }
+        .header__timer {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2563eb;
+            background: #eff6ff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            border: 1px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+        .header__icons {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .header__icon {
+            font-size: 1.5rem;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .header__icon:hover {
+            color: #2563eb;
+            transform: scale(1.15);
+        }
+        .settings-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .settings-content {
+            background: #ffffff;
+            width: 90%;
+            max-width: 32rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.4s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-3rem); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: linear-gradient(90deg, #3b82f6, #1e40af);
+            color: #ffffff;
+        }
+        .settings-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+        .settings-close {
+            background: none;
+            border: none;
+            font-size: 1.75rem;
+            cursor: pointer;
+            color: #ffffff;
+            transition: color 0.3s ease;
+        }
+        .settings-close:hover {
+            color: #fed7e2;
+        }
+        .settings-body {
+            padding: 1.5rem;
+            background: #f9fafb;
+        }
+        .settings-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .settings-option:hover {
+            background: #eff6ff;
+        }
+        .settings-option:last-child {
+            border-bottom: none;
+        }
+        .settings-option i {
+            margin-right: 0.75rem;
+            width: 1.25rem;
+            text-align: center;
+            color: #2563eb;
+        }
+        .settings-option span {
+            font-size: 1.1rem;
+        }
+        .sectionRubric {
+            margin: 1.5rem;
+            padding: 1.25rem;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .sectionRubric h2 {
+            font-size: 1.25rem;
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+        }
+        .passage-container {
+            width: 45%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            background: #f9fafb;
+            border-right: 1px solid #d1d5db;
+            position: relative;
+            user-select: text;
+            -webkit-user-select: text;
+        }
+        .passage-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .passage-container::-webkit-scrollbar-track {
+            background: #e5e7eb;
+        }
+        .passage-container::-webkit-scrollbar-thumb {
+            background: #6b7280;
+            border-radius: 4px;
+        }
+        .questions-container {
+            flex: 1;
+            height: 100%;
+            overflow-y: auto;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            background: #f9fafb;
+            user-select: text;
+            -webkit-user-select: text;
+            position: relative;
+        }
+        .questions-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .questions-container::-webkit-scrollbar-track {
+            background: #e5e7eb;
+        }
+        .questions-container::-webkit-scrollbar-thumb {
+            background: #6b7280;
+            border-radius: 4px;
+        }
+        .highlight {
+            border-radius: 0.25rem;
+            padding: 0 0.25rem;
+        }
+        .highlight.yellow { background: rgba(254, 243, 199, 0.5); }
+        .highlight.green { background: rgba(187, 247, 208, 0.5); }
+        .highlight.pink { background: rgba(251, 207, 232, 0.5); }
+        .highlight.blue { background: rgba(191, 219, 254, 0.5); }
+        .highlight-toolbar {
+            position: fixed;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 1000;
+            padding: 0.5rem;
+            transform: translate(-50%, -100%);
+            margin-top: -0.5rem;
+        }
+        .highlight-toolbar button {
+            background: none;
+            border: none;
+            width: 2rem;
+            height: 2rem;
+            cursor: pointer;
+            border-radius: 0.25rem;
+            transition: all 0.2s ease;
+        }
+        .highlight-toolbar button:hover {
+            background: #eff6ff;
+            transform: scale(1.1);
+        }
+        .highlight-toolbar button.remove {
+            color: #ef4444;
+        }
+        .divider {
+            width: 14px;
+            background: #e5e7eb;
+            cursor: col-resize;
+            position: relative;
+        }
+        .divider-handle {
+            width: 6px;
+            height: 60px;
+            background: #6b7280;
+            border-radius: 4px;
+            position: absolute;
+            top: 50%;
+            left: 4px;
+            transform: translateY(-50%);
+        }
+        .question {
+            margin-bottom: 2rem;
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+        .question:hover {
+            transform: translateY(-2px);
+        }
+        .question-rubric {
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .question-rubric h3 {
+            margin: 0 0 0.5rem;
+            color: #2563eb;
+        }
+        .question-rubric p {
+            margin: 0.25rem 0;
+            color: #4b5563;
+        }
+        .completion-input {
+            display: inline-block;
+            width: 10rem;
+            height: 1.75rem;
+            border: 2px dashed #6b7280;
+            border-radius: 0.5rem;
+            margin: 0 0.5rem;
+            padding: 0 0.5rem;
+            color: #6b7280;
+            font-weight: 600;
+            background: #eff6ff;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .completion-input:focus {
+            border-color: #2563eb;
+            background: #dbeafe;
+            color: #1f2937;
+            border-style: solid;
+            outline: none;
+        }
+        .completion-input.correct {
+            background: #ecfdf5;
+            border-color: #10b981;
+            border-style: solid;
+        }
+        .completion-input.incorrect {
+            background: #fef2f2;
+            border-color: #ef4444;
+            border-style: solid;
+        }
+        .completion-feedback {
+            margin-left: 0.75rem;
+            font-size: 0.9rem;
+        }
+        .completion-feedback.correct {
+            color: #10b981;
+        }
+        .completion-feedback.incorrect {
+            color: #ef4444;
+        }
+        .true-false-option {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+        }
+        .true-false-option input[type="radio"] {
+            margin-right: 0.75rem;
+        }
+        .true-false-option label {
+            font-size: 1rem;
+            color: #1f2937;
+        }
+        .footer {
+            background: #ffffff;
+            border-top: 1px solid #d1d5db;
+            padding: 1.25rem;
+            box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.05);
+        }
+        .nav-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .footer__questionWrapper {
+            display: flex;
+            align-items: center;
+        }
+        .footer__questionNo {
+            background: none;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #2563eb;
+            transition: all 0.2s ease;
+        }
+        .footer__questionNo:hover {
+            color: #1e40af;
+        }
+        .footer__subquestionWrapper {
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: 1.25rem;
+        }
+        .subQuestion {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            border: 1px solid #d1d5db;
+            background: #f3f4f6;
+            margin: 0.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4b5563;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .subQuestion.active {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+        }
+        .subQuestion.attempted {
+            background: #60a5fa;
+            color: #ffffff;
+        }
+        .footer__deliverButton {
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .footer__deliverButton:hover {
+            background: #1e40af;
+            transform: translateY(-2px);
+        }
+        .footer__deliverButton:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+        }
+        .submission-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .submission-content {
+            background: #ffffff;
+            width: 90%;
+            max-width: 48rem;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .submission-content h2 {
+            margin-top: 0;
+            color: #2563eb;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 0.75rem;
+            font-size: 1.75rem;
+        }
+        .submission-content p {
+            margin-bottom: 1.5rem;
+            color: #4b5563;
+            font-size: 1.1rem;
+        }
+        .answers-section {
+            margin-top: 1.5rem;
+        }
+        .answers-section h3 {
+            color: #2563eb;
+            margin-bottom: 1.25rem;
+            font-size: 1.25rem;
+        }
+        .answer-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            border-left: 6px solid #d1d5db;
+            background: #f9fafb;
+        }
+        .answer-item.correct {
+            border-left-color: #10b981;
+            background: #ecfdf5;
+        }
+        .answer-item.incorrect {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+        .answer-text {
+            font-weight: 600;
+        }
+        .correct-answer {
+            color: #10b981;
+            margin-left: 0.75rem;
+        }
+        .incorrect-answer {
+            color: #ef4444;
+            margin-left: 0.75rem;
+        }
+        .answer-status {
+            float: right;
+            margin-left: 1rem;
+        }
+        .correct-status {
+            color: #10b981;
+        }
+        .incorrect-status {
+            color: #ef4444;
+        }
+        .submission-buttons {
+            margin-top: 1.5rem;
+            text-align: right;
+        }
+        .submission-buttons button {
+            padding: 0.75rem 1.5rem;
+            margin-left: 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .submission-buttons .confirm {
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+        }
+        .submission-buttons .confirm:hover {
+            background: #1e40af;
+            transform: translateY(-2px);
+        }
+        .score-display {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: #eff6ff;
+            border-radius: 0.75rem;
+        }
+        .score-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #2563eb;
+            margin: 0.75rem 0;
+        }
+        .score-total {
+            font-size: 1.25rem;
+            color: #4b5563;
+        }
+        .performance-rating {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin: 1.25rem 0;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+        }
+        .excellent { color: #065f46; background: #ecfdf5; }
+        .very-good { color: #047857; background: #ecfdf5; }
+        .good { color: #34d399; background: #ecfdf5; }
+        .fair { color: #d97706; background: #fefce8; }
+        .poor { color: #dc2626; background: #fef2f2; }
+        .band-score {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2563eb;
+            margin: 0.75rem 0;
+        }
+        .highlight-color {
+            width: 1.75rem;
+            height: 1.75rem;
+            border-radius: 50%;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .highlight-color:hover {
+            transform: scale(1.2);
+        }
+        .highlight-color.yellow { background: #fef3c7; }
+        .highlight-color.green { background: #bbf7d0; }
+        .highlight-color.pink { background: #fbcfe8; }
+        .highlight-color.blue { background: #bfdbfe; }
+        .answer-comparison {
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            background: #f9fafb;
+            border-radius: 0.75rem;
+            display: none;
+        }
+        .answer-comparison h3 {
+            margin-top: 0;
+            color: #2563eb;
+        }
+        .correct-highlight {
+            background: rgba(16, 185, 129, 0.3);
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+        }
+        .incorrect-highlight {
+            background: rgba(239, 68, 68, 0.3);
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+        }
+        .true-false-answer {
+            margin-left: 0.75rem;
+            font-weight: normal;
+        }
+        .true-false-answer.correct {
+            color: #10b981;
+        }
+        .true-false-answer.incorrect {
+            color: #ef4444;
+        }
+        .time-spent {
+            font-size: 1.1rem;
+            color: #4b5563;
+            margin-bottom: 1.25rem;
+            text-align: center;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        #passageContent {
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+        #passageContent h2 {
+            margin: 1.5rem 0 1rem 0;
+            line-height: 1.4;
+        }
+        #passageContent p {
+            margin: 1.2rem 0;
+            text-align: justify;
+            line-height: 1.7;
+        }
+        #passageContent p:first-of-type {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-wrapper">
+        <header class="header">
+            <div class="header__logo">
+                <img src="https://d2snzxottmona5.cloudfront.net/releases/3.46.0/images/logo/ielts.svg" alt="IELTS Logo">
+                <a href="http://mini-ielts.com" target="_blank" class="text-blue-600 font-bold ml-4 flex items-center gap-2">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-.38.24-1.07.7-.96.66-1.89 1.28-1.89 1.28s-.17.11-.49.03c-.32-.08-.72-.26-1.16-.47-.54-.26-1.17-.53-1.17-.53s-.87-.55.62-1.14c.32-.13 1.96-.84 2.99-1.2 1.05-.37 2.86-1.01 2.86-1.01s1.02-.4 1.02 0z" fill="#2563eb"/>
+                    </svg>
+                    FULL EXAM MATERIALS
+                </a>
+            </div>
+            <div class="header__timer" id="testTimer">00:00</div>
+            <div class="header__icons">
+                <i class="fas fa-adjust header__icon" id="contrastToggle" title="Dark mode"></i>
+                <i class="fas fa-text-height header__icon" id="textSizeToggle" title="Text size"></i>
+                <i class="fas fa-circle-question header__icon" title="Tips" onclick="alert('Complete the notes with one word from the passage (1-6) and choose TRUE, FALSE, or NOT GIVEN for statements (7-13). Use the highlighter to mark important text. Click Submit to see your score and IELTS band estimate.')"></i>
+            </div>
+        </header>
+        <div class="settings-modal" id="settingsModal">
+            <div class="settings-content">
+                <div class="settings-header">
+                    <h2>Options</h2>
+                    <button class="settings-close" id="settingsClose">&times;</button>
+                </div>
+                <div class="settings-body">
+                    <div class="settings-option">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Go to submission page</span>
+                    </div>
+                    <div class="settings-option" id="contrastOption">
+                        <i class="fas fa-adjust"></i>
+                        <span>Dark mode</span>
+                    </div>
+                    <div class="settings-option" id="textSizeOption">
+                        <i class="fas fa-text-height"></i>
+                        <span>Text size</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="test-container">
+            <div class="passage-container" id="passage-container">
+                <div class="sectionRubric">
+                    <h2>Reading Passage</h2>
+                    <p>You should spend about 20 minutes on Questions 1-13, which are based on the Reading Passage below.</p>
+                </div>
+                <div class="highlight-toolbar" id="highlightToolbar">
+                    <button class="highlight-color yellow" data-color="yellow" title="Yellow highlight"></button>
+                    <button class="highlight-color green" data-color="green" title="Green highlight"></button>
+                    <button class="highlight-color pink" data-color="pink" title="Pink highlight"></button>
+                    <button class="highlight-color blue" data-color="blue" title="Blue highlight"></button>
+                    <button class="remove" title="Remove highlight"><i class="fas fa-times"></i></button>
+                </div>
+                <div id="passageContent">
+                    <h2 class="text-center text-xl font-bold text-gray-800">Dolls Through the Ages</h2>
+                    <p><strong>A</strong> What is today a simple children’s toy has a surprisingly rich history. Dolls have been a part of humankind for thousands of years. Often depicting religious figures, or used as playthings, early dolls were probably made from primitive materials such as clay, fur, or wood.</p>
+                    <p><strong>B</strong> Dolls constructed of flat pieces of wood, painted with various designs, and with ‘hair’ made of clay, have often been found in Egyptian graves dating back to 2000 BC. Egyptian tombs of wealthy families have included pottery dolls. Dolls being placed in these graves leads some to believe that they were cherished possessions.</p>
+                    <p><strong>C</strong> Girls from ancient Greece and Rome offered their wooden dolls to goddesses after they were too ‘grown-up’ to play with dolls. Most ancient dolls that were found in tombs were very simple creations, often made from such materials as clay, rags, wood, or bone. Some of the more unique dolls were made with ivory or wax. The main goal was to make the doll as lifelike as possible. That ideal led to the creation of dolls with movable limbs and removable garments, dating back to 600 BC.</p>
+                    <p><strong>D</strong> Following the era of the ancient dolls, Europe became a major hub for doll production. These dolls were primarily made of wood. Fewer than 30 examples of primitive wooden stump dolls from England survive today. The Grodnertal area of Germany produced many peg wooden dolls, a type of doll that has very simple peg joints and resembles a clothespin (a device for hanging washing on a clothesline). An alternative to wood was developed in the 1800s.</p>
+                    <p><strong>E</strong> ‘Composition’ is a collective term for mixtures of pulped wood or paper that were used to make doll heads and bodies. These mixtures were moulded under pressure, creating a durable doll that could be mass-produced. Manufacturers closely guarded the recipes for their mixtures, sometimes using strange ingredients like ash or eggshells. Papier-mâché, a type of composition, was one of the most popular mixtures.</p>
+                    <p><strong>F</strong> In addition to wooden dolls, wax dolls grew in popularity in the 17th and 18th centuries. Munich in Germany was a major manufacturing centre for wax dolls. Wax dollmakers would model a doll’s head in wax or clay, and then cover it with plaster to create a mould. Then they would pour melted wax into the cast. The wax for the head would be very thin, no more than 3 mm. Some of the most distinctive wax dolls were created in England between 1850 and 1930. One of the first dolls that portrayed a baby was made in England from wax at the beginning of the 19th century.</p>
+                    <p><strong>G</strong> Around the same time, porcelain became popular. It is made by firing special clays in a kiln at more than 2,372 degrees Fahrenheit (1300°C), and only a few clays can withstand firing at such high temperatures. Porcelain is used generically to refer to both china and bisque dolls; china is glazed, whereas bisque is unglazed. Germany, France, and Denmark started creating china heads for dolls in the 1840s. These china heads were replaced in the 1860s by ones made of bisque. Bisque, which is porcelain fired twice with colour added to it after the first firing, looked more like skin than china did.</p>
+                    <p><strong>H</strong> In France, the bébé was popular in the 1880s, and it has become a highly sought-after doll today. The bébé, first made in the 1850s, was different from its predecessors because it depicted a younger girl. Until then, most French dolls were representations of adults. Although the French dolls were unrivalled in their artistry, German bisque dolls became quite popular because they were not as expensive. Kammer & Reinhardt introduced a bisque character doll in the 1900s, starting a trend of creating realistic dolls.</p>
+                    <p><strong>I</strong> For many centuries, rag dolls were made by mothers for their children. The term ‘rag doll’ refers generically to dolls made of any fabric. ‘Cloth doll’ refers to a subset of rag dolls made of linen or cotton. Commercially produced rag dolls were first introduced in the 1850s by English and American manufacturers. Although not as sophisticated as dolls made from other materials, rag dolls were well loved, often as a child’s first toy.</p>
+                    <p><strong>J</strong> Dollmaking did not become an industry in the United States until after the Civil War in the 1860s. Doll production was concentrated in the New England region of the United States, with dolls made from a variety of materials such as leather, rubber, papier-mâché, and cloth. Celluloid was developed in the state of New Jersey in the late 1860s and was used to manufacture dolls until the mid-1950s. German, French, American, and Japanese factories churned out cheaply produced celluloid dolls in mass quantities. However, celluloid fell out of favour because of its extreme flammability and propensity to fade in bright light.</p>
+                    <p><strong>K</strong> After World War I, dollmakers experimented with plastics. Hard plastic dolls were manufactured in the 1940s. They resembled composition dolls, but they were much more durable. Other materials used in doll manufacturing included rubber, foam rubber, and vinyl in the 1950s and 1960s. Vinyl changed dollmaking, allowing dollmakers to root hair into the head, rather than using wigs or painting the hair. Although most dolls are now mass-manufactured using these modern materials, many modern dollmakers are still using the traditional materials of the past to make collectible dolls.</p>
+                </div>
+            </div>
+            <div class="divider" id="divider">
+                <div class="divider-handle"></div>
+            </div>
+            <div class="questions-container" id="questions-container">
+                <div class="question">
+                    <div class="question-rubric">
+                        <h3>Questions 1-6</h3>
+                        <p>Complete the notes below.</p>
+                        <p>Write <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+                    </div>
+                    <div class="question-content">
+                        <p><strong>Dolls</strong></p>
+                        <p><strong>Earliest known dolls</strong></p>
+                        <p>○ represented religious figures</p>
+                        <p>○ used as toys</p>
+                        <p><strong>Egypt, 2000 BC</strong></p>
+                        <p>○ bodies were made of wood</p>
+                        <p>○ <input type="text" class="completion-input" name="q1" id="q1" maxlength="20" placeholder="1"> was used for the hair</p>
+                        <p><strong>Ancient Greece and Rome</strong></p>
+                        <p>○ dolls were given to <input type="text" class="completion-input" name="q2" id="q2" maxlength="20" placeholder="2"> by older girls</p>
+                        <p><strong>600 BC</strong></p>
+                        <p>○ realistic dolls had separate clothes and <input type="text" class="completion-input" name="q3" id="q3" maxlength="20" placeholder="3"> that could be put in different positions</p>
+                        <p><strong>17th and 18th centuries</strong></p>
+                        <p>○ dolls made of <input type="text" class="completion-input" name="q4" id="q4" maxlength="20" placeholder="4"> became more common</p>
+                        <p>○ moulds made of <input type="text" class="completion-input" name="q5" id="q5" maxlength="20" placeholder="5"></p>
+                        <p><strong>1800s</strong></p>
+                        <p>○ new manufacturing process developed</p>
+                        <p>○ new group of mixtures known as <input type="text" class="completion-input" name="q6" id="q6" maxlength="20" placeholder="6"></p>
+                        <p>○ recipes for these mixtures kept secret</p>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-rubric">
+                        <h3>Questions 7-13</h3>
+                        <p>Choose <strong>TRUE</strong> if the statement agrees with the information given in the text, choose <strong>FALSE</strong> if the statement contradicts the information, or choose <strong>NOT GIVEN</strong> if there is no information on this.</p>
+                    </div>
+                    <div class="question-content">
+                        <p><strong>7.</strong> Bisque dolls appear less realistic than dolls made of china.</p>
+                        <div class="true-false-option">
+                            <input type="radio" name="q7" id="q7a" value="TRUE">
+                            <label for="q7a">TRUE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q7" id="q7b" value="FALSE">
+                            <label for="q7b">FALSE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q7" id="q7c" value="NOT GIVEN">
+                            <label for="q7c">NOT GIVEN</label>
+                        </div>
+                        <p><strong>8.</strong> French dolls tended to cost more than German bisque dolls.</p>
+                        <div class="true-false-option">
+                            <input type="radio" name="q8" id="q8a" value="TRUE">
+                            <label for="q8a">TRUE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q8" id="q8b" value="FALSE">
+                            <label for="q8b">FALSE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q8" id="q8c" value="NOT GIVEN">
+                            <label for="q8c">NOT GIVEN</label>
+                        </div>
+                        <p><strong>9.</strong> The first rag dolls were made in the 1850s.</p>
+                        <div class="true-false-option">
+                            <input type="radio" name="q9" id="q9a" value="TRUE">
+                            <label for="q9a">TRUE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q9" id="q9b" value="FALSE">
+                            <label for="q9b">FALSE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q9" id="q9c" value="NOT GIVEN">
+                            <label for="q9c">NOT GIVEN</label>
+                        </div>
+                        <p><strong>10.</strong> Only dolls made of cotton or linen are classified as cloth dolls.</p>
+                        <div class="true-false-option">
+                            <input type="radio" name="q10" id="q10a" value="TRUE">
+                            <label for="q10a">TRUE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q10" id="q10b" value="FALSE">
+                            <label for="q10b">FALSE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q10" id="q10c" value="NOT GIVEN">
+                            <label for="q10c">NOT GIVEN</label>
+                        </div>
+                        <p><strong>11.</strong> Dolls made of celluloid tended to lose their colour.</p>
+                        <div class="true-false-option">
+                            <input type="radio" name="q11" id="q11a" value="TRUE">
+                            <label for="q11a">TRUE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q11" id="q11b" value="FALSE">
+                            <label for="q11b">FALSE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q11" id="q11c" value="NOT GIVEN">
+                            <label for="q11c">NOT GIVEN</label>
+                        </div>
+                        <p><strong>12.</strong> Composition dolls lasted longer than the plastic dolls that were made in the 1940s.</p>
+                        <div class="true-false-option">
+                            <input type="radio" name="q12" id="q12a" value="TRUE">
+                            <label for="q12a">TRUE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q12" id="q12b" value="FALSE">
+                            <label for="q12b">FALSE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q12" id="q12c" value="NOT GIVEN">
+                            <label for="q12c">NOT GIVEN</label>
+                        </div>
+                        <p><strong>13.</strong> Doll collectors prefer a doll to be dressed in its original clothing.</p>
+                        <div class="true-false-option">
+                            <input type="radio" name="q13" id="q13a" value="TRUE">
+                            <label for="q13a">TRUE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q13" id="q13b" value="FALSE">
+                            <label for="q13b">FALSE</label>
+                        </div>
+                        <div class="true-false-option">
+                            <input type="radio" name="q13" id="q13c" value="NOT GIVEN">
+                            <label for="q13c">NOT GIVEN</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <nav class="nav-row perScorableItem" aria-label="Questions">
+                <div class="footer__questionWrapper selected multiple" role="tablist">
+                    <button role="tab" class="footer__questionNo" data-sectionid="128121930" tabindex="-1">
+                        <span>
+                            <span aria-hidden="true" class="section-prefix">Part </span>
+                            <span class="sectionNr" aria-hidden="true">1</span>
+                        </span>
+                    </button>
+                    <div class="footer__subquestionWrapper">
+                        <button class="subQuestion" data-contentrevisionid="128121896" data-ordernumber="1" data-sectionid="128121930" tabindex="0">
+                            <span class="sr-only">Question 1</span>
+                            <span aria-hidden="true">1</span>
+                            <span class="sr-only">Not attempted</span>
+                        </button>
+                        <button class="subQuestion" data-contentrevisionid="128121896" data-ordernumber="2" data-sectionid="128121930" tabindex="0">
+                            <span class="sr-only">Question 2</span>
+                            <span aria-hidden="true">2</span>
+                            <span class="sr-only">Not attempted</span>
+                        </button>
+                        <button class="subQuestion" data-contentrevisionid="128121896" data-ordernumber="3" data-sectionid="128121930" tabindex="0">
+                            <span class="sr-only">Question 3</span>
+                            <span aria-hidden="true">3</span>
+                            <span class="sr-only">Not attempted</span>
+                        </button>
+                        <button class="subQuestion" data-contentrevisionid="128121896" data-ordernumber="4" data-sectionid="128121930" tabindex="0">
+                            <span class="sr-only">Question 4</span>
+                            <span aria-hidden="true">4</span>
+                            <span class="sr-only">Not attempted</span>
+                        </button>
+                        <button class="subQuestion" data-contentrevisionid="128121896" data-ordernumber="5" data-sectionid="128121930" tabindex="0">
+                            <span class="sr-only">Question 5</span>
+                            <span aria-hidden="true">5</span>
+                            <span class="sr-only">Not attempted</span>
+                        </button>
+                        <button class="subQuestion" data-contentrevisionid="128121896" data-ordernumber="6" data-sectionid="128121930" tabindex="0">
+                            <span class="sr-only">Question 6</span>
+                            <span aria-hidden="true">6</span>
+                            <span class="sr-only">Not attempted</span>
+                        </button>
+                        <button class="subQuestion" data-contentrevisionid="128121896" data-ordernumber="7" data-sectionid="128121930" tabindex="0">
+                            <span class="sr-only">Question 7</span>
+                            <span aria-hidden="true">7</span>
+                            <span class="sr-only">Not attempted</span>
+                        </button>
+                        <button class="subQuestion" data-contentrevisionid="128121896" data-ordernumber="8" data-sectionid="128121930" tabindex="0">
+                            <span class="sr-only">Question 8</span>
+                            <span aria-hidden="true">8</span>
+                            <span class="sr-only">Not attempted</span>
+                        </button>
+                        <button class="subQuestion" data-contentrevisionid="128121896" data-ordernumber="9" data-sectionid="128121930" tabindex="0">
+                            <span class="sr-only">Question 9</span>
+                            <span aria-hidden="true">9</span>
+                            <span class="sr-only">Not attempted</span>
+                        </button>
+                        <button class="subQuestion" data-contentrevisionid="128121896" data-ordernumber="10" data-sectionid="128121930" tabindex="0">
+                            <span class="sr-only">Question 10</span>
+                            <span aria-hidden="true">10</span>
+                            <span class="sr-only">Not attempted</span>
+                        </button>
+                        <button class="subQuestion" data-contentrevisionid="128121896" data-ordernumber="11" data-sectionid="128121930" tabindex="0">
+                            <span class="sr-only">Question 11</span>
+                            <span aria-hidden="true">11</span>
+                            <span class="sr-only">Not attempted</span>
+                        </button>
+                        <button class="subQuestion" data-contentrevisionid="128121896" data-ordernumber="12" data-sectionid="128121930" tabindex="0">
+                            <span class="sr-only">Question 12</span>
+                            <span aria-hidden="true">12</span>
+                            <span class="sr-only">Not attempted</span>
+                        </button>
+                        <button class="subQuestion" data-contentrevisionid="128121896" data-ordernumber="13" data-sectionid="128121930" tabindex="0">
+                            <span class="sr-only">Question 13</span>
+                            <span aria-hidden="true">13</span>
+                            <span class="sr-only">Not attempted</span>
+                        </button>
+                    </div>
+                </div>
+                <button id="deliver-button" aria-label="Review your answers" class="footer__deliverButton">
+                    <i class="fas fa-check"></i> Submit
+                </button>
+            </nav>
+        </footer>
+    </div>
+    <div class="submission-modal" id="submissionModal">
+        <div class="submission-content">
+            <h2 id="submissionTitle">Test Results</h2>
+            <div class="score-display">
+                <div>Your Score:</div>
+                <div class="score-number" id="userScore">0</div>
+                <div class="score-total">out of <span id="totalQuestions">13</span></div>
+                <div class="band-score" id="bandScore">Band: 0.0</div>
+                <div class="performance-rating" id="performanceRating">Poor - Needs Improvement</div>
+            </div>
+            <div class="time-spent" id="timeSpent"></div>
+            <p id="submissionMessage">Here are your answers with the correct solutions:</p>
+            <div class="answers-section">
+                <h3>Your Answers:</h3>
+                <div id="answersList"></div>
+            </div>
+            <div class="submission-buttons">
+                <button class="confirm" id="closeSubmission">Close</button>
+            </div>
+        </div>
+    </div>
+    <div class="answer-comparison" id="answerComparison">
+        <h3>Answer Comparison</h3>
+        <p>Your answers are highlighted below. Correct answers are marked in <span class="correct-highlight">green</span>, incorrect answers in <span class="incorrect-highlight">red</span>.</p>
+    </div>
+    <script>
+        const correctAnswers = {
+            1: "clay",
+            2: "goddesses",
+            3: "limbs",
+            4: "wax",
+            5: "plaster",
+            6: "composition",
+            7: "FALSE",
+            8: "TRUE",
+            9: "TRUE",
+            10: "TRUE",
+            11: "TRUE",
+            12: "FALSE",
+            13: "NOT GIVEN"
+        };
+
+        const answerExplanations = {
+            1: "clay - Paragraph B states that dolls in Egyptian graves had 'hair' made of clay.",
+            2: "goddesses - Paragraph C mentions that girls from ancient Greece and Rome offered their wooden dolls to goddesses.",
+            3: "limbs - Paragraph C describes realistic dolls from 600 BC with movable limbs.",
+            4: "wax - Paragraph F notes that wax dolls grew in popularity in the 17th and 18th centuries.",
+            5: "plaster - Paragraph F explains that wax dollmakers used plaster to create moulds.",
+            6: "composition - Paragraph E defines 'composition' as mixtures of pulped wood or paper used in the 1800s.",
+            7: "FALSE - Paragraph G states that bisque dolls looked more like skin than china, indicating they appear more realistic.",
+            8: "TRUE - Paragraph H mentions that German bisque dolls were popular because they were not as expensive as French dolls, implying French dolls cost more.",
+            9: "TRUE - Paragraph I states that commercially produced rag dolls were first introduced in the 1850s.",
+            10: "TRUE - Paragraph I defines cloth dolls as a subset of rag dolls made of linen or cotton.",
+            11: "TRUE - Paragraph J notes that celluloid dolls fell out of favour due to their propensity to fade in bright light.",
+            12: "FALSE - Paragraph K states that hard plastic dolls of the 1940s were much more durable than composition dolls.",
+            13: "NOT GIVEN - The passage does not provide information on whether doll collectors prefer dolls in original clothing."
+        };
+
+        let totalSeconds = 0;
+        const timerElement = document.getElementById('testTimer');
+        let testSubmitted = false;
+        let userAnswers = {};
+        let startTime = new Date();
+        let resultsShown = false;
+
+        function updateTimer() {
+            if (testSubmitted) return;
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            totalSeconds++;
+        }
+
+        function disableAllInputs() {
+            document.querySelectorAll('input[type="radio"], input[type="text"]').forEach(input => {
+                input.disabled = true;
+            });
+            document.getElementById('deliver-button').disabled = true;
+            document.removeEventListener('mouseup', handleTextSelection);
+        }
+
+        function showSubmissionModal(title, message) {
+            const modal = document.getElementById('submissionModal');
+            document.getElementById('submissionTitle').textContent = title;
+            document.getElementById('submissionMessage').textContent = message;
+
+            const endTime = new Date();
+            const timeDiff = endTime - startTime;
+            const minutes = Math.floor(timeDiff / 60000);
+            const seconds = Math.floor((timeDiff % 60000) / 1000);
+            document.getElementById('timeSpent').textContent = `Time spent: ${minutes}m ${seconds}s`;
+
+            const answersList = document.getElementById('answersList');
+            answersList.innerHTML = '';
+            let score = 0;
+            userAnswers = {};
+
+            for (let i = 1; i <= 6; i++) {
+                const input = document.querySelector(`input[name="q${i}"]`);
+                const userAnswer = input.value.trim().toLowerCase() || 'Not answered';
+                userAnswers[i] = userAnswer;
+                const correctAnswer = correctAnswers[i].toLowerCase();
+                const isCorrect = userAnswer === correctAnswer;
+                if (isCorrect) score++;
+                const answerItem = document.createElement('div');
+                answerItem.className = `answer-item ${isCorrect ? 'correct' : 'incorrect'}`;
+                answerItem.innerHTML = `
+                    <div class="answer-text">Question ${i}: ${userAnswer}</div>
+                    <span class="${isCorrect ? 'correct-answer' : 'incorrect-answer'}">(Correct answer: ${correctAnswer})</span>
+                    <span class="answer-status ${isCorrect ? 'correct-status' : 'incorrect-status'}">
+                        ${isCorrect ? '✓' : '✗'}
+                    </span>
+                    <div style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280; font-style: italic;">
+                        ${answerExplanations[i]}
+                    </div>
+                `;
+                answersList.appendChild(answerItem);
+            }
+
+            for (let i = 7; i <= 13; i++) {
+                const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                const userAnswer = selectedOption ? selectedOption.value : 'Not answered';
+                userAnswers[i] = userAnswer;
+                const correctAnswer = correctAnswers[i];
+                const isCorrect = userAnswer === correctAnswer;
+                if (isCorrect) score++;
+                const answerItem = document.createElement('div');
+                answerItem.className = `answer-item ${isCorrect ? 'correct' : 'incorrect'}`;
+                answerItem.innerHTML = `
+                    <div class="answer-text">Question ${i}: ${userAnswer}</div>
+                    <span class="${isCorrect ? 'correct-answer' : 'incorrect-answer'}">(Correct answer: ${correctAnswer})</span>
+                    <span class="answer-status ${isCorrect ? 'correct-status' : 'incorrect-status'}">
+                        ${isCorrect ? '✓' : '✗'}
+                    </span>
+                    <div style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280; font-style: italic;">
+                        ${answerExplanations[i]}
+                    </div>
+                `;
+                answersList.appendChild(answerItem);
+            }
+
+            document.getElementById('userScore').textContent = score;
+            document.getElementById('totalQuestions').textContent = "13";
+
+            const bandScore = calculateBandScore(score);
+            document.getElementById('bandScore').textContent = `Band: ${bandScore.toFixed(1)}`;
+
+            const percentage = (score / 13) * 100;
+            let rating, ratingClass;
+            if (score >= 12) {
+                rating = "Excellent!";
+                ratingClass = "excellent";
+            } else if (score >= 10) {
+                rating = "Very Good";
+                ratingClass = "very-good";
+            } else if (score >= 8) {
+                rating = "Good";
+                ratingClass = "good";
+            } else if (score >= 6) {
+                rating = "Fair";
+                ratingClass = "fair";
+            } else {
+                rating = "Poor - Needs Improvement";
+                ratingClass = "poor";
+            }
+            const ratingElement = document.getElementById('performanceRating');
+            ratingElement.textContent = rating;
+            ratingElement.className = `performance-rating ${ratingClass}`;
+
+            if (testSubmitted) {
+                highlightAnswers(correctAnswers);
+            }
+
+            modal.style.display = 'flex';
+            resultsShown = true;
+            const submitButton = document.getElementById('deliver-button');
+            submitButton.innerHTML = '<i class="fas fa-eye"></i> Show My Results';
+            submitButton.disabled = false;
+        }
+
+        function calculateBandScore(score) {
+            if (score >= 12) return 9.0;
+            if (score >= 11) return 8.5;
+            if (score >= 10) return 8.0;
+            if (score >= 9) return 7.5;
+            if (score >= 8) return 7.0;
+            if (score >= 7) return 6.5;
+            if (score >= 6) return 6.0;
+            if (score >= 5) return 5.5;
+            if (score >= 4) return 5.0;
+            return 0.0;
+        }
+
+        function highlightAnswers(correctAnswers) {
+            for (let i = 1; i <= 6; i++) {
+                const input = document.querySelector(`input[name="q${i}"]`);
+                const userAnswer = userAnswers[i];
+                const correctAnswer = correctAnswers[i].toLowerCase();
+                input.classList.remove('correct', 'incorrect');
+                if (userAnswer && userAnswer !== 'Not answered') {
+                    input.classList.add(userAnswer === correctAnswer ? 'correct' : 'incorrect');
+                    const feedback = document.createElement('span');
+                    feedback.className = `completion-feedback ${userAnswer === correctAnswer ? 'correct' : 'incorrect'}`;
+                    feedback.textContent = userAnswer === correctAnswer ? '✓ Correct' : `✗ Correct: ${correctAnswer}`;
+                    if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('completion-feedback')) {
+                        input.parentNode.appendChild(feedback);
+                    }
+                }
+            }
+
+            for (let i = 7; i <= 13; i++) {
+                const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                const userAnswer = userAnswers[i];
+                const correctAnswer = correctAnswers[i];
+                const options = document.querySelectorAll(`input[name="q${i}"]`);
+                options.forEach(opt => {
+                    const label = opt.nextElementSibling;
+                    label.classList.remove('correct', 'incorrect');
+                    if (opt.value === correctAnswer) {
+                        label.classList.add('correct');
+                    } else if (userAnswer !== 'Not answered' && opt.value === userAnswer) {
+                        label.classList.add('incorrect');
+                    }
+                });
+                if (userAnswer !== 'Not answered') {
+                    const feedback = document.createElement('span');
+                    feedback.className = `true-false-answer ${userAnswer === correctAnswer ? 'correct' : 'incorrect'}`;
+                    feedback.textContent = userAnswer === correctAnswer ? '✓ Correct' : `✗ Correct: ${correctAnswer}`;
+                    const parent = selectedOption ? selectedOption.parentNode : document.querySelector(`input[name="q${i}"]`).parentNode;
+                    if (!parent.nextElementSibling || !parent.nextElementSibling.classList.contains('true-false-answer')) {
+                        parent.parentNode.appendChild(feedback);
+                    }
+                }
+            }
+
+            document.getElementById('answerComparison').style.display = 'block';
+        }
+
+        document.getElementById('deliver-button').addEventListener('click', function() {
+            if (resultsShown) {
+                document.getElementById('submissionModal').style.display = 'flex';
+                return;
+            }
+            if (testSubmitted) return;
+            if (confirm('Are you sure you want to submit your test? You won\'t be able to make changes after submission.')) {
+                clearInterval(timerInterval);
+                testSubmitted = true;
+                disableAllInputs();
+                showSubmissionModal('Test Submitted', 'Thank you for completing the test.');
+            }
+        });
+
+        document.getElementById('closeSubmission').addEventListener('click', function() {
+            document.getElementById('submissionModal').style.display = 'none';
+            highlightAnswers(correctAnswers);
+        });
+
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        const settingsModal = document.getElementById('settingsModal');
+        const settingsClose = document.getElementById('settingsClose');
+        
+        document.getElementById('contrastToggle').addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            settingsModal.style.display = 'flex';
+        });
+
+        settingsClose.addEventListener('click', function() {
+            settingsModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === settingsModal) {
+                settingsModal.style.display = 'none';
+            }
+            if (event.target === document.getElementById('submissionModal')) {
+                document.getElementById('submissionModal').style.display = 'none';
+            }
+        });
+
+        const divider = document.getElementById('divider');
+        const passageContainer = document.getElementById('passage-container');
+        const questionsContainer = document.getElementById('questions-container');
+        let isDragging = false;
+        let startX, startPassageWidth;
+
+        divider.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startPassageWidth = parseInt(document.defaultView.getComputedStyle(passageContainer).width, 10);
+            document.body.style.cursor = 'col-resize';
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+            e.preventDefault();
+        });
+
+        function onMouseMove(e) {
+            if (!isDragging) return;
+            const containerWidth = document.querySelector('.test-container').offsetWidth;
+            const newPassageWidth = startPassageWidth + e.clientX - startX;
+            const minWidth = containerWidth * 0.3;
+            const maxWidth = containerWidth * 0.7;
+            if (newPassageWidth >= minWidth && newPassageWidth <= maxWidth) {
+                passageContainer.style.width = `${newPassageWidth}px`;
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.body.style.cursor = '';
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        divider.addEventListener('selectstart', (e) => {
+            if (isDragging) e.preventDefault();
+        });
+
+        document.querySelectorAll('.subQuestion').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.subQuestion').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+                const questionNumber = parseInt(this.textContent.trim());
+                if (questionNumber >= 1 && questionNumber <= 6) {
+                    document.querySelector('.question:nth-of-type(1)').scrollIntoView({ behavior: 'smooth' });
+                } else if (questionNumber >= 7 && questionNumber <= 13) {
+                    document.querySelector('.question:nth-of-type(2)').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        const highlightToolbar = document.getElementById('highlightToolbar');
+        let selectedText = '';
+        let selectedRange = null;
+        let currentHighlightColor = null;
+
+        document.querySelectorAll('#passageContent, .questions-container').forEach(element => {
+            element.style.userSelect = 'text';
+            element.style.webkitUserSelect = 'text';
+        });
+
+        function handleTextSelection() {
+            const selection = window.getSelection();
+            selectedText = selection.toString().trim();
+            if (selectedText.length > 0 && isTextInContent(selection)) {
+                selectedRange = selection.getRangeAt(0);
+                const rangeRect = selectedRange.getBoundingClientRect();
+                highlightToolbar.style.display = 'flex';
+                highlightToolbar.style.top = `${rangeRect.top + window.scrollY - 45}px`;
+                highlightToolbar.style.left = `${rangeRect.left + window.scrollX + (rangeRect.width / 2)}px`;
+            } else {
+                if (!highlightToolbar.contains(document.activeElement)) {
+                    highlightToolbar.style.display = 'none';
+                }
+            }
+        }
+
+        function isTextInContent(selection) {
+            if (!selection.rangeCount) return false;
+            const range = selection.getRangeAt(0);
+            const passageContent = document.getElementById('passageContent');
+            const questionsContainer = document.querySelector('.questions-container');
+            return passageContent.contains(range.commonAncestorContainer) || 
+                   questionsContainer.contains(range.commonAncestorContainer);
+        }
+
+        document.addEventListener('mouseup', handleTextSelection);
+
+        document.addEventListener('mousedown', function(e) {
+            if (!highlightToolbar.contains(e.target)) {
+                highlightToolbar.style.display = 'none';
+            }
+        });
+
+        document.querySelectorAll('.highlight-color').forEach(button => {
+            button.addEventListener('click', function() {
+                currentHighlightColor = button.dataset.color;
+                applyHighlight();
+            });
+        });
+
+        function applyHighlight() {
+            if (selectedRange && currentHighlightColor) {
+                const span = document.createElement('span');
+                span.className = `highlight ${currentHighlightColor}`;
+                try {
+                    selectedRange.surroundContents(span);
+                } catch (e) {
+                    console.error('Error applying highlight:', e);
+                }
+                window.getSelection().removeAllRanges();
+                highlightToolbar.style.display = 'none';
+            }
+        }
+
+        document.querySelector('.highlight-toolbar .remove').addEventListener('click', function() {
+            if (selectedRange) {
+                const ancestor = selectedRange.commonAncestorContainer;
+                if (ancestor.nodeType === 3) {
+                    const parent = ancestor.parentNode;
+                    if (parent.classList.contains('highlight')) {
+                        const text = document.createTextNode(parent.innerHTML);
+                        parent.parentNode.replaceChild(text, parent);
+                    }
+                }
+                window.getSelection().removeAllRanges();
+                highlightToolbar.style.display = 'none';
+            }
+        });
+
+        document.querySelectorAll('input[type="radio"], input[type="text"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const questionNumber = this.name.replace('q', '');
+                const questionButton = document.querySelector(`.subQuestion[data-ordernumber="${questionNumber}"]`);
+                if (questionButton && (this.type !== 'radio' || this.checked)) {
+                    questionButton.classList.add('attempted');
+                }
+            });
+        });
+
+        let currentTextSize = 'normal';
+        const textSizes = {
+            small: '0.9rem',
+            normal: '1.05rem',
+            large: '1.2rem',
+            xlarge: '1.35rem'
+        };
+        const textSizeOrder = ['small', 'normal', 'large', 'xlarge'];
+
+        document.getElementById('textSizeToggle').addEventListener('click', function() {
+            const currentIndex = textSizeOrder.indexOf(currentTextSize);
+            const nextIndex = (currentIndex + 1) % textSizeOrder.length;
+            currentTextSize = textSizeOrder[nextIndex];
+            
+            const fontSize = textSizes[currentTextSize];
+            document.getElementById('passageContent').style.fontSize = fontSize;
+            document.querySelectorAll('.question-content, .question-rubric').forEach(el => {
+                el.style.fontSize = fontSize;
+            });
+            
+            const sizeNames = { small: 'Small', normal: 'Normal', large: 'Large', xlarge: 'Extra Large' };
+            this.title = `Text size: ${sizeNames[currentTextSize]}`;
+        });
+
+        let isDarkMode = false;
+        
+        document.getElementById('contrastToggle').addEventListener('click', function() {
+            isDarkMode = !isDarkMode;
+            
+            if (isDarkMode) {
+                document.body.style.background = 'radial-gradient(1200px 600px at 10% 0%, #1e293b, transparent), radial-gradient(1200px 600px at 90% 100%, #0f172a, transparent), #111827';
+                document.body.style.color = '#f9fafb';
+                
+                document.querySelector('.header').style.background = '#374151';
+                document.querySelector('.header').style.borderBottomColor = '#4b5563';
+                
+                document.querySelectorAll('.passage-container, .questions-container').forEach(el => {
+                    el.style.background = '#1f2937';
+                    el.style.color = '#f9fafb';
+                });
+                
+                document.querySelectorAll('.question, .sectionRubric').forEach(el => {
+                    el.style.background = '#374151';
+                    el.style.color = '#f9fafb';
+                    el.style.borderColor = '#4b5563';
+                });
+                
+                document.querySelector('.footer').style.background = '#374151';
+                document.querySelector('.footer').style.borderTopColor = '#4b5563';
+                
+                highlightToolbar.style.background = '#374151';
+                highlightToolbar.style.borderColor = '#4b5563';
+
+                document.querySelector('.submission-content').style.background = '#374151';
+                document.querySelector('.submission-content').style.color = '#f9fafb';
+                document.querySelector('.score-display').style.background = '#1e293b';
+                document.querySelectorAll('.answer-item').forEach(item => {
+                    item.style.background = '#1f2937';
+                    item.style.borderLeftColor = '#4b5563';
+                });
+                document.querySelectorAll('.answer-item.correct').forEach(item => {
+                    item.style.background = '#064e3b';
+                    item.style.borderLeftColor = '#10b981';
+                });
+                document.querySelectorAll('.answer-item.incorrect').forEach(item => {
+                    item.style.background = '#7f1d1d';
+                    item.style.borderLeftColor = '#ef4444';
+                });
+
+                divider.style.background = '#4b5563';
+                document.querySelector('.divider-handle').style.background = '#9ca3af';
+
+                document.querySelectorAll('.subQuestion').forEach(button => {
+                    button.style.background = '#4b5563';
+                    button.style.color = '#f9fafb';
+                    button.style.borderColor = '#6b7280';
+                });
+                document.querySelectorAll('.subQuestion.active').forEach(button => {
+                    button.style.background = '#2563eb';
+                    button.style.borderColor = '#2563eb';
+                });
+                document.querySelectorAll('.subQuestion.attempted').forEach(button => {
+                    button.style.background = '#60a5fa';
+                });
+
+                this.title = 'Light mode';
+            } else {
+                document.body.style.background = 'radial-gradient(1200px 600px at 10% 0%, #eef2ff, transparent), radial-gradient(1200px 600px at 90% 100%, #dbeafe, transparent), #f1f5f9';
+                document.body.style.color = '#1f2937';
+
+                document.querySelector('.header').style.background = '#ffffff';
+                document.querySelector('.header').style.borderBottomColor = '#d1d5db';
+
+                document.querySelectorAll('.passage-container, .questions-container').forEach(el => {
+                    el.style.background = '#f9fafb';
+                    el.style.color = '#1f2937';
+                });
+
+                document.querySelectorAll('.question, .sectionRubric').forEach(el => {
+                    el.style.background = '#ffffff';
+                    el.style.color = '#1f2937';
+                    el.style.borderColor = '#d1d5db';
+                });
+
+                document.querySelector('.footer').style.background = '#ffffff';
+                document.querySelector('.footer').style.borderTopColor = '#d1d5db';
+
+                highlightToolbar.style.background = '#ffffff';
+                highlightToolbar.style.borderColor = '#d1d5db';
+
+                document.querySelector('.submission-content').style.background = '#ffffff';
+                document.querySelector('.submission-content').style.color = '#1f2937';
+                document.querySelector('.score-display').style.background = '#eff6ff';
+                document.querySelectorAll('.answer-item').forEach(item => {
+                    item.style.background = '#f9fafb';
+                    item.style.borderLeftColor = '#d1d5db';
+                });
+                document.querySelectorAll('.answer-item.correct').forEach(item => {
+                    item.style.background = '#ecfdf5';
+                    item.style.borderLeftColor = '#10b981';
+                });
+                document.querySelectorAll('.answer-item.incorrect').forEach(item => {
+                    item.style.background = '#fef2f2';
+                    item.style.borderLeftColor = '#ef4444';
+                });
+
+                divider.style.background = '#e5e7eb';
+                document.querySelector('.divider-handle').style.background = '#6b7280';
+
+                document.querySelectorAll('.subQuestion').forEach(button => {
+                    button.style.background = '#f3f4f6';
+                    button.style.color = '#4b5563';
+                    button.style.borderColor = '#d1d5db';
+                });
+                document.querySelectorAll('.subQuestion.active').forEach(button => {
+                    button.style.background = '#2563eb';
+                    button.style.borderColor = '#2563eb';
+                });
+                document.querySelectorAll('.subQuestion.attempted').forEach(button => {
+                    button.style.background = '#60a5fa';
+                });
+
+                this.title = 'Dark mode';
+            }
+        });
+
+        document.querySelectorAll('.settings-option').forEach(option => {
+            option.addEventListener('click', function() {
+                if (this.textContent.includes('Go to submission page')) {
+                    if (!testSubmitted) {
+                        if (confirm('Are you sure you want to submit your test? You won\'t be able to make changes after submission.')) {
+                            clearInterval(timerInterval);
+                            testSubmitted = true;
+                            disableAllInputs();
+                            showSubmissionModal('Test Submitted', 'Thank you for completing the test.');
+                            settingsModal.style.display = 'none';
+                        }
+                    } else {
+                        document.getElementById('submissionModal').style.display = 'flex';
+                        settingsModal.style.display = 'none';
+                    }
+                } else if (this.textContent.includes('Dark mode')) {
+                    document.getElementById('contrastToggle').click();
+                    settingsModal.style.display = 'none';
+                } else if (this.textContent.includes('Text size')) {
+                    document.getElementById('textSizeToggle').click();
+                    settingsModal.style.display = 'none';
+                }
+            });
+        });
+
+        document.querySelector('.subQuestion[data-ordernumber="1"]').classList.add('active');
+
+        document.getElementById('passageContent').addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test 3</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            overflow: hidden;
+        }
+
+        .loading-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9fafb;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #2563eb;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-title {
+            font-size: 1.2rem;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .start-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9fafb;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9998;
+        }
+
+        .start-content {
+            text-align: center;
+        }
+
+        .start-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 24px;
+        }
+
+        .start-button {
+            padding: 12px 32px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .start-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            background: white;
+        }
+
+        header {
+            background-color: #ffffff;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .passage-info {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .timer {
+            background-color: rgba(255, 193, 193, 0.5);
+            padding: 6px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+            min-width: 80px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #c53030;
+            border: 1px solid rgba(255, 120, 120, 0.3);
+        }
+
+        .timer.warning {
+            color: #9b2c2c;
+            background-color: rgba(254, 178, 178, 0.7);
+        }
+
+        .logo-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+            cursor: pointer;
+        }
+
+        .logo-area:hover {
+            background-color: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .progress-container {
+            background-color: #f8f9fa;
+            padding: 4px 20px;
+            z-index: 100;
+            flex-shrink: 0;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .progress-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .progress-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .progress-item {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a5568;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            border: 1px solid #cbd5e0;
+        }
+
+        .progress-item.current {
+            background-color: #4299e1;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-item.answered {
+            background-color: #9ae6b4;
+            color: #22543d;
+        }
+
+        .progress-item.correct {
+            background-color: #48bb78;
+            color: white;
+        }
+
+        .progress-item.incorrect {
+            background-color: #fed7d7;
+            color: #c53030;
+        }
+
+        .btn {
+            padding: 6px 14px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.95rem;
+            background-color: #f7fafc;
+            color: #4a5568;
+        }
+
+        .btn:hover {
+            background-color: #edf2f7;
+        }
+
+        .btn-submit {
+            background-color: #48bb78;
+            color: white;
+            font-weight: 900;
+            border: 1px solid #38a169;
+        }
+
+        .btn-submit:hover {
+            background-color: #38a169;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #fafafa;
+        }
+
+        .resizer {
+            width: 4px;
+            background-color: #cbd5e0;
+            cursor: col-resize;
+            transition: background-color 0.2s;
+        }
+
+        .resizer:hover {
+            background-color: #a0aec0;
+        }
+
+        .questions-container {
+            width: 40%;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: white;
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .passage {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage h2, .passage h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .passage p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .question-section {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background-color: #ffffff;
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #2d3748;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            background-color: #f7fafc;
+        }
+
+        .option input {
+            margin-right: 8px;
+        }
+
+        .input-field {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 400px;
+            font-size: 0.95rem;
+            margin-top: 8px;
+        }
+
+        .input-field-inline {
+            padding: 4px 8px;
+            border: none;
+            border-bottom: 2px solid #cbd5e0;
+            background-color: transparent;
+            font-size: 0.95rem;
+            min-width: 120px;
+            max-width: 200px;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        .input-field-inline:focus {
+            border-bottom-color: #4299e1;
+        }
+
+        .input-field-inline::placeholder {
+            color: #a0aec0;
+        }
+
+        select.input-field {
+            width: auto;
+            min-width: 200px;
+        }
+
+        .answer-indicator {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .answer-indicator.correct {
+            background-color: #e6fffa;
+            border: 1px solid #38b2ac;
+            color: #234e52;
+        }
+
+        .answer-indicator.incorrect {
+            background-color: #fed7d7;
+            border: 1px solid #fc8181;
+            color: #742a2a;
+        }
+
+        .question-group {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .question-group-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2d3748;
+        }
+
+        .highlight {
+            background-color: #ffff00;
+            cursor: pointer;
+        }
+
+        #highlight-btn, #remove-highlight-btn {
+            position: absolute;
+            z-index: 9999;
+            display: none;
+            padding: 6px 12px;
+            font-size: 14px;
+            border: 1px solid #888;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .score-display {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #2d3748;
+        }
+
+        .score-breakdown {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .questions-container {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #e2e8f0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h2 class="loading-title">Your test will begin shortly</h2>
+            <p>Please wait</p>
+        </div>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="startScreen" class="start-screen hidden">
+        <div class="start-content">
+            <h1 class="start-title">IELTS Reading Test</h1>
+            <p style="margin-bottom: 24px; color: #6b7280;">Complete Reading Test - 60 minutes</p>
+            <button class="start-button" onclick="startTest()">Start Test</button>
+        </div>
+    </div>
+
+    <!-- Test Container -->
+    <div class="container hidden" id="testContainer">
+        <!-- Header -->
+        <header>
+            <div class="passage-info">IELTS Reading Test</div>
+            <div class="timer" id="globalTimer">
+                <i class="fas fa-clock"></i>
+                <span>60:00</span>
+            </div>
+            <div class="logo-area" onclick="window.open('https://t.me/xojaevs', '_blank')">
+                <i class="fas fa-paper-plane"></i>
+                <span>More TESTS</span>
+            </div>
+            <div class="passage-info" id="headerPassageTitle">Passage 1 of 3</div>
+        </header>
+
+        <!-- Highlight buttons -->
+        <button id="highlight-btn" type="button">Highlight</button>
+        <button id="remove-highlight-btn" type="button">Remove</button>
+
+        <div class="main-content">
+            <!-- PASSAGE 1: Feeding the World -->
+            <div class="passage-container" id="p1_passage">
+                <h2 class="section-title">READING PASSAGE 1</h2>
+                <div class="passage">
+                    <h3>Feeding the World</h3>
+                    <p><em>Feeding the world while nurturing the planet doesn't necessarily mean going back to nature, Andy Coghlan reports</em></p>
+
+                    <p>The world's population continues to climb and, despite the rise of high-tech agriculture, 800 million people don't get enough to eat. Admittedly, this is often due to lack of money since the world actually produces enough for everyone. However, by 2050, we will have 9 billion mouths to feed, 3 billion more than today. 'Agriculture must become the solution to environmental problems in 50 years. If we don't have systems that make the environment better—not just hold the fort—then we're in trouble,' says Kenneth Cassman, an agronomist at the University of Nebraska in America. That view was echoed by the Curry Report, a government panel that surveyed the future of farming in Britain.</p>
+
+                    <p>Concerned consumers are facing what appears to be an ever-widening ideological divide. In one corner are the techno-optimists, who put their faith in genetically modified crops and improved agro-chemicals; in the other are advocates of organic farming, who reject artificial chemicals and embrace back-to-nature techniques. Both sides cite plausible science to back their claims, leaving many people to believe we're faced with a stark choice between two mutually incompatible options.</p>
+
+                    <p>Not so. If you set ideology aside, and simply ask how the world can produce the food it needs with the least environmental cost, a new middle way opens. Like today's organic farming, the intelligent farming of the future should pay much more attention to the health of its soil and the ecosystem it is part of, as well as making shrewd and locally appropriate use of chemical fertilizers and pesticides. The most crucial ingredient in this new style of agriculture is not chemicals but information about what is happening in each field and how to respond.</p>
+
+                    <p>Organic farming sounds attractive since an approach that rejects synthetic chemicals surely runs no risk of poisoning land and water, and its emphasis on natural ecosystems seems to be good for everyone. Perhaps these easy assumptions explain why sales of organic food across Europe are increasing by at least 50% a year. Going organic sounds idyllic, but it is also naïve and has its own suite of environmental costs, which can be worse than those of conventional farming, especially if it were to become the world norm. Fundamentally, the organic versus chemical debate focuses on the wrong question. The issue is not what you put into a farm, but what you get out of it, both in terms of crop yields and pollutants.</p>
+
+                    <p>It is a fundamental belief of organic farming that chemical fertilizers are unwholesome, and plant nutrients must come from natural sources. But in effect, the main environmental damage done by chemical fertilizers, as opposed to any other kinds, is through the carbon dioxide from the fossil fuels used in their synthesis, and nitrogen oxides released by their degradation. Excess nitrogen from chemical fertilizers can pollute groundwater, but so can excess nitrogen from organic manures.</p>
+
+                    <p>Advocates of organic farming like to point out that fields organically managed can produce yields just as high as fields enhanced with synthetic fertilizers. For example, Bill Liebhardt, at the Rodale Institute in Pennsylvania, recently compiled the results of such comparisons for corn, wheat, soybeans, and tomatoes in the US and found that the organic fields averaged between 94 and 100 percent of the yields of nearby conventional crops.</p>
+
+                    <p>But this optimistic picture tells only half the story. Organic farmers can't reach this yield every year if they want to build soil nutrients without synthetic fertilizers. They need to alternate with soil-building crops, and this is the biggest cost of organic farming. Vaclav Smil, of the University of Manitoba in Winnipeg, estimates that if farmers worldwide gave up the 80 million tonnes of synthetic fertilizer they now use each year, total grain production would fall by at least half. Either farms would have to double the amount of land they cultivate—at catastrophic cost to natural habitats—or billions of people would starve.</p>
+
+                    <p>In short, the world needs chemical fertilizers, even though farmers in much of the temperate zone produce so much grain that they are hard-pressed to sell it at a profit. But if they were to cut back drastically on their fertilizer use, and harvests were to shrink, grain prices would go up, making poor people hungrier. Besides the obvious moral cost of this approach, nothing destroys ecosystems more surely than hungry people who cannot afford to think about tomorrow because they are desperate to feed their children today.</p>
+
+                    <p>Technologically advanced farmers can now monitor their yields and target their fertilizer to the parts of the field where it will do the most good, which, in turn, increases the yield. Eventually, farmers may incorporate long-term weather forecasts into their planning so they can cut back on fertilizer use when the weather is likely to make harvests poor anyway, says Ron Olson, an agronomist from Florida.</p>
+
+                    <p>The challenge in moving towards a new, more intelligent farming of the future is as much political as it is technological. We already know how to build better soils, how to keep pests in check, and how to recognize when synthetic chemicals can provide the decisive edge to maximize yields. What's missing is political will. The time has come to step past the tired battle lines drawn up between organics advocates and agribusiness and enter the zone in between, where the real solutions lie.</p>
+                </div>
+            </div>
+
+            <div class="resizer" id="resizer"></div>
+
+            <div class="questions-container" id="p1_questions">
+                <h2 class="section-title">Questions 1-13</h2>
+                
+                <div class="question-group">
+                    <div class="question-group-title">Questions 1-4: Match opinions with people</div>
+                    <p>Match each opinion with the correct person, A, B, C, or D.</p>
+                    <p><strong>List of people:</strong><br>
+                    A. Kenneth Cassman<br>
+                    B. Bill Liebhardt<br>
+                    C. Vaclav Smil<br>
+                    D. Ron Olson</p>
+
+                    <div class="question" data-question="1">
+                        <div class="question-text">1. Without the use of synthetic fertilizers, large numbers of people would die of hunger.</div>
+                        <select name="q1" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A - Kenneth Cassman</option>
+                            <option value="B">B - Bill Liebhardt</option>
+                            <option value="C">C - Vaclav Smil</option>
+                            <option value="D">D - Ron Olson</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="2">
+                        <div class="question-text">2. We need agricultural methods that work for the environment.</div>
+                        <select name="q2" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A - Kenneth Cassman</option>
+                            <option value="B">B - Bill Liebhardt</option>
+                            <option value="C">C - Vaclav Smil</option>
+                            <option value="D">D - Ron Olson</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="3">
+                        <div class="question-text">3. In the future, the quantity of fertilizer used will be linked to predicted harvests.</div>
+                        <select name="q3" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A - Kenneth Cassman</option>
+                            <option value="B">B - Bill Liebhardt</option>
+                            <option value="C">C - Vaclav Smil</option>
+                            <option value="D">D - Ron Olson</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="4">
+                        <div class="question-text">4. The output from organic soils is very nearly equal to that from fields treated with chemical fertilizers.</div>
+                        <select name="q4" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A - Kenneth Cassman</option>
+                            <option value="B">B - Bill Liebhardt</option>
+                            <option value="C">C - Vaclav Smil</option>
+                            <option value="D">D - Ron Olson</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 5-9: YES / NO / NOT GIVEN</div>
+
+                    <div class="question" data-question="5">
+                        <div class="question-text">5. There are only two real farming options worth considering.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q5" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q5" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q5" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="6">
+                        <div class="question-text">6. Farmers need to act on locally relevant information.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q6" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q6" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q6" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="7">
+                        <div class="question-text">7. Chemical fertilizers are expensive to produce.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q7" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q7" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q7" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="8">
+                        <div class="question-text">8. Successful organic farming requires crop rotation.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q8" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q8" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q8" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="9">
+                        <div class="question-text">9. Farmers are unable to meet demand for grain in temperate zones.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q9" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q9" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q9" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 10-13: Complete the summary</div>
+                    <p>Choose NO MORE THAN TWO WORDS from the passage for each answer.</p>
+
+                    <div class="question" data-question="10">
+                        <div class="question-text">10. A leading American agronomist is concerned that unless we improve our approach to food production, the world will face serious shortages by the year 2050. A government team which looked ahead at British <input type="text" name="q10" class="input-field-inline" maxlength="30" placeholder="________"> came up with a similar prediction.</div>
+                    </div>
+
+                    <div class="question" data-question="11">
+                        <div class="question-text">11. The pro-technology lobby believes in using crops which are <input type="text" name="q11" class="input-field-inline" maxlength="30" placeholder="________"> as well as relying heavily on agro-chemicals.</div>
+                    </div>
+
+                    <div class="question" data-question="12">
+                        <div class="question-text">12. On the other hand, <input type="text" name="q12" class="input-field-inline" maxlength="30" placeholder="________"> farmers believe passionately in natural techniques.</div>
+                    </div>
+
+                    <div class="question" data-question="13">
+                        <div class="question-text">13. The real problem is, however, that both natural and <input type="text" name="q13" class="input-field-inline" maxlength="30" placeholder="________"> fertilizers damage the ecosystem.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSAGE 2: Ideal Homes -->
+            <div class="passage-container hidden" id="p2_passage">
+                <h2 class="section-title">READING PASSAGE 2</h2>
+                <div class="passage">
+                    <h3>Ideal Homes</h3>
+                    <p><em>New ideas and some old ones</em></p>
+
+                    <p><strong>A</strong> The traditional kampung houses of Malaysia do not need air-conditioning. Built on stilts and with steep roofs, they have year-round ventilation. The raised structure ensures a cooling breeze comes up through the floorboards, while the high roof acts as a chimney to release hot air. The airtight, concrete boxes of modern city construction, in contrast, are heat traps, says Muhammad Peter Davis of University Putra Malaysia. He has calculated that typical modern Malaysian houses are 5°C hotter than the air outside. The builders of kampung houses "had no knowledge of modern science or engineering but they came up with the perfect design,' says Davis.</p>
+
+                    <p><strong>B</strong> This story of ancient architectural sophistication and modern insanity is repeated around the world. In the name of modernism, people have thrown away architecture designed to cope with the environment in which they live, and adopted house designs originating from cold, northern environments, where the idea is to keep heat in.</p>
+
+                    <p><strong>C</strong> Once, the aim of architectural modernists was to build structures that kept nature out and to replace it with air-conditioning. Now they are learning that they cannot do that effectively. Slowly, they are seeing the benefit of working with nature, rather than against it. In California, they probably use more power for air-conditioning than anywhere else on Earth. According to Arthur Rosenfeld from the University of California, what California needs is white paint. If Los Angeles painted its roofs white, planted trees to shade buildings, and chose lighter-colored paving, it could reduce city temperatures by 3°C and cut the annual air-conditioning bill by $US 170 million a year.</p>
+
+                    <p><strong>D</strong> Modern buildings are greedy in their use of energy. Much is made of the contribution of transportation to global warming, through its emissions of greenhouse gases. But, globally, transportation is responsible for just 22 per cent of carbon dioxide emissions. The building sector is responsible for 31 per cent, mostly the result of heating and air-conditioning systems. In developing countries, where demand for electricity for buildings is rising by 5 per cent a year, the biggest demand is for air-conditioning in modern buildings which are often designed to cope with every different climatic condition.</p>
+
+                    <p><strong>E</strong> Before air-conditioning, much of the Arab world kept cool through thoughtful building design. Many buildings were built according to the principles of the wind tower, a tall structure with vertical vents at the top that open in all directions to catch any passing breeze. Typically, these wind-tower buildings were made of local materials such as stone, mud brick, wood and palm-tree fronds. The buildings were inward-looking, which served the dual function of focusing attention on the courtyard, where family members spend time together, and protecting living areas from the rays of the sun.</p>
+
+                    <p><strong>F</strong> Throughout the Middle East today, wind towers are often little more than museum pieces. But there are exceptions. Jordan has won awards for the architecture of a village on the shores of the Red Sea, which is designed to conserve energy. Made of rough, local stone in a traditional style, it combines the ventilation system of the wind towers for summer coolness with up-to-date heating and floor insulation to protect against the desert cold in winter.</p>
+
+                    <p><strong>G</strong> Traditional building materials, like traditional building designs, are being rediscovered by those looking for low-energy solutions to the current construction needs. Clay is one such material. As the Dutch housing contractor R van der Ley has argued in promoting a series of clay housing projects in developing countries, clay has many benefits over its industrialized version, brick. Clay blocks cost only half as much as ordinary bricks. Clay also generates work because people can find it, mould it, bake it and work it themselves. Two hundred clay bricks can be made with the fuel oil that makes just one ordinary brick. Moreover, clay is an excellent insulator against both cold and heat outside, and can easily be recycled.</p>
+
+                    <p><strong>H</strong> But although traditional methods and materials can be revived in appropriate settings, new green, low-energy technologies are needed, especially in urban environments. The thermal insulation of homes in cold countries is an example. In 1983, Sweden adopted a national standard, requiring the country's homes to lose no more than 60 kilowatt-hours per square metre over the year. To meet that standard, windows were double-glazed, and walls and roofs insulated. Every home became a fortress against the cold air outside. Unfortunately, the rest of Europe has not followed the lead.</p>
+
+                    <p><strong>I</strong> In the United States, Amory Lovins has promoted a range of low-energy technologies: 'super-windows', for example, which let in invisible light but can be 'tuned' to either allow in, or reflect away, infrared solar radiation - the stuff that heats. Buildings with large expanses of window (and big energy bills) can be designed to achieve optimum temperatures.</p>
+
+                    <p><strong>J</strong> As well as more efficient use of energy, the world also needs new sources of renewable power. Solar energy is being tried out in the developing world, in villages often far from electricity grids. The world's biggest solar power installation got underway in the Philippines, in 2001, where a project commenced to install solar panels for 400,000 people in 150 villages. Such projects are demonstrating that countries, whether developing or developed, no longer need huge national grids to supply electricity. Every home can do its own thing with the help of a solar panel and a storage battery.</p>
+
+                    <p><strong>K</strong> Houses, of course, are more than machines for living in. They are social and psychological spaces, too. Future houses may not look exactly like kampungs or wind towers or any other traditional models. But to work for us and for our environment, they will have to suit us as well as these traditional forms did.</p>
+                </div>
+            </div>
+
+            <div class="resizer hidden" id="resizer2"></div>
+
+            <div class="questions-container hidden" id="p2_questions">
+                <h2 class="section-title">Questions 14-26</h2>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 14-18: Match information to paragraphs</div>
+                    <p>Reading Passage 2 has eleven paragraphs, A-K. Which paragraph contains the following information?</p>
+
+                    <div class="question" data-question="14">
+                        <div class="question-text">14. Reasons why a particular construction material is advantageous</div>
+                        <select name="q14" class="input-field">
+                            <option value="">Select</option>
+                            <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+                            <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option><option>K</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="15">
+                        <div class="question-text">15. An example of a construction design which benefits domestic interaction</div>
+                        <select name="q15" class="input-field">
+                            <option value="">Select</option>
+                            <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+                            <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option><option>K</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="16">
+                        <div class="question-text">16. A description of a house that is ventilated from below</div>
+                        <select name="q16" class="input-field">
+                            <option value="">Select</option>
+                            <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+                            <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option><option>K</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="17">
+                        <div class="question-text">17. An example of self-sufficient energy supply</div>
+                        <select name="q17" class="input-field">
+                            <option value="">Select</option>
+                            <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+                            <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option><option>K</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="18">
+                        <div class="question-text">18. Suggested methods of reducing temperatures in a city</div>
+                        <select name="q18" class="input-field">
+                            <option value="">Select</option>
+                            <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+                            <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option><option>K</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 19-22: Match people with ideas</div>
+                    <p>Match each person with the correct idea, A-G.</p>
+                    <p><strong>List of ideas:</strong><br>
+                    A. The choice of a certain construction material can have a socio-economic impact<br>
+                    B. Throughout the world, people are rejecting traditional housing design in order to appear modern<br>
+                    C. Houses should not only meet people's physical needs but also their social and psychological needs<br>
+                    D. Traditional knowledge can be superior to modern knowledge<br>
+                    E. There is an innovation that can save costs on both air-conditioning and heating<br>
+                    F. Solar energy can meet the energy needs of people living in villages in developing countries<br>
+                    G. There is a very simple solution that can save on the cost of air-conditioning</p>
+
+                    <div class="question" data-question="19">
+                        <div class="question-text">19. Muhammad Peter Davis</div>
+                        <select name="q19" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A</option><option value="B">B</option><option value="C">C</option>
+                            <option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="20">
+                        <div class="question-text">20. Arthur Rosenfeld</div>
+                        <select name="q20" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A</option><option value="B">B</option><option value="C">C</option>
+                            <option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="21">
+                        <div class="question-text">21. R van der Ley</div>
+                        <select name="q21" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A</option><option value="B">B</option><option value="C">C</option>
+                            <option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="22">
+                        <div class="question-text">22. Amory Lovins</div>
+                        <select name="q22" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A</option><option value="B">B</option><option value="C">C</option>
+                            <option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 23-26: TRUE / FALSE / NOT GIVEN</div>
+
+                    <div class="question" data-question="23">
+                        <div class="question-text">23. The air temperature in modern Malaysian houses is lower than the air temperature outside.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q23" value="TRUE"> TRUE</label>
+                            <label class="option"><input type="radio" name="q23" value="FALSE"> FALSE</label>
+                            <label class="option"><input type="radio" name="q23" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="24">
+                        <div class="question-text">24. The construction industry is more to blame than transport for global warming.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q24" value="TRUE"> TRUE</label>
+                            <label class="option"><input type="radio" name="q24" value="FALSE"> FALSE</label>
+                            <label class="option"><input type="radio" name="q24" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="25">
+                        <div class="question-text">25. The use of wind towers for cooling is widespread in the Middle East today.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q25" value="TRUE"> TRUE</label>
+                            <label class="option"><input type="radio" name="q25" value="FALSE"> FALSE</label>
+                            <label class="option"><input type="radio" name="q25" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="26">
+                        <div class="question-text">26. The 'super-windows' promoted by Amory Lovins can be installed at low cost.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q26" value="TRUE"> TRUE</label>
+                            <label class="option"><input type="radio" name="q26" value="FALSE"> FALSE</label>
+                            <label class="option"><input type="radio" name="q26" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSAGE 3: Headphones -->
+            <div class="passage-container hidden" id="p3_passage">
+                <h2 class="section-title">READING PASSAGE 3</h2>
+                <div class="passage">
+                    <h3>Some views on the use of headphones</h3>
+                    <p><em>Whether wearing headphones at work, or in other areas of everyday life, is a good thing or a bad thing has generated a lot of research and opinion</em></p>
+
+                    <p>To visit a typical modern office today is to walk into a room with possibly a dozen songs playing simultaneously but to hear none of them. Up to half of younger workers listen to music on their headphones, and nearly all of them think it makes them better at their jobs. In survey after survey, people report with confidence that music makes them happier, better at concentrating, and more productive.</p>
+
+                    <p>Scientists do not share this belief, they maintain that listening to music hurts people's ability to recall other things they should be doing, and any pop song, loud or soft, reduces overall performance for both extroverts and introverts. A Taiwanese study linked music that has lyrics to lower marks on concentration tests for college students, and other research has shown music with lyrics scrambles our brains' verbal-processing skills. 'As silence has the best overall performance, it would still be advisable that people work in silence,' another reporter dryly concluded.</p>
+
+                    <p>The question is therefore: if headphones are so bad for productivity, why do so many people at work have them? One factor to consider is that countries like the USA have moved from a farming and manufacturing economy to a service economy, with an emphasis on jobs in offices that require higher levels of concentration, reflection and creativity. As an estimated 70 percent of office workers work in open-plan office spaces, it is more important to create one's own enclosing bubble of sound. Lending strength to the argument for headphones at work is evidence that music relaxes our muscles, improves our mood, and may even moderately reduce blood pressure, heart rate and anxiety.</p>
+
+                    <p>The story of headphones began in 1910, when the US Navy received an odd letter written in purple ink on blue-and-pink paper. The letter writer, an eccentric inventor and repairman named Nathaniel Baldwin, from the USA state of Utah, made what at the time was an astonishing claim: he had built, in his kitchen, a new kind of headset that could amplify sound. This was an opportune invention for the Navy, who asked for a sound test and then enthusiastically adopted the headsets, later called headphones, and used them in World War I for naval radio communication.</p>
+
+                    <p>The purpose of headphones is to concentrate a quiet and private sound in the ear of the listener, which is a radical departure from music's social purpose in history. 'Music, together with dance, co-evolved biologically and culturally to serve as a technology of social bonding,' Nills L Wallin and Bjorn Merker wrote in The Origins of Music. Songs don't leave behind fossils, but evidence of musical notation dates back to Sumeria, 3,500 years ago, and in 1995 archeologists discovered a bone flute in southern Europe estimated to be 44,000 years old. If music evolved as a social glue for the species, as a way to make groups and keep them together, headphones have done what writing and literacy did for language – they made music private.</p>
+
+                    <p>Author and columnist Stephen Marche wrote that separation from other people is one of the first things ordinary Americans spend their money achieving. It is 'a by-product of a long-standing national appetite for independence,' he said. Americans are not alone in their desire for personal independence and privacy. Marche is right; wealth can buy – and modern technology can deliver – personal independence, and it is this that people have always sought.</p>
+
+                    <p>Dr Michael Bull, an expert on personal music devices from the University of Sussex in the UK, has repeatedly made the larger point that personal music devices change how we relate to public spaces. Controlling our public spaces is more important now that more people are moving from the edges of cities to live in urban centers. 'With the urban space, the more it's inhabited, the safer you feel,' Bull says. 'You feel safe if you can feel people there, but you don't' want to interact with them.' Headphones create shields for wearers, separating them from other people and their surroundings. Headphones have their own rules of good manners; they are like wearing a 'Do not disturb' sign. We assume that people wearing them are busy and we should respect their privacy, so now people wear them to appear busy. In fact, it is now becoming quite common for people not to listen to anything at all, but just to wear headphones.</p>
+
+                    <p>However, as pointed out at the beginning of this piece, although scientists have stated that headphones are bad for productivity, people still wear them at work. It is not just that headphones create privacy out of public areas, but also that music causes people to relax and reflect and pause. The outcome of relaxation, reflection and pausing at work won't be captured in minute-to-minute productivity metrics. What must be considered is that in moments of extreme focus, our attention radiates outward, toward the problem, rather than inward, on how to solve the problem. However, with music 'When our minds are at ease, we're more likely to direct the spotlight of attention inward,' Jonah Lehrer wrote in his book Imagine: How Creativity Works. 'The answers have been there all along. We just weren't listening.' In a crowded world, real estate is the ultimate scarce resource, and a headphone is a small invisible fence around our minds – making space, creating separation, and helping us listen to ourselves.</p>
+                </div>
+            </div>
+
+            <div class="resizer hidden" id="resizer3"></div>
+
+            <div class="questions-container hidden" id="p3_questions">
+                <h2 class="section-title">Questions 27-40</h2>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 27-31: YES / NO / NOT GIVEN</div>
+
+                    <div class="question" data-question="27">
+                        <div class="question-text">27. Young people are easily persuaded by surveys that listening to music is beneficial.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q27" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q27" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q27" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="28">
+                        <div class="question-text">28. Different studies share the same conclusions about the desirability of working in silence.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q28" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q28" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q28" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="29">
+                        <div class="question-text">29. Some doctors recommend wearing headphones to lower blood pressure.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q29" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q29" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q29" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="30">
+                        <div class="question-text">30. Nathaniel Baldwin was a respected government researcher.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q30" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q30" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q30" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="31">
+                        <div class="question-text">31. The effect of the invention of headphones is comparable to the effect of the invention of writing.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q31" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q31" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q31" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 32-36: Multiple choice</div>
+                    <p>Choose the correct letter, A, B, C or D.</p>
+
+                    <div class="question" data-question="32">
+                        <div class="question-text">32. What does the writer suggest about a service economy?</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q32" value="A"> A. The work is mentally demanding</label>
+                            <label class="option"><input type="radio" name="q32" value="B"> B. It provides employment for younger workers</label>
+                            <label class="option"><input type="radio" name="q32" value="C"> C. It is a small part of a country's economy</label>
+                            <label class="option"><input type="radio" name="q32" value="D"> D. Workers have to live in urban centres</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="33">
+                        <div class="question-text">33. When the writer mentions the historical evidence for early music he is</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q33" value="A"> A. emphasizing the diversity of musical forms</label>
+                            <label class="option"><input type="radio" name="q33" value="B"> B. expressing his frustration with the limited archaeological evidence uncovered</label>
+                            <label class="option"><input type="radio" name="q33" value="C"> C. lending support to the view that music has been important in human history</label>
+                            <label class="option"><input type="radio" name="q33" value="D"> D. creating a geographical map of the evolution of music</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="34">
+                        <div class="question-text">34. What does the writer say about the social effects of listening to music through headphones?</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q34" value="A"> A. It has caused a reduction in the number of people who listen to music</label>
+                            <label class="option"><input type="radio" name="q34" value="B"> B. It has increased people's participation in music events</label>
+                            <label class="option"><input type="radio" name="q34" value="C"> C. It has reduced the global variation of music styles</label>
+                            <label class="option"><input type="radio" name="q34" value="D"> D. It has changed the traditional role of music in society</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="35">
+                        <div class="question-text">35. What does the writer say about personal independence?</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q35" value="A"> A. Americans are unique in their desire for personal independence</label>
+                            <label class="option"><input type="radio" name="q35" value="B"> B. Personal independence is something that can be purchased</label>
+                            <label class="option"><input type="radio" name="q35" value="C"> C. Striving for personal independence is a recent phenomenon</label>
+                            <label class="option"><input type="radio" name="q35" value="D"> D. Personal independence destroys social connections</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="36">
+                        <div class="question-text">36. Why does the writer quote Jonah Lehrer in the last paragraph?</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q36" value="A"> A. to support the writer's own view</label>
+                            <label class="option"><input type="radio" name="q36" value="B"> B. to draw attention to an authoritative book about music</label>
+                            <label class="option"><input type="radio" name="q36" value="C"> C. to raise awareness of people's loss of listening skills</label>
+                            <label class="option"><input type="radio" name="q36" value="D"> D. to illustrate how music brings people closer to each other</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 37-40: Complete the summary</div>
+                    <p>Complete the summary using the list of words, A-I, below.</p>
+                    <p><strong>List of words:</strong><br>
+                    A. courtesy  B. relationship  C. difficulty<br>
+                    D. countryside  E. suburbs  F. language<br>
+                    G. barriers  H. obstacles  I. disapproval</p>
+
+                    <p><strong>Headphones and city living</strong></p>
+                    <p>Dr Michael Bull believes that listening to music through headphones has changed the <strong>37</strong> __________ the wearers of headphones have with public spaces.</p>
+
+                    <div class="question" data-question="37">
+                        <div class="question-text">37.</div>
+                        <select name="q37" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A - courtesy</option>
+                            <option value="B">B - relationship</option>
+                            <option value="C">C - difficulty</option>
+                            <option value="D">D - countryside</option>
+                            <option value="E">E - suburbs</option>
+                            <option value="F">F - language</option>
+                            <option value="G">G - barriers</option>
+                            <option value="H">H - obstacles</option>
+                            <option value="I">I - disapproval</option>
+                        </select>
+                    </div>
+
+                    <p>Living in the centre of cities is becoming popular, as people become less keen on living in the <strong>38</strong> __________.</p>
+
+                    <div class="question" data-question="38">
+                        <div class="question-text">38.</div>
+                        <select name="q38" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A - courtesy</option>
+                            <option value="B">B - relationship</option>
+                            <option value="C">C - difficulty</option>
+                            <option value="D">D - countryside</option>
+                            <option value="E">E - suburbs</option>
+                            <option value="F">F - language</option>
+                            <option value="G">G - barriers</option>
+                            <option value="H">H - obstacles</option>
+                            <option value="I">I - disapproval</option>
+                        </select>
+                    </div>
+
+                    <p>In densely populated city centres, headphones form <strong>39</strong> __________ that isolate people from fellow citizens and from their environment.</p>
+
+                    <div class="question" data-question="39">
+                        <div class="question-text">39.</div>
+                        <select name="q39" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A - courtesy</option>
+                            <option value="B">B - relationship</option>
+                            <option value="C">C - difficulty</option>
+                            <option value="D">D - countryside</option>
+                            <option value="E">E - suburbs</option>
+                            <option value="F">F - language</option>
+                            <option value="G">G - barriers</option>
+                            <option value="H">H - obstacles</option>
+                            <option value="I">I - disapproval</option>
+                        </select>
+                    </div>
+
+                    <p>Wearers of headphones are treated with <strong>40</strong> __________ that other people do not receive.</p>
+
+                    <div class="question" data-question="40">
+                        <div class="question-text">40.</div>
+                        <select name="q40" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A - courtesy</option>
+                            <option value="B">B - relationship</option>
+                            <option value="C">C - difficulty</option>
+                            <option value="D">D - countryside</option>
+                            <option value="E">E - suburbs</option>
+                            <option value="F">F - language</option>
+                            <option value="G">G - barriers</option>
+                            <option value="H">H - obstacles</option>
+                            <option value="I">I - disapproval</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-nav">
+                <div class="progress-items" id="bottomPartTabs"></div>
+                <div class="nav-buttons">
+                    <button class="btn" id="prev-btn" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+                    <button class="btn" id="next-btn">Next <i class="fas fa-arrow-right"></i></button>
+                    <button class="btn btn-submit" id="submit-all-btn">Submit All <i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div class="modal" id="results-modal">
+        <div class="modal-content">
+            <h2>Test Results</h2>
+            <div class="score-display" id="score-display">0/40</div>
+            <div class="score-breakdown" id="score-breakdown"></div>
+            <div class="modal-buttons">
+                <button class="btn" id="close-modal">Close</button>
+                <button class="btn" id="review-answers">Review Answers</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const PARTS = [
+            { id: 1, title: 'Passage 1', qStart: 1, qEnd: 13, passage: 'p1_passage', questions: 'p1_questions' },
+            { id: 2, title: 'Passage 2', qStart: 14, qEnd: 26, passage: 'p2_passage', questions: 'p2_questions' },
+            { id: 3, title: 'Passage 3', qStart: 27, qEnd: 40, passage: 'p3_passage', questions: 'p3_questions' }
+        ];
+
+        // Answer Key
+        const correctAnswers = {
+            // Passage 1 (Q1-13)
+            q1: "C", q2: "A", q3: "D", q4: "B",
+            q5: "NO", q6: "YES", q7: "NOT GIVEN", q8: "YES", q9: "NO",
+            q10: "farming", q11: "genetically modified", q12: "organic", q13: "chemical",
+            
+            // Passage 2 (Q14-26)
+            q14: "G", q15: "E", q16: "A", q17: "J", q18: "C",
+            q19: "D", q20: "G", q21: "A", q22: "E",
+            q23: "FALSE", q24: "TRUE", q25: "FALSE", q26: "NOT GIVEN",
+            
+            // Passage 3 (Q27-40)
+            q27: "NOT GIVEN", q28: "YES", q29: "NOT GIVEN", q30: "NO", q31: "YES",
+            q32: "A", q33: "C", q34: "D", q35: "B", q36: "A",
+            q37: "B", q38: "E", q39: "G", q40: "A"
+        };
+
+        // State
+        let currentPart = 1;
+        let currentQuestion = 1;
+        let seconds = 60 * 60;
+        let timerInterval;
+
+        function el(id) { return document.getElementById(id); }
+
+        function renderBottomTabs() {
+            const tabs = el('bottomPartTabs');
+            tabs.innerHTML = '';
+            PARTS.forEach(p => {
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                btn.style.fontWeight = p.id === currentPart ? '900' : '600';
+                btn.innerHTML = p.id === currentPart ? `<strong>${p.title}</strong>` : p.title;
+                btn.onclick = () => switchPart(p.id);
+                tabs.appendChild(btn);
+
+                const rail = document.createElement('div');
+                rail.id = `rail-part-${p.id}`;
+                rail.style.display = p.id === currentPart ? 'flex' : 'none';
+                rail.style.gap = '6px';
+                rail.style.flexWrap = 'wrap';
+                
+                for (let q = p.qStart; q <= p.qEnd; q++) {
+                    const chip = document.createElement('div');
+                    chip.textContent = q;
+                    chip.className = 'progress-item' + (q === currentQuestion && p.id === currentPart ? ' current' : '');
+                    chip.dataset.question = q;
+                    chip.style.width = '30px';
+                    chip.style.height = '20px';
+                    chip.style.borderRadius = '6px';
+                    chip.style.fontSize = '14px';
+                    chip.onclick = () => scrollToQuestion(q);
+                    rail.appendChild(chip);
+                }
+                tabs.appendChild(rail);
+            });
+        }
+
+        function switchPart(partId) {
+            if (currentPart === partId) return;
+            
+            PARTS.forEach(p => {
+                el(p.passage).classList.add('hidden');
+                el(p.questions).classList.add('hidden');
+                const r = el(`rail-part-${p.id}`);
+                if (r) r.style.display = 'none';
+            });
+
+            el('resizer').classList.add('hidden');
+            el('resizer2').classList.add('hidden');
+            el('resizer3').classList.add('hidden');
+            
+            currentPart = partId;
+            const p = PARTS[currentPart - 1];
+            currentQuestion = p.qStart;
+            el(p.passage).classList.remove('hidden');
+            el(p.questions).classList.remove('hidden');
+
+            if (currentPart === 1) el('resizer').classList.remove('hidden');
+            if (currentPart === 2) el('resizer2').classList.remove('hidden');
+            if (currentPart === 3) el('resizer3').classList.remove('hidden');
+
+            const r = el(`rail-part-${p.id}`);
+            if (r) r.style.display = 'flex';
+            
+            el('headerPassageTitle').textContent = `Passage ${currentPart} of 3`;
+            scrollToQuestion(currentQuestion, false);
+            renderBottomTabs();
+        }
+
+        function scrollToQuestion(num, smooth = true) {
+            const elQ = document.querySelector(`[data-question="${num}"]`) ||
+                       document.querySelector(`input[name="q${num}"]`) ||
+                       document.querySelector(`select[name="q${num}"]`);
+            if (elQ) elQ.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'center' });
+            updateCurrentQuestion(num);
+        }
+
+        function updateCurrentQuestion(num) {
+            currentQuestion = num;
+            document.querySelectorAll(`#rail-part-${currentPart} .progress-item`).forEach(it => {
+                it.classList.toggle('current', parseInt(it.dataset.question, 10) === num);
+            });
+        }
+
+        function attachAnsweredListeners() {
+            document.querySelectorAll('input[type="radio"], input[type="text"], select').forEach(input => {
+                input.addEventListener('change', () => {
+                    const m = input.name && input.name.match(/^q(\d+)/);
+                    if (!m) return;
+                    const q = parseInt(m[1], 10);
+                    const chip = document.querySelector(`.progress-item[data-question="${q}"]`);
+                    if (chip) {
+                        const val = input.type === 'text' ? input.value.trim() : input.value;
+                        if (val) chip.classList.add('answered');
+                    }
+                });
+            });
+        }
+
+        el('submit-all-btn').addEventListener('click', () => {
+            if (!confirm('Submit the entire test?')) return;
+
+            let score = 0;
+            const total = 40;
+            const results = {};
+
+            for (let q = 1; q <= total; q++) {
+                const key = `q${q}`;
+                const corr = correctAnswers[key];
+                let user = null;
+                let isCorrect = false;
+
+                const radios = document.querySelectorAll(`input[name="${key}"][type="radio"]`);
+                const text = document.querySelector(`input[name="${key}"][type="text"]`);
+                const sel = document.querySelector(`select[name="${key}"]`);
+
+                if (radios && radios.length) {
+                    const c = Array.from(radios).find(r => r.checked);
+                    if (c) { user = c.value; isCorrect = user === corr; }
+                } else if (text) {
+                    user = text.value.trim();
+                    if (user) {
+                        const norm = s => String(s).trim().toLowerCase().replace(/\s+/g, ' ');
+                        isCorrect = norm(user) === norm(corr);
+                    }
+                } else if (sel) {
+                    user = sel.value;
+                    if (user) isCorrect = user === corr;
+                }
+
+                if (isCorrect) score++;
+                results[key] = { userAnswer: user || 'No answer', correct: corr, isCorrect };
+            }
+
+            for (let q = 1; q <= total; q++) {
+                const res = results[`q${q}`];
+                const ch = document.querySelector(`.progress-item[data-question="${q}"]`);
+                if (ch) {
+                    ch.classList.remove('current', 'answered');
+                    if (res) ch.classList.add(res.isCorrect ? 'correct' : 'incorrect');
+                }
+            }
+
+            el('score-display').textContent = `${score}/${total}`;
+            const breakdown = el('score-breakdown');
+            breakdown.innerHTML = PARTS.map(p => {
+                const partScore = Array.from({ length: p.qEnd - p.qStart + 1 }, (_, i) => 
+                    results[`q${p.qStart + i}`]).filter(r => r && r.isCorrect).length;
+                return `<div class="score-item"><span>Passage ${p.id}:</span><span>${partScore}/${p.qEnd - p.qStart + 1}</span></div>`;
+            }).join('');
+            
+            el('results-modal').style.display = 'flex';
+
+            el('review-answers').onclick = () => {
+                el('results-modal').style.display = 'none';
+                showCorrectIndicators(results);
+            };
+        });
+
+        function showCorrectIndicators(results) {
+            document.querySelectorAll('.answer-indicator').forEach(e => e.remove());
+            
+            for (let q = 1; q <= 40; q++) {
+                const key = `q${q}`;
+                const res = results[key];
+                if (!res) continue;
+
+                let target = null;
+                const qEl = document.querySelector(`[data-question="${q}"] .options`);
+                if (qEl) target = qEl;
+                if (!target) {
+                    const input = document.querySelector(`input[name="${key}"]`);
+                    if (input) target = input.parentNode;
+                }
+                if (!target) {
+                    const sel = document.querySelector(`select[name="${key}"]`);
+                    if (sel) target = sel.parentNode;
+                }
+                if (!target) continue;
+
+                const box = document.createElement('div');
+                box.className = 'answer-indicator ' + (res.isCorrect ? 'correct' : 'incorrect');
+                box.innerHTML = res.isCorrect
+                    ? `<i class="fas fa-check"></i> Correct!`
+                    : `<i class="fas fa-times"></i> Incorrect. Your answer: <strong>${res.userAnswer}</strong><br><strong>Correct:</strong> ${res.correct}`;
+                target.appendChild(box);
+            }
+        }
+
+        const timerSpan = document.querySelector('#globalTimer span');
+        const timerContainer = el('globalTimer');
+        
+        function updateTimer() {
+            seconds--;
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            timerSpan.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            if (seconds <= 2 * 60) timerContainer.classList.add('warning');
+            if (seconds <= 0) {
+                clearInterval(timerInterval);
+                alert('Time is up! Submitting test.');
+                el('submit-all-btn').click();
+            }
+        }
+
+        function startTest() {
+            el('startScreen').classList.add('hidden');
+            el('testContainer').classList.remove('hidden');
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+        window.startTest = startTest;
+
+        setTimeout(() => {
+            el('loadingScreen').classList.add('hidden');
+            el('startScreen').classList.remove('hidden');
+        }, 900);
+
+        PARTS.forEach(p => {
+            if (p.id === 1) {
+                el(p.passage).classList.remove('hidden');
+                el(p.questions).classList.remove('hidden');
+            } else {
+                el(p.passage).classList.add('hidden');
+                el(p.questions).classList.add('hidden');
+            }
+        });
+        
+        renderBottomTabs();
+        attachAnsweredListeners();
+
+        // Resizer
+        let isResizing = false;
+
+        ['resizer', 'resizer2', 'resizer3'].forEach(rid => {
+            el(rid).addEventListener('mousedown', (e) => {
+                isResizing = true;
+                document.body.style.cursor = 'col-resize';
+                e.preventDefault();
+            });
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const container = document.querySelector('.main-content');
+            const rect = container.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const leftPct = (mouseX / rect.width) * 100;
+            const rightPct = 100 - leftPct;
+            
+            if (leftPct >= 30 && leftPct <= 70) {
+                const passagePanel = document.querySelector('.passage-container:not(.hidden)');
+                const questionsPanel = document.querySelector('.questions-container:not(.hidden)');
+                if (passagePanel && questionsPanel) {
+                    passagePanel.style.flex = leftPct + '%';
+                    questionsPanel.style.width = rightPct + '%';
+                }
+            }
+        });
+        
+        document.addEventListener('mouseup', () => {
+            if (isResizing) {
+                isResizing = false;
+                document.body.style.cursor = '';
+            }
+        });
+
+        // Highlight functionality
+        const highlightBtn = el('highlight-btn');
+        const removeHighlightBtn = el('remove-highlight-btn');
+        let lastSelection = null;
+        let highlightTarget = null;
+
+        function getValidSelection() {
+            const sel = window.getSelection();
+            if (!sel.rangeCount || sel.isCollapsed) return null;
+            return sel.getRangeAt(0);
+        }
+
+        highlightBtn.addEventListener('click', () => {
+            if (lastSelection) {
+                const span = document.createElement('span');
+                span.className = 'highlight';
+                span.appendChild(lastSelection.extractContents());
+                lastSelection.insertNode(span);
+                window.getSelection().removeAllRanges();
+                highlightBtn.style.display = 'none';
+            }
+        });
+
+        removeHighlightBtn.addEventListener('click', () => {
+            if (highlightTarget) {
+                const parent = highlightTarget.parentNode;
+                while (highlightTarget.firstChild) {
+                    parent.insertBefore(highlightTarget.firstChild, highlightTarget);
+                }
+                parent.removeChild(highlightTarget);
+                removeHighlightBtn.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('selectionchange', () => {
+            highlightBtn.style.display = 'none';
+            removeHighlightBtn.style.display = 'none';
+            
+            const range = getValidSelection();
+            if (range) {
+                lastSelection = range;
+                const rect = range.getBoundingClientRect();
+                highlightBtn.style.top = (window.scrollY + rect.top - 35) + 'px';
+                highlightBtn.style.left = (window.scrollX + rect.left) + 'px';
+                highlightBtn.style.display = 'block';
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target.classList && e.target.classList.contains('highlight')) {
+                e.preventDefault();
+                highlightTarget = e.target;
+                const rect = e.target.getBoundingClientRect();
+                removeHighlightBtn.style.top = (window.scrollY + rect.top - 35) + 'px';
+                removeHighlightBtn.style.left = (window.scrollX + rect.left) + 'px';
+                removeHighlightBtn.style.display = 'block';
+            }
+        });
+
+        el('close-modal').addEventListener('click', () => {
+            el('results-modal').style.display = 'none';
+        });
+
+        el('prev-btn').addEventListener('click', () => {
+            if (currentPart > 1) switchPart(currentPart - 1);
+        });
+
+        el('next-btn').addEventListener('click', () => {
+            if (currentPart < 3) switchPart(currentPart + 1);
+        });
+    </script>
+</body>
+</html>

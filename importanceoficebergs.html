@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 2 – The importance of icebergs to ocean life</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  .muted{color:var(--muted)}
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+      <div id="passage">
+        <h2>Reading Passage 2</h2>
+        <p><strong>A.</strong> The word iceberg refers to pieces of ice larger than five meters across... (full text from PDF condensed for layout). The waters surrounding Antarctica are home to most of the icebergs on Earth, although they can also be found in the Arctic region... Recent research is beginning to shed light on what it is about icebergs that is attractive to wildlife.</p>
+        <p><strong>B.</strong> Ken Smith ... reported hot spots of chemical and biological enrichment... high concentrations of chlorophyll, krill, and seabirds in the water surrounding the icebergs he sampled...</p>
+        <p><strong>C.</strong> During their first expedition, Smith and his team deployed oceanographic instruments, fishing nets, and cameras around two icebergs...</p>
+        <p><strong>D.</strong> Their most significant finding was that as icebergs melt, accumulated dust and rock are dispersed into the water... These act as ocean fertilizer to microscopic marine organisms such as plankton...</p>
+        <p><strong>E.</strong> Oceanographer Greg Stone led a team of scuba divers to study iceberg ecology around B-15, the largest iceberg ever known...</p>
+        <p><strong>F.</strong> The team recorded higher concentrations of jellyfish and krill near icebergs and observed juvenile ice fish living in burrows in the ice... In a cave inside a grounded iceberg they found a garden of invertebrates.</p>
+        <p><strong>G.</strong> Most Antarctic icebergs get pushed around by wind and currents; their keel can rub along the seafloor, disturbing the benthic ecosystem. A grounded berg can protect bottom-dwelling creatures.</p>
+        <p><strong>H.</strong> Stone agrees with Smith that icebergs play a vital role in fertilizing the Southern Ocean... twenty-four-hour summer sunshine also fuels productivity.</p>
+        <p><strong>I.</strong> Icebergs are not safe: one grounded berg completely crumbled and disintegrated just hours after a cave dive, likely due to pressures from melting and refreezing.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">📢 Join my Telegram</button>
+
+<script>
+const CONFIG = {
+  title: "READING PASSAGE 2 – The importance of icebergs to ocean life",
+  subtitle: "Spend about 20 minutes on Questions 17–32.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  sections: [
+    { type:'locate', heading:'Questions 17–22', instructions:['Which paragraph contains the information?'], items:[
+      {id:17,prompt:'examples of equipment used in the study of icebergs',correct:'C'},
+      {id:18,prompt:'a description of the volume of water inside one iceberg',correct:'E'},
+      {id:19,prompt:'a reference to causes of instability in icebergs',correct:'I'},
+      {id:20,prompt:'an explanation as to the origins of the contents of the water around icebergs',correct:'D'},
+      {id:21,prompt:'a definition of the term “iceberg”',correct:'A'},
+      {id:22,prompt:'a reference to the temperature of the water surrounding an iceberg',correct:'F'}
+    ]},
+
+    // For 23–24 choose TWO: rendered as one block with checkboxes
+    { type:'msq', heading:'Questions 23–24', instructions:['Choose TWO letters, A–E.'], options:[
+      {key:'A',text:'He likened the results of icebergs melting to the action of rivers joining the sea.'},
+      {key:'B',text:'He obtained all his results from the study of a single Antarctic iceberg.'},
+      {key:'C',text:'He was able to confirm that all icebergs around the world would have similar ecosystems.'},
+      {key:'D',text:'He established connections between the contents of icebergs and surrounding marine life.'},
+      {key:'E',text:'He was the first to note the presence of bacteria in the sea around icebergs.'}
+    ], correct:['A','D'], ids:[23,24]},
+
+    // 25–26 choose TWO about Greg Stone
+    { type:'msq', heading:'Questions 25–26', instructions:['Choose TWO letters, A–E.'], options:[
+      {key:'A',text:'His work is widely regarded as more innovative than that of Ken Smith.'},
+      {key:'B',text:'He has been criticised for the risks he is willing to take in his work with icebergs.'},
+      {key:'C',text:'His attempts to study the biggest iceberg in history were unsuccessful.'},
+      {key:'D',text:'He identifies day length as providing a boost to the ecological importance of icebergs.'},
+      {key:'E',text:'He was partly responsible for the collapse of an iceberg that he was studying.'}
+    ], correct:['B','C'], ids:[25,26]},
+
+    // 27–32 summary completion ONE WORD ONLY
+    { type:'gap', heading:'Questions 27–32', instructions:['Complete the summary. ONE WORD ONLY.'], items:[
+      {id:27,prompt:'... such as krill and ________ in the immediate vicinity of the ice.',correct:'jellyfish'},
+      {id:28,prompt:'young fish appeared to have created ________ to live in',correct:'burrows'},
+      {id:29,prompt:'— possibly as a means of avoiding ________.',correct:'predators'},
+      {id:30,prompt:'a stunning display ... deep within a ________ in the ice.',correct:'cave'},
+      {id:31,prompt:'rather than being blown around or moved by ocean ________.',correct:'currents'},
+      {id:32,prompt:'movement can cause an iceberg’s ________ to collide with and damage the seabed.',correct:'keel'}
+    ]}
+  ]
+};
+
+// ===== RENDER =====
+const qroot=document.getElementById('qroot');
+const navIds=[]; const answersMap={};
+function sectionHeader(t){const h=document.createElement('h2');h.className='qsection';h.textContent=t;return h;}
+function renderLocate(sec){qroot.appendChild(sectionHeader(sec.heading));(sec.instructions||[]).forEach(tx=>{const p=document.createElement('p');p.className='muted';p.textContent=tx;qroot.appendChild(p);});const letters=['A','B','C','D','E','F','G','H','I'];sec.items.forEach(it=>{const b=document.createElement('div');b.className='qblock';b.id=`anchor-${it.id}`;const head=document.createElement('div');head.className='qhead';head.innerHTML=`<strong>${it.id}.</strong> ${it.prompt}`;const o=document.createElement('div');o.className='options';o.innerHTML=letters.map(k=>`<label><input type="radio" name="q${it.id}" value="${k}"> ${k}</label>`).join('');b.appendChild(head);b.appendChild(o);qroot.appendChild(b);navIds.push(it.id);answersMap[it.id]=it.correct??'';});}
+function renderMSQ(sec){qroot.appendChild(sectionHeader(sec.heading));(sec.instructions||[]).forEach(tx=>{const p=document.createElement('p');p.className='muted';p.textContent=tx;qroot.appendChild(p);});const label=`${sec.ids[0]}–${sec.ids[1]}`;const b=document.createElement('div');b.className='qblock';b.id=`anchor-${sec.ids[0]}_${sec.ids[1]}`;b.innerHTML=`<div class="qhead"><strong>${label}.</strong></div>`;const o=document.createElement('div');o.className='options';o.innerHTML=sec.options.map(x=>`<label><input type="checkbox" name="q${sec.ids[0]}_${sec.ids[1]}" value="${x.key}"> ${x.key} ${x.text}</label>`).join('');b.appendChild(o);qroot.appendChild(b);navIds.push(...sec.ids);answersMap[`${sec.ids[0]}_${sec.ids[1]}`]=sec.correct.slice();}
+function renderGap(sec){qroot.appendChild(sectionHeader(sec.heading));(sec.instructions||[]).forEach(tx=>{const p=document.createElement('p');p.className='muted';p.textContent=tx;qroot.appendChild(p);});sec.items.forEach(it=>{const b=document.createElement('div');b.className='qblock';b.id=`anchor-${it.id}`;b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div><div class="options"><input type="text" id="q${it.id}" name="q${it.id}" placeholder="your answer"></div>`;qroot.appendChild(b);navIds.push(it.id);answersMap[it.id]=it.correct??'';});}
+CONFIG.sections.forEach(sec=>{if(sec.type==='locate')renderLocate(sec);if(sec.type==='msq')renderMSQ(sec);if(sec.type==='gap')renderGap(sec);});
+
+// Footer chips
+const footerNav=document.getElementById('footerNav');
+(function(){footerNav.innerHTML='<strong class="muted">Questions:</strong>';[...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{const chip=document.createElement('button');chip.className='chip';chip.id=`chip-${id}`;chip.textContent=id;chip.addEventListener('click',()=>{document.getElementById(`anchor-${id}`)?.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById(`anchor-${CONFIG.sections[1].ids[0]}_${CONFIG.sections[1].ids[1]}`)?.scrollIntoView({behavior:'smooth',block:'center'});});footerNav.appendChild(chip);});})();
+function markChipAnswered(id,answered){const chip=document.getElementById(`chip-${id}`);if(chip)chip.classList.toggle('answered',!!answered);} 
+document.addEventListener('change',e=>{const ms=e.target.name||e.target.id||'';let id=null;if(/q(\d+_\d+)/.test(ms)){id=ms.match(/q(\d+_\d+)/)[1];}else{const m=ms.match(/q(\d+)/);id=m?m[1]:null;}if(!id)return;let answered=false;if(e.target.type==='checkbox'){answered=(document.querySelectorAll(`input[name='q${id}']:checked`).length>0);}else if(e.target.type==='radio'){answered=!!document.querySelector(`input[name='q${id}']:checked`);}else{answered=(e.target.value||'').trim().length>0;}const idsArr=String(id).split('_');idsArr.forEach(n=>markChipAnswered(+n,answered));});
+
+// Timer
+let timeLeft=Math.max(1,20)*60;const timer=document.getElementById('timer');const pauseBtn=document.getElementById('pauseBtn');const resumeBtn=document.getElementById('resumeBtn');let paused=false;let iv;const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;function startTick(){if(iv)clearInterval(iv);iv=setInterval(()=>{if(paused)return;timer.textContent=fmt(timeLeft);if(timeLeft<=0){clearInterval(iv);alert("Time's up! Submitting.");submit();}timeLeft--;},1000);}timer.textContent=fmt(timeLeft);startTick();pauseBtn.addEventListener('click',()=>{paused=true;pauseBtn.disabled=true;resumeBtn.disabled=false;});resumeBtn.addEventListener('click',()=>{paused=false;pauseBtn.disabled=false;resumeBtn.disabled=true;});
+
+// Submit & grading
+ document.getElementById('submitBtn').addEventListener('click',submit);
+ function submit(){paused=true;pauseBtn.disabled=true;resumeBtn.disabled=false;let total=0,graded=0,correctCount=0;const itemsOut=[];const ids=[];CONFIG.sections.forEach(sec=>{sec.items?.forEach(it=>ids.push(it.id));if(sec.type==='msq')ids.push(...sec.ids);});ids.forEach(k=>{let key=String(k);let ans=answersMap[key];let user='';if(!ans&&answersMap[`${k-1}_${k}`]){key=`${k-1}_${k}`;ans=answersMap[key];}
+ if(Array.isArray(ans)){
+   const picked=Array.from(document.querySelectorAll(`input[name='q${key}']:checked`)).map(x=>x.value).sort();
+   const expected=ans.slice().sort();
+   user=picked.join(', ');
+   total++;graded++;
+   const ok=(picked.length===expected.length)&&picked.every((v,i)=>v===expected[i]);
+   if(ok)correctCount++;
+   itemsOut.push({label:key.replace('_','–'),status:ok?'✓ Correct':'✗ Incorrect',user:user||'No answer',correct:expected.join(', ')});
+ } else {
+   const input=document.getElementById('q'+key) || document.querySelector(`input[name='q${key}']:checked`);
+   user=input?(input.value||input.value):'';
+   total++;graded++;
+   const ok=(user||'').trim().toUpperCase()===(String(ans)||'').trim().toUpperCase();
+   if(ok)correctCount++;
+   itemsOut.push({label:key,status:ok?'✓ Correct':'✗ Incorrect',user:user||'No answer',correct:String(ans)});
+ }
+});
+ document.getElementById('score').innerHTML=`Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;
+ document.getElementById('answers').innerHTML=itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+ const r=document.getElementById('results');r.style.display='block';r.scrollIntoView({behavior:'smooth'});
+ }
+
+// Highlight helpers
+function markSelection(color,scope){const sel=window.getSelection();if(!sel||!sel.rangeCount)return;const range=sel.getRangeAt(0);if(!scope.contains(range.commonAncestorContainer))return;const container=range.commonAncestorContainer.nodeType===1?range.commonAncestorContainer:range.commonAncestorContainer.parentNode;if(container.closest&&container.closest('input, textarea, select'))return;const frag=range.extractContents();const span=document.createElement('span');span.className='highlight';span.style.backgroundColor=color;span.appendChild(frag);range.insertNode(span);sel.removeAllRanges();}
+const passageCard=document.getElementById('passageCard');const pPalette=document.getElementById('pPalette');passageCard.addEventListener('mouseup',e=>{const sel=window.getSelection();if(!sel||sel.toString().trim().length===0)return;if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer))return;const r=passageCard.getBoundingClientRect(),x=Math.min(e.clientX-r.left,r.width-10),y=Math.max(0,e.clientY-r.top-40);pPalette.style.left=(r.left+x)+'px';pPalette.style.top=(r.top+y)+'px';pPalette.style.display='block';});document.addEventListener('mousedown',e=>{if(!pPalette.contains(e.target))pPalette.style.display='none';});pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{btn.addEventListener('click',()=>{markSelection(btn.dataset.color,passageCard);pPalette.style.display='none';});});document.getElementById('clearPMarks').addEventListener('click',()=>{passageCard.querySelectorAll('span.highlight').forEach(n=>{const p=n.parentNode;while(n.firstChild)p.insertBefore(n.firstChild,n);p.removeChild(n);p.normalize();});pPalette.style.display='none';});
+const qCard=document.querySelector('.card.questions');const qPalette=document.getElementById('qPalette');qCard.addEventListener('mouseup',e=>{const sel=window.getSelection();if(!sel||sel.toString().trim().length===0)return;if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer))return;const node=sel.getRangeAt(0).commonAncestorContainer.nodeType===1?sel.getRangeAt(0).commonAncestorContainer:sel.getRangeAt(0).commonAncestorContainer.parentNode;if(node.closest&&node.closest('input,textarea,select'))return;const r=qCard.getBoundingClientRect(),x=Math.min(e.clientX-r.left,r.width-10),y=Math.max(0,e.clientY-r.top-40);qPalette.style.left=(r.left+x)+'px';qPalette.style.top=(r.top+y)+'px';qPalette.style.display='block';});document.addEventListener('mousedown',e=>{if(!qPalette.contains(e.target))qPalette.style.display='none';});qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{btn.addEventListener('click',()=>{markSelection(btn.dataset.color,qCard);qPalette.style.display='none';});});document.getElementById('clearQMarks').addEventListener('click',()=>{qCard.querySelectorAll('span.highlight').forEach(n=>{const p=n.parentNode;while(n.firstChild)p.insertBefore(n.firstChild,n);p.removeChild(n);p.normalize();});qPalette.style.display='none';});
+
+document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

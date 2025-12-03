@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Test - Complete</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            overflow: hidden;
+        }
+
+        .loading-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9fafb;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #2563eb;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-title {
+            font-size: 1.2rem;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .start-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9fafb;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9998;
+        }
+
+        .start-content {
+            text-align: center;
+        }
+
+        .start-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 24px;
+        }
+
+        .start-button {
+            padding: 12px 32px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .start-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            background: white;
+        }
+
+        header {
+            background-color: #ffffff;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .passage-info {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .timer {
+            background-color: rgba(255, 193, 193, 0.5);
+            padding: 6px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+            min-width: 80px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #c53030;
+            border: 1px solid rgba(255, 120, 120, 0.3);
+        }
+
+        .timer.warning {
+            color: #9b2c2c;
+            background-color: rgba(254, 178, 178, 0.7);
+        }
+
+        .logo-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+            cursor: pointer;
+        }
+
+        .logo-area:hover {
+            background-color: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .progress-container {
+            background-color: #f8f9fa;
+            padding: 4px 20px;
+            z-index: 100;
+            flex-shrink: 0;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .progress-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .progress-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .progress-item {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a5568;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            border: 1px solid #cbd5e0;
+        }
+
+        .progress-item.current {
+            background-color: #4299e1;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-item.answered {
+            background-color: #9ae6b4;
+            color: #22543d;
+        }
+
+        .progress-item.correct {
+            background-color: #48bb78;
+            color: white;
+        }
+
+        .progress-item.incorrect {
+            background-color: #fed7d7;
+            color: #c53030;
+        }
+
+        .btn {
+            padding: 6px 14px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.95rem;
+            background-color: #f7fafc;
+            color: #4a5568;
+        }
+
+        .btn:hover {
+            background-color: #edf2f7;
+        }
+
+        .btn-submit {
+            background-color: #48bb78;
+            color: white;
+            font-weight: 900;
+            border: 1px solid #38a169;
+        }
+
+        .btn-submit:hover {
+            background-color: #38a169;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #fafafa;
+        }
+
+        .resizer {
+            width: 4px;
+            background-color: #cbd5e0;
+            cursor: col-resize;
+            transition: background-color 0.2s;
+        }
+
+        .resizer:hover {
+            background-color: #a0aec0;
+        }
+
+        .questions-container {
+            width: 40%;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: white;
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .passage {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage h2, .passage h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .passage p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .question-section {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background-color: #ffffff;
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #2d3748;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            background-color: #f7fafc;
+        }
+
+        .option input {
+            margin-right: 8px;
+        }
+
+        .input-field {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 400px;
+            font-size: 0.95rem;
+            margin-top: 8px;
+        }
+
+        .input-field-inline {
+            padding: 4px 8px;
+            border: none;
+            border-bottom: 2px solid #cbd5e0;
+            background-color: transparent;
+            font-size: 0.95rem;
+            min-width: 120px;
+            max-width: 200px;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        .input-field-inline:focus {
+            border-bottom-color: #4299e1;
+        }
+
+        .input-field-inline::placeholder {
+            color: #a0aec0;
+        }
+
+        select.input-field {
+            width: auto;
+            min-width: 200px;
+        }
+
+        .answer-indicator {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .answer-indicator.correct {
+            background-color: #e6fffa;
+            border: 1px solid #38b2ac;
+            color: #234e52;
+        }
+
+        .answer-indicator.incorrect {
+            background-color: #fed7d7;
+            border: 1px solid #fc8181;
+            color: #742a2a;
+        }
+
+        .question-group {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .question-group-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2d3748;
+        }
+
+        .highlight {
+            background-color: #ffff00;
+            cursor: pointer;
+        }
+
+        #highlight-btn, #remove-highlight-btn {
+            position: absolute;
+            z-index: 9999;
+            display: none;
+            padding: 6px 12px;
+            font-size: 14px;
+            border: 1px solid #888;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .score-display {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #2d3748;
+        }
+
+        .score-breakdown {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .questions-container {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #e2e8f0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h2 class="loading-title">Your test will begin shortly</h2>
+            <p>Please wait</p>
+        </div>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="startScreen" class="start-screen hidden">
+        <div class="start-content">
+            <h1 class="start-title">IELTS WITH Muxriddin Xujayev</h1>
+            <p style="margin-bottom: 24px; color: #6b7280;">Complete Reading Test - 60 minutes</p>
+            <button class="start-button" onclick="startTest()">Start Test</button>
+        </div>
+    </div>
+
+    <!-- Test Container -->
+    <div class="container hidden" id="testContainer">
+        <!-- Header -->
+        <header>
+            <div class="passage-info">IELTS Reading Test</div>
+            <div class="timer" id="globalTimer">
+                <i class="fas fa-clock"></i>
+                <span>60:00</span>
+            </div>
+            <div class="logo-area" onclick="window.open('https://t.me/xojaevs', '_blank')">
+                <i class="fas fa-paper-plane"></i>
+                <span>Click For More Tests</span>
+            </div>
+            <div class="passage-info" id="headerPassageTitle">Passage 1 of 3</div>
+        </header>
+
+        <!-- Highlight buttons -->
+        <button id="highlight-btn" type="button">Highlight</button>
+        <button id="remove-highlight-btn" type="button">Remove</button>
+
+        <div class="main-content">
+            <!-- PASSAGE 1 -->
+            <div class="passage-container" id="p1_passage">
+                <h2 class="section-title">READING PASSAGE 1</h2>
+                <div class="passage">
+                    <h3>Chocolate for the masses</h3>
+                    <p><em>For almost three thousand years, chocolate was a drink of the elite and the wealthy, originally in South America and later on in Europe. In the early 19th century, however, chocolate became far more widely available, and consumption shot up dramatically across the populations of Europe in particular.</em></p>
+
+                    <p>It was 1828 that marked the beginning of the modern era in chocolate making and production. Chocolate as a drink had been known for centuries, but in 1628 a Dutch chemist named Van Houten developed a process for the manufacture of a new kind of powdered chocolate using a hydraulic press. Untreated chocolate liquor' — the end result of grinding the cacao beans from which Chocolate is obtained — contains about 5-3 per cent cacao butter, but this machine removed nearly half of this, leaving a cake that could be pulverized into a fine powder — what is now known as 'cocoa'.</p>
+
+                    <p>In 1547, the British Firm Fry and Sons found a way to mix a blend of cocoa powder and sugar with melted cacao butter to produce a thin paste which could be cast into various shapes. This was the world's first true solid chocolate. Thanks to immediate high demand for this product, the price of cacao butter escalated, so the new solid chocolate was only accessible for the elite. But this would eventually change, because of the introduction of cost-cutting methods and mass production.</p>
+
+                    <p>By the latter half of the 19th century, many manufacturers had begun making their own chocolate, and using cocoa powder to hand-coat sugar confections. Cocoa powder also reached wide use in many other products, like ice creams and biscuits. Entrepreneurial families like the Frys and Cadburys in Britain had a social conscience in the midst of all this money-making, unlike many other l9th-century captains of industry. In the Birmingham suburb of Bourneville, where they had established their chocolate factor, the Cadburys created a model town with adequate housing for their workers, and even dining and reading rooms so that their employees had no need to spend anything on entertaining themselves.</p>
+
+                    <p>However, the rising demand for chocolate also made it a target for unscrupulous producers and merchants. Sometimes the expensive cacao butter was completely extracted and replaced with olive or almond oil, or egg yolks. Alternatively, cheaper materials such as potato starch or flour were added. In 1850, a health commission was created in Britain for the analysis of foods suspicions about chocolate proved well-founded — most of the samples contained starch grains from potatoes or other plants. The investigation inspired the British Food and Drug Act of 1860 and the Adulteration of Food Act of 1872.</p>
+
+                    <p>The invention of milk chocolate took place in Switzerland, and was a collaboration between two men. The first was Henri Nestle, a chemist who in l867 discovered a process to make powdered milk by evaporation, when mixed with water, this could be fed to infants and small children. The second man, Daniel Peter, came up with the idea of using Nestlé's milk powder in the manufacture of a new kind of chocolate, and, in 1879, the first milk chocolate bar was produced.</p>
+
+                    <p>Also in 1879 another Swiss, Rodolphe Lindt, invented the conche machine, which vastly improved the quality of Chocolate confectionery. Before Lindt, solid chocolate was usually coarse and gritty. Now, however, it achieved such a degree of smoothness that Lindt named it 'fondant', after the smooth sugar creams of that name. People on both sides of the Atlantic developed a taste for fondant chocolate, and the use of the conche machine for solid chocolate became universal in the business.</p>
+
+                    <p>In the USA, Milton Hershey dominated the chocolate industry. In 1893, after seeing examples of the machinery used in Europe in action at an international exhibition in Chicago, he bought some and began turning out chocolate coatings for the caramels he was already producing. But after a trip to the chocolate centers of Europe, he sold his caramel business for a million dollars, bought a farm in Pennsylvania, and built a chocolate factory there.</p>
+
+                    <p>This became the nucleus of 'Hershey, the Chocolate Town', which contained amongst other things Hershey's imposing mansion, the Hershey Department Store and the Hershey Bank. There was, however, no elected mayor or indeed any democratic system in place. The whole town was in essence Milton Hershey's private kingdom, and he ran it as he wanted.</p>
+
+                    <p>This was not the only Hershey town in existence. During a trip which he made to the island of Cuba in 1915, Hershey was inspired to build a new model town centered round a mill for grinding sugar. To transport the refined sugar so that it could be shipped by sea to his chocolate and cocoa factory, Hershey built modern electric railroads too.</p>
+
+                    <p>To help advertise his products, Hershey employed nutritionists to proclaim their health qualities, and his chocolate bars and cocoa soon commanded the American market. Everything was mechanized — a true assembly-line operation. Hershey's best-set King bar contained almonds imported from southern Europe dropped by machines into the waiting molds. Another popular product was 'Hershey's Kisses' — bite-sized, flat-bottomed drops of chocolate, individually wrapped.</p>
+
+                    <p>Nowadays so many tourists visit Hershey that the company no longer offers tours of its factory. Rather, visitors are whisked along on automated carts through an exhibition called 'Chocolate World', where they can see how their favorite products are produced.</p>
+                </div>
+            </div>
+
+            <div class="resizer" id="resizer"></div>
+
+            <div class="questions-container" id="p1_questions">
+                <h2 class="section-title">Questions 1-13</h2>
+                
+                <div class="question-group">
+                    <div class="question-group-title">Questions 1-6: TRUE / FALSE / NOT GIVEN</div>
+                    
+                    <div class="question" data-question="1">
+                        <div class="question-text">1. Chocolate was consumed by greater numbers of people in the nineteenth century than in previous times.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q1" value="TRUE"> TRUE</label>
+                            <label class="option"><input type="radio" name="q1" value="FALSE"> FALSE</label>
+                            <label class="option"><input type="radio" name="q1" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="2">
+                        <div class="question-text">2. Fry's chocolate became more affordable because of the fall in price of one ingredient.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q2" value="TRUE"> TRUE</label>
+                            <label class="option"><input type="radio" name="q2" value="FALSE"> FALSE</label>
+                            <label class="option"><input type="radio" name="q2" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="3">
+                        <div class="question-text">3. Entrepreneurial British chocolate manufacturers paid their employees well.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q3" value="TRUE"> TRUE</label>
+                            <label class="option"><input type="radio" name="q3" value="FALSE"> FALSE</label>
+                            <label class="option"><input type="radio" name="q3" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="4">
+                        <div class="question-text">4. Customers were made ill through the practices of unscrupulous chocolate producers.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q4" value="TRUE"> TRUE</label>
+                            <label class="option"><input type="radio" name="q4" value="FALSE"> FALSE</label>
+                            <label class="option"><input type="radio" name="q4" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="5">
+                        <div class="question-text">5. Fresh milk was used in the production of milk chocolate in Switzerland.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q5" value="TRUE"> TRUE</label>
+                            <label class="option"><input type="radio" name="q5" value="FALSE"> FALSE</label>
+                            <label class="option"><input type="radio" name="q5" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="6">
+                        <div class="question-text">6. Lindt's conche machine was adopted by other manufacturers.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q6" value="TRUE"> TRUE</label>
+                            <label class="option"><input type="radio" name="q6" value="FALSE"> FALSE</label>
+                            <label class="option"><input type="radio" name="q6" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 7-13: Complete the notes</div>
+                    <p><strong>Milton Hershey and the chocolate industry</strong></p>
+                    <p>Choose ONE WORD ONLY from the passage for each answer.</p>
+
+                    <div class="question" data-question="7">
+                        <div class="question-text">7. Hershey bought some <input type="text" name="q7" class="input-field-inline" maxlength="30" placeholder="________"> after visiting a trade fair.</div>
+                    </div>
+
+                    <div class="question" data-question="8">
+                        <div class="question-text">8. After selling his caramel business, Hershey purchased a <input type="text" name="q8" class="input-field-inline" maxlength="30" placeholder="________">.</div>
+                    </div>
+
+                    <div class="question" data-question="9">
+                        <div class="question-text">9. The inhabitants of Hershey could not vote for a <input type="text" name="q9" class="input-field-inline" maxlength="30" placeholder="________">.</div>
+                    </div>
+
+                    <div class="question" data-question="10">
+                        <div class="question-text">10. Hershey constructed <input type="text" name="q10" class="input-field-inline" maxlength="30" placeholder="________"> to transport material.</div>
+                    </div>
+
+                    <div class="question" data-question="11">
+                        <div class="question-text">11. Hershey brought in <input type="text" name="q11" class="input-field-inline" maxlength="30" placeholder="________"> to improve the image of his chocolate.</div>
+                    </div>
+
+                    <div class="question" data-question="12">
+                        <div class="question-text">12. One popular chocolate product had <input type="text" name="q12" class="input-field-inline" maxlength="30" placeholder="________"> added to it.</div>
+                    </div>
+
+                    <div class="question" data-question="13">
+                        <div class="question-text">13. Because of the high demand, tourists can only visit the <input type="text" name="q13" class="input-field-inline" maxlength="30" placeholder="________"> at Hershey.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSAGE 2 -->
+            <div class="passage-container hidden" id="p2_passage">
+                <h2 class="section-title">READING PASSAGE 2</h2>
+                <div class="passage">
+                    <h3>The impact of invasive species</h3>
+                    
+                    <p><strong>A</strong> Invasive species are among the leading threats to the native wildlife of most countries, with approximately 42 percent of endangered species at risk from them. Invasive species can be any kind of organism - for example, a mammal, amphibian, fish, insect or plant - that is not native to an ecosystem. Often they reproduce and spread with great speed. Contrary to popular belief, a plant or animal classified as an invasive species does not necessarily originate in another country. For example, lake trout are native to the Great Lakes of North America, but are considered to be an invasive species in Yellowstone Lake in Wyoming because they compete with native cutthroat trout for habitat.</p>
+
+                    <p><strong>B</strong> When a new species is introduced into an ecosystem, native wildlife may struggle to compete with it for food and other resources. Invasive species can change the food web in an ecosystem by destroying or replacing native food sources, while providing little or no food for local wildlife. In extreme cases, the invader may prey on the native species. Above all, invasive species threaten biodiversity in many habitats. For instance, the climbing plant species kudzu (which is native to East Asia) can easily replace a habitat that had a wide range of plants with a monoculture consisting solely of kudzu, as has started to happen in the south east of the USA.</p>
+
+                    <p><strong>C</strong> The phenomenon is not an exclusively modern one. Humans have always transferred a variety of species from one region to another, but the development of rapid means of transportation has increased the frequency of such introductions. Aquatic organisms can be shipped across the oceans, while insects can easily get into the wooden crates that are transported around the world in this way. In addition, climate change has enabled some invasive plant species to colonise new areas. Other invasive species include pets such as snakes or turtles which are intentionally set free into the wild.</p>
+
+                    <p><strong>D</strong> Invasive species do not all present the same level of threat to native ecosystems and can be classified into three types. The first of these may be introduced species which can maintain themselves in a limited range of habitats without upsetting the ecological equilibrium of the area. Some scientists have even argued that in these cases the introduction enhances the diversity of animal and plant life in that specific area. A second group of invaders present a greater threat because their spread is at the expense of one native species. The North American grey squirrel, for example, was introduced to the UK in 1876 largely because wealthy landowners thought it would be a fashionable and attractive addition to the local wildlife on their estates. It spread widely, leading directly to the dramatic decline in the population of the native red squirrel. However, it would appear that this is the only definite negative impact of the grey squirrel.</p>
+
+                    <p><strong>E</strong> There is a third level of threat in which the dominance of the introduced species has an extremely destructive effect on the entire ecosystem. One of the most damaging examples involved a species of comb jellyfish. Native to estuaries along the western Atlantic coast from the northern United States to the Valdés peninsula in Argentina, this species was released from a ship into the Black Sea in Eastern Europe in 1982, almost certainly by accident. The Black Sea has levels of industrial waste which are by international standards exceptionally high. Despite this, fishing boats were still able to catch healthy numbers of fish. But when the invading jellyfish underwent a population explosion in the space of just six years, the entire marine ecosystem was transformed, and fish numbers declined dramatically because they were in competition with the jellyfish, preying on exactly the same microscopic creatures. The jellyfish had a more serious impact on the ecosystem than the heavily polluted water.</p>
+
+                    <p><strong>F</strong> More than a century after its introduction outside its native range on the Amazon river in South America, a plant known as a water hyacinth can be found in tropical lakes, streams, and rivers around the world. Its beauty attracted botanists seeking exotic plants for botanical gardens and they imported it to a horticultural exhibition in New Orleans in 1884. Visitors were so impressed they planted it in many locations during the 1880s and 1890s, resulting in the aquatic ecosystems of the south eastern United States being progressively colonized by vast, floating, dense carpets of water hyacinth. Today it is present around the globe, damaging boat engines and even blocking cooling pipes for power plants, occasionally leading to massive blackouts. The impact of the water hyacinth on native water plants is largely unstudied, as is unfortunately the case for most ecosystems invaded by new plant species.</p>
+
+                    <p><strong>G</strong> In the United States, more than 7,000 introduced species have established themselves, of which at least 15 percent cause ecological damage. As the number of invasive species expands, legislation to deal with this problem is rare or non-existent in the majority of countries. Unfortunately, ordinary people outside the scientific community have a very limited understanding of the threat posed by invasive species, which means that other environmental threats receive considerably more media attention. The introduction of new species can initially seem highly desirable, but the full extent of their impact is consistently underestimated.</p>
+
+                    <p><strong>H</strong> Although ultimately measures need to be taken at an international level, limited action is possible by individuals. One way is for people to plant native plants in their gardens rather than species from abroad. It is also useful to learn to identify invasive species, and report any sightings to wildlife organisations. Regularly cleaning clothing, boots, boats, tires, and any other equipment regularly used outdoors can remove insects and plant parts that may introduce invasive species into new locations.</p>
+                </div>
+            </div>
+
+            <div class="resizer hidden" id="resizer2"></div>
+
+            <div class="questions-container hidden" id="p2_questions">
+                <h2 class="section-title">Questions 14-26</h2>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 14-19: Which paragraph contains the following information?</div>
+                    <p>Write the correct letter, A-H.</p>
+
+                    <div class="question" data-question="14">
+                        <div class="question-text">14. A suggestion that people have moved numerous species across the globe throughout history</div>
+                        <select name="q14" class="input-field">
+                            <option value="">Select</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                            <option>D</option>
+                            <option>E</option>
+                            <option>F</option>
+                            <option>G</option>
+                            <option>H</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="15">
+                        <div class="question-text">15. An example of how an ecosystem can be damaged very rapidly</div>
+                        <select name="q15" class="input-field">
+                            <option value="">Select</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                            <option>D</option>
+                            <option>E</option>
+                            <option>F</option>
+                            <option>G</option>
+                            <option>H</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="16">
+                        <div class="question-text">16. A description of what can be done to restrict the spread of invasive species</div>
+                        <select name="q16" class="input-field">
+                            <option value="">Select</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                            <option>D</option>
+                            <option>E</option>
+                            <option>F</option>
+                            <option>G</option>
+                            <option>H</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="17">
+                        <div class="question-text">17. A reference to the lack of research on the effects of some invasive species</div>
+                        <select name="q17" class="input-field">
+                            <option value="">Select</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                            <option>D</option>
+                            <option>E</option>
+                            <option>F</option>
+                            <option>G</option>
+                            <option>H</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="18">
+                        <div class="question-text">18. A mention of a current lack of public awareness of the problem of invasive species</div>
+                        <select name="q18" class="input-field">
+                            <option value="">Select</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                            <option>D</option>
+                            <option>E</option>
+                            <option>F</option>
+                            <option>G</option>
+                            <option>H</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="19">
+                        <div class="question-text">19. That an introduced species may benefit a specific ecosystem</div>
+                        <select name="q19" class="input-field">
+                            <option value="">Select</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                            <option>D</option>
+                            <option>E</option>
+                            <option>F</option>
+                            <option>G</option>
+                            <option>H</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 20-21: Choose TWO letters</div>
+                    <p>Which TWO reasons for the spread of invasive species are mentioned in the text?</p>
+
+                    <div class="question" data-question="20">
+                        <div class="question-text">20-21. Select TWO answers</div>
+                        <div class="options">
+                            <label class="option"><input type="checkbox" name="q20" value="C"> C. A lack of checks on some of the cargo on board ships</label>
+                            <label class="option"><input type="checkbox" name="q21" value="D"> D. The deliberate release of non-native animals</label>
+                            <label class="option"><input type="checkbox" name="q20" value="E"> E. An extension of their geographical range as a result of global warming</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 22-23: Choose TWO letters</div>
+                    <p>Which TWO statements does the writer make about the water hyacinth?</p>
+
+                    <div class="question" data-question="22">
+                        <div class="question-text">22-23. Select TWO answers</div>
+                        <div class="options">
+                            <label class="option"><input type="checkbox" name="q22" value="B"> B. It was brought to North America in the late nineteenth century</label>
+                            <label class="option"><input type="checkbox" name="q23" value="D"> D. Its spread has caused some practical problems in recent years</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 24-26: Complete the sentences</div>
+                    <p>Choose ONE WORD ONLY from the passage.</p>
+
+                    <div class="question" data-question="24">
+                        <div class="question-text">24. Kudzu has reduced the <input type="text" name="q24" class="input-field-inline" maxlength="30" placeholder="________"> of certain areas in the south east of the USA.</div>
+                    </div>
+
+                    <div class="question" data-question="25">
+                        <div class="question-text">25. Some introduced species present a low level of threat if they remain within a small area and do not disturb the <input type="text" name="q25" class="input-field-inline" maxlength="30" placeholder="________"> of the surrounding ecosystem.</div>
+                    </div>
+
+                    <div class="question" data-question="26">
+                        <div class="question-text">26. The effect of invasive jellyfish in the Black Sea was greater than that <input type="text" name="q26" class="input-field-inline" maxlength="30" placeholder="________"> from factories.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSAGE 3 -->
+            <div class="passage-container hidden" id="p3_passage">
+                <h2 class="section-title">READING PASSAGE 3</h2>
+                <div class="passage">
+                    <h3>Game theory</h3>
+                    <p><em>Computer software that models human behaviour can make forecasts, outsmart rivals and transform negotiations</em></p>
+
+                    <p>According to game theory, our chances of success in negotiations are based on the choices of others. Computer models have been developed to work out how events will unfold as people and organizations act in what they perceive to be their own best interests. Numerical values are placed on the goals, motivations, and influence of players, and likely options are considered. Game theory software then evaluates the ability of each of those players to influence others, and hence predicts the course of events.</p>
+
+                    <p>Although many individuals would feel uncomfortable having a computer make decisions for them, many organizations run such computer simulations for law firms, companies, and governments. But feeding software with accurate data on all the players involved is especially tricky for political matters. Reinier van Oosten of Decide, a Dutch firm that models political negotiations, notes that predictions may become unreliable when people unexpectedly give in to 'non-rational emotions', such as hatred, rather than pursuing what is apparently in their best interests. However, sorting out people's motivations is much easier when making money is the main object. Accordingly, modeling behavior using game theory is proving especially useful when applied to economics.</p>
+
+                    <p>Using game theory software to model auctions can be very lucrative. Consulting firms are entering the market to help clients design profitable auctions, or to win them less expensively. In 2006, in the run-up to an online auction of radio-spectrum licenses by America's Federal Communications Commission, Dr. Paul Milgrom, a consultant and Stanford University professor in the United States, customized his game theory software to assist a consortium of bidders. He was apprehensive at first, but the result was a triumph. When the auction began, Milgrom's software tracked competitors' bids to estimate their budgets for the 1,132 licenses on offer. Crucially, the software estimated the secret values bidders placed on specific licenses, and determined that certain big licenses were being overvalued. Milgrom's clients were then directed to obtain a collection of smaller, less expensive licenses instead. Two of his clients paid about a third less than their competitors for an equivalent amount of spectrum, saving almost $1.2 billion. Such a saving makes one wonder why everyone isn't using game theory software. And, if they were, how would that affect the game?</p>
+
+                    <p>PA Consulting, a British firm, designs models for software based on game theory to help its clients solve specific problems in areas from pharmaceuticals to the production of television shows. British government agencies have asked PA Consulting to build models to test zoning rules that govern how many of a certain type of business should be allowed to operate in one area. To give a simple example; if two competing ice-cream sellers share a long beach, they will set up stalls back-to-back in the middle and stay put, explains Dr. Stephen Black, a modeller for PA. Unfortunately for potential customers at the far ends of the beach, each seller prevents the other from relocating - no other spot would be closer to more people. Introduce a third seller, however, and the stifling equilibrium is broken as relocations and pricing changes energize the market. By studying a chain of events such as this, software designers can assess the effect of change and see the patterns in possible outcomes that may occur. As a result, the use of modeling makes clients more inclined to look at future repercussions when making business decisions, Black says.</p>
+
+                    <p>Where is all this heading? Alongside the increasingly elaborate modeling software, there are also efforts to develop software that can assist in negotiation and mediation. Two decades ago, Dr. Clara Ponsati, a Spanish academic, came up with a clever idea. She accepted that, as negotiators everywhere know, the first side to disclose the maximum amount that it is willing to pay loses considerable bargaining power. Without leverage, it can be pushed backward in the bargaining process by a clever opponent. But if neither side reveals the concessions it is prepared to make, negotiations can become very slow or collapse. However, difficult negotiations can often be pushed along by neutral mediators, especially if they are entrusted with the secret bottom lines of all parties. Ponsati's idea was that if a human mediator was not trusted, affordable, or available, a computer could do the job instead. Negotiating parties would update the software with the confidential information on their bargaining positions after each round of talks. Once positions on both sides were no longer mutually exclusive, the software would be used to split the difference and propose an agreement. Ponsati, now head of the Institute of Economic Analysis at the Autonomous University of Barcelona in Spain, says such 'mediation machines' could be employed to push negotiations forward by unlocking information that would otherwise be withheld from an opponent.</p>
+
+                    <p>Could mediation which has been achieved using software based on game theory spread from auction bids and utility pricing to resolving political and military disputes? Today's game theory software is not yet sufficiently advanced to mediate between warring countries. But one day opponents on the brink of war might be tempted to use it to exchange information without having to engage in conflict. According to some game theorists, opponents could learn how a war would turn out, skip the fighting, and strike a deal. Over-optimistic, perhaps - but game theorists do have rather an impressive track record when it comes to predicting the future.</p>
+                </div>
+            </div>
+
+            <div class="resizer hidden" id="resizer3"></div>
+
+            <div class="questions-container hidden" id="p3_questions">
+                <h2 class="section-title">Questions 27-40</h2>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 27-31: Multiple choice</div>
+                    <p>Choose the correct letter, A, B, C, or D.</p>
+
+                    <div class="question" data-question="27">
+                        <div class="question-text">27. What does the writer suggest about game theory software in the first paragraph?</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q27" value="A"> A. Traditional negotiating practices should be used to supplement the software</label>
+                            <label class="option"><input type="radio" name="q27" value="B"> B. Success of the software depends on the accuracy of the assigned</label>
+                            <label class="option"><input type="radio" name="q27" value="C"> C. This software anticipates the outcome of future events</label>
+                            <label class="option"><input type="radio" name="q27" value="D"> D. Future business negotiations will be dominated by this software</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="28">
+                        <div class="question-text">28. Reinier van Oosten says predicting what people will do works best if</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q28" value="A"> A. Participants are honest about how they feel</label>
+                            <label class="option"><input type="radio" name="q28" value="B"> B. There is a good understanding of the client's culture</label>
+                            <label class="option"><input type="radio" name="q28" value="C"> C. People strongly dislike the other party</label>
+                            <label class="option"><input type="radio" name="q28" value="D"> D. Profit is the primary motivator</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="29">
+                        <div class="question-text">29. After using game theory software in 2006, Dr. Milgrom instructed his clients to</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q29" value="A"> A. Buy big licenses</label>
+                            <label class="option"><input type="radio" name="q29" value="B"> B. Negotiate with the other parties directly</label>
+                            <label class="option"><input type="radio" name="q29" value="C"> C. Make one big offer at the end of the auction</label>
+                            <label class="option"><input type="radio" name="q29" value="D"> D. Purchase a mix of licenses</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="30">
+                        <div class="question-text">30. The writer refers to Stephen Black's ice-cream seller example in order to</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q30" value="A"> A. Show the impact new competitors have on business</label>
+                            <label class="option"><input type="radio" name="q30" value="B"> B. Highlight the importance of location on business success</label>
+                            <label class="option"><input type="radio" name="q30" value="C"> C. Demonstrate that businesses must follow a strategy</label>
+                            <label class="option"><input type="radio" name="q30" value="D"> D. Clarify how pricing affects sales</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="31">
+                        <div class="question-text">31. Ponsati believes business negotiations are more likely to progress if</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q31" value="A"> A. A solution is proposed by one of the interested parties</label>
+                            <label class="option"><input type="radio" name="q31" value="B"> B. Mediators or computers take over the bargaining process</label>
+                            <label class="option"><input type="radio" name="q31" value="C"> C. Both parties follow the rules of negotiating</label>
+                            <label class="option"><input type="radio" name="q31" value="D"> D. Sufficient time is allowed for the bargaining process</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 32-35: YES / NO / NOT GIVEN</div>
+
+                    <div class="question" data-question="32">
+                        <div class="question-text">32. Game theory software may be unhelpful when dealing with political issues.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q32" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q32" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q32" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="33">
+                        <div class="question-text">33. Dr. Milgrom was confident about applying his software to an auction in 2006.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q33" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q33" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q33" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="34">
+                        <div class="question-text">34. Dr. Ponsati believes 'mediation machines' are an inappropriate method of negotiation in areas other than business.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q34" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q34" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q34" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="35">
+                        <div class="question-text">35. Military organizations refuse to accept that software based on game theory could prevent wars.</div>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="q35" value="YES"> YES</label>
+                            <label class="option"><input type="radio" name="q35" value="NO"> NO</label>
+                            <label class="option"><input type="radio" name="q35" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-group-title">Questions 36-40: Complete sentences</div>
+                    <p>Choose the correct ending, A-F.</p>
+
+                    <div class="question" data-question="36">
+                        <div class="question-text">36. According to Reinier van Oosten, game theory software fails when...</div>
+                        <select name="q36" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A. something is thought to be worth more than it really is</option>
+                            <option value="B">B. discussions between the parties begin to break down</option>
+                            <option value="C">C. too much information is given to the other parties early on</option>
+                            <option value="D">D. businesses consider possible future developments</option>
+                            <option value="E">E. people allow their feelings to influence decisions</option>
+                            <option value="F">F. a solution requires face-to-face negotiation</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="37">
+                        <div class="question-text">37. Dr. Milgrom's software is successful in detecting if...</div>
+                        <select name="q37" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A. something is thought to be worth more than it really is</option>
+                            <option value="B">B. discussions between the parties begin to break down</option>
+                            <option value="C">C. too much information is given to the other parties early on</option>
+                            <option value="D">D. businesses consider possible future developments</option>
+                            <option value="E">E. people allow their feelings to influence decisions</option>
+                            <option value="F">F. a solution requires face-to-face negotiation</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="38">
+                        <div class="question-text">38. Dr. Black's game theory software is a helpful tool when...</div>
+                        <select name="q38" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A. something is thought to be worth more than it really is</option>
+                            <option value="B">B. discussions between the parties begin to break down</option>
+                            <option value="C">C. too much information is given to the other parties early on</option>
+                            <option value="D">D. businesses consider possible future developments</option>
+                            <option value="E">E. people allow their feelings to influence decisions</option>
+                            <option value="F">F. a solution requires face-to-face negotiation</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="39">
+                        <div class="question-text">39. According to Dr. Ponsati, negotiators fall behind if...</div>
+                        <select name="q39" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A. something is thought to be worth more than it really is</option>
+                            <option value="B">B. discussions between the parties begin to break down</option>
+                            <option value="C">C. too much information is given to the other parties early on</option>
+                            <option value="D">D. businesses consider possible future developments</option>
+                            <option value="E">E. people allow their feelings to influence decisions</option>
+                            <option value="F">F. a solution requires face-to-face negotiation</option>
+                        </select>
+                    </div>
+
+                    <div class="question" data-question="40">
+                        <div class="question-text">40. Dr. Ponsati's mediation machine is useful when...</div>
+                        <select name="q40" class="input-field">
+                            <option value="">Select</option>
+                            <option value="A">A. something is thought to be worth more than it really is</option>
+                            <option value="B">B. discussions between the parties begin to break down</option>
+                            <option value="C">C. too much information is given to the other parties early on</option>
+                            <option value="D">D. businesses consider possible future developments</option>
+                            <option value="E">E. people allow their feelings to influence decisions</option>
+                            <option value="F">F. a solution requires face-to-face negotiation</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-nav">
+                <div class="progress-items" id="bottomPartTabs"></div>
+                <div class="nav-buttons">
+                    <button class="btn" id="prev-btn" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+                    <button class="btn" id="next-btn">Next <i class="fas fa-arrow-right"></i></button>
+                    <button class="btn btn-submit" id="submit-all-btn">Submit All <i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div class="modal" id="results-modal">
+        <div class="modal-content">
+            <h2>Test Results</h2>
+            <div class="score-display" id="score-display">0/40</div>
+            <div class="score-breakdown" id="score-breakdown"></div>
+            <div class="modal-buttons">
+                <button class="btn" id="close-modal">Close</button>
+                <button class="btn" id="review-answers">Review Answers</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const PARTS = [
+            { id: 1, title: 'Passage 1', qStart: 1, qEnd: 13, passage: 'p1_passage', questions: 'p1_questions' },
+            { id: 2, title: 'Passage 2', qStart: 14, qEnd: 26, passage: 'p2_passage', questions: 'p2_questions' },
+            { id: 3, title: 'Passage 3', qStart: 27, qEnd: 40, passage: 'p3_passage', questions: 'p3_questions' }
+        ];
+
+        // Answer Key
+        const correctAnswers = {
+            // Passage 1
+            q1: "TRUE", q2: "FALSE", q3: "NOT GIVEN", q4: "NOT GIVEN", q5: "FALSE", q6: "TRUE",
+            q7: "machinery", q8: "farm", q9: "mayor", q10: "railroads", q11: "nutritionists", 
+            q12: "almonds", q13: "exhibition",
+            
+            // Passage 2
+            q14: "C", q15: "E", q16: "H", q17: "F", q18: "G", q19: "D",
+            q20: "C", q21: "D", // Multiple answers for 20-21
+            q22: "B", q23: "D", // Multiple answers for 22-23
+            q24: "biodiversity", q25: "equilibrium", q26: "pollution",
+            
+            // Passage 3
+            q27: "C", q28: "D", q29: "D", q30: "A", q31: "B",
+            q32: "YES", q33: "NO", q34: "NOT GIVEN", q35: "NOT GIVEN",
+            q36: "E", q37: "A", q38: "D", q39: "C", q40: "B"
+        };
+
+        // State
+        let currentPart = 1;
+        let currentQuestion = 1;
+        let seconds = 60 * 60;
+        let timerInterval;
+
+        function el(id) { return document.getElementById(id); }
+
+        function renderBottomTabs() {
+            const tabs = el('bottomPartTabs');
+            tabs.innerHTML = '';
+            PARTS.forEach(p => {
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                btn.style.fontWeight = p.id === currentPart ? '900' : '600';
+                btn.innerHTML = p.id === currentPart ? `<strong>${p.title}</strong>` : p.title;
+                btn.onclick = () => switchPart(p.id);
+                tabs.appendChild(btn);
+
+                const rail = document.createElement('div');
+                rail.id = `rail-part-${p.id}`;
+                rail.style.display = p.id === currentPart ? 'flex' : 'none';
+                rail.style.gap = '6px';
+                rail.style.flexWrap = 'wrap';
+                
+                for (let q = p.qStart; q <= p.qEnd; q++) {
+                    const chip = document.createElement('div');
+                    chip.textContent = q;
+                    chip.className = 'progress-item' + (q === currentQuestion && p.id === currentPart ? ' current' : '');
+                    chip.dataset.question = q;
+                    chip.style.width = '30px';
+                    chip.style.height = '20px';
+                    chip.style.borderRadius = '6px';
+                    chip.style.fontSize = '14px';
+                    chip.onclick = () => scrollToQuestion(q);
+                    rail.appendChild(chip);
+                }
+                tabs.appendChild(rail);
+            });
+        }
+
+        function switchPart(partId) {
+            if (currentPart === partId) return;
+            
+            PARTS.forEach(p => {
+                el(p.passage).classList.add('hidden');
+                el(p.questions).classList.add('hidden');
+                const r = el(`rail-part-${p.id}`);
+                if (r) r.style.display = 'none';
+            });
+
+            // Hide all resizers
+            el('resizer').classList.add('hidden');
+            el('resizer2').classList.add('hidden');
+            el('resizer3').classList.add('hidden');
+            
+            currentPart = partId;
+            const p = PARTS[currentPart - 1];
+            currentQuestion = p.qStart;
+            el(p.passage).classList.remove('hidden');
+            el(p.questions).classList.remove('hidden');
+
+            // Show appropriate resizer
+            if (currentPart === 1) el('resizer').classList.remove('hidden');
+            if (currentPart === 2) el('resizer2').classList.remove('hidden');
+            if (currentPart === 3) el('resizer3').classList.remove('hidden');
+
+            const r = el(`rail-part-${p.id}`);
+            if (r) r.style.display = 'flex';
+            
+            el('headerPassageTitle').textContent = `Passage ${currentPart} of 3`;
+            scrollToQuestion(currentQuestion, false);
+            renderBottomTabs();
+        }
+
+        function scrollToQuestion(num, smooth = true) {
+            const elQ = document.querySelector(`[data-question="${num}"]`) ||
+                       document.querySelector(`input[name="q${num}"]`) ||
+                       document.querySelector(`select[name="q${num}"]`);
+            if (elQ) elQ.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'center' });
+            updateCurrentQuestion(num);
+        }
+
+        function updateCurrentQuestion(num) {
+            currentQuestion = num;
+            document.querySelectorAll(`#rail-part-${currentPart} .progress-item`).forEach(it => {
+                it.classList.toggle('current', parseInt(it.dataset.question, 10) === num);
+            });
+        }
+
+        function attachAnsweredListeners() {
+            document.querySelectorAll('input[type="radio"], input[type="text"], input[type="checkbox"], select').forEach(input => {
+                input.addEventListener('change', () => {
+                    const m = input.name && input.name.match(/^q(\d+)$/);
+                    if (!m) return;
+                    const q = parseInt(m[1], 10);
+                    const chip = document.querySelector(`.progress-item[data-question="${q}"]`);
+                    if (chip) {
+                        const val = input.type === 'text' ? input.value.trim() : input.value;
+                        if (val) chip.classList.add('answered');
+                    }
+                });
+            });
+        }
+
+        el('submit-all-btn').addEventListener('click', () => {
+            if (!confirm('Submit the entire test?')) return;
+
+            let score = 0;
+            const total = 40;
+            const results = {};
+
+            for (let q = 1; q <= total; q++) {
+                const key = `q${q}`;
+                const corr = correctAnswers[key];
+                let user = null;
+                let isCorrect = false;
+
+                const radios = document.querySelectorAll(`input[name="${key}"][type="radio"]`);
+                const checkboxes = document.querySelectorAll(`input[name="${key}"][type="checkbox"]`);
+                const text = document.querySelector(`input[name="${key}"][type="text"]`);
+                const sel = document.querySelector(`select[name="${key}"]`);
+
+                if (radios && radios.length) {
+                    const c = Array.from(radios).find(r => r.checked);
+                    if (c) { user = c.value; isCorrect = user === corr; }
+                } else if (checkboxes && checkboxes.length) {
+                    const checked = Array.from(checkboxes).filter(c => c.checked);
+                    if (checked.length) {
+                        user = checked.map(c => c.value).join(',');
+                        isCorrect = checked.some(c => c.value === corr);
+                    }
+                } else if (text) {
+                    user = text.value.trim();
+                    if (user) {
+                        const norm = s => String(s).trim().toLowerCase().replace(/\s+/g, ' ');
+                        isCorrect = norm(user) === norm(corr);
+                    }
+                } else if (sel) {
+                    user = sel.value;
+                    if (user) isCorrect = user === corr;
+                }
+
+                if (isCorrect) score++;
+                results[key] = { userAnswer: user || 'No answer', correct: corr, isCorrect };
+            }
+
+            for (let q = 1; q <= total; q++) {
+                const res = results[`q${q}`];
+                const ch = document.querySelector(`.progress-item[data-question="${q}"]`);
+                if (ch) {
+                    ch.classList.remove('current', 'answered');
+                    if (res) ch.classList.add(res.isCorrect ? 'correct' : 'incorrect');
+                }
+            }
+
+            el('score-display').textContent = `${score}/${total}`;
+            const breakdown = el('score-breakdown');
+            breakdown.innerHTML = PARTS.map(p => {
+                const partScore = Array.from({ length: p.qEnd - p.qStart + 1 }, (_, i) => 
+                    results[`q${p.qStart + i}`]).filter(r => r && r.isCorrect).length;
+                return `<div class="score-item"><span>Passage ${p.id}:</span><span>${partScore}/${p.qEnd - p.qStart + 1}</span></div>`;
+            }).join('');
+            
+            el('results-modal').style.display = 'flex';
+
+            el('review-answers').onclick = () => {
+                el('results-modal').style.display = 'none';
+                showCorrectIndicators(results);
+            };
+        });
+
+        function showCorrectIndicators(results) {
+            document.querySelectorAll('.answer-indicator').forEach(e => e.remove());
+            
+            for (let q = 1; q <= 40; q++) {
+                const key = `q${q}`;
+                const res = results[key];
+                if (!res) continue;
+
+                let target = null;
+                const qEl = document.querySelector(`[data-question="${q}"] .options`);
+                if (qEl) target = qEl;
+                if (!target) {
+                    const input = document.querySelector(`input[name="${key}"]`);
+                    if (input) target = input.parentNode;
+                }
+                if (!target) {
+                    const sel = document.querySelector(`select[name="${key}"]`);
+                    if (sel) target = sel.parentNode;
+                }
+                if (!target) continue;
+
+                const box = document.createElement('div');
+                box.className = 'answer-indicator ' + (res.isCorrect ? 'correct' : 'incorrect');
+                box.innerHTML = res.isCorrect
+                    ? `<i class="fas fa-check"></i> Correct!`
+                    : `<i class="fas fa-times"></i> Incorrect. Your answer: <strong>${res.userAnswer}</strong><br><strong>Correct:</strong> ${res.correct}`;
+                target.appendChild(box);
+            }
+        }
+
+        const timerSpan = document.querySelector('#globalTimer span');
+        const timerContainer = el('globalTimer');
+        
+        function updateTimer() {
+            seconds--;
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            timerSpan.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            if (seconds <= 2 * 60) timerContainer.classList.add('warning');
+            if (seconds <= 0) {
+                clearInterval(timerInterval);
+                alert('Time is up! Submitting test.');
+                el('submit-all-btn').click();
+            }
+        }
+
+        function startTest() {
+            el('startScreen').classList.add('hidden');
+            el('testContainer').classList.remove('hidden');
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+        window.startTest = startTest;
+
+        setTimeout(() => {
+            el('loadingScreen').classList.add('hidden');
+            el('startScreen').classList.remove('hidden');
+        }, 900);
+
+        PARTS.forEach(p => {
+            if (p.id === 1) {
+                el(p.passage).classList.remove('hidden');
+                el(p.questions).classList.remove('hidden');
+            } else {
+                el(p.passage).classList.add('hidden');
+                el(p.questions).classList.add('hidden');
+            }
+        });
+        
+        renderBottomTabs();
+        attachAnsweredListeners();
+
+        // Resizer
+        let isResizing = false;
+        let currentResizer = null;
+
+        // Resizer 1 (Passage 1)
+        el('resizer').addEventListener('mousedown', (e) => {
+            isResizing = true;
+            currentResizer = 'resizer';
+            document.body.style.cursor = 'col-resize';
+            e.preventDefault();
+        });
+
+        // Resizer 2 (Passage 2)
+        el('resizer2').addEventListener('mousedown', (e) => {
+            isResizing = true;
+            currentResizer = 'resizer2';
+            document.body.style.cursor = 'col-resize';
+            e.preventDefault();
+        });
+
+        // Resizer 3 (Passage 3)
+        el('resizer3').addEventListener('mousedown', (e) => {
+            isResizing = true;
+            currentResizer = 'resizer3';
+            document.body.style.cursor = 'col-resize';
+            e.preventDefault();
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const container = document.querySelector('.main-content');
+            const rect = container.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const leftPct = (mouseX / rect.width) * 100;
+            const rightPct = 100 - leftPct;
+            
+            if (leftPct >= 30 && leftPct <= 70) {
+                const passagePanel = document.querySelector('.passage-container:not(.hidden)');
+                const questionsPanel = document.querySelector('.questions-container:not(.hidden)');
+                if (passagePanel && questionsPanel) {
+                    passagePanel.style.flex = leftPct + '%';
+                    questionsPanel.style.width = rightPct + '%';
+                }
+            }
+        });
+        
+        document.addEventListener('mouseup', () => {
+            if (isResizing) {
+                isResizing = false;
+                currentResizer = null;
+                document.body.style.cursor = '';
+            }
+        });
+
+        // Highlight functionality
+        const highlightBtn = el('highlight-btn');
+        const removeHighlightBtn = el('remove-highlight-btn');
+        let lastSelection = null;
+        let highlightTarget = null;
+
+        function getValidSelection() {
+            const sel = window.getSelection();
+            if (!sel.rangeCount || sel.isCollapsed) return null;
+            return sel.getRangeAt(0);
+        }
+
+        highlightBtn.addEventListener('click', () => {
+            if (lastSelection) {
+                const span = document.createElement('span');
+                span.className = 'highlight';
+                span.appendChild(lastSelection.extractContents());
+                lastSelection.insertNode(span);
+                window.getSelection().removeAllRanges();
+                highlightBtn.style.display = 'none';
+            }
+        });
+
+        removeHighlightBtn.addEventListener('click', () => {
+            if (highlightTarget) {
+                const parent = highlightTarget.parentNode;
+                while (highlightTarget.firstChild) {
+                    parent.insertBefore(highlightTarget.firstChild, highlightTarget);
+                }
+                parent.removeChild(highlightTarget);
+                removeHighlightBtn.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('selectionchange', () => {
+            highlightBtn.style.display = 'none';
+            removeHighlightBtn.style.display = 'none';
+            
+            const range = getValidSelection();
+            if (range) {
+                lastSelection = range;
+                const rect = range.getBoundingClientRect();
+                highlightBtn.style.top = (window.scrollY + rect.top - 35) + 'px';
+                highlightBtn.style.left = (window.scrollX + rect.left) + 'px';
+                highlightBtn.style.display = 'block';
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target.classList && e.target.classList.contains('highlight')) {
+                e.preventDefault();
+                highlightTarget = e.target;
+                const rect = e.target.getBoundingClientRect();
+                removeHighlightBtn.style.top = (window.scrollY + rect.top - 35) + 'px';
+                removeHighlightBtn.style.left = (window.scrollX + rect.left) + 'px';
+                removeHighlightBtn.style.display = 'block';
+            }
+        });
+
+        el('close-modal').addEventListener('click', () => {
+            el('results-modal').style.display = 'none';
+        });
+
+        // Previous/Next buttons
+        el('prev-btn').addEventListener('click', () => {
+            if (currentPart > 1) switchPart(currentPart - 1);
+        });
+
+        el('next-btn').addEventListener('click', () => {
+            if (currentPart < 3) switchPart(currentPart + 1);
+        });
+    </script>
+</body>
+</html>

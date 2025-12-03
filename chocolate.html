@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 1 – The history and production of chocolate</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  h3{margin:8px 0 0}
+  .muted{color:var(--muted)}
+
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+
+  /* Highlights */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+
+      <div id="passage">
+        <h2>Reading Passage 1</h2>
+        <h3>The history and production of chocolate</h3>
+
+        <h4>Early history in Central America</h4>
+
+        <p>The climate of tropical rain forests combines great quantities of rainfall with high year-round temperatures and humidity. This results in the perfect conditions for the cultivation of the cacao tree plant from whose bean chocolate is derived. This tree has grown in the wild in Central America for about 10,000 years. The <strong>Olmec Indians</strong>, whose civilization flourished in what is now southern Mexico from 1500 to 300 BC are believed to have been the first to grow cocoa beans as a domestic crop.</p>
+
+        <p>The cacao tree was worshipped from about 600 AD by the <strong>Mayan</strong> people of Central America and southern Mexico, who believed it to be of divine origin. Cacao, which the early explorers renamed to as cocoa, is actually a Mayan word meaning 'god food'. The Mayans brewed a spicy, bitter sweet drink by pounding the cocoa beans with maize and chilli peppers and letting the mixture ferment. This drink was reserved for use in traditional ceremonies as well as for drinking by the wealthy and by priests, who also ate a porridge made from the beans.</p>
+
+        <p>In about 1200 AD the <strong>Aztecs</strong> of central Mexico were introduced to cocoa beans and came to highly prize them, but because they lived further north at more arid, higher altitudes not suitable for the cultivation of the cacao tree, they had to acquire the beans through trade or by force. The Aztecs used cocoa beans as currency and taxes were paid in the beans to their rulers. In fact, the Aztec royal treasury consisted not of precious metals but of cocoa beans. The Aztecs also enjoyed a beverage made from the beans, and this again featured prominently in rituals and as a luxury available only to the very wealthy. The Aztecs called this drink "xocolatl". The Spanish explorers found this word almost impossible to pronounce and so corrupted it to "chocolat", which the English subsequently changed to chocolate.</p>
+
+        <h4>Introduction to Europe and North America</h4>
+
+        <p>Chocolate was brought back to Spain in the early 16th century by <strong>Spanish explorers</strong>, who at first found the Aztec drink distasteful because of its bitterness. However, they learned to improve its taste by mixing the ground roasted beans with sugar and vanilla. Chocolate factories were established in Spain and by the early 17th century, chocolate powder was being exported to other parts of Europe. The Spanish kept the source of the drink—the beans—a secret for many years, so successfully, in fact, that when English pirates boarded a Spanish ship they thought carried great treasure and only found a load of cocoa beans, they burned the ship in frustration. If only they had known that chocolate at that time was extremely valuable.</p>
+
+        <p>Within a few years, the cocoa beverage produced in Spain was sought after throughout Europe. The first chocolate house in England opened in 1657, followed rapidly by many others. These establishments were used as clubs where wealthy people could meet to talk to their friends and to discuss business over a cup of chocolate. The first recorded instance of chocolate being eaten in solid form occurred when a baker in England began adding cocoa powder to cakes in the mid-1600s. Then in 1828, a Dutch chemist, <strong>Johannes Van Houten</strong> invented a method of extracting the bitter-tasting cocoa butter from the roasted beans. His aim was to make the cocoa drink smoother and more palatable, however, unknowingly he paved the way for the chocolate bar that we consume today.</p>
+
+        <p>In the early 18th century, certain companies owned by prominent English families including the <strong>Frys</strong>, <strong>Rowntrees</strong> and <strong>Cadburys</strong>, began making chocolate. Many of these chocolate factory owners were noticed for their enlightened treatment of employees, providing not just jobs but facilities such as housing and schools. In fact, the Cadbury company constructed a large purpose-built town near Birmingham. And interestingly, <strong>Milton Hershey</strong>, founder of perhaps the most famous US chocolate-making company of its day, also established a town in Pennsylvania in 1900.</p>
+
+        <h4>The production of chocolate</h4>
+
+        <p>Producing chocolate is a time-consuming and complicated process. After being harvested and separated from the pods which contain them the beans are allowed to ferment and then dried either in the sun (which produces the best chocolate) or artificially, using specially designed machines, (which creates an inferior chocolate). After that the beans are roasted according to various formulas which affect the flavour of the final product.</p>
+
+        <p>The beans are then lightly crushed, the outer layer of shell discarded, and the internal kernel or 'nib' retained. At this point, the nibs, which contain high quantities of a fat known as cocoa butter may be treated to develop their flavour and colour. The nibs are finely ground, and in the grinding process heat is produced which liquefies the product into substance called 'the liquor'. This is cooled and allowed to solidify. After this stage, the chocolate is made into any of a multitude of solid forms or is ground into cocoa powder, depending on the ultimate intended use.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">🔔 Join my Telegram</button>
+
+<script>
+/* =======================
+   CONFIG
+   ======================= */
+const CONFIG = {
+  title: "READING PASSAGE 1 – The history and production of chocolate",
+  subtitle: "You should spend about 20 minutes on Questions 1–13.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  showFooterNavigator: true,
+
+  sections: [
+    /* 1–5 True/False/Not Given */
+    {
+      type: "tfng",
+      heading: "Questions 1–5",
+      instructions: [
+        "Do the following statements agree with the information given in Reading Passage 1?",
+        "In boxes 1–5 on your answer sheet, write:",
+        "TRUE if the statement agrees with the information",
+        "FALSE if the statement contradicts the information",
+        "NOT GIVEN if there is no information on this"
+      ],
+      items: [
+        { id: 1, text: "A climate with seasonal variation in temperature is ideal for growing the cacao tree.", correct: "FALSE" },
+        { id: 2, text: "It is likely that the Olmec Indians were the first people to cultivate the cacao tree.", correct: "TRUE" },
+        { id: 3, text: "The location of the Aztec homeland meant that they had to obtain cocoa beans from elsewhere.", correct: "TRUE" },
+        { id: 4, text: "The Aztec rulers demanded heavy taxes from their subjects.", correct: "NOT GIVEN" },
+        { id: 5, text: "Drinks made from cocoa beans were widely consumed by ordinary Aztecs.", correct: "FALSE" }
+      ]
+    },
+
+    /* 6–10 Gap Fill */
+    {
+      type: "gapfill",
+      heading: "Questions 6–10",
+      instructions: [
+        "Complete the notes below.",
+        "Choose ONE WORD ONLY from the passage for each answer.",
+        "Write your answers in boxes 6–10 on your answer sheet."
+      ],
+      title: "The history of chocolate",
+      sections: [
+        {
+          subtitle: "Introduction to Europe and North America",
+          items: [
+            { id: 6, text: "Spanish explorers introduced chocolate drink to Europe in 16th century", gap: "ingredients added to reduce", correct: "bitterness" },
+            { id: 7, text: "chocolate houses established in 17th century in England for social,", gap: "and other activities", correct: "business" }
+          ]
+        },
+        {
+          subtitle: "Developments in the production of chocolate",
+          items: [
+            { id: 8, text: "Englishman who was a", gap: "creates first known edible chocolate product in 1600s", correct: "baker" },
+            { id: 9, text: "Dutch scientist invents process leading to creation of the chocolate", gap: "", correct: "bar" },
+            { id: 10, text: "many English producers provide variety of facilities for", gap: "", correct: "employees" },
+            { text: "Cadbury (in England) and Hershey (in America) each establish a town" }
+          ]
+        }
+      ]
+    },
+
+    /* 11–13 Flow Chart */
+    {
+      type: "flowchart",
+      heading: "Questions 11–13",
+      instructions: [
+        "Complete the flow chart below.",
+        "Choose ONE WORD ONLY from the passage for each answer.",
+        "Write your answers in boxes 11–13 on your answer sheet."
+      ],
+      title: "The chocolate manufacturing process",
+      items: [
+        { text: "After being separated from their pods, cocoa beans are", id: 11, gap: "naturally or mechanically", correct: "dried" },
+        { text: "Beans then", id: 12, gap: "to create distinctive tastes", correct: "roasted" },
+        { text: "Nibs are separated from the shells" },
+        { text: "Heat generated during the grinding of the nibs produces", id: 13, gap: "", correct: "liquor" },
+        { text: "Further treatment produces desired final chocolate product" }
+      ]
+    }
+  ]
+};
+
+/* =======================
+   RENDER
+   ======================= */
+document.getElementById('title').textContent = CONFIG.title;
+document.getElementById('subtitle').textContent = CONFIG.subtitle || '';
+
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+/* True/False/Not Given renderer */
+function renderTFNG(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const opts=['TRUE','FALSE','NOT GIVEN'].map(v=>`<label><input type="radio" name="q${it.id}" value="${v}"> ${v}</label>`).join('');
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${opts}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Gap Fill renderer */
+function renderGapFill(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  
+  if(sec.title) {
+    const titleDiv = document.createElement('h3');
+    titleDiv.textContent = sec.title;
+    qroot.appendChild(titleDiv);
+  }
+
+  sec.sections.forEach(section => {
+    if(section.subtitle) {
+      const subtitleDiv = document.createElement('h4');
+      subtitleDiv.style.color = 'var(--brand)';
+      subtitleDiv.style.marginTop = '20px';
+      subtitleDiv.textContent = section.subtitle;
+      qroot.appendChild(subtitleDiv);
+    }
+
+    const listDiv = document.createElement('div');
+    listDiv.style.marginLeft = '10px';
+    
+    section.items.forEach(it => {
+      if(it.id) {
+        const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+        const input = `<input type="text" name="q${it.id}" id="q${it.id}" placeholder="Enter word">`;
+        b.innerHTML=`<div class="qhead">• ${it.text} <strong>${it.id}</strong>.......... ${it.gap}</div><div class="options">${input}</div>`;
+        listDiv.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+      } else {
+        const textDiv = document.createElement('div');
+        textDiv.style.margin = '8px 0';
+        textDiv.innerHTML = `• ${it.text}`;
+        listDiv.appendChild(textDiv);
+      }
+    });
+    
+    qroot.appendChild(listDiv);
+  });
+}
+
+/* Flow Chart renderer */
+function renderFlowChart(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  
+  if(sec.title) {
+    const titleDiv = document.createElement('h3');
+    titleDiv.textContent = sec.title;
+    qroot.appendChild(titleDiv);
+  }
+
+  const flowDiv = document.createElement('div');
+  flowDiv.style.textAlign = 'center';
+  flowDiv.style.lineHeight = '2';
+
+  sec.items.forEach((it, index) => {
+    const stepDiv = document.createElement('div');
+    stepDiv.style.margin = '15px 0';
+    stepDiv.style.padding = '10px';
+    stepDiv.style.border = '1px solid #e5e7eb';
+    stepDiv.style.borderRadius = '8px';
+    stepDiv.style.backgroundColor = '#f9fafb';
+
+    if(it.id) {
+      stepDiv.id = `anchor-${it.id}`;
+      const input = `<input type="text" name="q${it.id}" id="q${it.id}" placeholder="Enter word" style="margin: 0 5px; width: 150px;">`;
+      stepDiv.innerHTML = `${it.text} <strong>${it.id}</strong> ${input} ${it.gap}`;
+      navIds.push(it.id); answersMap[it.id]=it.correct||'';
+    } else {
+      stepDiv.innerHTML = it.text;
+    }
+
+    flowDiv.appendChild(stepDiv);
+
+    if(index < sec.items.length - 1) {
+      const arrow = document.createElement('div');
+      arrow.innerHTML = '↓';
+      arrow.style.fontSize = '20px';
+      arrow.style.color = 'var(--brand)';
+      arrow.style.margin = '5px 0';
+      flowDiv.appendChild(arrow);
+    }
+  });
+
+  qroot.appendChild(flowDiv);
+}
+
+/* Build UI */
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='tfng') renderTFNG(sec);
+  if (sec.type==='gapfill') renderGapFill(sec);
+  if (sec.type==='flowchart') renderFlowChart(sec);
+});
+
+/* Footer chips */
+const footerNav=document.getElementById('footerNav');
+(function(){
+  if(!CONFIG.showFooterNavigator){ footerNav.style.display='none'; return; }
+  footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+  [...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+    const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+    chip.addEventListener('click',()=>{ document.getElementById(`anchor-${id}`).scrollIntoView({behavior:'smooth',block:'center'}); });
+    footerNav.appendChild(chip);
+  });
+})();
+function markChipAnswered(id, answered){
+  const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered);
+}
+document.addEventListener('change',(e)=>{
+  const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  const id=m?+m[1]:null; if(!id) return;
+  const answered=(e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                 : (e.target.value.trim().length>0);
+  markChipAnswered(id, answered);
+});
+
+/* Timer */
+let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60;
+const timer=document.getElementById('timer');
+const pauseBtn=document.getElementById('pauseBtn');
+const resumeBtn=document.getElementById('resumeBtn');
+let paused=false, iv;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){ if(iv) clearInterval(iv);
+  iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft); if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent=fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+function submit(){
+  paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const itemsOut=[];
+  const ids=Object.keys(answersMap);
+
+  ids.forEach(key=>{
+    const ans=answersMap[key];
+    const label=key;
+    let user='';
+    const picked=document.querySelector(`input[name="q${key}"]:checked`);
+    if(picked){ user=picked.value; }
+    else if(document.getElementById('q'+key)){ user=document.getElementById('q'+key).value; }
+    const shown=user||'No answer';
+
+    if(String(ans).trim()===''){ total++; itemsOut.push({label, status:'— not graded —', user:shown, correct:'(no key)'}); return; }
+
+    total++; graded++;
+    const ok = shown.trim().toUpperCase() === String(ans).trim().toUpperCase();
+    if(ok) correctCount++;
+    itemsOut.push({label, status: ok? '✓ Correct' : '✗ Incorrect', user:shown, correct:String(ans)});
+  });
+
+  document.getElementById('score').innerHTML = `Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;
+  document.getElementById('answers').innerHTML = itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlights */
+const passageCard=document.getElementById('passageCard');
+const pPalette=document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Questions highlight */
+const qCard=document.querySelector('.card.questions');
+const qPalette=document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1 ? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if (node.closest && node.closest('input,textarea,select')) return;
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none';});
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* Helper */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container=range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+
+/* TG button */
+document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Reading Passage 1 – The Olympic Torch</title>
+<style>
+:root{--brand:#2563eb;--ink:#111827;--bg:#f6f7fb;--muted:#6b7280}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+.container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+.card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+.passage,.questions{flex:1}
+h1{margin:0 0 10px;border-bottom:2px solid var(--brand);padding-bottom:8px;color:var(--ink)}
+h2{color:var(--brand);margin:18px 0 8px}.muted{color:var(--muted)}
+.qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+.qhead{font-weight:600;margin-bottom:8px}
+select,input[type=text]{width:100%;max-width:520px;padding:8px;border:1px solid #e5e7eb;border-radius:8px}
+.submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:10px;font-weight:600;cursor:pointer;margin-top:10px}
+.results{display:none;margin-top:16px;background:#f8fafc;border-radius:12px;padding:16px}
+.results li{list-style:none;margin:6px 0;padding:8px;border-radius:8px}
+.ok{background:#ecfdf5;color:#065f46}.bad{background:#fef2f2;color:#991b1b}.meta{font-size:13px;color:var(--muted)}
+.footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+.chip{border:1px solid #d1d5db;background:#fff;padding:6px 10px;border-radius:999px;cursor:pointer}.chip.answered{border-color:#9ca3af;background:#f3f4f6}
+.timerWrap{position:fixed;top:16px;right:16px;display:flex;gap:8px;z-index:10}
+.timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:10px;font-weight:700}
+.tbtn{border:1px solid #e5e7eb;background:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
+.palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+.hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+.highlight{background:yellow}
+</style>
+</head>
+<body>
+<div class="timerWrap">
+  <div class="timer" id="timer">20:00</div>
+  <button class="tbtn" id="pauseBtn">⏸️</button>
+  <button class="tbtn" id="resumeBtn" disabled>▶️</button>
+</div>
+
+<div class="palette" id="pPalette">
+  <button class="hbtn" data-color="yellow">Yellow</button>
+  <button class="hbtn" data-color="lightgreen">Green</button>
+  <button class="hbtn" data-color="lightblue">Blue</button>
+  <button class="hbtn" data-color="pink">Pink</button>
+  <button class="hbtn" data-color="orange">Orange</button>
+  <button class="hbtn" id="clearP">Clear</button>
+</div>
+<div class="palette" id="qPalette">
+  <button class="hbtn" data-color="yellow">Yellow</button>
+  <button class="hbtn" data-color="lightgreen">Green</button>
+  <button class="hbtn" data-color="lightblue">Blue</button>
+  <button class="hbtn" data-color="pink">Pink</button>
+  <button class="hbtn" data-color="orange">Orange</button>
+  <button class="hbtn" id="clearQ">Clear</button>
+</div>
+
+<div class="container">
+  <div class="card passage" id="passageCard">
+    <h1>READING PASSAGE 1 – The Olympic Torch</h1>
+    <div class="muted">You should spend about 20 minutes on Questions 1–13.</div>
+    <div id="passage">
+      <h2>The evolution of an internationally recognized symbol</h2>
+      <p>Every Olympic Games begins with a torch-lighting ceremony in Greece, the home of the original Games, followed by a torch relay in which runners carry the flame to the Olympic stadium in the country that is hosting the Games. Each runner carries the torch for one stage of its trip, then lights the torch of the next person in the relay. The final torchbearer runs around the stadium track once, the lights the Olympic cauldron, signalling the official start of the Olympic Games.</p>
+      <p>Each time the Games are held, a new torch is created. Sometime before the Games begin, different designs are sent in to the Olympic Committee, who select the one that seems most functional and aesthetically pleasing. The first torch used in the modern Olympics (the 1936 Berlin Games) was made of a thin steel rod topped with a circular piece from which the flame rose. It was inscribed with a dedication to the runners. Since then, designers have tried to create torches that represent the host country and the theme for that Olympic Games. The Salt Lake City Winter Olympics torch was made of crystal to resemble icicles, in order to represent that year’s theme, ‘Light the fire within’. The Athens Olympic torch resembled an olive leaf, a symbol of Greece and of peace.</p>
+      <p>More than a year may be needed to design and construct a torch. It may be carried over deserts, mountains and oceans and must survive wind, rain and snow. It must be light enough to be comfortable for each runner to carry (usually between 1.4 and 1.8 kg). It must hold enough fuel to stay lit for the entire stage and must burn brightly enough to be visible even on a sunny day, and it must also be designed to keep the runner safe from the heat of the flame as well as from hot debris falling from the flame. Anywhere from 10,000 to 15,000 torches are constructed, to accommodate the thousands of runners who carry them through each stage of the Olympic relay. Each runner has the opportunity to purchase their torch afterwards to remind them of the honour of carrying it.</p>
+      <p>Although torch design and construction vary from year to year, the torch always contains the same basic elements: a storage space for the fuel, a way of conveying the fuel to the top of the torch where the flame burns, and an aerodynamic outer shell. Early torches burned everything from gunpowder to olive oil. These substances were not always the most efficient fuel sources, and they were sometimes dangerous. In the 1956 Games, magnesium and aluminium were used as fuel, and in the final stage burning chunks fell from the torch and seared the runner’s arms. Liquid fuels were introduced at the 1972 Munich Games, and since that time all torches have carried liquid fuels – stored under pressure as a liquid, but burned as a gas to produce a flame.</p>
+      <p>The torch designed for the 1996 Atlanta Olympics was the only Olympic torch designed with a handle in the middle of the torch, instead of at the bottom. Below the handle it had an aluminium base housing a small fuel tank, which had a brass valve at the top with hundreds of tiny holes. Liquid fuel was forced through these holes and when it reached the pipe on the other side the pressure dropped, and the liquid fuel turned into a gas for burning.</p>
+      <p>The 1996 torch was originally intended to be fuelled by propane (...), but the designers found that the flame was not visible enough, particularly in windy conditions, and so in the final version they switched to propylene, which produced a brighter flame. But because propylene contains a high level of carbon, it also produces a lot of smoke. In 2000, the creators of the Sydney Olympic torch came up with a more environmentally friendly design. To fuel their torch, they decided to use propane and butane, which when mixed together produce a strong flame without making a lot of smoke. Because this mix can be stored as a liquid under relatively low pressure, it can be kept in a lightweight container. The shape and colour of the outer shell of the torch were inspired by the roof of the Sydney Opera House. The liquid fuel was stored in an aluminium canister, located about halfway up the torch, and flowed up to the top of the torch through a pipe. Before leaving the pipe, the liquid fuel was forced through a tiny hole. Once it moved through the hole, there was a pressure drop, causing the liquid to turn into a gas for burning.</p>
+      <p>The engineers behind both the 1996 and 2000 torches included a burner system that utilised a double flame, helping it to stay lit even in erratic winds. One flame was big, so it could be seen clearly, but it was unstable in winds. The other one burned at a higher temperature, producing a flame that was very stable, because its internal location protected it from the wind, enabling it to relight the first flame should it go out. Future torch design will continue to evolve as technology improves and new fuels provide even greater safety and reliability.</p>
+    </div>
+  </div>
+
+  <div class="card questions">
+    <h1>Questions 1–13</h1>
+    <div id="qroot"></div>
+    <button class="submit" id="submitBtn">Submit Answers</button>
+    <div class="results" id="results">
+      <h2>Your Results</h2><div id="score" class="meta"></div><ul id="answers"></ul>
+    </div>
+  </div>
+</div>
+<div class="footerNav" id="footerNav"></div>
+
+<script>
+/* ===== CONFIG (answers only) ===== */
+const CONFIG={
+  durationMinutes:20,
+  sections:[
+    {type:"wordlist",heading:"Questions 1–4",instructions:[
+      "Complete the summary using the list of words, A–K.","Write the correct letter, A–K."
+    ], legend:{A:"climates",B:"competitions",C:"souvenir",D:"cultures",E:"prize",F:"flame",G:"design",H:"inscription",I:"production",J:"sports",K:"gift"},
+      items:[{id:1,correct:"G"},{id:2,correct:"A"},{id:3,correct:"F"},{id:4,correct:"C"}]},
+    {type:"matchTorch",heading:"Questions 5–9",instructions:[
+      "Look at the descriptions (5–9) and the list of Olympic Games A–G.","Write the correct letter A–G."
+    ], legend:{A:"Berlin Olympics (1936)",B:"Melbourne Olympics (1956)",C:"Munich Olympics (1972)",D:"Atlanta Olympics (1996)",E:"Sydney Olympics (2000)",F:"Salt Lake City Winter Olympics (2002)",G:"Athens Olympics (2004)"},
+      items:[{id:5,correct:"A"},{id:6,correct:"F"},{id:7,correct:"B"},{id:8,correct:"C"},{id:9,correct:"D"}]},
+    {type:"diagram",heading:"Questions 10–13",instructions:["Label the diagram. Choose NO MORE THAN TWO WORDS."],
+      items:[
+        {id:10,prompt:"A",correct:["aluminium base","aluminum base"]},
+        {id:11,prompt:"fuel in the form of a/an",correct:["liquid"]},
+        {id:12,prompt:"brass valve with many small",correct:["holes"]},
+        {id:13,prompt:"combination of ___ and butane",correct:["propane"]}
+      ]}
+  ]
+};
+/* ===== Render engine ===== */
+const qroot=document.getElementById('qroot');const nav=[];const KEY={},TYPE={};
+function H(t){const h=document.createElement('h2');h.textContent=t;return h}
+function p(txt){const p=document.createElement('p');p.className='muted';p.textContent=txt;return p}
+function renderWordlist(sec){qroot.appendChild(H(sec.heading));sec.instructions.forEach(i=>qroot.appendChild(p(i)));const legend=document.createElement('div');legend.className='qblock';legend.innerHTML=`<div class="qhead"><strong>List of Words</strong></div>${Object.entries(sec.legend).map(([k,v])=>`<div><b>${k}</b> — ${v}</div>`).join('')}`;qroot.appendChild(legend);sec.items.forEach(it=>{const b=document.createElement('div');b.className='qblock';b.id='anchor-'+it.id;b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong></div><select id="q${it.id}"><option value="">—</option>${Object.keys(sec.legend).map(k=>`<option>${k}</option>`).join('')}</select>`;qroot.appendChild(b);nav.push(it.id);KEY[it.id]=it.correct;TYPE[it.id]='wl'})}
+function renderTorch(sec){qroot.appendChild(H(sec.heading));sec.instructions.forEach(i=>qroot.appendChild(p(i)));const legend=document.createElement('div');legend.className='qblock';legend.innerHTML=`<div class="qhead"><strong>List of Olympic Games</strong></div>${Object.entries(sec.legend).map(([k,v])=>`<div><b>${k}</b> — ${v}</div>`).join('')}`;qroot.appendChild(legend);sec.items.forEach(it=>{const b=document.createElement('div');b.className='qblock';b.id='anchor-'+it.id;b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> (match to A–G)</div><select id="q${it.id}"><option value="">—</option>${Object.keys(sec.legend).map(k=>`<option>${k}</option>`).join('')}</select>`;qroot.appendChild(b);nav.push(it.id);KEY[it.id]=it.correct;TYPE[it.id]='torch'})}
+function renderDiagram(sec){qroot.appendChild(H(sec.heading));sec.instructions.forEach(i=>qroot.appendChild(p(i)));sec.items.forEach(it=>{const b=document.createElement('div');b.className='qblock';b.id='anchor-'+it.id;b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.prompt||''}</div><input type="text" id="q${it.id}" placeholder="Answer">`;qroot.appendChild(b);nav.push(it.id);KEY[it.id]=it.correct;TYPE[it.id]='gap'})}
+CONFIG.sections.forEach(s=>{if(s.type==='wordlist')renderWordlist(s);if(s.type==='matchTorch')renderTorch(s);if(s.type==='diagram')renderDiagram(s)});
+/* Footer chips */
+const footer=document.getElementById('footerNav');footer.innerHTML='<strong class="muted">Questions:</strong>';
+nav.sort((a,b)=>a-b).forEach(id=>{const c=document.createElement('button');c.className='chip';c.id='chip-'+id;c.textContent=id;c.onclick=()=>document.getElementById('anchor-'+id).scrollIntoView({behavior:'smooth',block:'center'});footer.appendChild(c)});
+function mark(id,ans){const c=document.getElementById('chip-'+id);if(c)c.classList.toggle('answered',!!ans)}
+document.addEventListener('change',e=>{const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);const id=m?+m[1]:null;if(!id)return;const isRadio=e.target.type==='radio';const ans=isRadio?!!document.querySelector(`input[name='q${id}']:checked`):!!(document.getElementById('q'+id)?.value||'').trim();mark(id,ans)});
+/* Timer */
+let t=20*60,paused=false,iv;const timer=document.getElementById('timer'),pauseBtn=document.getElementById('pauseBtn'),resumeBtn=document.getElementById('resumeBtn');const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;function start(){if(iv)clearInterval(iv);iv=setInterval(()=>{if(paused)return;timer.textContent=fmt(t);if(t<=0){clearInterval(iv);alert("Time's up! Submitting.");submit()}t--},1000)}timer.textContent=fmt(t);start();pauseBtn.onclick=()=>{paused=true;pauseBtn.disabled=true;resumeBtn.disabled=false};resumeBtn.onclick=()=>{paused=false;pauseBtn.disabled=false;resumeBtn.disabled=true};
+/* Submit */
+document.getElementById('submitBtn').onclick=submit;function norm(s){return (s||'').trim().toLowerCase()}
+function submit(){paused=true;pauseBtn.disabled=true;resumeBtn.disabled=false;const out=[];let total=0,graded=0,okc=0;Object.keys(KEY).map(Number).sort((a,b)=>a-b).forEach(k=>{total++;let user='',ok=false;const type=TYPE[k];if(type==='gap'){user=document.getElementById('q'+k)?.value||'';const acc=Array.isArray(KEY[k])?KEY[k]:[KEY[k]];ok=acc.map(norm).includes(norm(user))}else{user=document.getElementById('q'+k)?.value||'';ok=norm(user)===norm(KEY[k])}if(user)graded++;if(ok)okc++;out.push({k,user,ok,corr:Array.isArray(KEY[k])?KEY[k].join(' / '):String(KEY[k])})});document.getElementById('score').innerHTML=`Graded ${graded} of ${total} • Score: ${okc}/${graded||total}`;document.getElementById('answers').innerHTML=out.map(it=>`<li class="${it.ok?'ok':'bad'}">Q${it.k}: ${it.ok?'✓ Correct':'✗ Incorrect'} — Your: <b>${it.user||'No answer'}</b> | Correct: <b>${it.corr}</b></li>`).join('');document.getElementById('results').style.display='block';document.getElementById('results').scrollIntoView({behavior:'smooth'})}
+/* Highlights */
+function markSel(color,scope){const sel=window.getSelection();if(!sel||!sel.rangeCount)return;const r=sel.getRangeAt(0);if(!scope.contains(r.commonAncestorContainer))return;const frag=r.extractContents();const span=document.createElement('span');span.className='highlight';span.style.backgroundColor=color;span.appendChild(frag);r.insertNode(span);sel.removeAllRanges()}
+const pCard=document.getElementById('passageCard'),qCard=document.querySelector('.card.questions');const pPal=document.getElementById('pPalette'),qPal=document.getElementById('qPalette');
+pCard.addEventListener('mouseup',e=>{const s=String(window.getSelection());if(!s.trim())return;const r=pCard.getBoundingClientRect();pPal.style.left=e.clientX+'px';pPal.style.top=(r.top+Math.max(0,e.clientY-r.top-40))+'px';pPal.style.display='block'});document.addEventListener('mousedown',e=>{if(!pPal.contains(e.target))pPal.style.display='none'});pPal.querySelectorAll('.hbtn[data-color]').forEach(b=>b.onclick=()=>{markSel(b.dataset.color,pCard);pPal.style.display='none'});document.getElementById('clearP').onclick=()=>{pCard.querySelectorAll('span.highlight').forEach(n=>{const P=n.parentNode;while(n.firstChild)P.insertBefore(n.firstChild,n);P.removeChild(n);P.normalize()});pPal.style.display='none'};
+qCard.addEventListener('mouseup',e=>{const s=String(window.getSelection());if(!s.trim())return;const r=qCard.getBoundingClientRect();qPal.style.left=e.clientX+'px';qPal.style.top=(r.top+Math.max(0,e.clientY-r.top-40))+'px';qPal.style.display='block'});document.addEventListener('mousedown',e=>{if(!qPal.contains(e.target))qPal.style.display='none'});qPal.querySelectorAll('.hbtn[data-color]').forEach(b=>b.onclick=()=>{markSel(b.dataset.color,qCard);qPal.style.display='none'});document.getElementById('clearQ').onclick=()=>{qCard.querySelectorAll('span.highlight').forEach(n=>{const P=n.parentNode;while(n.firstChild)P.insertBefore(n.firstChild,n);P.removeChild(n);P.normalize()});qPal.style.display='none'};
+</script>
+</body>
+</html>

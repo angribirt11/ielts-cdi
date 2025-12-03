@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 1 – The early history of Scott and Bowne’s cod liver oil</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  .muted{color:var(--muted)}
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:420px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+      <div id="passage">
+        <h2>Reading Passage 1</h2>
+        <p>Cod liver oil is a type of fish oil used today for general health purposes, but northern European fishing communities used cod liver for centuries before the doctors and chemists of 19th-century Europe began to take an interest. Its manufacture was simple: the livers of the codfish were left for some days, then oil was taken from them. The oil grew darker according to how long the livers were left, resulting in three grades of oil: pale, light brown and dark brown.</p>
+        <p>Ludovicus Josephus de Jongh of the Netherlands produced the first extensive chemical analysis of cod liver oil in 1843. His studies of the three grades of oil led him to conclude that the light-brown oil was the most healthy. He attributed this superiority to the larger quantities of iodine, phosphate of chalk and volatile acids found in it.</p>
+        <p>In 1846, de Jongh traveled to Norway to obtain the purest oil available. By the 1850s, ‘Dr. de Jong’s Light Brown Cod Liver Oil’ was marketed throughout Europe and exported to the United States. Each bottle had de Jongh’s signature and stamped seal on it – a blue codfish on a red shield – guaranteeing that the product was ‘put to the test of chemical analysis’. Advertising emphasized de Jongh’s credentials as a doctor and chemist, and included testimonials from other men of science and medicine.</p>
+        <p>However, even the most enthusiastic supporters of cod liver oil admitted that the highly disagreeable taste and smell presented a significant obstacle to its use. De Jongh believed the problem of the oil’s unpleasant taste and smell could be overcome with a little perseverance or, failing that, by following it with some fruit or biscuit, or glass of wine. But his recommendations appear not to have worked well. It was often combined with coffee, although a few people recommended taking the oil with tomato ketchup.</p>
+        <p>In 1873, Alfred B. Scott came to New York and, along with partner Samuel W. Bowne, began experimenting to produce a more pleasant preparation of cod liver. Three years later they established the firm of Scott and Bowne, and began marketing their product as Scott’s Emulsion. Though not a doctor or pharmacist by training, Scott had the eye for opportunity that was necessary for achievement in business. Advertising, the two men believed, would propel their product to success. And so it did: by the 1890s Scott and Bowne had factories in five European countries, and were selling their emulsion throughout the Americas, Europe and Asia.</p>
+        <p>Scott got his oil for Scott’s Emulsion directly from the Lofoten Islands in Norway, the world center of cod fishery – located above the Arctic Circle. The codfish streamed to the islands in early January to lay their eggs, and by the end of April were gone. The Gulf Stream, the Arctic waters, and the Norwegian fjords combined to create a perfect breeding group for the codfish and an unequaled fishing industry for the fishermen.</p>
+        <p>Scott and Bowne’s first trademark, registered in 1879, included the initials P.P.P. and three words – ‘Perfect, Permanent, Palatable’. The mark reflected that Scott’s Emulsion was a perfect formula, a permanent emulsion, and most importantly, that it had a pleasant taste. ‘Palatable as milk’ became a key phrase in Scott’s advertising.</p>
+        <p>A man with a fish on his back first appeared on Scott’s Emulsion around 1884 and became Scott and Bowne’s trademark in 1890. As Scott told it, he saw this fisherman with his record-breaking catch while on business in Norway. A photographer was quickly found to record the scene. Later, the photo was faithfully reproduced as a drawing, and registered as the company’s trademark. In the drawing, the man stoops forward, glances out from under the brim of his hat, legs tensed under the weight of his load. A thick rope, wrapped round his waist, shoulders and hands, secures the load on his back – a huge fish with gaping mouth and glassy yellow eye, its tail sweeping the floor. The common codfish is recognizable by the brown and amber spots all over its body, the light stripe down its side, and the three dorsal fins. The words ‘SCOTT’S EMULSION’ appear in the title of the picture.</p>
+        <p>Trade cards and booklets featured the fisherman and his catch along with the words ‘Scene taken from life on the coast of Norway’ and ‘The Codfish, weighing 156 pounds, was caught off the coast of Norway’. The realistic image, a direct reference to the natural source of the medicine, served as a reassurance of quality in a market that contained some impure, unsafe products.</p>
+        <p>By the 1900s, ‘the man with the fish’ was famous. His image appeared on countless boxes and bottles of a cod-liver-oil preparation. It was printed in full colour on advertising trade cards, booklets, and posters distributed around the globe, and in one instance painted several stories high on the side of a building. The man with the fish endures today, a testament to the persistence of an age-old tradition, even as scientific and commercial interest in cod liver oil has risen and fallen.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">📢 Join my Telegram</button>
+
+<script>
+const CONFIG = {
+  title: "READING PASSAGE 1 – The early history of Scott and Bowne’s cod liver oil",
+  subtitle: "Spend about 20 minutes on Questions 1–16.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  ynLabels: { TRUE:'TRUE (✓)', FALSE:'FALSE (✗)', 'NOT GIVEN':'NOT GIVEN (?)' },
+  sections: [
+    { type:'yn', heading:'Questions 1–8', instructions:["Do the statements agree with the passage? Select TRUE, FALSE or NOT GIVEN."], items:[
+      {id:1, text:'In the manufacturing process, cod livers left for the longest time produced the lightest type of oil.', correct:'FALSE'},
+      {id:2, text:'A Dutch scientist called de Jongh suggested why one grade of cod liver oil was particularly healthy.', correct:'TRUE'},
+      {id:3, text:'De Jongh was both a researcher in, and a supplier of, cod liver oil.', correct:'TRUE'},
+      {id:4, text:'Many scientists tried to find a solution to the bad smell of cod liver oil.', correct:'NOT GIVEN'},
+      {id:5, text:'The experimental methods of Scott and Bowne were much better than de Jongh’s.', correct:'NOT GIVEN'},
+      {id:6, text:'Scott was a trained chemist as well as a businessman.', correct:'FALSE'},
+      {id:7, text:'Scott found a new location for cod fishing.', correct:'FALSE'},
+      {id:8, text:'Cod around the Lofoten Islands could be caught during the first four months of the year.', correct:'TRUE'}
+    ]},
+    { type:'gap', heading:'Questions 9–16', instructions:['Complete the notes. ONE WORD ONLY.'], items:[
+      {id:9, prompt:'de Jongh suggested drinking some ________ after taking it', correct:'wine'},
+      {id:10, prompt:'others frequently added it to ________', correct:'coffee'},
+      {id:11, prompt:'one slogan compared the product with ________', correct:'milk'},
+      {id:12, prompt:'a man with a ________ around his body', correct:'rope'},
+      {id:13, prompt:'a fish whose ________ is touching the ground', correct:'tail'},
+      {id:14, prompt:'multi-coloured ________ on it', correct:'spots'},
+      {id:15, prompt:'suggested the ________ of the product to customers', correct:'quality'},
+      {id:16, prompt:'appeared in large-scale on a ________', correct:'building'}
+    ]}
+  ]
+};
+
+// ===== RENDER =====
+const qroot=document.getElementById('qroot');
+const navIds=[]; const answersMap={};
+function sectionHeader(t){const h=document.createElement('h2');h.className='qsection';h.textContent=t;return h;}
+function renderYN(sec){qroot.appendChild(sectionHeader(sec.heading));(sec.instructions||[]).forEach(tx=>{const p=document.createElement('p');p.className='muted';p.textContent=tx;qroot.appendChild(p);});sec.items.forEach(it=>{const b=document.createElement('div');b.className='qblock';b.id=`anchor-${it.id}`;b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div>`;const sel=document.createElement('select');sel.name=`q${it.id}`;sel.id=`q${it.id}`;sel.innerHTML=`<option value="">—</option>`+["TRUE","FALSE","NOT GIVEN"].map(v=>`<option value="${v}">${CONFIG.ynLabels[v]||v}</option>`).join('');const o=document.createElement('div');o.className='options';o.appendChild(sel);b.appendChild(o);qroot.appendChild(b);navIds.push(it.id);answersMap[it.id]=it.correct??'';});}
+function renderGap(sec){qroot.appendChild(sectionHeader(sec.heading));(sec.instructions||[]).forEach(tx=>{const p=document.createElement('p');p.className='muted';p.textContent=tx;qroot.appendChild(p);});sec.items.forEach(it=>{const b=document.createElement('div');b.className='qblock';b.id=`anchor-${it.id}`;b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div><div class="options"><input type="text" id="q${it.id}" name="q${it.id}" placeholder="your answer"></div>`;qroot.appendChild(b);navIds.push(it.id);answersMap[it.id]=it.correct??'';});}
+CONFIG.sections.forEach(sec=>{if(sec.type==='yn')renderYN(sec);if(sec.type==='gap')renderGap(sec);});
+
+// Footer chips
+const footerNav=document.getElementById('footerNav');
+(function(){footerNav.innerHTML='<strong class="muted">Questions:</strong>';[...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{const chip=document.createElement('button');chip.className='chip';chip.id=`chip-${id}`;chip.textContent=id;chip.addEventListener('click',()=>{document.getElementById(`anchor-${id}`).scrollIntoView({behavior:'smooth',block:'center'});});footerNav.appendChild(chip);});})();
+function markChipAnswered(id,answered){const chip=document.getElementById(`chip-${id}`);if(chip)chip.classList.toggle('answered',!!answered);} 
+document.addEventListener('change',e=>{const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);const id=m?+m[1]:null;if(!id)return;const answered=(e.target.type==='radio')?!!document.querySelector(`input[name='q${id}']:checked`):(e.target.type==='checkbox')?(document.querySelectorAll(`input[name='q${id}']:checked`).length>0):(e.target.value.trim().length>0);markChipAnswered(id,answered);});
+
+// Timer
+let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60;const timer=document.getElementById('timer');const pauseBtn=document.getElementById('pauseBtn');const resumeBtn=document.getElementById('resumeBtn');let paused=false;let iv;const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;function startTick(){if(iv)clearInterval(iv);iv=setInterval(()=>{if(paused)return;timer.textContent=fmt(timeLeft);if(timeLeft<=0){clearInterval(iv);alert("Time's up! Submitting.");submit();}timeLeft--;},1000);}timer.textContent=fmt(timeLeft);startTick();pauseBtn.addEventListener('click',()=>{paused=true;pauseBtn.disabled=true;resumeBtn.disabled=false;});resumeBtn.addEventListener('click',()=>{paused=false;pauseBtn.disabled=false;resumeBtn.disabled=true;});
+
+// Submit & grading
+ document.getElementById('submitBtn').addEventListener('click',submit);
+ function submit(){paused=true;pauseBtn.disabled=true;resumeBtn.disabled=false;let total=0,graded=0,correctCount=0;const itemsOut=[];Object.keys(answersMap).forEach(key=>{const ans=answersMap[key];let user='';if(document.getElementById('q'+key)){user=document.getElementById('q'+key).value;}else{const picked=document.querySelector(`select#q${key}`);user=picked?picked.value:'';}const userShown=user||'No answer';total++;if((Array.isArray(ans)&&ans.length===0)||(!Array.isArray(ans)&&String(ans).trim()==='')){itemsOut.push({label:key,status:'— not graded —',user:userShown,correct:'(no key)'});return;}graded++;const ok=userShown.trim().toUpperCase()===String(ans).trim().toUpperCase();if(ok)correctCount++;itemsOut.push({label:key,status:ok?'✓ Correct':'✗ Incorrect',user:userShown,correct:String(ans)});});document.getElementById('score').innerHTML=`Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;document.getElementById('answers').innerHTML=itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');const r=document.getElementById('results');r.style.display='block';r.scrollIntoView({behavior:'smooth'});} 
+
+// Highlight helpers
+const passageCard=document.getElementById('passageCard');const pPalette=document.getElementById('pPalette');passageCard.addEventListener('mouseup',e=>{const sel=window.getSelection();if(!sel||sel.toString().trim().length===0)return;if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer))return;const r=passageCard.getBoundingClientRect(),x=Math.min(e.clientX-r.left,r.width-10),y=Math.max(0,e.clientY-r.top-40);pPalette.style.left=(r.left+x)+'px';pPalette.style.top=(r.top+y)+'px';pPalette.style.display='block';});document.addEventListener('mousedown',e=>{if(!pPalette.contains(e.target))pPalette.style.display='none';});pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{btn.addEventListener('click',()=>{markSelection(btn.dataset.color,passageCard);pPalette.style.display='none';});});document.getElementById('clearPMarks').addEventListener('click',()=>{passageCard.querySelectorAll('span.highlight').forEach(n=>{const p=n.parentNode;while(n.firstChild)p.insertBefore(n.firstChild,n);p.removeChild(n);p.normalize();});pPalette.style.display='none';});
+const qCard=document.querySelector('.card.questions');const qPalette=document.getElementById('qPalette');qCard.addEventListener('mouseup',e=>{const sel=window.getSelection();if(!sel||sel.toString().trim().length===0)return;if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer))return;const node=sel.getRangeAt(0).commonAncestorContainer.nodeType===1?sel.getRangeAt(0).commonAncestorContainer:sel.getRangeAt(0).commonAncestorContainer.parentNode;if(node.closest&&node.closest('input,textarea,select'))return;const r=qCard.getBoundingClientRect(),x=Math.min(e.clientX-r.left,r.width-10),y=Math.max(0,e.clientY-r.top-40);qPalette.style.left=(r.left+x)+'px';qPalette.style.top=(r.top+y)+'px';qPalette.style.display='block';});document.addEventListener('mousedown',e=>{if(!qPalette.contains(e.target))qPalette.style.display='none';});qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{btn.addEventListener('click',()=>{markSelection(btn.dataset.color,qCard);qPalette.style.display='none';});});document.getElementById('clearQMarks').addEventListener('click',()=>{qCard.querySelectorAll('span.highlight').forEach(n=>{const p=n.parentNode;while(n.firstChild)p.insertBefore(n.firstChild,n);p.removeChild(n);p.normalize();});qPalette.style.display='none';});
+function markSelection(color,scope){const sel=window.getSelection();if(!sel||!sel.rangeCount)return;const range=sel.getRangeAt(0);if(!scope.contains(range.commonAncestorContainer))return;const container=range.commonAncestorContainer.nodeType===1?range.commonAncestorContainer:range.commonAncestorContainer.parentNode;if(container.closest&&container.closest('input, textarea, select'))return;const frag=range.extractContents();const span=document.createElement('span');span.className='highlight';span.style.backgroundColor=color;span.appendChild(frag);range.insertNode(span);sel.removeAllRanges();}
+
+document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

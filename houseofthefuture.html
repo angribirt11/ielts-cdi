@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  .muted{color:var(--muted)}
+
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:420px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 16px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#ffffffcc;backdrop-filter:saturate(120%) blur(6px);border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+
+  /* Highlight palettes */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:10px;border:1px solid #e5e7eb;min-width:220px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+
+  /* Telegram (off by default but kept for parity) */
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;border-radius:999px;padding:12px 14px;display:none;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+</style>
+</head>
+<body>
+  <!-- Timer -->
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <div class="muted" style="margin-bottom:6px">Highlight (passage)</div>
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <div class="muted" style="margin-bottom:6px">Highlight (questions)</div>
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <!-- PASSAGE -->
+    <div class="card passage" id="passageCard">
+      <h1 id="title">The house of the future, then and now</h1>
+      <div id="subtitle" class="muted">Spend about 20 minutes on Questions 14–26.</div>
+      <div id="passage">
+        <h2>Reading Passage</h2>
+        <p><strong>A.</strong> The term 'home о! tomorrow' first came into usage in the 19205 10 describe the 'ideal house for
+future living (Corn and Horrigan, 1984, p. 62). It quickly emerged as a cultural symbol for the
+American obsession with the single-family dwelling. In the 1930s and 1940s, advertisers and
+promoters picked up the concept, and a number of full-scale homes of tomorrow traveled
+through fairs and department stores. It was in this same era that American consumer culture
+was consolidated. In the 1920s, there were three competing conceptions of the home of the
+future. The first, indebted to modernist architecture, depicted the home о! tomorrow аs а
+futuristic architectural structure. The second conception was that of the mass-produced,
+prefabricated house, a dwelling potentially available to every North American. These first two
+failed to capture е imagination апа the dollars of industrialists ог of the public, but the third image of the home о! the future did. From World War И until the present, the evolving story о! the home of the future is а story о! the house аз а wonderland of gadgets (Horrigan, 1986, p.154). </p>
+
+        <p><strong>B.</strong> In the 1950s, the home of the future was represented п апа by one room: the kitchen.
+Appliance manufacturers, advertisers and women's magazines teamed up to surround women
+with images of the technology of tomorrow that would 'automate' their lives, апа automation
+became а synonym for reduced domestic labor. in 1958, one author predicted 'Combustion
+freezers and electric ovens may someday reduce the job of preparing meals to a push-button
+operation' (Ross, 1958, pp.197-8). ‘Before long there will also be self-propelled carpet апа floor
+sweepers, automatic ironers that can fold and stack clothing, laundro-matic units that will wash
+and dry clothes even as these hang in the closet, dishwashers capable of washing and drying
+dinnerware апа storing it п the cupboard, апа many additional push-button marvels.” (Ross,
+1958, p. 200) </p>
+
+        <p><strong>C.</strong> In the 1960s, representations reflected social and political turmoil. Technology moved out of the kitchen into living rooms, bedrooms and bathrooms. Who used gadgets and to what effect entered the debate. A 1968 Whirlpool ad in <em>Ladies’ Home Journal</em> (“How Whirlpool made my husband a man again”) framed a crisis of masculinity triggered by men doing housework, “solved” by the two-speed dishwasher—essentially preserving traditional roles.</p>
+
+        <p><strong>D.</strong> The 1970s looked backward to pioneer heritage. “Old-fashioned” changed from insult to cherished value. Trust in science and technology eroded; utopian techno-futures waned. Wood and windows dominated, blurring indoors/outdoors; solar tech and the Green movement rose amid energy-crisis concerns. Even utilities addressed the crisis directly in ads.</p>
+
+        <p><strong>E.</strong> By 1978, <em>House Beautiful</em> declared self-indulgence the new wave: bathroom spas and gyms, computerized kitchens, wide-screen entertainment, even home discotheques. In the 1980s, as more women worked outside the home and household computing emerged, enthusiasm for technology rebounded. Work/leisure lines blurred; e.g., a “Walking Desk” combined treadmill, bike and climber with a workstation; “nature” even arrived via the monitor.</p>
+      </div>
+    </div>
+
+    <!-- QUESTIONS -->
+    <div class="card questions">
+      <h1>Questions 14–26</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer navigator -->
+  <div class="footerNav" id="footerNav"></div>
+
+  <!-- (Optional) Telegram button kept hidden -->
+  <button class="tg" id="tgBtn">Join Telegram</button>
+
+<script>
+/* ================
+   CONFIG
+   ================ */
+const CONFIG = {
+  durationMinutes: 20,
+  showFooterNavigator: true,
+  telegramLink: "", // left blank
+
+  sections: [
+    /* 14–18 Matching Headings */
+    {
+      type: "match",
+      heading: "Questions 14–18: Choose the correct heading (i–viii) for Sections A–E",
+      instructions: [
+        "Headings:",
+        "i) Outdoor spaces in the house of tomorrow",
+        "ii) The house of the future helps with the battle of the sexes",
+        "iii) The compact home of tomorrow",
+        "iv) The multipurpose home of tomorrow",
+        "v) Housework declines in the house of the future",
+        "vi) Mixed success for visions of the future",
+        "vii) The future lies in the past",
+        "viii) A change of structure in the home of tomorrow"
+      ],
+      options: ["i","ii","iii","iv","v","vi","vii","viii"],
+      items: [
+        { id: 14, text: "Section A", correct: "vi"   }, // G -> vi
+        { id: 15, text: "Section B", correct: "v"    }, // E -> v
+        { id: 16, text: "Section C", correct: "ii"   }, // B -> ii
+        { id: 17, text: "Section D", correct: "viii" }, // A -> viii
+        { id: 18, text: "Section E", correct: "vii"  }  // D -> vii
+      ]
+    },
+
+    /* 19–26 Time periods */
+    {
+      type: "match",
+      heading: "Questions 19–26: Match each statement with the correct time period (A–E)",
+      instructions: [
+        "A) 1920s • B) 1930s–40s • C) 1950s • D) 1970s • E) 1980s"
+      ],
+      options: ["A","B","C","D","E"],
+      items: [
+        { id: 19, text: "There was a loss of faith in automation.", correct: "D" },
+        { id: 20, text: "Advertisers believed houses would be made in a factory.", correct: "A" },
+        { id: 21, text: "There were fewer housewives.", correct: "E" },
+        { id: 22, text: "One writer envisaged washable synthetic furniture.", correct: "C" },
+        { id: 23, text: "Increased awareness of the environment.", correct: "D" },
+        { id: 24, text: "Link between future-interest and consumerism.", correct: "B" },
+        { id: 25, text: "Magazine predicted disposable plates/plastics.", correct: "C" },
+        { id: 26, text: "A new phrase for “the perfect home” was introduced.", correct: "A" }
+      ]
+    }
+  ]
+};
+
+/* ================
+   RENDER
+   ================ */
+const qroot = document.getElementById('qroot');
+const answersMap = {};
+const navIds = [];
+
+function sectionHeader(title){
+  const h = document.createElement('div'); h.className='qsection';
+  h.innerHTML = `<h2>${title}</h2>`; return h;
+}
+
+function renderMatch(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{
+    const p=document.createElement('div'); p.className='muted'; p.textContent=tx; qroot.appendChild(p);
+  });
+  sec.items.forEach(it=>{
+    const b = document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    b.innerHTML = `<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div>`;
+    const sel = document.createElement('select'); sel.name=`q${it.id}`; sel.id=`q${it.id}`;
+    sel.innerHTML = `<option value="">—</option>` + sec.options.map(o=>`<option value="${o}">${o}</option>`).join('');
+    const o = document.createElement('div'); o.className='options'; o.appendChild(sel);
+    b.appendChild(o); qroot.appendChild(b);
+    navIds.push(it.id); answersMap[it.id]=it.correct;
+  });
+}
+
+CONFIG.sections.forEach(sec=>{
+  if(sec.type==='match') renderMatch(sec);
+});
+
+/* Footer chips */
+if(CONFIG.showFooterNavigator){
+  const foot=document.getElementById('footerNav');
+  navIds.forEach(id=>{
+    const c=document.createElement('button'); c.className='chip'; c.textContent=id;
+    c.addEventListener('click',()=>document.getElementById(`anchor-${id}`).scrollIntoView({behavior:'smooth',block:'center'}));
+    foot.appendChild(c);
+  });
+}
+function markChipAnswered(id, answered){
+  const chips=[...document.querySelectorAll('.footerNav .chip')];
+  const c=chips.find(x=>x.textContent==String(id)); if(!c) return;
+  c.classList.toggle('answered', !!answered);
+}
+
+/* Track answered state */
+qroot.addEventListener('change', e=>{
+  if(!e.target.id) return;
+  const id = +(e.target.id.replace('q',''));
+  if(!isNaN(id)) markChipAnswered(id, (e.target.value||'').length>0);
+});
+
+/* ================
+   TIMER
+   ================ */
+let timeLeft = Math.max(1, +CONFIG.durationMinutes || 20) * 60;
+const timer = document.getElementById('timer');
+const pauseBtn = document.getElementById('pauseBtn');
+const resumeBtn = document.getElementById('resumeBtn');
+let paused = false; let iv;
+const fmt = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){
+  if (iv) clearInterval(iv);
+  iv = setInterval(()=>{
+    if (paused) return;
+    timer.textContent = fmt(timeLeft);
+    if (timeLeft <= 0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); }
+    timeLeft--;
+  },1000);
+}
+timer.textContent = fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* ================
+   SUBMIT & GRADING
+   ================ */
+document.getElementById('submitBtn').addEventListener('click', submit);
+
+function submit(){
+  paused = true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let graded=0, correctCount=0;
+  const itemsOut=[];
+  Object.keys(answersMap).forEach(k=>{
+    const id = +k;
+    const el = document.getElementById('q'+id);
+    const val = (el && el.value || '').trim();
+    const ok  = val === (answersMap[id]||'');
+    if (val) graded++;
+    if (ok) correctCount++;
+    itemsOut.push({ id, val, ok, correct: answersMap[id]||'' });
+  });
+
+  const results = document.getElementById('results');
+  const score   = document.getElementById('score');
+  const ul      = document.getElementById('answers');
+  score.textContent = `Score: ${correctCount} / ${Object.keys(answersMap).length}`;
+  ul.innerHTML = itemsOut
+    .sort((a,b)=>a.id-b.id)
+    .map(r=>`<li class="${r.ok?'ok':'bad'}"><strong>${r.id}.</strong> ${r.val||'—'} ${r.ok?'✓':'✗'} <span class="meta">Correct: ${r.correct}</span></li>`)
+    .join('');
+  results.style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ================
+   HIGHLIGHT – Passage
+   ================ */
+const passageCard = document.getElementById('passageCard');
+const pPalette = document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* ================
+   HIGHLIGHT – Questions
+   ================ */
+const qCard = document.querySelector('.card.questions');
+const qPalette = document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if (node.closest && node.closest('input,textarea,select')) return; // ignore form controls
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; });
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* ================
+   Generic highlighter
+   ================ */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||sel.rangeCount===0) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container = range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+
+/* Telegram (kept for parity; hidden) */
+document.getElementById('tgBtn').addEventListener('click',()=>{ if(CONFIG.telegramLink) window.open(CONFIG.telegramLink,'_blank'); });
+</script>
+</body>
+</html>

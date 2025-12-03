@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 2 – Bird Migration</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  h3{margin:8px 0 0}
+  .muted{color:var(--muted)}
+
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+
+  /* Highlights */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+
+      <div id="passage">
+        <h2>Reading Passage 2</h2>
+        <h3>Bird Migration</h3>
+
+        <p><strong>A.</strong> Birds have many unique design features that enable them to perform amazing feats of endurance. They are equipped with lightweight, hollow bones; intricately designed feathers providing lift and thrust; navigation systems superior to any that humans have developed; and a heat-conserving design that concentrates blood circulation beneath layers of warm, waterproof plumage, allowing life in the harshest climates. Their respiratory systems must work efficiently during sustained high-altitude flights, so birds extract oxygen from their lungs far better than other animals. Late in the breeding season, when food is plentiful, their bodies can lay down considerable fat to power long migratory flights.</p>
+
+        <p><strong>B.</strong> The fundamental reason birds migrate is to find adequate food during winter when it is scarce. This applies especially to species breeding in temperate and Arctic regions of the Northern Hemisphere, where food is abundant only during the short growing season. Many species tolerate cold temperatures if food is plentiful, but when it is not, they must migrate. However, intriguing questions remain.</p>
+
+        <p><strong>C.</strong> One puzzling fact is that many birds journey much farther than necessary simply to find food and good weather. For instance, British swallows could presumably survive the winter in equatorial Africa, yet they fly several thousand miles farther to South Africa’s Cape Province. Another mystery involves huge migrations by arctic terns and mudflat-feeding shorebirds that breed near the poles. In general, the farther north a migrant breeds, the farther south it winters. For arctic terns this means an annual round trip of about 25,000 miles. En route all these individuals overfly apparently suitable habitat across two hemispheres. We may not fully understand why birds choose particular places, but we can marvel at their feats.</p>
+
+        <p><strong>D.</strong> One of the greatest mysteries is how young birds find traditional wintering areas without parental guidance. Very few adults migrate with juveniles, and youngsters may have little or no idea what their parents look like. The cuckoo, for example, lays its eggs in another species’ nest and never meets its young. Yet once raised by the host species, the young cuckoo makes its own way to ancestral wintering grounds in the tropics before returning alone to northern Europe next season to seek a mate of its own kind. The implication is that it inherits an in-built route map and direction-finding capability, as well as a mental image of another cuckoo. How this is possible is unknown.</p>
+
+        <p><strong>E.</strong> Mounting evidence confirms that birds use the positions of the sun and stars to obtain compass directions. They also seem able to detect the earth’s magnetic field, probably through minute crystals of magnetite in the brain. True navigation, however, also requires awareness of position and time—especially when lost. Experiments show that after being taken thousands of miles over unfamiliar land, birds can still return rapidly to nest sites. Such phenomenal powers result from computing many cues, including an inborn map of the night sky and the pull of the earth’s magnetic field. Most small birds migrate at night and take their direction from the setting sun, but they also see the plane of polarized light it creates, which calibrates their compass. Night travel avoids daytime <em>predators</em>, reduces dehydration in warm, sunlit skies, and benefits from cooler, less turbulent air.</p>
+
+        <p><strong>F.</strong> Nevertheless, all journeys involve risk, and part of arriving safely is setting off at the right time—requiring accurate weather sense and use of favourable winds. Birds are adept at both; in laboratory tests, some detect minute differences in barometric pressure between floor and ceiling. Often birds react to weather changes before any <em>visible</em> sign appears. Lapwings flee west from the Netherlands to the British Isles, France and Spain at the onset of a cold snap, returning to Holland ahead of a thaw as pressure changes signal improvement.</p>
+
+        <p><strong>G.</strong> In one instance, a Welsh Manx shearwater carried to America and released was back in its burrow on Skokholm Island, off the Pembrokeshire coast, one day before a letter announcing its release arrived. Conversely, each autumn a few North American birds are blown across the Atlantic by fast-moving westerlies; ringing evidence shows some make it back the following spring, probably after wintering with European migrants in Africa.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">📢 Join my Telegram</button>
+
+<script>
+/* =======================
+   CONFIG
+   ======================= */
+const CONFIG = {
+  title: "READING PASSAGE 2 – Bird Migration",
+  subtitle: "You should spend about 20 minutes on Questions 14–26.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  showFooterNavigator: true,
+
+  sections: [
+    /* 14–20 Headings */
+    {
+      type: "headings",
+      heading: "Questions 14–20",
+      instructions: [
+        "Reading Passage 2 has seven paragraphs, A–G.",
+        "Choose the correct heading for each paragraph from the list below."
+      ],
+      headingsList: [
+        { key:"i",   text:"The best moment to migrate" },
+        { key:"ii",  text:"The unexplained rejection of closer feeding ground" },
+        { key:"iii", text:"The influence of weather on the migration route" },
+        { key:"iv",  text:"Physical characteristics that allow birds to migrate" },
+        { key:"v",   text:"The main reason why birds migrate" },
+        { key:"vi",  text:"The best wintering grounds for birds" },
+        { key:"vii", text:"Research findings on how birds migrate" },
+        { key:"viii",text:"Successful migration despite trouble of wind" },
+        { key:"ix",  text:"Contrast between long- and short-distance migration" },
+        { key:"x",   text:"Mysterious migration despite lack of teaching" }
+      ],
+      items: [
+        { id: 14, prompt: "Paragraph A", correct: "iv" },
+        { id: 15, prompt: "Paragraph B", correct: "v"  },
+        { id: 16, prompt: "Paragraph C", correct: "ii" },
+        { id: 17, prompt: "Paragraph D", correct: "x"  },
+        { id: 18, prompt: "Paragraph E", correct: "vii"},
+        { id: 19, prompt: "Paragraph F", correct: "i"  },
+        { id: 20, prompt: "Paragraph G", correct: "viii"}
+      ]
+    },
+
+    /* 21–22 Choose TWO letters */
+    {
+      type: "msq",
+      heading: "Questions 21–22",
+      instructions: ["Choose TWO letters, A–E. Which TWO statements are true of bird migration?"],
+      options: [
+        { key:"A", text:"Birds often travel farther than they need to." },
+        { key:"B", text:"Birds travelling in family groups are safe." },
+        { key:"C", text:"Birds flying at night need less water." },
+        { key:"D", text:"Birds have much sharper eyesight than humans." },
+        { key:"E", text:"Only shorebirds are resistant to strong winds." }
+      ],
+      correct: ["A","C"]
+    },
+
+    /* 23–26 Sentence completion */
+    {
+      type: "gap",
+      heading: "Questions 23–26",
+      instructions: ["Complete the sentences below. WRITE NO MORE THAN ONE WORD OR A NUMBER."],
+      items: [
+        { id: 23, prompt: "It is a great mystery that young birds like cuckoos can find their wintering grounds without ______.", correct: "parental guidance" },
+        { id: 24, prompt: "Evidence shows birds can tell directions like a ______ by observing the sun and the stars.", correct: "compass" },
+        { id: 25, prompt: "One advantage for birds flying at night is that they can avoid contact with ______.", correct: "predators" },
+        { id: 26, prompt: "Laboratory tests show that birds can detect weather without ______ signs.", correct: "visible" }
+      ]
+    }
+  ]
+};
+
+/* =======================
+   RENDER
+   ======================= */
+document.getElementById('title').textContent = CONFIG.title;
+document.getElementById('subtitle').textContent = CONFIG.subtitle || '';
+
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+/* Headings */
+function renderHeadings(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  const bank=document.createElement('div'); bank.className='qblock';
+  bank.innerHTML = `<div class="qhead"><strong>List of Headings</strong></div>
+    <div class="options">${sec.headingsList.map(h=>`<div><b>${h.key}</b> — ${h.text}</div>`).join('')}</div>`;
+  qroot.appendChild(bank);
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const letters=sec.headingsList.map(h=>h.key);
+    const opts=letters.map(k=>`<label><input type="radio" name="q${it.id}" value="${k}"> ${k}</label>`).join('');
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div><div class="options">${opts}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Multi-select */
+function renderMSQ(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  const b=document.createElement('div'); b.className='qblock'; b.id='anchor-21_22';
+  const opts=sec.options.map(o=>`<label><input type="checkbox" name="q21_22" value="${o.key}"> ${o.key} ${o.text}</label>`).join('');
+  b.innerHTML=`<div class="qhead"><strong>21–22.</strong> Select TWO.</div><div class="options">${opts}</div>`;
+  qroot.appendChild(b); navIds.push(21,22); answersMap['21_22']=sec.correct.slice();
+}
+
+/* Gaps */
+function renderGap(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div>
+                 <div class="options"><input type="text" id="q${it.id}" placeholder="your answer"></div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Build UI */
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='headings') renderHeadings(sec);
+  if (sec.type==='msq') renderMSQ(sec);
+  if (sec.type==='gap') renderGap(sec);
+});
+
+/* Footer chips */
+const footerNav=document.getElementById('footerNav');
+(function(){
+  if(!CONFIG.showFooterNavigator){ footerNav.style.display='none'; return; }
+  footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+  [...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+    const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+    chip.addEventListener('click',()=>{ document.getElementById(`anchor-${id}`).scrollIntoView({behavior:'smooth',block:'center'}); });
+    footerNav.appendChild(chip);
+  });
+})();
+function markChipAnswered(id, answered){
+  const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered);
+}
+document.addEventListener('change',(e)=>{
+  const is2122 = e.target.name==='q21_22';
+  const m = is2122 ? ['','21'] : String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  const id = m? +m[1] : null; if(!id) return;
+  const answered = is2122 ? (document.querySelectorAll(`input[name='q21_22']:checked`).length>0)
+                 : (e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                 : (e.target.value.trim().length>0);
+  markChipAnswered(id, answered); if(is2122) markChipAnswered(22, answered);
+});
+
+/* Timer */
+let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60;
+const timer=document.getElementById('timer');
+const pauseBtn=document.getElementById('pauseBtn');
+const resumeBtn=document.getElementById('resumeBtn');
+let paused=false, iv;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){ if(iv) clearInterval(iv);
+  iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft);
+    if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent=fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+function submit(){
+  paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const itemsOut=[];
+  const ids=Object.keys(answersMap);
+
+  ids.forEach(key=>{
+    const ans=answersMap[key];
+    const label=(key==='21_22') ? '21–22' : key;
+    let user='';
+    if(key==='21_22'){
+      user = Array.from(document.querySelectorAll(`input[name='q21_22']:checked`)).map(x=>x.value).sort().join(', ');
+    } else {
+      const picked=document.querySelector(`input[name="q${key}"]:checked`);
+      user = picked? picked.value : (document.getElementById('q'+key)?.value || '');
+    }
+    const shown=user || 'No answer';
+
+    if ((Array.isArray(ans) && ans.length===0) || (!Array.isArray(ans) && String(ans).trim()==='')){
+      total++; itemsOut.push({label, status:'— not graded —', user:shown, correct:'(no key)'}); return;
+    }
+
+    total++; graded++;
+    let ok=false; const correctText = Array.isArray(ans)? ans.join(', ') : ans;
+    if(Array.isArray(ans)){
+      const expected = ans.slice().sort();
+      const picked = Array.from(document.querySelectorAll(`input[name='q21_22']:checked`)).map(x=>x.value).sort();
+      ok = (picked.length===expected.length) && picked.every((v,i)=>v===expected[i]);
+    } else {
+      ok = shown.trim().toUpperCase() === String(ans).trim().toUpperCase();
+    }
+    if(ok) correctCount++;
+    itemsOut.push({label, status: ok? '✓ Correct' : '✗ Incorrect', user:shown, correct:correctText});
+  });
+
+  document.getElementById('score').innerHTML=`Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;
+  document.getElementById('answers').innerHTML=itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlights */
+const passageCard=document.getElementById('passageCard');
+const pPalette=document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Question highlights */
+const qCard=document.querySelector('.card.questions');
+const qPalette=document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1 ? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if(node.closest && node.closest('input,textarea,select')) return;
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; });
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* Helper */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container=range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+
+/* TG button */
+document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

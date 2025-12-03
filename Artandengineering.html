@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 2 – Art and engineering</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  h3{margin:8px 0 0}
+  .muted{color:var(--muted)}
+
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+
+  /* Highlights */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+
+      <div id="passage">
+        <h2>Reading Passage 2</h2>
+        <h3>Art and engineering</h3>
+
+        <p><strong>A</strong> Work of engineering and technology are sometime viewed as having nothing to do with art and humanity. Think of the connotation of assembly lines, robots and computer. The positive values associated with these creation can be overwhelmed by the negative associations of repetitive, stressful work and threatened jobs. Critics of technology protest against what they see as the same time, megastructures such as the Brooklyn and Golden Gate Bridges in the US are hailed as majestic human achievements, as well as great engineering monuments that have come to embody the spirit of their respective cities. The relationship between art and engineering has seldom been easy or consistent.</p>
+
+        <p><strong>B</strong> Arguably, the assembly line process associated with Henry Ford made workers tools of the system. The human worker may have appeared to be only a cog in the wheel of industry, yet photographers such as <strong>Lewis Hine</strong> revealed the beauty of line and composition in his study of a worker using a wrench to turn a bolt. Hine focused on the individuals engaged in the work. In the period around World War I, he visited New York and was given the opportunity to record the construction of the famous <strong>Empire State Building</strong>, the tallest building of its time. This resulted in a series of striking photographs which have become familiar images of daring. Hine put his own life at risk to photograph workers suspended on cables hundreds of feet in the air, or sitting on a high girder eating lunch.</p>
+
+        <p><strong>C</strong> When Ford's enormous River Rouge plant opened in 1927, the painter/photographer <strong>Charles Sheeler</strong> was chosen to photograph it. The world's largest car plant captured the imagination of Sheeler, who described it as the most thrilling subject he had ever had to work with.</p>
+
+        <p><strong>D</strong> Long before Hine and Sheeler, other photographers and painters had seen the art and humanity in works of engineering and technology. This is perhaps nowhere more evident than in the Coalbrookdale Museum of Iron, at Ironbridge in Shropshire in the UK. In the late 18th century, <strong>Abraham Darby</strong> cast the large iron ribs that formed the world's first iron bridge, a dramatic departure from the classic stone and timber bridges that dotted the countryside and had been captured in numerous landscape paintings. This structure still spans the <strong>River Severn</strong>, and the Coalbrookdale Museum is crowded with its portraits, showing the iron structure not as a blight on the landscape, but as its focal point. This is how <strong>Michael Rooker</strong> shows the iron bridge in his late 18th-century painting, in which the surrounding area radiates out from the bridge and pales behind it. Countless other contemporary representations of the bridge hang in the nearby museum.</p>
+
+        <p><strong>E</strong> In the 19th century, the railways were another feat of engineering which captured the imagination of painters, and the steam engine in the distance of a landscape became as much a part of it as the herd of cows in the foreground. The Impressionist <strong>Claude Monet</strong> painted railway stations – such as the Gare St-Lazare in Paris – as well as flower and gardens. By the 20th century, engineering, technology and industry were very well established as subjects for artists.</p>
+
+        <p><strong>F</strong> American-born artist <strong>Joseph Pennell</strong> portrayed buildings under construction and shrouded in scaffolding, and recorded scenes of industry during World War I. He is perhaps best known for his prints of the Panama Canal as it neared completion and of the partially completed Hell Gate and Delaware River Bridges. Pennell has often been quoted as saying, "Great engineering is great art", a sentiment that he expressed repeatedly. He wrote of his contemporaries: I understand nothing of engineering, but I know that engineers are the greatest architects and the most pictorial builders since the (ancient) Greeks." Pennell called the sensation that he felt when he looked at a great construction project "the Wonder of Work". He saw engineering as a process memorialized in every completed dam, skyscraper, bridge or other great engineering feat.</p>
+
+        <p><strong>G</strong> Today, one of the most innovative and influential engineers is <strong>Santiago Calatrava</strong>, who also trained as an architect. His bridges and other structures provide public spaces on a human scale, and stand as pieces of sculpture in their own right. Increasingly, commissioners of bridges in the US are looking to such individuals, to teams of engineers and architects who work with artists. The growing awareness of the intangible added value of art is sure to give us more masterpieces like the Brooklyn Bridge. They in turn will continue to be noble monuments to civilization, and will be welcome subjects for artists of all kinds.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">📢 Join my Telegram</button>
+
+<script>
+/* =======================
+   CONFIG
+   ======================= */
+const CONFIG = {
+  title: "READING PASSAGE 2 – Art and engineering",
+  subtitle: "You should spend about 20 minutes on Questions 14–26.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  showFooterNavigator: true,
+
+  sections: [
+    /* 14–19 Paragraph Information */
+    {
+      type: "paragraph_info",
+      heading: "Questions 14–19",
+      instructions: ["Reading Passage 2 has seven paragraphs, A–G.", "Which paragraph contains the following information?", "Write the correct letter A–G in boxes 14–19 on your answer sheet.", "NB You may use any letter more than once."],
+      items: [
+        { id: 14, text: "a time when a transport system became an inspiration for artists", correct: "E" },
+        { id: 15, text: "a reference to the current trend of including artists in engineering projects", correct: "G" },
+        { id: 16, text: "reasons for the idea that art and engineering are difficult to combine", correct: "A" },
+        { id: 17, text: "how the depiction of human labour involved danger to an artist", correct: "B" },
+        { id: 18, text: "a reference to an artist who celebrated a number of unfinished structures", correct: "F" },
+        { id: 19, text: "a reference to two large engineering works that are symbols of their locations", correct: "A" }
+      ]
+    },
+
+    /* 20–22 Matching People */
+    {
+      type: "match_people",
+      heading: "Questions 20–22",
+      instructions: ["Look at the following statements (Questions 20–22) and the list of people below.", "Match each statement with the correct person, A–G.", "Write the correct letter, A–G, in boxes 20–22 on your answer sheet."],
+      people: {
+        A: "Lewis Hine",
+        B: "Charles Sheeler", 
+        C: "Abraham Darby",
+        D: "Michael Rooker",
+        E: "Claude Monet",
+        F: "Joseph Pennell",
+        G: "Santiago Calatrava"
+      },
+      items: [
+        { id: 20, text: "His engineering constructions are also regarded as works of art.", correct: "G" },
+        { id: 21, text: "He created images of builders constructing an iconic American skyscraper.", correct: "A" },
+        { id: 22, text: "He painted a building connected with a significant innovation in transport.", correct: "E" }
+      ]
+    },
+
+    /* 23–26 Summary Completion */
+    {
+      type: "summary",
+      heading: "Questions 23–26",
+      instructions: ["Complete the summary below.", "Choose NO MORE THAN TWO WORDS from the passage for each answer.", "Write your answers in boxes 23–26 on your answer sheet."],
+      title: "The iron bridge",
+      summary: "Before the late 18th century, bridges were traditionally constructed of wood and 23 ................ Then the engineer 24 ................ manufactured the elements of an innovative bridge across the 25 ................ This iron bridge was the subject of a number of artworks, including a notable one by 26 ................ While some may have viewed it as ugly, artists regarded the bridge as a central feature of the landscape.",
+      items: [
+        { id: 23, correct: "stone" },
+        { id: 24, correct: "Abraham Darby" },
+        { id: 25, correct: "River Severn" },
+        { id: 26, correct: "Michael Rooker" }
+      ]
+    }
+  ]
+};
+
+/* =======================
+   RENDER
+   ======================= */
+document.getElementById('title').textContent = CONFIG.title;
+document.getElementById('subtitle').textContent = CONFIG.subtitle || '';
+
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+/* Paragraph Information renderer */
+function renderParagraphInfo(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const sel=`<select id="q${it.id}" name="q${it.id}">
+      <option value="">—</option>
+      ${['A','B','C','D','E','F','G'].map(k=>`<option value="${k}">${k}</option>`).join('')}
+    </select>`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${sel}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Match People renderer */
+function renderMatchPeople(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+
+  const legend=document.createElement('div'); legend.className='qblock';
+  legend.innerHTML = `<div class="qhead"><strong>List of People</strong></div>
+    <div class="options">${Object.entries(sec.people).map(([k,v])=>`<div><b>${k}</b> — ${v}</div>`).join('')}</div>`;
+  qroot.appendChild(legend);
+
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const sel=`<select id="q${it.id}" name="q${it.id}">
+      <option value="">—</option>${Object.keys(sec.people).map(k=>`<option value="${k}">${k}</option>`).join('')}
+    </select>`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${sel}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Summary renderer */
+function renderSummary(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  
+  if(sec.title) {
+    const titleDiv = document.createElement('div');
+    titleDiv.innerHTML = `<h3>${sec.title}</h3>`;
+    qroot.appendChild(titleDiv);
+  }
+
+  if(sec.summary) {
+    const summaryDiv = document.createElement('div');
+    summaryDiv.className = 'qblock';
+    summaryDiv.innerHTML = `<div class="qhead">${sec.summary}</div>`;
+    qroot.appendChild(summaryDiv);
+  }
+
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const input = `<input type="text" id="q${it.id}" name="q${it.id}" placeholder="Enter your answer">`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ................</div><div class="options">${input}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Build UI */
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='paragraph_info') renderParagraphInfo(sec);
+  if (sec.type==='match_people') renderMatchPeople(sec);
+  if (sec.type==='summary') renderSummary(sec);
+});
+
+/* Footer chips */
+const footerNav=document.getElementById('footerNav');
+(function(){
+  if(!CONFIG.showFooterNavigator){ footerNav.style.display='none'; return; }
+  footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+  [...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+    const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+    chip.addEventListener('click',()=>{ document.getElementById(`anchor-${id}`).scrollIntoView({behavior:'smooth',block:'center'}); });
+    footerNav.appendChild(chip);
+  });
+})();
+
+function markChipAnswered(id, answered){
+  const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered);
+}
+
+document.addEventListener('change',(e)=>{
+  const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  const id=m?+m[1]:null; if(!id) return;
+  const answered=(e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                 : (e.target.value.trim().length>0);
+  markChipAnswered(id, answered);
+});
+
+/* Timer */
+let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60;
+const timer=document.getElementById('timer');
+const pauseBtn=document.getElementById('pauseBtn');
+const resumeBtn=document.getElementById('resumeBtn');
+let paused=false, iv;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){ if(iv) clearInterval(iv);
+  iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft); if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent=fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+function submit(){
+  paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const itemsOut=[];
+  const ids=Object.keys(answersMap);
+
+  ids.forEach(key=>{
+    const ans=answersMap[key];
+    const label=key;
+    let user='';
+    const picked=document.querySelector(`input[name="q${key}"]:checked`);
+    if(picked){ user=picked.value; }
+    else if(document.getElementById('q'+key)){ user=document.getElementById('q'+key).value; }
+    const shown=user||'No answer';
+
+    if(String(ans).trim()===''){ total++; itemsOut.push({label, status:'— not graded —', user:shown, correct:'(no key)'}); return; }
+
+    total++; graded++;
+    const ok = shown.trim().toUpperCase() === String(ans).trim().toUpperCase();
+    if(ok) correctCount++;
+    itemsOut.push({label, status: ok? '✓ Correct' : '✗ Incorrect', user:shown, correct:String(ans)});
+  });
+
+  document.getElementById('score').innerHTML = `Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;
+  document.getElementById('answers').innerHTML = itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlights */
+const passageCard=document.getElementById('passageCard');
+const pPalette=document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Questions highlight */
+const qCard=document.querySelector('.card.questions');
+const qPalette=document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1 ? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if (node.closest && node.closest('input,textarea,select')) return;
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; });
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* Helper */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container=range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+
+/* TG button */
+document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

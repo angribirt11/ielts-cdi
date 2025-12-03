@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>IELTS Reading Practice</title>
+    <style>
+.flash {
+    animation: flashAnim 0.6s ease-out;
+}
+@keyframes flashAnim {
+    0% { background: yellow; }
+    100% { background: transparent; }
+}
+
+        * { box-sizing: border-box; margin:0; padding:0; }
+        body { font-family: Arial, sans-serif; color:#222; background:#fff; line-height:1.4; }
+        #header { position:fixed; top:0; left:0; right:0; height:60px; background:#fff; border-bottom:1px solid #e0e0e0; display:flex; align-items:center; justify-content:space-between; padding:0 20px; z-index:100; }
+        #timer { font-weight:bold; }
+        #passage-header-container { margin-top:60px; padding:15px 20px; background:#f5f5f5; border-bottom:1px solid #e0e0e0; }
+        .main-container { display:flex; flex-direction:column; height:calc(100vh - 60px); }
+        .panels-container { display:flex; flex:1; overflow:hidden; }
+        .passage-panel { flex:1; overflow-y:auto; padding:20px 20px 120px; min-width:220px; }
+        .questions-panel { flex:1; overflow-y:auto; padding:20px 20px 120px; border-left:1px solid #e0e0e0; min-width:300px; }
+        .reading-passage p { margin-bottom:15px; text-align:justify; }
+        .question { margin-bottom:20px; }
+        .inline-input { padding:6px 10px; border:1px solid #ddd; border-radius:4px; min-width:140px; }
+        .answer-input { padding:6px 10px; border:1px solid #ddd; border-radius:4px; min-width:120px; }
+        .drop-zone { min-width:80px; min-height:36px; border:2px dashed #cfcfcf; border-radius:4px; background:#fafafa; display:flex; align-items:center; justify-content:center; padding:4px; text-align:center; }
+        .drop-zone.filled { border-style:solid; border-color:#4a90e2; background:#e8f4ff; }
+        .drag-item { padding:8px 12px; background:#fff; border:1px solid #ddd; border-radius:4px; cursor:grab; margin:6px; display:inline-block; }
+        .drag-item.dragging { opacity:0.5; }
+        .matching-options-bank { padding:10px; background:#fbfbfb; border:1px solid #eee; display:flex; flex-wrap:wrap; gap:8px; }
+        .resizer { width:10px; cursor:col-resize; background:#f5f5f5; border-left:1px solid #e0e0e0; border-right:1px solid #e0e0e0; display:flex; align-items:center; justify-content:center; }
+        #bottom-nav { position:fixed; bottom:0; left:0; right:0; height:80px; background:#fff; border-top:1px solid #e0e0e0; padding:10px 20px; display:flex; justify-content:space-between; align-items:center; gap:20px; z-index:100; }
+        #submit-btn { background:#4a90e2; color:#fff; padding:12px 28px; border-radius:8px; border:none; cursor:pointer; font-size:16px; }
+        .part-btn { padding:8px 12px; border-radius:6px; border:1px solid #ddd; background:#f7f7f7; cursor:pointer; }
+        .part-btn.active { background:#4a90e2; color:#fff; border-color:#4a90e2; }
+        .question-btn { padding:5px 8px; border:1px solid #ddd; border-radius:4px; cursor:pointer; margin:2px; }
+        .question-btn.answered { background:#d4edda; border-color:#28a745; }
+        .drop-heading { min-width:150px; min-height:30px; border:2px dashed #cfcfcf; padding:3px 6px; margin-right:10px; display:inline-flex; align-items:center; justify-content:center; background:#fff; border-radius:4px; }
+        .drop-heading.filled { background:#e8f4ff; border-style:solid; border-color:#4a90e2; }
+        .diagram-container { display:flex; gap:16px; align-items:flex-start; }
+        .diagram-container img { max-width:420px; width:40%; height:auto; border:1px solid #ddd; padding:6px; background:#fff; }
+        .table-select { width:100%; border-collapse:collapse; margin-top:8px; }
+        .table-select th, .table-select td { border:1px solid #ddd; padding:8px; text-align:center; }
+        .table-select th:first-child, .table-select td:first-child { text-align:left; }
+        .table-select input[type="radio"] { width:18px; height:18px; }
+        .heading-bank { margin-bottom:12px; }
+        .results-correct { color:#28a745; } .results-incorrect { color:#dc3545; }
+        .flash { animation: flashAnim 0.6s ease-out; } @keyframes flashAnim { 0% { background: yellow; } 100% { background: transparent; } }
+        .input-filled { border-color: #28a745 !important; background: #e9fbe9 !important;}
+   </style>
+</head>
+<body>
+    <div id="header">
+        <div id="timer-container">
+            <span id="timer">60:00</span>
+            <button id="timer-toggle">⏸</button>
+            <button id="timer-reset">↻</button>
+        </div>
+        <a href="https://t.me/IELTS_PAPERS" target="_blank">@IELTS_PAPERS</a>
+    </div>
+
+    <div id="passage-header-container">
+        <div id="part-header-1" class="part-header" style="display:block;">
+            <p><strong>Part 1</strong></p>
+            <p>Read the text and answer questions 1-13.</p>
+        </div>
+        <div id="part-header-2" class="part-header" style="display:none;">
+            <p><strong>Part 2</strong></p>
+            <p>Read the text and answer questions 14-26.</p>
+        </div>
+        <div id="part-header-3" class="part-header" style="display:none;">
+            <p><strong>Part 3</strong></p>
+            <p>Read the text and answer questions 27-40.</p>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="panels-container">
+            <div class="passage-panel" id="passage-panel">
+                <!-- Passage 1 -->
+                <div id="passage-text-1" class="reading-passage" style="display:block;">
+                    <h4 style="text-align:center;">A Brief History of Rubber</h4>
+                    <p><strong>A</strong> Rubber is one of the most important products to come out of the rainforest. Though indigenous rainforest dwellers of South America have been using rubber for generations, it was not until 1839 that rubber had its first practical application in the industrial world. In that year, Charles Goodyear accidentally dropped rubber and sulfur on a hot stovetop, causing it to char like leather yet remain plastic and elastic. Vulcanization, a refined version of this process, transformed the white sap from the bark of the Heave tree into an essential product for the industrial age.</p>
+                    <p><strong>B</strong> With the invention of the automobile in the late 19th century, the rubber boom began. As demand for rubber soared small dumpy river towns like Manaus, Brazil, were transformed over night into bustling centers of commerce. Manaus, situated on the Amazon where it is met by Rio Negro, became the opulent heart of the rubber trade. Within a few short years Manaus had Brazil’s first telephone system, 161 miles of streetcar tracks, and an electric grid for a city of a million, though it had a population of only 40,000.</p>
+                    <p><strong>C</strong> The opulence of the rubber barons could only be exceeded by their brutality. Wild Heave trees, like all primary rainforest trees are widely dispersed, with an adaptation that protects species from the South American leaf blight which easily spreads through and decimates plantations. Thus to make a profit, barons had to acquire control over huge tracts of land. Most did so by hiring their own private armies to defend their claims, acquire new land, and capture native laborers. As the Indians died, production soared.</p>
+                    <p><strong>D</strong> The Brazilian rubber market was crushed by the rapid development of the more efficient rubber plantations of Southeast Asia. However, the prospects of developing plantations did not begin on a high note. Rubber seeds, rich with oil and latex, could not survive the long Atlantic journey from Brazil. Finally, in 1876, an English planter, Henry Wickham, collected 70,000 seeds and shipped them to England. 2800 of the seeds germinated and were sent to Colombo, Ceylon (present day Sri Lanka). After several false starts, including one planter in northern Borneo who felled his plantation after finding no rubber balls hanging from the braches, the prospects were grim. One major obstacle was the success of tea and coffee gave planters no reason to try an untested crop.</p>
+                    <p><strong>E</strong> Finally in 1895, Henry Ridley, head of Singapore’s botanical garden, persuaded two coffee growers to plant two acres of Heave tress. Twelve years later more than 300,000 ha of rubber grew in plantations in Ceylon and Malaya. New innovations increased efficiency and production doubled every two years. Rubber could be produced at only a fraction of the cost of collecting wild rubber in Brazil. By 1910, Brazilian production had fallen to 50%. In 1914, Brazil’s market share was down around 30%; 1918 -20%, and 1940 -1.3%.</p>
+                    <p><strong>F</strong> However the Second World War threatened to shift the rubber wealth. With Japan occupying prime rubber producing areas in Southeast Asia, the US feared it would run out of the vital material. Every tire, hose, seal, valve, and inch of wiring required rubber. The rubber Development Corporation, the chief overseer of rubber acquisition, sought out other sources including establishing a rubber program that sent intrepid explorers into the Amazon seeking rubber specimen that would be used to produce high yields, superior product, and possibility of resistance against leaf blight. The ultimate goal of the program was to establish rubber plantations close to home. In addition to searching the Amazon and establishing experimental plantations in Latin America, the program came up with some novel plans to produce rubber. Extensive work on synthetic rubber yielded a product that, in time, economists predicted would replace natural rubber. By 1964 synthetic rubber made up 75% of the market.</p>
+                    <p><strong>G</strong> However the situation changed drastically with the OPEC oil embargo of 1973 which doubled the price of synthetic rubber and made oil consumers more conscious of their gas mileage. The concern over gas mileage brought unexpected threat to the synthetic market: the wide-spread adoption of the radial tire. The radial tire replaced the simple bias tires (which made up 90% of the market only 5 year earlier) and within a few years virtually all cars were rolling in radials. Synthetic rubber did not have the strength for radials; only natural rubber could provide the required sturdiness. By 1993 natural rubber had recaptured 39% of the domestic market. Today nearly 50% of every auto tire and 100% of all aircraft tires are made of natural rubber. 85% of this rubber is imported from Southeast Asia meaning that the US is highly susceptible to disruptions caused by an embargo or worse, the unintentional or intentional introduction of leaf blight into plantations. None of the trees in plantations across Southeast Asia has resistance to blight so a single act to biological terrorism, the systematic introduction of fungal spores so small as to be readily concealed in a shoe, could wipe out the plantations, shutting down production of natural rubber for at least a decade. It is difficult to think of any other raw material that is as vital and vulnerable.</p>
+                </div>
+
+                <!-- Passage 2 -->
+                <div id="passage-text-2" class="reading-passage" style="display:none;">
+                    <h4 style="text-align:center;">Mrs. Carlill and the Carbolic Smoke Ball</h4>
+                    <p>On 14 January 1892, Queen Victoria’s grandson Prince Albert Victor, second in line to the British throne, died from flu. He had succumbed to the third and most lethal wave of the Russian flu pandemic sweeping the world. The nation was shocked. The people mourned. Albert was relegated to a footnote in history.</p>
+                    <p>Three days later, London housewife Louisa Carlill went down with flu. She was shocked. For two months, she had inhaled thrice daily from a carbolic smoke ball, a preventive measure guaranteed to fend off flu – if you believed the advert. Which she did. And why shouldn’t she when the Carbolic Smoke Ball Company had promised to cough up £100 for any customer who fell ill? Unlike Albert, Louisa recovered, claimed her £100 and set in train events that would win her lasting fame.</p>
+                    <p>It started in the spring of 1889. The first reports of a flu epidemic came from Russia. By the end of the year, the world was in the grip of the first truly global flu pandemic. The disease came in waves, once a year for the next four years, and each worse than the last.</p>
+                    <p>Whole cities came to a standstill. London was especially hard-hit. As the flu reached each annual peak, normal life stopped. The postal service ground to a halt, trains stopped running, banks closed. Even courts stopped sitting for lack of judges. At the height of the third wave in 1892, 200 people were buried every day at just one London cemetery. This flu was far more lethal than previous epidemics, and those who recovered were left weak, depressed, and often unfit for work. It was a picture repeated across the continent.</p>
+                    <p>Accurate figures for the number of the sick and dead were few and far between but Paris, Berlin and Vienna all reported a huge upsurge in deaths. The newspapers took an intense interest in the disease, not just because of the scale of it but because of who it attacked. Most epidemics carried off the poor and weak, the old and frail. This flu was cutting as great a swathe through the upper classes, dealing death to the rich and famous, and the young and fit.</p>
+                    <p>The newspaper-reading public was fed a daily diet of celebrity victims. The flu had worked its way through the Russian imperial family and invaded the royal palaces of Europe. It carried off the Dowager Empress of Germany and the second son of the king of Italy, as well as England’s future king. Aristocrats and politicians, poets and opera singers, bishops and cardinals – none escaped the attentions of the Russian flu.</p>
+                    <p>The public grew increasingly fearful. The press might have been overdoing the doom and gloom, but their hysterical coverage had exposed one terrible fact. The medical profession had no answer to the disease. This flu, which might not even have begun in Russia, was a mystery. What caused it and how did it spread? No one could agree on anything.</p>
+                    <p>By now, the theory that micro-organisms caused disease was gaining ground, but no one had identified an organism responsible for flu (and wouldn’t until 1933). In the absence of a germ, many clung to the old idea of bad airs, or miasmas, possibly stirred by some great physical force – earthquakes, perhaps, or electrical phenomena in the upper atmosphere, even a passing comet.</p>
+                    <p>Doctors advised people to eat well avoiding “unnecessary assemblies”, and if they were really worried, to stuff cotton wool up their nostrils. If they fell ill, they should rest, keep warm and eat a nourishing diet of “milk, eggs and farinaceous puddings”. Alcohol figured prominently among the prescriptions: one eminent English doctor suggested champagne, although he conceded “brandy in considerable quantities has sometimes been given with manifest advantages”. French doctors prescribed warm alcoholic drinks, arguing that they never saw an alcoholic with flu. Their prescription had immediate results: over a three-day period, 1,200 of the 1,500 drunks picked up on the streets of Paris claimed they were following doctor’s orders.</p>
+                    <p>Some doctors gave drugs to ease symptoms – quinine for fever, salicin for headache, heroin for an “incessant cough”. But nothing in the pharmacy remotely resembled a cure. Not surprisingly, people looked elsewhere for help. Hoping to cash in while the pandemic lasted, purveyors of patent medicines competed for the public’s custom with ever more outrageous advertisements. One of the most successful was the Carbolic Smoke Ball Company.</p>
+                    <p>The carbolic smoke ball was a hollow rubber ball, 5 centimetres across, with a nozzle covered by gauze. Inside was a powder treated with carbolic acid, or phenol. The idea was to clutch it close to the nose and squeeze gently, inhaling deeply from the emerging cloud of pungent powder. This, the company claimed, would disinfect the mucous membranes, curing any condition related to “taking cold”. In the summer of 1890, sales were steady at 300 smoke balls a month. In January 1891, the figure skyrocketed to 1,500.</p>
+                    <p>Eager to exploit the public’s mounting panic, the Carbolic Smoke Ball Company made increasingly extravagant claims. On 13 November 1892, its latest advert in the Pall Mall Gazette caught the eye of south London housewife Louisa Carlill. “Carbolic Smoke Ball,” it declared, “will positively cure colds, coughs, asthma, bronchitis, hoarseness, influenza, croup, whooping cough …”. And the list went on. But it was the next part Mrs. Carlill found compelling. “A £100 reward will be paid by the Carbolic Smoke Ball Company to any person who contracts the increasing epidemic influenza, colds or any disease caused by taking cold, after having used the carbolic smoke ball according to the printed directions supplied with each ball. £1,000 is deposited with the Alliance bank, Regent Street, showing our sincerity in the matter.”</p>
+                    <p>Mrs. Carlill hurried off to buy a smoke ball, price 10 shillings. After carefully reading the instructions, she diligently dosed herself thrice daily until 17 January – when she fell ill.</p>
+                    <p>On 20 January, Louisa’s husband wrote to the Carbolic Smoke Ball Company. Unfortunately for them, Mr. Carlill happened to be a solicitor. His wife, he wrote, had seen their advert and bought a smoke ball on the strength of it. She had followed the instructions to the letter, and yet now – as their doctor could confirm – she had flu.</p>
+                    <p>There was no reply. But £100 was not a sum to be sneezed at. Mr. Carlill persisted. The company resisted. Louisa recovered and sued. In June, Mr. Justice Hawkins found in Mrs. Carlill’s favour. The company’s main defence was that adverts were mere “puffery” and only an idiot would believe such extravagant claims. Judge Hawkins pointed out that adverts were not aimed at the wise and thoughtful, but at the credulous and weak. A vendor who made a promise “must not be surprised if occasionally he is held to his promise”.</p>
+                    <p>Carbolic appealed. In December, three lord justices considered the case. Carbolic’s lawyers tried several lines of defence. But in the end, the case came down to a single matter: not whether the remedy was useless, or whether Carbolic had committed fraud, but whether its advert constituted a contract – which the company had broken. A contract required agreement between two parties, argued Carbolic’s lawyers. What agreement had Mrs. Carlill made with them?</p>
+                    <p>There were times, the judges decided, when a contract could be one-sided. The advert had made a very specific offer to purchasers: protection from flu or £100. By using the smoke ball as instructed, Mrs. Carlill had accepted that offer. The company might just have wriggled out of it if it hadn’t added the bit about the £1,000 deposit. That, said the judges, gave buyers reason to believe Carbolic meant what it said. “It seems to me that if a person chooses to make extravagant promises of this kind, he probably does so because it pays him to make them, and, if he has made them, the extravagance of the promises is no reason in law why he should not be bound by them,” pronounced Lord Justice Bowen.</p>
+                    <p>Louisa got her £100. The case established the principle of the unilateral contract and is frequently cited today.</p>
+                </div>
+
+                <!-- Passage 3 -->
+                <div id="passage-text-3" class="reading-passage" style="display:none;">
+                    <h4 style="text-align:center;">Living Dunes</h4>
+                    <p><span class="drop-heading" data-question="q27"></span><strong>A</strong> Although no more than a pile of wind-blown sand, dunes can roll over trees and buildings, march relentlessly across highways, devour vehicles on its path, and threaten crops and factories in Africa, the Middle East, and China. In some places, killer dunes even roll in and swallow up towns. Entire villages have disappeared under the sand. In a few instances the government built new villages for those displaced only to find that new villages themselves were buried several years later. Preventing sand dunes from overwhelming cities and agricultural areas has become a priority for the United Nations Environment Program.</p>
+                    <p><span class="drop-heading" data-question="q28"></span><strong>B</strong> Some of the most significant experimental measurements on sand movement were performed by Ralph Bagnold, a British engineer who worked in Egypt prior to World War II. Bagnold investigated the physics of particles moving through the atmosphere and deposited by wind. He recognised two basic dune types, the crescentic dune, which he called “barchan,” and the linear dune, which he called longitudinal or “sief ’ (Arabic for “sword”). The crescentic barchan dune is the most common type of sand dune. As its name suggests, this dune is shaped like a crescent moon with points at each end, and it is usually wider than it is long. Some types of barchan dunes move faster over desert surfaces than any other type of dune. The linear dune is straighter than the crescentic dune with ridges as its prominent feature. Unlike crescentic dunes, linear dunes are longer than they are wide—in fact, some are more than 100 miles (about 160 kilometers) long. Dunes can also be comprised of smaller dunes of different types, called complex dunes.</p>
+                    <p><span class="drop-heading" data-question="q29"></span><strong>C</strong> Despite the complicated dynamics of dune formation, Bagnold noted that a sand dune generally needs the following three things to form: a large amount of loose sand in an area with little vegetation—usually on the coast or in a dried-up river, lake or sea bed; a wind or breeze to move the grains of sand; and an obstacle, which could be as small as a rock or as big as a tree, that causes the sand to lose momentum and settle. Where these three variables merge, a sand dune forms.</p>
+                    <p><span class="drop-heading" data-question="q30"></span><strong>D</strong> As the wind picks up the sand, the sand travels, but generally only about an inch or two above the ground, until an obstacle causes it to stop. The heaviest grains settle against the obstacle, and a small ridge or bump forms. The lighter grains deposit themselves on the other side of the obstacle. Wind continues to move sand up to the top of the pile until the pile is so steep that it collapses under its own weight. The collapsing sand comes to rest when it reaches just the right steepness to keep the dune stable. The repeating cycle of sand inching up the windward side to the dune crest, then slipping down the dune’s slip face allows the dune to inch forward, migrating in the direction the wind blows.</p>
+                    <p><span class="drop-heading" data-question="q31"></span><strong>E</strong> Depending on the speed and direction of the wind and the weight of the local sand, dunes will develop into different shapes and sizes. Stronger winds tend to make taller dunes; gentler winds tend to spread them out. If the direction of the wind generally is the same over the years, dunes gradually shift in that direction. But a dune is “a curiously dynamic creature”, wrote Farouk El-Baz in National Geographic. Once formed, a dune can grow, change shape, move with the wind and even breed new dunes. Some of these offspring may be carried on the back of the mother dune. Others are born and race downwind, outpacing their parents.</p>
+                    <p><span class="drop-heading" data-question="q32"></span><strong>F</strong> Sand dunes even can be heard ‘singing’ in more than 30 locations worldwide, and in each place the sounds have their own characteristic frequency, or note. When the thirteenth century explorer Marco Polo encountered the weird and wonderful noises made by desert sand dunes, he attributed them to evil spirits. The sound is unearthly. The volume is also unnerving. Adding to the tone’s otherworldliness is the inability of the human ear to localise the source of the noise. Stéphane Douady of the French national research agency CNRS and his colleagues have been delving deeper into dunes in Morocco, Chile, China and Oman, and believe they can now explain the exact mechanism behind this acoustic phenomenon.</p>
+                    <p><span class="drop-heading" data-question="q33"></span><strong>G</strong> The group hauled sand back to the laboratory and set it up in channels with automated pushing plates. The sands still sang, proving that the dune itself was not needed to act as a resonating body for the sound, as some researchers had theorised. To make the booming sound, the grains have to be of a small range of sizes, all alike in shape: well-rounded. Douady’s key discovery was that this synchronised frequency — which determines the tone of sound — is the result of the grain size. The larger the grain, the lower the key. He has successfully predicted the notes emitted by dunes in Morocco, Chile and the US simply by measuring the size of the grains they contain. Douady also discovered that the singing grains had some kind of varnish or a smooth coating of various minerals: silicon, iron and manganese, which probably formed on the sand when the dunes once lay beneath an ancient ocean. But in the muted grains this coat had been worn away, which explains why only some dunes can sing. He admits he is unsure exactly what role the coating plays in producing the noise. The mysterious dunes, it seems, aren’t quite ready yet to give up all of their secrets.</p>
+                </div>
+            </div>
+
+            <div class="resizer" id="resizer"><div></div></div>
+
+            <div class="questions-panel" id="questions-panel">
+                <!-- Questions for part 1 (1-13) -->
+                <div id="questions-1" class="question-set" style="display:block;">
+                    <div class="question">
+                        <p><strong>Questions 1-7</strong></p>
+                        <p>Reading Passage 1 contains 7 paragraphs A–G.</p>
+                        <p>Which paragraphs state the following information?</p>
+                        <p>Click the appropriate box (A–G) for each statement.</p>
+                    </div>
+
+                    <!-- New table format: statement in first column, columns A-G with radio buttons -->
+                    <table class="table-select">
+                        <thead>
+                            <tr>
+                                <th>Statement</th>
+                                <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1. The extensive acceptance of radial tires.</td>
+                                <td><input type="radio" name="q1" value="A"></td>
+                                <td><input type="radio" name="q1" value="B"></td>
+                                <td><input type="radio" name="q1" value="C"></td>
+                                <td><input type="radio" name="q1" value="D"></td>
+                                <td><input type="radio" name="q1" value="E"></td>
+                                <td><input type="radio" name="q1" value="F"></td>
+                                <td><input type="radio" name="q1" value="G"></td>
+                            </tr>
+                            <tr>
+                                <td>2. Searching for new specimens to overcome leaf blight.</td>
+                                <td><input type="radio" name="q2" value="A"></td>
+                                <td><input type="radio" name="q2" value="B"></td>
+                                <td><input type="radio" name="q2" value="C"></td>
+                                <td><input type="radio" name="q2" value="D"></td>
+                                <td><input type="radio" name="q2" value="E"></td>
+                                <td><input type="radio" name="q2" value="F"></td>
+                                <td><input type="radio" name="q2" value="G"></td>
+                            </tr>
+                            <tr>
+                                <td>3. The first trading center for the rubber business.</td>
+                                <td><input type="radio" name="q3" value="A"></td>
+                                <td><input type="radio" name="q3" value="B"></td>
+                                <td><input type="radio" name="q3" value="C"></td>
+                                <td><input type="radio" name="q3" value="D"></td>
+                                <td><input type="radio" name="q3" value="E"></td>
+                                <td><input type="radio" name="q3" value="F"></td>
+                                <td><input type="radio" name="q3" value="G"></td>
+                            </tr>
+                            <tr>
+                                <td>4. Asia dominated the rubber market year by year.</td>
+                                <td><input type="radio" name="q4" value="A"></td>
+                                <td><input type="radio" name="q4" value="B"></td>
+                                <td><input type="radio" name="q4" value="C"></td>
+                                <td><input type="radio" name="q4" value="D"></td>
+                                <td><input type="radio" name="q4" value="E"></td>
+                                <td><input type="radio" name="q4" value="F"></td>
+                                <td><input type="radio" name="q4" value="G"></td>
+                            </tr>
+                            <tr>
+                                <td>5. Rubber seeds are vulnerable to long-distance transport.</td>
+                                <td><input type="radio" name="q5" value="A"></td>
+                                <td><input type="radio" name="q5" value="B"></td>
+                                <td><input type="radio" name="q5" value="C"></td>
+                                <td><input type="radio" name="q5" value="D"></td>
+                                <td><input type="radio" name="q5" value="E"></td>
+                                <td><input type="radio" name="q5" value="F"></td>
+                                <td><input type="radio" name="q5" value="G"></td>
+                            </tr>
+                            <tr>
+                                <td>6. Individual wealth accumulated by rubber trading.</td>
+                                <td><input type="radio" name="q6" value="A"></td>
+                                <td><input type="radio" name="q6" value="B"></td>
+                                <td><input type="radio" name="q6" value="C"></td>
+                                <td><input type="radio" name="q6" value="D"></td>
+                                <td><input type="radio" name="q6" value="E"></td>
+                                <td><input type="radio" name="q6" value="F"></td>
+                                <td><input type="radio" name="q6" value="G"></td>
+                            </tr>
+                            <tr>
+                                <td>7. Natural rubber gave way to its replacement.</td>
+                                <td><input type="radio" name="q7" value="A"></td>
+                                <td><input type="radio" name="q7" value="B"></td>
+                                <td><input type="radio" name="q7" value="C"></td>
+                                <td><input type="radio" name="q7" value="D"></td>
+                                <td><input type="radio" name="q7" value="E"></td>
+                                <td><input type="radio" name="q7" value="F"></td>
+                                <td><input type="radio" name="q7" value="G"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top:18px;">
+                        <p><strong>Questions 8-13</strong></p>
+                        <p>Complete the summary below based on paragraph G. Use <strong>NO MORE THAN THREE WORDS</strong>. </p>
+                        <p>OPEC doubled revenue from synthetic rubber and made oil consuming nations more attentive of <input id="q8" class="inline-input" /></p>
+                        <p>This brought threats to the synthetic market by espousing the <input id="q9" class="inline-input" /> which would replace all the simple bias tires within a few years. Because <input id="q10" class="inline-input" /> is the only material that provides the entailed toughness, synthetic rubber lost significant market share. The US industry is very fragile to disruptions caused by an <input id="q11" class="inline-input" />. What’s even worse, since the rubber trees in plantations across Southeast Asia cannot withstand <input id="q12" class="inline-input" />, the small fungal spores could be so dangerous as to shut down production of natural rubber for a decade. Rubber, hence, is the most <input id="q13" class="inline-input" /> raw material in the world.</p>
+                    </div>
+                </div>
+
+                <!-- Questions for part 2 (14-26) -->
+                <div id="questions-2" class="question-set" style="display:none;">
+                    <div class="question">
+                        <p><strong>Questions 14-17</strong></p>
+                        <p>Write <strong>TRUE / FALSE / NOT GIVEN</strong>  for 14–17</p>
+                        <div>
+                            <p>14. Cities rather than rural areas were badly affected by the pandemic flu.</p>
+                            <label><input type="radio" name="q14" value="TRUE"> TRUE</label>
+                            <label><input type="radio" name="q14" value="FALSE"> FALSE</label>
+                            <label><input type="radio" name="q14" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                        <div>
+                            <p>15. At the time of the flu pandemic, people didn’t know the link between micro-organisms and illnesses.</p>
+                            <label><input type="radio" name="q15" value="TRUE"> TRUE</label>
+                            <label><input type="radio" name="q15" value="FALSE"> FALSE</label>
+                            <label><input type="radio" name="q15" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                        <div>
+                            <p>16. People used to believe flu was caused by miasmas.</p>
+                            <label><input type="radio" name="q16" value="TRUE"> TRUE</label>
+                            <label><input type="radio" name="q16" value="FALSE"> FALSE</label>
+                            <label><input type="radio" name="q16" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                        <div>
+                            <p>17. Flu prescriptions often contained harmful ingredients.</p>
+                            <label><input type="radio" name="q17" value="TRUE"> TRUE</label>
+                            <label><input type="radio" name="q17" value="FALSE"> FALSE</label>
+                            <label><input type="radio" name="q17" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><strong>Questions 18–21</strong></p>
+                        <p>Complete the diagram below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</p>
+
+                        <div class="diagram-container">
+                            <img src="https://pub-575a1a5c907e4a69a28b883dc49329fc.r2.dev/62d816ec-4360-489b-8f10-133181e9e0f3.png" alt="diagram for q18-21" />
+                            <div style="flex:1;">
+                                <p>18. Covered with <input id="q18" class="inline-input" placeholder="(max 2 words)"/></p>
+                                <p>19. Metal <input id="q19" class="inline-input" placeholder="(max 2 words)"/></p>
+                                <p>20. Content <input id="q20" class="inline-input" placeholder="(max 2 words)"/></p>
+                                <p>21. <input id="q21" class="inline-input" placeholder="(max 2 words)"/></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Questions 22-25: Drag-and-drop statements bank; candidate drags full statement to blanks -->
+                    <div class="question">
+                        <p><strong>Questions 22–25</strong></p>
+                        <p>Look at the following people (Questions 22–25) and the list of statements.</p>
+                        <p>Drag each statement into the correct person's box.</p>
+
+                        <div class="matching-options-bank" id="bank-22-25">
+                            <!-- Full statements rather than single letters for user to drag -->
+                            <div class="drag-item" draggable="true" data-value="Filed a complaint which was never responded to">Filed a complaint which was never responded to</div>
+                            <div class="drag-item" draggable="true" data-value="Broke the contract made with Carbolic Smoke Ball Company">Broke the contract made with Carbolic Smoke Ball Company</div>
+                            <div class="drag-item" draggable="true" data-value="Initiated a legal case">Initiated a legal case</div>
+                            <div class="drag-item" draggable="true" data-value="Described the audience of advertisement">Described the audience of advertisement</div>
+                            <div class="drag-item" draggable="true" data-value="Claimed that most advertisements are fraudulent">Claimed that most advertisements are fraudulent</div>
+                            <div class="drag-item" draggable="true" data-value="Treated advertisement as a type of contract">Treated advertisement as a type of contract</div>
+                        </div>
+
+                        <div style="margin-top:12px;">
+                            <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+                                <span style="flex:1;"><strong>22.</strong> Mrs. Carlill</span>
+                                <div class="drop-zone" data-question="q22"></div>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+                                <span style="flex:1;"><strong>23.</strong> Mrs. Carlill’s husband</span>
+                                <div class="drop-zone" data-question="q23"></div>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+                                <span style="flex:1;"><strong>24.</strong> Judge Hawkins</span>
+                                <div class="drop-zone" data-question="q24"></div>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+                                <span style="flex:1;"><strong>25.</strong> Lord Justice Bowen</span>
+                                <div class="drop-zone" data-question="q25"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><strong>Question 26</strong></p>
+                        <p>Choose the correct letter, A, B, C or D.</p>
+                        <p><strong>26.</strong> Why is Mrs. Carlill’s case often cited in present-day court trials?</p>
+                        <label><input type="radio" name="q26" value="A"> A It proved the untrustworthiness of advertisements.</label><br/>
+                        <label><input type="radio" name="q26" value="B"> B It established the validity of one-sided contract.</label><br/>
+                        <label><input type="radio" name="q26" value="C"> C It explained the nature of contract.</label><br/>
+                        <label><input type="radio" name="q26" value="D"> D It defended the rights of consumers.</label>
+                    </div>
+                </div>
+
+                <!-- Questions for part 3 (27-40) -->
+                <div id="questions-3" class="question-set" style="display:none;">
+                    <div class="question">
+                        <p><strong>Questions 27–33</strong></p>
+                        <p>Reading passage 3 has seven paragraphs, A–G. Drag each heading to the beginning of the paragraph it matches.</p>
+
+                        <div class="heading-bank" id="bank-27-33">
+                            <div class="drag-item" draggable="true" data-value="i">i Shaping and reforming</div>
+                            <div class="drag-item" draggable="true" data-value="ii">ii Causes of desertification</div>
+                            <div class="drag-item" draggable="true" data-value="iii">iii Need combination of specific conditions</div>
+                            <div class="drag-item" draggable="true" data-value="iv">iv Potential threat to industry and communication</div>
+                            <div class="drag-item" draggable="true" data-value="v">v An old superstition demystified</div>
+                            <div class="drag-item" draggable="true" data-value="vi">vi Differences and similarities</div>
+                            <div class="drag-item" draggable="true" data-value="vii">vii A continuous cycling process</div>
+                            <div class="drag-item" draggable="true" data-value="viii">viii Habitat for rare species</div>
+                            <div class="drag-item" draggable="true" data-value="ix">ix Replicating the process in laboratory</div>
+                            <div class="drag-item" draggable="true" data-value="x">x Commonest type of dune</div>
+                        </div>
+
+                        <p style="font-size:13px; color:#555;">(Drag i–x into the small boxes at the start of paragraphs A–G in the passage panel.)</p>
+                    </div>
+
+                    <div class="question">
+                        <p><strong>Questions 34–36</strong></p>
+                        <p>Complete the sentences below. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+
+                        <p><strong>34.</strong> <input id="q34" class="answer-input" placeholder="one word" /> dune is said to have long ridges that can extend hundreds of miles.</p>
+                        <p><strong>35.</strong> According to Bagnold, an <input id="q35" class="answer-input" placeholder="one word" /> is needed to stop the sand from moving before a dune can form.</p>
+                        <p><strong>36.</strong> Stéphane Douady believes the singing of dunes is not a spiritual phenomenon, but purely <input id="q36" class="answer-input" placeholder="one word" /></p>
+                    </div>
+
+                    <div class="question">
+                        <p><strong>Questions 37–40</strong></p>
+                        <p>Complete the summary below. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+                        <p>There are many different types of dunes, two of which are most commonly found in deserts throughout the world, the linear dune and the <input id="q37" class="inline-input" /> dune, sometimes also known as the crescentic dune. It’s been long known that in some places dunes can even sing and the answer lies in the sand itself. To produce singing sand in lab, all the sands must have similar <input id="q38" class="inline-input" />. And scientists have discovered that the size of the sand can affect the <input id="q39" class="inline-input" /> of the sound. But the function of the varnish composed by a mixture of <input id="q40" class="inline-input" /> still remains puzzling.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bottom-nav">
+        <div>
+            <button class="part-btn active" data-part="1">Part 1 <span class="attempted-count">0 of 13</span></button>
+            <button class="part-btn" data-part="2">Part 2 <span class="attempted-count">0 of 13</span></button>
+            <button class="part-btn" data-part="3">Part 3 <span class="attempted-count">0 of 14</span></button>
+        </div>
+
+        <div id="question-nav"></div>
+
+        <div>
+            <button id="submit-btn">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        // Timer
+        let timerSeconds = 3600;
+        let timerInterval = null;
+        let timerRunning = true;
+        const timerDisplay = document.getElementById('timer');
+        const timerToggle = document.getElementById('timer-toggle');
+        const timerReset = document.getElementById('timer-reset');
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            timerDisplay.textContent = `${minutes}:${String(seconds).padStart(2,'0')}`;
+        }
+        function startTimer() {
+            if (timerInterval) return;
+            timerRunning = true; timerToggle.textContent = '⏸';
+            timerInterval = setInterval(() => {
+                if (timerSeconds>0) { timerSeconds--; updateTimerDisplay(); }
+                else { clearInterval(timerInterval); timerInterval=null; timerToggle.textContent='▶'; }
+            },1000);
+        }
+        function pauseTimer() { clearInterval(timerInterval); timerInterval=null; timerRunning=false; timerToggle.textContent='▶'; }
+        timerToggle.addEventListener('click', ()=> { if (timerRunning) pauseTimer(); else startTimer(); });
+        timerReset.addEventListener('click', ()=> { pauseTimer(); timerSeconds=3600; updateTimerDisplay(); });
+        startTimer();
+
+        // Resizer
+        const resizer = document.getElementById('resizer');
+        const passagePanel = document.getElementById('passage-panel');
+        const questionsPanel = document.getElementById('questions-panel');
+        let isResizing=false;
+        resizer.addEventListener('mousedown', ()=>{ isResizing=true; document.body.style.cursor='col-resize'; });
+        document.addEventListener('mousemove', (e)=>{ if(!isResizing) return; const containerWidth = passagePanel.parentElement.offsetWidth; const newPassageWidth = e.clientX - passagePanel.getBoundingClientRect().left; const newPassagePercent = (newPassageWidth/containerWidth)*100; if (newPassagePercent>20 && newPassagePercent<80){ passagePanel.style.flex=`0 0 ${newPassagePercent}%`; questionsPanel.style.flex=`0 0 ${100-newPassagePercent}%`; }});
+        document.addEventListener('mouseup', ()=>{ isResizing=false; document.body.style.cursor='default'; });
+
+        // Part switching and nav
+        function switchToPart(partNum) {
+            document.querySelectorAll('.reading-passage').forEach(p=>p.style.display='none');
+            document.querySelectorAll('.question-set').forEach(s=>s.style.display='none');
+            document.querySelectorAll('.part-header').forEach(h=>h.style.display='none');
+            document.getElementById(`passage-text-${partNum}`).style.display='block';
+            document.getElementById(`questions-${partNum}`).style.display='block';
+            document.getElementById(`part-header-${partNum}`).style.display='block';
+            document.querySelectorAll('.part-btn').forEach(b=>b.classList.remove('active'));
+            document.querySelector(`.part-btn[data-part="${partNum}"]`).classList.add('active');
+            updateSubNavigation(partNum);
+        }
+        document.querySelectorAll('.part-btn').forEach(btn => { btn.addEventListener('click', ()=> switchToPart(Number(btn.dataset.part))); });
+        function updateSubNavigation(part) {
+            const map = {1:{s:1,e:13},2:{s:14,e:26},3:{s:27,e:40}};
+            const {s,e} = map[part];
+            const nav = document.getElementById('question-nav'); nav.innerHTML='';
+            for (let i=s;i<=e;i++){
+                const b=document.createElement('button'); b.className='question-btn'; b.textContent=i; b.dataset.question=i;
+                b.addEventListener('click', ()=> goToQuestion(i));
+                if (isQuestionAnswered(i)) b.classList.add('answered');
+                nav.appendChild(b);
+            }
+        }
+
+        // Drag & drop (for statements and headings)
+        let draggedElem = null;
+        document.addEventListener('dragstart', (e)=> {
+            if (e.target.classList.contains('drag-item')) {
+                draggedElem = e.target;
+                e.target.classList.add('dragging');
+            }
+        });
+        document.addEventListener('dragend', (e)=> {
+            if (e.target.classList.contains('drag-item')) {
+                e.target.classList.remove('dragging');
+            }
+            draggedElem = null;
+        });
+
+        document.addEventListener('dragover', (e)=> {
+            if (e.target.classList.contains('drop-zone') || e.target.classList.contains('drop-heading')) {
+                e.preventDefault();
+                e.target.classList.add('drag-over');
+            }
+        });
+        document.addEventListener('dragleave', (e)=> {
+            if (e.target.classList && (e.target.classList.contains('drop-zone') || e.target.classList.contains('drop-heading'))) {
+                e.target.classList.remove('drag-over');
+            }
+        });
+        document.addEventListener('drop', (e)=> {
+            const target = e.target;
+            if ((target.classList && target.classList.contains('drop-zone')) && draggedElem) {
+                e.preventDefault();
+                target.classList.remove('drag-over');
+                const val = draggedElem.dataset.value || draggedElem.textContent.trim();
+                target.textContent = val;
+                target.dataset.answer = val;
+                target.classList.add('filled');
+                updateAnsweredIndicators();
+            }
+            if ((target.classList && target.classList.contains('drop-heading')) && draggedElem) {
+                e.preventDefault();
+                target.classList.remove('drag-over');
+                const val = draggedElem.dataset.value || draggedElem.textContent.trim();
+                target.textContent = val;
+                target.dataset.answer = val;
+                target.classList.add('filled');
+                updateAnsweredIndicators();
+            }
+        });
+
+        // Click to clear drop zones
+        document.addEventListener('click', (e)=> {
+            if (e.target.classList && e.target.classList.contains('drop-zone') && e.target.classList.contains('filled')) {
+                e.target.textContent=''; e.target.dataset.answer=''; e.target.classList.remove('filled');
+                updateAnsweredIndicators();
+            }
+            if (e.target.classList && e.target.classList.contains('drop-heading') && e.target.classList.contains('filled')) {
+                e.target.textContent=''; e.target.dataset.answer=''; e.target.classList.remove('filled');
+                updateAnsweredIndicators();
+            }
+        });
+
+        // Make heading drop boxes droppable (the ones in passage)
+        document.querySelectorAll('.drop-heading').forEach(d => {
+            d.addEventListener('dragover', (ev)=> { ev.preventDefault(); d.classList.add('drag-over'); });
+            d.addEventListener('dragleave', ()=> d.classList.remove('drag-over'));
+            d.addEventListener('drop', (ev)=> {
+                ev.preventDefault(); d.classList.remove('drag-over');
+                if (draggedElem) { d.textContent = draggedElem.dataset.value || draggedElem.textContent.trim(); d.dataset.answer = d.textContent; d.classList.add('filled'); updateAnsweredIndicators(); }
+            });
+        });
+
+        // Allow drag items to be clicked and selected for keyboard users (optional)
+        document.querySelectorAll('.drag-item').forEach(item => {
+            item.addEventListener('keydown', (e)=> {
+                if (e.key === 'Enter' && item.dataset.value) { item.style.outline='2px solid #4a90e2'; setTimeout(()=> item.style.outline='',500); }
+            });
+        });
+
+        // Utility: check answered
+        function isQuestionAnswered(qNum) {
+            // radio group
+            const radio = document.querySelector(`input[name="q${qNum}"]:checked`);
+            if (radio) return true;
+            // text input
+            const input = document.getElementById(`q${qNum}`);
+            if (input) { if (input.value.trim() !== '') { input.classList.add('input-filled'); return true; } else { input.classList.remove('input-filled');}}
+            // drop-zone
+            const dz = document.querySelector(`.drop-zone[data-question="q${qNum}"]`);
+            if (dz && dz.dataset.answer && dz.dataset.answer.trim()!=='') return true;
+            // drop-heading (passage headings q27-q33)
+            const dh = document.querySelector(`.drop-heading[data-question="q${qNum}"]`);
+            if (dh && dh.dataset.answer && dh.dataset.answer.trim()!=='') return true;
+            return false;
+        }
+
+        function updateAnsweredIndicators() {
+            document.querySelectorAll('.question-btn').forEach(btn => {
+                const qNum = Number(btn.dataset.question);
+                if (isQuestionAnswered(qNum)) btn.classList.add('answered'); else btn.classList.remove('answered');
+            });
+            // update counts
+            const questionCounts = {1:13,2:13,3:14};
+            for (let part=1;part<=3;part++){
+                const start = part===1?1:part===2?14:27;
+                const end = start + questionCounts[part]-1;
+                let answered = 0;
+                for (let q=start;q<=end;q++) if (isQuestionAnswered(q)) answered++;
+                const span = document.querySelector(`.part-btn[data-part="${part}"] .attempted-count`);
+                if (span) span.textContent = `${answered} of ${questionCounts[part]}`;
+            }
+        }
+
+        // Listen for inputs to update indicators
+        document.querySelectorAll('input[type="text"], input[type="radio"]').forEach(el => {
+            el.addEventListener('change', updateAnsweredIndicators);
+            el.addEventListener('input', updateAnsweredIndicators);
+        });
+
+        // Correct answers object (kept same as before but adapted to new matching text answers)
+        const correctAnswers = {
+            q1: 'G', q2: 'F', q3: 'B', q4: 'E', q5: 'D', q6: 'C', q7: 'F',
+            q8: 'their gas mileage', q9: 'radial tire', q10: 'natural rubber', q11: 'embargo', q12: 'blight', q13: 'vital and vulnerable',
+            q14: 'NOT GIVEN', q15: 'FALSE', q16: 'TRUE', q17: 'NOT GIVEN',
+            q18: 'gauze', q19: 'nozzle', q20: 'powder', q21: 'rubber ball',
+            // For 22-25 we compare by checking presence of key phrase
+            q22: 'Initiated a legal case', q23: 'Filed a complaint which was never responded to', q24: 'Described the audience of advertisement', q25: 'Treated advertisement as a type of contract',
+            q26: 'B',
+            q27: 'iv', q28: 'x', q29: 'iii', q30: 'vii', q31: 'i', q32: 'v', q33: 'ix',
+            q34: 'linear', q35: 'obstacle', q36: 'acoustic',
+            q37: 'barchan', q38: 'shape', q39: 'tone', q40: 'minerals'
+        };
+
+        // Submit handler - now runs without confirm and displays modal results
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            // Collect answers and grade
+            let correct=0, incorrect=0;
+            const results=[];
+            for (let q=1;q<=40;q++){
+                const qId = `q${q}`;
+                let userAns = '';
+                // radio groups (including table for 1-7)
+                const radio = document.querySelector(`input[name="${qId}"]:checked`);
+                if (radio) userAns = radio.value;
+                // text input
+                const txt = document.getElementById(qId);
+                if (txt && txt.value) userAns = txt.value.trim();
+                // drop-zone (22-25)
+                const dz = document.querySelector(`.drop-zone[data-question="${qId}"]`);
+                if (dz && dz.dataset.answer) userAns = dz.dataset.answer.trim();
+                // drop-heading (27-33)
+                const dh = document.querySelector(`.drop-heading[data-question="${qId}"]`);
+                if (dh && dh.dataset.answer) userAns = dh.dataset.answer.trim();
+                // Normalize
+                const userN = userAns.toLowerCase().trim();
+                let corr = (correctAnswers[qId] || '').toLowerCase().trim();
+
+                // For some answers allow approximate matches (22-25 statements)
+                let isCorrect=false;
+                if (!corr && !userN) { isCorrect=false; }
+                else if (corr && userN === corr) { isCorrect=true; }
+                else {
+                    // special checks: 8-13 may have spaces/phrases - check inclusion
+                    if (corr && corr.length>0 && userN.includes(corr)) isCorrect=true;
+                    // For 22-25 we check by presence of key words in user's answer
+                    if (!isCorrect && (q>=22 && q<=25)) {
+                        const expected = correctAnswers[qId] || '';
+                        if (expected && userN.includes(expected.toLowerCase().split(' ')[0])) isCorrect = true;
+                        // direct equality earlier handles best case
+                    }
+                }
+
+                if (isCorrect) { correct++; } else { incorrect++; }
+                results.push({ question:q, userAnswer: userAns||'(blank)', correctAnswer: correctAnswers[qId]||'(n/a)', isCorrect});
+            }
+
+            showResultsModal(correct, incorrect, results);
+        });
+                // Text Highlighting
+        let highlights = [];
+
+        document.addEventListener('contextmenu', (e) => {
+            const selection = window.getSelection();
+            if (selection.toString().trim().length === 0) return;
+
+            e.preventDefault();
+
+            const menu = document.createElement('div');
+            menu.id = 'context-menu';
+            menu.style.cssText = `
+                position: absolute;
+                top: ${e.pageY}px;
+                left: ${e.pageX}px;
+                background: white;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                padding: 5px 0;
+                z-index: 10000;
+            `;
+
+            const highlightBtn = document.createElement('button');
+            highlightBtn.textContent = '🖍 Highlight';
+            highlightBtn.style.cssText = 'display: block; width: 100%; padding: 8px 15px; border: none; background: white; text-align: left; cursor: pointer;';
+            highlightBtn.addEventListener('click', () => {
+                highlightSelection();
+                menu.remove();
+            });
+
+            menu.appendChild(highlightBtn);
+            document.body.appendChild(menu);
+
+            setTimeout(() => {
+                document.addEventListener('click', () => menu.remove(), { once: true });
+            }, 100);
+        });
+
+        function highlightSelection() {
+            const selection = window.getSelection();
+            if (selection.rangeCount === 0) return;
+
+            const range = selection.getRangeAt(0);
+            const span = document.createElement('span');
+            span.classList.add('highlighted-text');
+            span.style.backgroundColor = 'yellow';
+
+            range.surroundContents(span);
+            highlights.push(span);
+
+            selection.removeAllRanges();
+        }
+
+        function clearAllHighlights() {
+            highlights.forEach(span => {
+                const parent = span.parentNode;
+                while (span.firstChild) {
+                    parent.insertBefore(span.firstChild, span);
+                }
+                parent.removeChild(span);
+            });
+            highlights = [];
+        }
+        function showResultsModal(correct, incorrect, results){
+            const total = correct+incorrect;
+            const pct = total>0?((correct/total)*100).toFixed(1):'0.0';
+            let rows='';
+            results.forEach(r=>{
+                const icon = r.isCorrect ? '✓' : '✗';
+                const color = r.isCorrect ? '#28a745' : '#dc3545';
+                rows += `<tr><td style="padding:8px;border:1px solid #ddd;">${r.question}</td><td style="padding:8px;border:1px solid #ddd;">${r.userAnswer}</td><td style="padding:8px;border:1px solid #ddd;">${r.correctAnswer}</td><td style="padding:8px;border:1px solid #ddd;color:${color};">${icon}</td></tr>`;
+            });
+            const modal = document.createElement('div');
+            modal.id='results-modal';
+            modal.style.cssText = 'position:fixed;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:10000;';
+            modal.innerHTML = `
+                <div style="background:#fff;padding:22px;border-radius:8px;max-width:900px;width:95%;max-height:85vh;overflow:auto;">
+                    <h2>Test Results</h2>
+                    <p><strong>Score: ${correct}/${total} (${pct}%)</strong></p>
+                    <p>Correct: <span style="color:#28a745;">${correct}</span> | Incorrect: <span style="color:#dc3545;">${incorrect}</span></p>
+                    <table style="width:100%;border-collapse:collapse;margin-top:10px;">
+                        <thead><tr style="background:#f5f5f5;"><th style="padding:10px;border:1px solid #ddd;">Q</th><th style="padding:10px;border:1px solid #ddd;">Your Answer</th><th style="padding:10px;border:1px solid #ddd;">Correct Answer</th><th style="padding:10px;border:1px solid #ddd;">Status</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                    <div style="margin-top:14px;display:flex;gap:10px;justify-content:flex-end;">
+                        <button id="close-results" style="background:#4a90e2;color:#fff;padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">Close</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.getElementById('close-results').addEventListener('click', ()=> modal.remove());
+        }
+
+        // Initialize nav
+        switchToPart(1);
+        updateAnsweredIndicators();
+    </script>
+</body>
+</html>

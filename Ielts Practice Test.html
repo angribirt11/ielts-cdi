@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Practice Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.4;
+            color: #333;
+            background-color: #ffffff;
+        }
+
+        body::after {
+            content: "@IELTS_PAPERS";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-20deg);
+            font-size: 72px;
+            color: #000;
+            opacity: 0.02;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        #timer-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #timer {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #timer.warning {
+            color: #dc3545;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        #timer-toggle, #timer-reset {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        #header a {
+            color: #0088cc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #passage-header-container {
+            margin-top: 60px;
+            padding: 15px 20px;
+            background: #f5f5f5;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .part-header {
+            margin-bottom: 10px;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 60px);
+        }
+
+        .panels-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-panel {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 150px;
+            min-width: 200px;
+        }
+
+        .reading-passage p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .resizer {
+            width: 10px;
+            cursor: col-resize;
+            background: #f5f5f5;
+            border-left: 1px solid #e0e0e0;
+            border-right: 1px solid #e0e0e0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .resizer div {
+            width: 4px;
+            height: 30px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="30" viewBox="0 0 4 30"><circle cx="2" cy="5" r="2" fill="#666"/><circle cx="2" cy="15" r="2" fill="#666"/><circle cx="2" cy="25" r="2" fill="#666"/></svg>') center/contain no-repeat;
+        }
+
+        .questions-panel {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 150px;
+            border-left: 1px solid #e0e0e0;
+            min-width: 200px;
+        }
+
+        .question, .tf-question, .summary-completion {
+            margin-bottom: 25px;
+        }
+
+        .answer-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .inline-input {
+            width: 120px;
+            padding: 4px 8px;
+            margin: 0 5px;
+        }
+
+        .tf-question-line {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .tf-question-number {
+            min-width: 40px;
+        }
+
+        .tf-question-text {
+            flex: 1;
+        }
+
+        .tf-options {
+            display: flex;
+            gap: 20px;
+            margin-left: 40px;
+        }
+
+        #bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            z-index: 100;
+            padding: 10px 20px;
+        }
+
+        .part-btn {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .part-btn.active {
+            background: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+        }
+
+        #question-nav {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+        }
+
+        .question-btn {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .question-btn.answered {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .question-btn.active {
+            background: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+        }
+
+        #submit-btn, #clear-highlights-btn {
+            background: #4a90e2;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        #clear-highlights-btn {
+            background: #6c757d;
+        }
+
+        .correct {
+            border-color: #28a745 !important;
+            background-color: #d4edda !important;
+        }
+
+        .incorrect {
+            border-color: #dc3545 !important;
+            background-color: #f8d7da !important;
+        }
+
+        .flash {
+            animation: flash 0.5s;
+        }
+
+        @keyframes flash {
+            0% { background-color: #fff3cd; }
+            100% { background-color: inherit; }
+        }
+
+        .highlighted-text {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header">
+        <div id="timer-container">
+            <span id="timer">60:00</span>
+            <button id="timer-toggle">⏸</button>
+            <button id="timer-reset">↻</button>
+            <button id="clear-highlights-btn">Clear Highlights</button>
+        </div>
+        <a href="https://t.me/IELTS_PAPERS target="_blank">@IELTS_PAPERS</a>
+    </div>
+
+    <!-- Part Header Container -->
+    <div id="passage-header-container">
+        <div id="part-header-1" class="part-header">
+            <p><strong>Part 1</strong></p>
+            <p>Read the text and answer questions 1-13.</p>
+        </div>
+        <div id="part-header-2" class="part-header" style="display: none;">
+            <p><strong>Part 2</strong></p>
+            <p>Read the text and answer questions 14-26.</p>
+        </div>
+        <div id="part-header-3" class="part-header" style="display: none;">
+            <p><strong>Part 3</strong></p>
+            <p>Read the text and answer questions 27-40.</p>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="panels-container">
+            <!-- Passage Panel -->
+            <div class="passage-panel" id="passage-panel">
+                <div id="passage-text-1" class="reading-passage">
+                    <h4 class="text-center">The English Canal System</h4>
+                    <p>The development of an extensive inland network of rivers and canals in England during the 18th century was a direct result of the Industrial Revolution, which required an effective transport system. The widespread use of inland waterways in England may seem surprising, as the country's rivers are relatively small compared to those in continental Europe, and no part of England lies more than about 150 kilometres from the sea. At first glance, road transport might have appeared to be a more practical option. However, the small scale of English rivers may actually have been advantageous. During the early 18th century, hydraulic engineering was still at an early stage, and the modest size of the required works made it easier for engineers of the time to plan and construct them successfully.</p>
+                    <p>Another factor that encouraged the growth of inland water transport was the poor condition of roads in the 18th century. They were few in number, badly maintained, and often impassable, particularly in the steep hills and valleys of northern England. As a result, they were incapable of carrying the large quantities of heavy materials demanded by expanding industries. Merchants and factory owners needed a cheaper means of moving both raw materials and finished goods. In England, it was these merchants who financed the construction of the first successful canals, unlike in many parts of Europe, where such projects were typically funded by the aristocracy.</p>
+                    <p>By the second half of the 18th century, most of England's canal system had been completed. Civil engineering had advanced considerably, and many of the earlier canals, which had taken long, winding routes, were later made more direct, thereby reducing travel distances. Another major innovation was the introduction of locks, which made it possible to build canals through hilly areas. Locks functioned like steps, raising or lowering boats from one level to another. When a boat was enclosed in the central chamber and both sets of lock gates were closed, no water could enter or escape through them, as they were watertight. However, water could flow in or out through sluice gates positioned below the lock gates. By opening or closing these, the water level inside the lock could be adjusted until it matched the level of the water outside, allowing the boat to continue on its journey.</p>
+                    <p>Nevertheless, several factors associated with the late 18th-century canal network led to persistent problems. To minimize construction costs, many canals and locks in industrial areas were built to very small dimensions—sometimes only 2.15 metres wide. Consequently, the boats that used them also had to be narrow. The canal builders of the time had not anticipated the rapid growth in traffic that would follow. By contrast, canals linking to coastal rivers and ports were wider, with larger boats and locks measuring around 4.3 metres across. This lack of standardisation resulted in a fragmented transport network.</p>
+                    <p>During the 1790s, many newly planned canals were viewed primarily as profit-making ventures by investors who were often speculators with no connection to local industry. These individuals believed that any canal would be profitable, regardless of its location. In practice, only a few canals yielded good returns, most of them wide canals in northern England that served as vital links between industrial centres and transport routes. Canals built in agricultural regions rarely carried enough cargo to recover their construction costs. By the early 19th century, many canals could no longer compete with the newly emerging railways. To reduce competition, railway companies purchased many of these canals but often neglected their maintenance, leading to their eventual abandonment.</p>
+                    <p>Today, inland water transport is no longer a major mode of goods transportation in England, with most freight now moved by road. In the latter half of the 20th century, the General Development Initiative (GDI) campaigned to increase public awareness of the historical and recreational value of canals. It was not an easy task, as many influential figures considered canals to be derelict and even dangerous to children, with some parents calling for them to be drained. However, growing public interest gradually brought national attention to these waterways. Many people became fascinated by their history, as centuries of neglect had left them largely unchanged since their construction over 200 years ago. Today, thanks to restoration and conservation efforts, England's canals are recognised as sites of both historical and environmental significance.</p>
+                </div>
+                <div id="passage-text-2" class="reading-passage" style="display: none;">
+                    <h4 class="text-center">Playing with Science</h4>
+                    <p><strong>A</strong><br>The connection between science and play is not often discussed, perhaps because scientists take it for granted or because they feel self-conscious about it and prefer to conceal it. In this context, the word "play" can refer to a variety of activities. It may involve exploring new uses for everyday objects purely out of curiosity; it could include wordplay or the playing of jokes and tricks on other scientists. Although the playful element in science is difficult to define, it is fundamental to the experience of scientific work.</p>
+                    <p><strong>B</strong><br>One example of this connection is the jigsaw puzzle. Such puzzles present players with small, two-dimensional pieces of different shapes, which must be fitted together to reconstruct a complete picture. Solving a scientific problem resembles completing a jigsaw puzzle. Scientists examine each piece of data for possible connections with others, gradually building a complete argument. Those who are good at puzzles can often predict where a piece will fit even before testing it. Similarly, the most talented scientists are often those who make the best guesses.</p>
+                    <p><strong>C</strong><br>But scientists do not only play at solving puzzles or outguessing each other. They also describe their work as "playing" with "toys." Joseph Lambert, a professor of chemistry at Northwestern University in the United States, has shed light on this tendency. In a letter, he wrote: "When I was growing up, every child spent serious time in the sandbox, often building complex structures and creating imaginary worlds. Later, in the organic chemistry labs at Yale, I realised that mixing chemicals and watching reactions was just as enjoyable. The physical process of working with my hands was satisfying, and by the end of the year I knew I wanted to be an organic chemist — someone who could play in the sandbox for a living." Indeed, many scientists enjoy playing with the "toys" of their trade, inventing clever devices for specific tasks or adapting commercial equipment for new scientific purposes. A classic example is the experiment by Robert Millikan and Harvey Fletcher to measure the charge of the electron, which used a perfume atomizer purchased from a local pharmacy.</p>
+                    <p><strong>D</strong><br>While society often discourages playfulness, science tends to encourage and nurture it. For example, scientists have given humorous names to various chemical compounds, such as tristane, windowpane, penguinone, and megaphone. Each class of organic molecules contains a few examples with playful or witty names. Similar amusement can be found in other scientific disciplines.</p>
+                    <p><strong>E</strong><br>Hoaxes are another expression of scientific playfulness. One well-known case concerns the "Plate of Brasses," which supposedly confirmed England's claim to California and was said to have been left by the explorer Sir Francis Drake in 1579. A brass plate thought to be Drake's was discovered in the 1930s. However, in 1977, Helen Michel and Frank Asaro, from the Lawrence Berkeley National Laboratory, found that the copper and zinc in the plate were of higher purity than would have been available in the 16th century. They concluded that Drake's plate was most likely created much more recently.</p>
+                    <p><strong>F</strong><br>Shortly afterwards, staff at the University of California announced that the artifact had been produced as a practical joke by friends of Herbert E. Bolton, director of the Bancroft Library at the university's Berkeley campus. Bolton was fascinated by stories of Drake's supposed plate and often urged his students to look for it. Some of his friends decided to play a harmless trick on him, but the joke went wrong when Bolton publicly announced that the relic was genuine before they could tell him the truth.</p>
+                    <p><strong>G</strong><br>Sometimes, however, hoaxes can serve a useful purpose. Nathan Lewis, a professor of chemistry at the California Institute of Technology, once recalled how he and a graduate student worked in the laboratory of senior professor Harry Gray. Another colleague had a habit of examining their data and rushing to Gray with his own interpretations. To stop this, Lewis and his student devised a trap. "I manufactured an NMR spectrum," Lewis explained. "We left it out as bait. Our colleague took it and wrote a paper claiming the result was important. He was ready to submit it to the Journal of the American Chemical Society, but we stopped him in time. It prevented him from misusing our data again."</p>
+                    <p><strong>H</strong><br>Is the playfulness of science always so beneficial? Some might argue that playing practical jokes is a waste of time. So why do scientists do it? Perhaps play is simply part of human nature. Psychologists might say that scientists play because their work is often too serious, and play offers relief. Another possibility is that scientists tend to be young, and youth encourages playfulness. Some disciplines, such as mathematics, are known for their brief period of peak creativity early in life. Yet there may also be genuine cognitive value in the playful element of science. After all, "playing" with ideas lies at the heart of scientific discovery. A childlike, curious attitude may in fact be one of the most productive traits a scientist can have.</p>
+                </div>
+                <div id="passage-text-3" class="reading-passage" style="display: none;">
+                    <h4 class="text-center">Motivating Drives</h4>
+                    <p>For many years, scientists have been studying how to motivate employees effectively. Such research seeks to build a comprehensive model for understanding workplace motivation, particularly when the goal is to transform unmotivated teams into productive ones. However, earlier studies have often been too limited in scope, focusing only on surface behaviours rather than the deeper forces that drive them. Understanding motivation is essential, as it influences both the emotions and behaviours of employees and plays a vital role in organizational development.</p>
+                    <p>Recent studies have identified four fundamental drives that shape human motivation in the workplace: the drive to acquire, the drive to bond, the drive to comprehend, and the drive to defend.</p>
+                    <p><strong>The Drive to Acquire</strong><br>The drive to acquire relates to the desire for rewards, recognition, and achievement. To fulfil this drive, organisations must provide fair and motivating reward systems. Recognition of excellent performance, career advancement opportunities, and other benefits can enhance motivation. However, not all rewards are financial. Sometimes, a sincere letter of appreciation can inspire more motivation than a large cash bonus, as emotional recognition often strengthens engagement and loyalty. Successful leaders therefore focus not only on physical rewards but also on other mechanisms that can stimulate motivation within the organisation.</p>
+                    <p><strong>The Drive to Bond</strong><br>The drive to bond is another crucial motivational force. People naturally seek social connection—whether through friendship, family, or belonging to a group. In the workplace, employees want to feel that they are valued members of the organisation. When they develop a sense of belonging and commitment, they become more motivated. This drive affects the direction, intensity, and persistence of employees' efforts and decisions within a company.</p>
+                    <p><strong>The Drive to Comprehend</strong><br>The drive to comprehend encourages people to make sense of the world around them and to find meaning in what they do. For many employees, motivation increases when their jobs challenge them intellectually and allow them to learn and grow. Setting ambitious goals and providing stimulating work help fulfil this drive. Conversely, if employees find their tasks monotonous or meaningless, they may become dissatisfied and seek employment elsewhere. A sense of purpose and understanding is therefore essential to sustained performance.</p>
+                    <p><strong>The Drive to Defend</strong><br>The drive to defend is often the most difficult to manage. It involves people's need to protect themselves, their achievements, and their sense of fairness. In organisations, this drive is linked to justice, transparency, and trust. Employees are motivated when they feel they can express themselves freely and when resources are distributed fairly. For example, during the merger of two large companies (referred to as P Company and H Company), employees from the original organisation expressed strong concern about the changes, reflecting their drive to defend what they valued.</p>
+                    <p>Two large-scale studies published in the <em>Harvard Business Review</em> examined the relationship between these four drives and employee motivation. The researchers surveyed workers from Fortune 500 companies and two major global businesses, P Company and H Company. They explored how each drive independently influenced employees' behaviour and how different organisational strategies could strengthen motivation.</p>
+                    <p>The studies revealed that the drive to bond was most closely linked to employee commitment, while the drive to comprehend most strongly influenced how much effort employees put into their work. The drive to acquire could be satisfied through fair reward systems that connect performance with recognition and advancement. In contrast, the drive to defend required transparent communication and equitable treatment. Interestingly, during the merger between P Company and H Company, employees from the former organisation demonstrated unusually cooperative behaviour, perhaps reflecting successful management of this drive.</p>
+                    <p>In conclusion, to achieve the highest levels of motivation, organisations must address all four drives. Each is essential to understanding human behaviour at work. While these drives may not be the only factors that influence motivation, they provide a unified framework for understanding what drives modern employees and how companies can help them reach their full potential.</p>
+                </div>
+            </div>
+
+            <!-- Resizer -->
+            <div class="resizer" id="resizer">
+                <div></div>
+            </div>
+
+            <!-- Questions Panel -->
+            <div class="questions-panel" id="questions-panel">
+                <div id="questions-1" class="question-set">
+                    <h3>Questions 1–5</h3>
+                    <p>Do the following statements agree with the information given in Reading Passage 1?</p>
+                    <p>In boxes 1–5 on your answer sheet, write:</p>
+                    <p>TRUE  if the statement agrees with the information<br>
+                       FALSE  if the statement contradicts the information<br>
+                       NOT GIVEN  if there is no information on this</p>
+                    <div class="tf-question">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number"><strong>1.</strong></span>
+                            <span class="tf-question-text">Larger rivers would have made the work of 18th-century hydraulic engineers more difficult.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label><input type="radio" name="q1" value="TRUE"> TRUE</label>
+                            <label><input type="radio" name="q1" value="FALSE"> FALSE</label>
+                            <label><input type="radio" name="q1" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                    <div class="tf-question">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number"><strong>2.</strong></span>
+                            <span class="tf-question-text">Merchants refused to pay the high costs associated with road transport.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label><input type="radio" name="q2" value="TRUE"> TRUE</label>
+                            <label><input type="radio" name="q2" value="FALSE"> FALSE</label>
+                            <label><input type="radio" name="q2" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                    <div class="tf-question">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number"><strong>3.</strong></span>
+                            <span class="tf-question-text">18th-century European and English canals were funded differently.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label><input type="radio" name="q3" value="TRUE"> TRUE</label>
+                            <label><input type="radio" name="q3" value="FALSE"> FALSE</label>
+                            <label><input type="radio" name="q3" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                    <div class="tf-question">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number"><strong>4.</strong></span>
+                            <span class="tf-question-text">Canals were narrower in some places than in others.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label><input type="radio" name="q4" value="TRUE"> TRUE</label>
+                            <label><input type="radio" name="q4" value="FALSE"> FALSE</label>
+                            <label><input type="radio" name="q4" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                    <div class="tf-question">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number"><strong>5.</strong></span>
+                            <span class="tf-question-text">Canal locks were first introduced in the 19th century.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label><input type="radio" name="q5" value="TRUE"> TRUE</label>
+                            <label><input type="radio" name="q5" value="FALSE"> FALSE</label>
+                            <label><input type="radio" name="q5" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <h3>Questions 6–9</h3>
+                    <p>Complete the notes below.</p>
+                    <p>Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</p>
+                    <p>Write your answers in boxes 6–9 on your answer sheet.</p>
+                    <p><strong>Canal Locks</strong></p>
+                    <p><strong>Reasons for locks:</strong></p>
+                    <p>• Locks allowed canal boats to travel through <input type="text" class="answer-input" id="q6" placeholder="6">.</p>
+                    <p><strong>How locks operate:</strong></p>
+                    <p>• The boat is shut in the <input type="text" class="answer-input" id="q7" placeholder="7"> of the lock.</p>
+                    <p>• <input type="text" class="answer-input" id="q8" placeholder="8"> open or close to raise or lower the water level.</p>
+                    <p>• Water levels must be <input type="text" class="answer-input" id="q9" placeholder="9"> before the boat can exit.</p>
+
+                    <h3>Questions 10–13</h3>
+                    <p>Answer the questions below.</p>
+                    <p>Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</p>
+                    <p>Write your answers in boxes 10–13 on your answer sheet.</p>
+                    <div class="question">
+                        <p><strong>10.</strong> Which group of people from outside the local community saw canals as a way of getting rich?</p>
+                        <input type="text" class="answer-input" id="q10" placeholder="10">
+                    </div>
+                    <div class="question">
+                        <p><strong>11.</strong> In which geographical area did the canals make more money?</p>
+                        <input type="text" class="answer-input" id="q11" placeholder="11">
+                    </div>
+                    <div class="question">
+                        <p><strong>12.</strong> What were the wrong kinds of areas to build profitable canals in?</p>
+                        <input type="text" class="answer-input" id="q12" placeholder="12">
+                    </div>
+                    <div class="question">
+                        <p><strong>13.</strong> Who bought the canals that were not making a profit?</p>
+                        <input type="text" class="answer-input" id="q13" placeholder="13">
+                    </div>
+                </div>
+                <div id="questions-2" class="question-set" style="display: none;">
+                    <h3>Questions 14–20</h3>
+                    <p>Reading Passage 2 has eight paragraphs, A–H.</p>
+                    <p>Which paragraph contains the following information?</p>
+                    <p>Write the correct letter, A–H, in boxes 14–20 on your answer sheet.</p>
+                    <div class="question">
+                        <p><strong>14.</strong> A description of how a test showed some evidence to be fake</p>
+                        <input type="text" class="answer-input" id="q14" placeholder="14">
+                    </div>
+                    <div class="question">
+                        <p><strong>15.</strong> Reasons why scientists may be unwilling to admit that they play</p>
+                        <input type="text" class="answer-input" id="q15" placeholder="15">
+                    </div>
+                    <div class="question">
+                        <p><strong>16.</strong> The result of a trick going wrong</p>
+                        <input type="text" class="answer-input" id="q16" placeholder="16">
+                    </div>
+                    <div class="question">
+                        <p><strong>17.</strong> The similarity between a skill used in play and one used in science</p>
+                        <input type="text" class="answer-input" id="q17" placeholder="17">
+                    </div>
+                    <div class="question">
+                        <p><strong>18.</strong> How a group of scientists stopped a colleague misusing their results</p>
+                        <input type="text" class="answer-input" id="q18" placeholder="18">
+                    </div>
+                    <div class="question">
+                        <p><strong>19.</strong> Some examples of the playful nature of scientific language</p>
+                        <input type="text" class="answer-input" id="q19" placeholder="19">
+                    </div>
+                    <div class="question">
+                        <p><strong>20.</strong> An example of an everyday object put to a scientific use</p>
+                        <input type="text" class="answer-input" id="q20" placeholder="20">
+                    </div>
+
+                    <h3>Questions 21–22</h3>
+                    <p>Choose <strong>TWO</strong> correct letters, A–E.</p>
+                    <p>Write the correct letters in boxes 21–22 on your answer sheet.</p>
+                    <p><strong>Which TWO of the following are given as possible explanations for scientists' playful behaviour?</strong></p>
+                    <div style="margin-left: 20px;">
+                        <label style="display: block; margin: 8px 0;">
+                            <input type="checkbox" class="multi-select" data-group="q21-22" name="q21-22" value="A"> A. Play may provide relief from their work.
+                        </label>
+                        <label style="display: block; margin: 8px 0;">
+                            <input type="checkbox" class="multi-select" data-group="q21-22" name="q21-22" value="B"> B. Scientists sometimes spend time as teachers.
+                        </label>
+                        <label style="display: block; margin: 8px 0;">
+                            <input type="checkbox" class="multi-select" data-group="q21-22" name="q21-22" value="C"> C. The age of scientists predisposes them to play.
+                        </label>
+                        <label style="display: block; margin: 8px 0;">
+                            <input type="checkbox" class="multi-select" data-group="q21-22" name="q21-22" value="D"> D. Scientists get ideas from children's questions.
+                        </label>
+                        <label style="display: block; margin: 8px 0;">
+                            <input type="checkbox" class="multi-select" data-group="q21-22" name="q21-22" value="E"> E. Scientists are secretive about their work.
+                        </label>
+                    </div>
+
+                    <h3>Questions 23–26</h3>
+                    <p>Complete the summary below.</p>
+                    <p>Write <strong>NO MORE THAN THREE WORDS</strong> from the passage for each answer.</p>
+                    <p>Write your answers in boxes 23–26 on your answer sheet.</p>
+                    <div class="summary-completion">
+                        <p><strong>Scientists Play Tricks</strong></p>
+                        <p style="line-height: 2; margin-top: 15px;">
+                            The passage describes two examples of tricks resulting from scientists' playfulness. Researchers at Caltech found that a colleague had been stealing their <input type="text" class="answer-input inline-input" id="q23" placeholder="23"> and used a fake NMR spectrum to trap him. Another story concerns a plate said to have been left in California by a famous <input type="text" class="answer-input inline-input" id="q24" placeholder="24">. The <input type="text" class="answer-input inline-input" id="q25" placeholder="25"> of the plate later revealed that it was a fake — a hoax carried out by friends of the director of the <input type="text" class="answer-input inline-input" id="q26" placeholder="26">.
+                        </p>
+                    </div>
+                </div>
+                <div id="questions-3" class="question-set" style="display: none;">
+                    <h3>Questions 27–31</h3>
+                    <p>Choose the correct letter, A, B, C, or D.</p>
+                    <p>Write the correct letter in boxes 27–31 on your answer sheet.</p>
+                    <div class="question">
+                        <p><strong>27.</strong> What does the passage suggest about the study of motivation?</p>
+                        <div style="margin-left: 20px;">
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q27" value="A"> A. It has only recently begun to attract interest in organisations.
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q27" value="B"> B. It is essential because employee motivation affects salary levels.
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q27" value="C"> C. Researchers have often been too theoretical in their approach.
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q27" value="D"> D. The purpose of motivation studies is to increase company profits.
+                            </label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p><strong>28.</strong> What can be inferred about the study of people's drives?</p>
+                        <div style="margin-left: 20px;">
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q28" value="A"> A. Fulfilling employees' drives can lead to behavioural change.
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q28" value="B"> B. Meeting employees' drives can negatively affect their emotions.
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q28" value="C"> C. Satisfying employees' drives always guarantees high performance.
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q28" value="D"> D. Satisfying employees' drives directly increases productivity.
+                            </label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p><strong>29.</strong> According to the passage, what is required to optimise employees' performance?</p>
+                        <div style="margin-left: 20px;">
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q29" value="A"> A. The drive to acquire and the achievement element
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q29" value="B"> B. Outstanding performance and recognition
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q29" value="C"> C. Financial incentives combined with appreciation
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q29" value="D"> D. Career fulfilment and job stability
+                            </label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p><strong>30.</strong> How does the drive to comprehend help employees perform better?</p>
+                        <div style="margin-left: 20px;">
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q30" value="A"> A. It helps them understand company development more deeply.
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q30" value="B"> B. It gives them a sense of meaning and purpose in their work.
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q30" value="C"> C. It helps them to set higher goals for the organisation.
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q30" value="D"> D. It provides them with repetitive but secure tasks.
+                            </label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p><strong>31.</strong> What is said about the drive to defend?</p>
+                        <div style="margin-left: 20px;">
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q31" value="A"> A. It is the most difficult organisational resource to allocate.
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q31" value="B"> B. It is harder to apply than the drive to comprehend.
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q31" value="C"> C. Employees value the freedom to express their opinions.
+                            </label>
+                            <label style="display: block; margin: 8px 0;">
+                                <input type="radio" name="q31" value="D"> D. Employees prefer merging with another company to remain safe.
+                            </label>
+                        </div>
+                    </div>
+
+                    <h3>Questions 32–34</h3>
+                    <p>Choose <strong>THREE</strong> letters, A–F.</p>
+                    <p>Write the correct letters in boxes 32–34 on your answer sheet.</p>
+                    <p><strong>Which THREE of the following statements are true about the study of drives?</strong></p>
+                    <div style="margin-left: 20px;">
+                        <label style="display: block; margin: 8px 0;">
+                            <input type="checkbox" class="multi-select" data-group="q32-34" name="q32-34" value="A"> A. Employees are more motivated when they feel a sense of belonging to the company.
+                        </label>
+                        <label style="display: block; margin: 8px 0;">
+                            <input type="checkbox" class="multi-select" data-group="q32-34" name="q32-34" value="B"> B. Training and development opportunities enhance employee motivation.
+                        </label>
+                        <label style="display: block; margin: 8px 0;">
+                            <input type="checkbox" class="multi-select" data-group="q32-34" name="q32-34" value="C"> C. Motivation improves when employees' goals align with organisational objectives.
+                        </label>
+                        <label style="display: block; margin: 8px 0;">
+                            <input type="checkbox" class="multi-select" data-group="q32-34" name="q32-34" value="D"> D. When motivation is low, companies should prioritise salary increases.
+                        </label>
+                        <label style="display: block; margin: 8px 0;">
+                            <input type="checkbox" class="multi-select" data-group="q32-34" name="q32-34" value="E"> E. Employees who find their jobs unchallenging are likely to leave.
+                        </label>
+                        <label style="display: block; margin: 8px 0;">
+                            <input type="checkbox" class="multi-select" data-group="q32-34" name="q32-34" value="F"> F. Employees worry about losing their jobs when their company is sold.
+                        </label>
+                    </div>
+
+                    <h3>Questions 35–40</h3>
+                    <p>Do the following statements agree with the claims of the writer in Reading Passage 3?</p>
+                    <p>In boxes 35–40 on your answer sheet, write:</p>
+                    <p>YES  if the statement agrees with the claims of the writer<br>
+                       NO  if the statement contradicts the claims of the writer<br>
+                       NOT GIVEN  if it is impossible to say what the writer thinks</p>
+                    <div class="tf-question">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number"><strong>35.</strong></span>
+                            <span class="tf-question-text">Increasing pay can lead to higher work motivation.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label><input type="radio" name="q35" value="YES"> YES</label>
+                            <label><input type="radio" name="q35" value="NO"> NO</label>
+                            <label><input type="radio" name="q35" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                    <div class="tf-question">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number"><strong>36.</strong></span>
+                            <span class="tf-question-text">Local companies benefit more than global companies from such studies.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label><input type="radio" name="q36" value="YES"> YES</label>
+                            <label><input type="radio" name="q36" value="NO"> NO</label>
+                            <label><input type="radio" name="q36" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                    <div class="tf-question">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number"><strong>37.</strong></span>
+                            <span class="tf-question-text">Employees show the strongest commitment when their drive to comprehend is met.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label><input type="radio" name="q37" value="YES"> YES</label>
+                            <label><input type="radio" name="q37" value="NO"> NO</label>
+                            <label><input type="radio" name="q37" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                    <div class="tf-question">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number"><strong>38.</strong></span>
+                            <span class="tf-question-text">Workers from the former company behaved unusually during the merger.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label><input type="radio" name="q38" value="YES"> YES</label>
+                            <label><input type="radio" name="q38" value="NO"> NO</label>
+                            <label><input type="radio" name="q38" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                    <div class="tf-question">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number"><strong>39.</strong></span>
+                            <span class="tf-question-text">The two studies examined the relationship between natural drives and employee attitudes.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label><input type="radio" name="q39" value="YES"> YES</label>
+                            <label><input type="radio" name="q39" value="NO"> NO</label>
+                            <label><input type="radio" name="q39" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                    <div class="tf-question">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number"><strong>40.</strong></span>
+                            <span class="tf-question-text">Reward systems cause companies to lose profit.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label><input type="radio" name="q40" value="YES"> YES</label>
+                            <label><input type="radio" name="q40" value="NO"> NO</label>
+                            <label><input type="radio" name="q40" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div id="bottom-nav">
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <button class="part-btn active" data-part="1">Part 1 <span class="attempted-count">0 of 13</span></button>
+            <button class="part-btn" data-part="2">Part 2 <span class="attempted-count">0 of 13</span></button>
+            <button class="part-btn" data-part="3">Part 3 <span class="attempted-count">0 of 14</span></button>
+        </div>
+        <div id="question-nav" style="display: flex; gap: 5px; overflow-x: auto;">
+            <!-- Dynamically populated -->
+        </div>
+        <div style="position: absolute; right: 20px; bottom: 20px;">
+            <button id="submit-btn">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        // Answer Key (CORRECTED)
+        const correctAnswers = {
+            q1: 'true',
+            q2: 'not given',
+            q3: 'true',
+            q4: 'true',
+            q5: 'false',  // FIXED: Locks introduced in 18th century, not 19th
+            q6: 'hilly areas',
+            q7: 'central chamber',
+            q8: 'sluice gates',
+            q9: 'matched',  // FIXED: "matched" is more accurate than "equal"
+            q10: 'speculators',
+            q11: 'northern england',
+            q12: 'agricultural regions',
+            q13: 'railway companies',
+            q14: 'e',
+            q15: 'a',
+            q16: 'f',
+            q17: 'b',
+            q18: 'g',
+            q19: 'd',
+            q20: 'c',
+            'q21-22': ['a', 'c'],  // Multiple choice answer
+            q23: 'data',
+            q24: 'explorer',  // FIXED: More flexible answer
+            q25: 'analysis',
+            q26: 'bancroft library',
+            q27: 'c',
+            q28: 'a',
+            q29: 'a',
+            q30: 'b',
+            q31: 'c',
+            'q32-34': ['a', 'e', 'f'],  // Multiple choice answer
+            q35: 'yes',
+            q36: 'not given',
+            q37: 'no',
+            q38: 'yes',
+            q39: 'yes',
+            q40: 'not given'
+        };
+
+        // Alternate acceptable answers for flexibility
+        const alternateAnswers = {
+            q6: ['hilly areas', 'hilly terrain'],
+            q9: ['matched', 'equal', 'the same'],
+            q11: ['northern england', 'north of england', 'northern'],
+            q12: ['agricultural regions', 'agricultural areas'],
+            q13: ['railway companies', 'the railway companies'],
+            q24: ['explorer', 'sir francis drake', 'drake'],
+            q26: ['bancroft library', 'the bancroft library']
+        };
+
+        // Timer System
+        let timerSeconds = 3600;
+        let timerInterval = null;
+        let timerRunning = true;
+
+        const timerDisplay = document.getElementById('timer');
+        const timerToggle = document.getElementById('timer-toggle');
+        const timerReset = document.getElementById('timer-reset');
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Warning for last 5 minutes
+            if (timerSeconds <= 300 && timerSeconds > 0) {
+                timerDisplay.classList.add('warning');
+            } else {
+                timerDisplay.classList.remove('warning');
+            }
+        }
+
+        function startTimer() {
+            if (timerInterval) return;
+            timerRunning = true;
+            timerToggle.textContent = '⏸';
+
+            timerInterval = setInterval(() => {
+                if (timerSeconds > 0) {
+                    timerSeconds--;
+                    updateTimerDisplay();
+                    
+                    // Alert when time is up
+                    if (timerSeconds === 0) {
+                        alert('Time is up! Please submit your test.');
+                    }
+                } else {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    timerToggle.textContent = '▶';
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timerRunning = false;
+            timerToggle.textContent = '▶';
+        }
+
+        timerToggle.addEventListener('click', () => {
+            if (timerRunning) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        });
+
+        timerReset.addEventListener('click', () => {
+            pauseTimer();
+            timerSeconds = 3600;
+            updateTimerDisplay();
+        });
+
+        startTimer();
+
+        // Resizer
+        const resizer = document.getElementById('resizer');
+        const passagePanel = document.getElementById('passage-panel');
+        const questionsPanel = document.getElementById('questions-panel');
+        let isResizing = false;
+
+        resizer.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            document.body.style.cursor = 'col-resize';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const containerWidth = passagePanel.parentElement.offsetWidth;
+            const newPassageWidth = e.clientX - passagePanel.getBoundingClientRect().left;
+            const newPassagePercent = (newPassageWidth / containerWidth) * 100;
+            if (newPassagePercent > 20 && newPassagePercent < 80) {
+                passagePanel.style.flex = `0 0 ${newPassagePercent}%`;
+                questionsPanel.style.flex = `0 0 ${100 - newPassagePercent}%`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isResizing = false;
+            document.body.style.cursor = 'default';
+        });
+
+        // Navigation System
+        let currentPart = 1;
+        let currentQuestion = 1;
+
+        document.querySelectorAll('.part-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const partNum = parseInt(btn.dataset.part);
+                switchToPart(partNum);
+            });
+        });
+
+        function switchToPart(partNum) {
+            currentPart = partNum;
+
+            document.querySelectorAll('.reading-passage').forEach(passage => {
+                passage.style.display = 'none';
+            });
+            document.querySelectorAll('.question-set').forEach(set => {
+                set.style.display = 'none';
+            });
+            document.querySelectorAll('.part-header').forEach(header => {
+                header.style.display = 'none';
+            });
+
+            document.getElementById(`passage-text-${partNum}`).style.display = 'block';
+            document.getElementById(`questions-${partNum}`).style.display = 'block';
+            document.getElementById(`part-header-${partNum}`).style.display = 'block';
+
+            document.querySelectorAll('.part-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.part-btn[data-part="${partNum}"]`).classList.add('active');
+
+            updateSubNavigation(partNum);
+        }
+
+        function updateSubNavigation(partNum) {
+            const questionNav = document.getElementById('question-nav');
+            questionNav.innerHTML = '';
+            let questionStart, questionEnd;
+            if (partNum === 1) {
+                questionStart = 1;
+                questionEnd = 13;
+            } else if (partNum === 2) {
+                questionStart = 14;
+                questionEnd = 26;
+            } else {
+                questionStart = 27;
+                questionEnd = 40;
+            }
+
+            for (let i = questionStart; i <= questionEnd; i++) {
+                const btn = document.createElement('button');
+                btn.classList.add('question-btn');
+                btn.dataset.question = i;
+                btn.textContent = i;
+                if (isQuestionAnswered(i)) {
+                    btn.classList.add('answered');
+                }
+                btn.addEventListener('click', () => goToQuestion(i));
+                questionNav.appendChild(btn);
+            }
+        }
+
+        function goToQuestion(qNum) {
+            currentQuestion = qNum;
+            const input = document.getElementById(`q${qNum}`) || document.querySelector(`input[name="q${qNum}"]`);
+            if (input) {
+                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                input.focus();
+                input.classList.add('flash');
+                setTimeout(() => input.classList.remove('flash'), 500);
+            }
+        }
+
+        function isQuestionAnswered(qNum) {
+            const input = document.getElementById(`q${qNum}`);
+            if (input && input.type === 'text') {
+                return input.value.trim() !== '';
+            }
+            const radios = document.querySelectorAll(`input[name="q${qNum}"]:checked`);
+            if (radios.length > 0) {
+                return true;
+            }
+            
+            // Check multi-select questions
+            if (qNum >= 21 && qNum <= 22) {
+                const checked = document.querySelectorAll(`input[name="q21-22"]:checked`);
+                return checked.length > 0;
+            }
+            if (qNum >= 32 && qNum <= 34) {
+                const checked = document.querySelectorAll(`input[name="q32-34"]:checked`);
+                return checked.length > 0;
+            }
+            
+            return false;
+        }
+
+        function updateAnsweredIndicators() {
+            document.querySelectorAll('.question-btn').forEach(btn => {
+                const qNum = parseInt(btn.dataset.question);
+                if (isQuestionAnswered(qNum)) {
+                    btn.classList.add('answered');
+                } else {
+                    btn.classList.remove('answered');
+                }
+            });
+
+            for (let part = 1; part <= 3; part++) {
+                let start, end;
+                if (part === 1) {
+                    start = 1;
+                    end = 13;
+                } else if (part === 2) {
+                    start = 14;
+                    end = 26;
+                } else {
+                    start = 27;
+                    end = 40;
+                }
+                let answered = 0;
+                for (let q = start; q <= end; q++) {
+                    if (isQuestionAnswered(q)) answered++;
+                }
+                const countSpan = document.querySelector(`.part-btn[data-part="${part}"] .attempted-count`);
+                if (countSpan) {
+                    countSpan.textContent = `${answered} of ${end - start + 1}`;
+                }
+            }
+        }
+
+        document.querySelectorAll('.answer-input, input[type="radio"], input[type="checkbox"]').forEach(input => {
+            input.addEventListener('input', updateAnsweredIndicators);
+            input.addEventListener('change', updateAnsweredIndicators);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '1' && e.key <= '9') {
+                const qNum = parseInt(e.key);
+                let start, end;
+                if (currentPart === 1) {
+                    start = 1;
+                    end = 13;
+                } else if (currentPart === 2) {
+                    start = 14;
+                    end = 26;
+                } else {
+                    start = 27;
+                    end = 40;
+                }
+                if (qNum + start - 1 <= end) {
+                    goToQuestion(start + qNum - 1);
+                }
+            }
+        });
+
+        // Multiple Selection Limit
+        document.querySelectorAll('.multi-select[data-group="q21-22"]').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const checked = document.querySelectorAll('.multi-select[data-group="q21-22"]:checked');
+                if (checked.length > 2) {
+                    cb.checked = false;
+                    alert('You can only select TWO answers for questions 21-22.');
+                }
+                updateAnsweredIndicators();
+            });
+        });
+
+        document.querySelectorAll('.multi-select[data-group="q32-34"]').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const checked = document.querySelectorAll('.multi-select[data-group="q32-34"]:checked');
+                if (checked.length > 3) {
+                    cb.checked = false;
+                    alert('You can only select THREE answers for questions 32-34.');
+                }
+                updateAnsweredIndicators();
+            });
+        });
+
+        // Improved answer checking function
+        function normalizeAnswer(answer) {
+            return answer.toLowerCase().trim().replace(/\s+/g, ' ').replace(/[.,;!?]/g, '');
+        }
+
+        function checkAnswer(qId, userAnswer) {
+            const correctAnswer = correctAnswers[qId];
+            const normalizedUser = normalizeAnswer(userAnswer);
+            const normalizedCorrect = normalizeAnswer(correctAnswer);
+            
+            // Check alternates if they exist
+            if (alternateAnswers[qId]) {
+                return alternateAnswers[qId].some(alt => normalizeAnswer(alt) === normalizedUser);
+            }
+            
+            return normalizedUser === normalizedCorrect;
+        }
+
+        // Submit & Results
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            if (!confirm('Are you sure you want to submit your test?')) return;
+
+            pauseTimer();
+            let correct = 0;
+            let total = 0;
+            const results = [];
+
+            // Process individual questions (1-20, 23-26, 27-31, 35-40)
+            for (let i = 1; i <= 40; i++) {
+                // Skip multi-select question numbers (we'll handle them separately)
+                if ((i >= 21 && i <= 22) || (i >= 32 && i <= 34)) continue;
+                
+                const qId = `q${i}`;
+                if (!correctAnswers[qId]) continue;
+                
+                total++;
+                let userAnswer = '';
+                const input = document.getElementById(qId);
+
+                if (input && input.type === 'text') {
+                    userAnswer = input.value.trim();
+                    const isCorrect = checkAnswer(qId, userAnswer);
+                    
+                    if (isCorrect) {
+                        correct++;
+                        input.classList.add('correct');
+                    } else {
+                        input.classList.add('incorrect');
+                    }
+                    
+                    results.push({
+                        question: i,
+                        userAnswer: userAnswer || '(blank)',
+                        correctAnswer: correctAnswers[qId],
+                        isCorrect
+                    });
+                } else {
+                    const selected = document.querySelector(`input[name="${qId}"]:checked`);
+                    userAnswer = selected ? selected.value : '';
+                    const isCorrect = normalizeAnswer(userAnswer) === normalizeAnswer(correctAnswers[qId]);
+                    
+                    if (isCorrect) {
+                        correct++;
+                    }
+                    
+                    // Mark all radio buttons in the group
+                    document.querySelectorAll(`input[name="${qId}"]`).forEach(radio => {
+                        if (isCorrect) {
+                            radio.parentElement.style.color = '#28a745';
+                            radio.parentElement.style.fontWeight = 'bold';
+                        } else if (radio.checked) {
+                            radio.parentElement.style.color = '#dc3545';
+                            radio.parentElement.style.fontWeight = 'bold';
+                        }
+                    });
+                    
+                    results.push({
+                        question: i,
+                        userAnswer: userAnswer || '(blank)',
+                        correctAnswer: correctAnswers[qId],
+                        isCorrect
+                    });
+                }
+            }
+
+            // Process Q21-22 (multi-select)
+            const q21_22_checked = Array.from(document.querySelectorAll('input[name="q21-22"]:checked')).map(cb => cb.value.toLowerCase()).sort();
+            const q21_22_correct = correctAnswers['q21-22'].sort();
+            const q21_22_isCorrect = JSON.stringify(q21_22_checked) === JSON.stringify(q21_22_correct);
+            
+            total += 2; // Questions 21 and 22
+            if (q21_22_isCorrect) {
+                correct += 2;
+                document.querySelectorAll('input[name="q21-22"]:checked').forEach(cb => {
+                    cb.parentElement.style.color = '#28a745';
+                    cb.parentElement.style.fontWeight = 'bold';
+                });
+            } else {
+                document.querySelectorAll('input[name="q21-22"]:checked').forEach(cb => {
+                    cb.parentElement.style.color = '#dc3545';
+                    cb.parentElement.style.fontWeight = 'bold';
+                });
+            }
+            
+            results.push({
+                question: '21-22',
+                userAnswer: q21_22_checked.join(', ').toUpperCase() || '(blank)',
+                correctAnswer: q21_22_correct.join(', ').toUpperCase(),
+                isCorrect: q21_22_isCorrect
+            });
+
+            // Process Q32-34 (multi-select)
+            const q32_34_checked = Array.from(document.querySelectorAll('input[name="q32-34"]:checked')).map(cb => cb.value.toLowerCase()).sort();
+            const q32_34_correct = correctAnswers['q32-34'].sort();
+            const q32_34_isCorrect = JSON.stringify(q32_34_checked) === JSON.stringify(q32_34_correct);
+            
+            total += 3; // Questions 32, 33, and 34
+            if (q32_34_isCorrect) {
+                correct += 3;
+                document.querySelectorAll('input[name="q32-34"]:checked').forEach(cb => {
+                    cb.parentElement.style.color = '#28a745';
+                    cb.parentElement.style.fontWeight = 'bold';
+                });
+            } else {
+                document.querySelectorAll('input[name="q32-34"]:checked').forEach(cb => {
+                    cb.parentElement.style.color = '#dc3545';
+                    cb.parentElement.style.fontWeight = 'bold';
+                });
+            }
+            
+            results.push({
+                question: '32-34',
+                userAnswer: q32_34_checked.join(', ').toUpperCase() || '(blank)',
+                correctAnswer: q32_34_correct.join(', ').toUpperCase(),
+                isCorrect: q32_34_isCorrect
+            });
+
+            showResultsModal(correct, total, results);
+        });
+
+        function showResultsModal(correct, total, results) {
+            const percentage = ((correct / total) * 100).toFixed(1);
+            
+            // Estimate IELTS band score
+            let bandScore = 0;
+            if (percentage >= 87.5) bandScore = 9;
+            else if (percentage >= 80) bandScore = 8.5;
+            else if (percentage >= 75) bandScore = 8;
+            else if (percentage >= 70) bandScore = 7.5;
+            else if (percentage >= 65) bandScore = 7;
+            else if (percentage >= 57.5) bandScore = 6.5;
+            else if (percentage >= 50) bandScore = 6;
+            else if (percentage >= 42.5) bandScore = 5.5;
+            else if (percentage >= 35) bandScore = 5;
+            else if (percentage >= 27.5) bandScore = 4.5;
+            else if (percentage >= 20) bandScore = 4;
+            else bandScore = 3.5;
+
+            let tableRows = '';
+            results.forEach((r) => {
+                const statusIcon = r.isCorrect ? '✓' : '✗';
+                const statusColor = r.isCorrect ? '#28a745' : '#dc3545';
+                tableRows += `
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${r.question}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${r.userAnswer}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${r.correctAnswer}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; color: ${statusColor}; text-align: center; font-weight: bold;">${statusIcon}</td>
+                    </tr>
+                `;
+            });
+
+            const modalHTML = `
+                <div id="results-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 30px; border-radius: 8px; max-width: 900px; max-height: 85vh; overflow-y: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                        <h2 style="margin-bottom: 20px; color: #333;">📊 Test Results</h2>
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
+                            <p style="font-size: 24px; margin-bottom: 10px;">
+                                <strong>Score: ${correct}/${total} (${percentage}%)</strong>
+                            </p>
+                            <p style="font-size: 20px; margin-bottom: 15px; color: #4a90e2;">
+                                <strong>Estimated Band Score: ${bandScore}</strong>
+                            </p>
+                            <p style="margin: 0;">
+                                Correct: <span style="color: #28a745; font-weight: bold;">${correct}</span> |
+                                Incorrect: <span style="color: #dc3545; font-weight: bold;">${total - correct}</span>
+                            </p>
+                        </div>
+                        <h3 style="margin-bottom: 15px;">Detailed Results:</h3>
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                                <thead>
+                                    <tr style="background: #4a90e2; color: white;">
+                                        <th style="padding: 12px; border: 1px solid #ddd;">Question</th>
+                                        <th style="padding: 12px; border: 1px solid #ddd;">Your Answer</th>
+                                        <th style="padding: 12px; border: 1px solid #ddd;">Correct Answer</th>
+                                        <th style="padding: 12px; border: 1px solid #ddd;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${tableRows}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="text-align: center;">
+                            <button onclick="document.getElementById('results-modal').remove()" style="background: #4a90e2; color: white; padding: 12px 40px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">Close</button>
+                            <button onclick="window.print()" style="background: #6c757d; color: white; padding: 12px 40px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-left: 10px;">Print Results</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        // Text Highlighting
+        let highlights = [];
+
+        document.addEventListener('contextmenu', (e) => {
+            const selection = window.getSelection();
+            if (selection.toString().trim().length === 0) return;
+
+            e.preventDefault();
+
+            const menu = document.createElement('div');
+            menu.id = 'context-menu';
+            menu.style.cssText = `
+                position: absolute;
+                top: ${e.pageY}px;
+                left: ${e.pageX}px;
+                background: white;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                padding: 5px 0;
+                z-index: 10000;
+            `;
+
+            const highlightBtn = document.createElement('button');
+            highlightBtn.textContent = '🖍 Highlight';
+            highlightBtn.style.cssText = 'display: block; width: 100%; padding: 8px 15px; border: none; background: white; text-align: left; cursor: pointer;';
+            highlightBtn.addEventListener('mouseenter', () => highlightBtn.style.background = '#f5f5f5');
+            highlightBtn.addEventListener('mouseleave', () => highlightBtn.style.background = 'white');
+            highlightBtn.addEventListener('click', () => {
+                highlightSelection();
+                menu.remove();
+            });
+
+            menu.appendChild(highlightBtn);
+            document.body.appendChild(menu);
+
+            setTimeout(() => {
+                document.addEventListener('click', () => menu.remove(), { once: true });
+            }, 100);
+        });
+
+        function highlightSelection() {
+            const selection = window.getSelection();
+            if (selection.rangeCount === 0) return;
+
+            try {
+                const range = selection.getRangeAt(0);
+                const span = document.createElement('span');
+                span.classList.add('highlighted-text');
+                span.style.backgroundColor = 'yellow';
+
+                range.surroundContents(span);
+                highlights.push(span);
+
+                selection.removeAllRanges();
+            } catch (error) {
+                console.log('Cannot highlight this selection');
+            }
+        }
+
+        // Clear highlights button
+        document.getElementById('clear-highlights-btn').addEventListener('click', () => {
+            if (highlights.length === 0) {
+                alert('No highlights to clear.');
+                return;
+            }
+            
+            if (confirm(`Clear all ${highlights.length} highlights?`)) {
+                highlights.forEach(span => {
+                    const parent = span.parentNode;
+                    while (span.firstChild) {
+                        parent.insertBefore(span.firstChild, span);
+                    }
+                    parent.removeChild(span);
+                });
+                highlights = [];
+                alert('All highlights cleared!');
+            }
+        });
+
+        // Initialize
+        switchToPart(1);
+        updateAnsweredIndicators();
+
+        // Prevent accidental page closure
+        window.addEventListener('beforeunload', (e) => {
+            if (timerSeconds < 3600 && timerSeconds > 0) {
+                e.preventDefault();
+                e.returnValue = '';
+                return '';
+            }
+        });
+    </script>
+</body>
+</html>

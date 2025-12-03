@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Real exam IELTS</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --passage-bg: #f8f9fa;
+            --questions-bg: #ffffff;
+            --border-color: #5770ff;
+            --highlight-color: springgreen;
+            /* Changed highlight color */
+
+            /* New Header & Social Colors */
+            --header-bg: #F8F8F8;
+            /* Very light gray for header background */
+            --header-text: #333333;
+            /* Dark text for light header */
+            --telegram-blue: #0088CC;
+            --instagram-pink: #E4405F;
+            --youtube-red: #FF0000;
+
+            /* Button Colors (Red themed) */
+            --button-bg: #28a745;
+            /* Primary button red */
+            --button-hover: #218838;
+            /* Darker red on hover */
+
+            --correct-color: #28a745;
+            /* Standard green */
+            --incorrect-color: #dc3545;
+            /* Standard red */
+            --progress-complete: #28a745;
+            --progress-incomplete: #bdbdbd;
+
+            /* Timer Colors (Red themed) */
+            --timer-bg: #0088CC;
+            /* Very light red/pink */
+            --timer-text: #ffffff;
+            /* Darker red */
+
+            --footer-bg: #f5f5f5;
+        }
+
+        .night-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --passage-bg: #1e1e1e;
+            --questions-bg: #1e1e1e;
+            --border-color: #424242;
+            --highlight-color: #0084ff;
+            /* Darker springgreen for night mode */
+
+            /* Night Mode Header & Social Colors */
+            --header-bg: #1a1a1a;
+            /* Dark gray for header background */
+            --header-text: #ffffff;
+            /* White text for dark header */
+            --telegram-blue: #005f99;
+            /* Darker telegram blue */
+            --instagram-pink: #b2334b;
+            /* Darker instagram pink */
+            --youtube-red: #b20000;
+            /* Darker YouTube red */
+
+            /* Night Mode Button Colors */
+            --button-bg: #990000;
+            /* Darker primary button red */
+            --button-hover: #7a0000;
+            /* Even darker red on hover */
+
+            --correct-color: #218838;
+            /* Darker green */
+            --incorrect-color: #c82333;
+            /* Darker red */
+            --progress-complete: #218838;
+            --progress-incomplete: #616161;
+
+            /* Night Mode Timer Colors */
+            --timer-bg: #0088CC;
+            /* Dark red */
+            --timer-text: #ffcdd2;
+            /* Lighter red */
+
+            --footer-bg: #121212;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            /* Space between social links */
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            /* Space between icon and text */
+            color: white;
+            /* Text color is always white for social links */
+            padding: 8px 15px;
+            border-radius: 50px;
+            /* Pill shape */
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-1px);
+        }
+
+        .social-link i {
+            font-size: 1.2em;
+            /* Makes icon slightly larger than text */
+        }
+
+        /* Specific styling for social links */
+        .social-link.telegram {
+            background-color: var(--telegram-blue);
+        }
+
+        .social-link.telegram:hover {
+            background-color: #007bb5;
+            /* Slightly darker */
+        }
+
+        .social-link.instagram {
+            background-color: var(--instagram-pink);
+        }
+
+        .social-link.instagram:hover {
+            background-color: #d62976;
+            /* Slightly darker */
+        }
+
+        .social-link.youtube {
+            background-color: var(--youtube-red);
+        }
+
+        .social-link.youtube:hover {
+            background-color: #CC0000;
+            /* Slightly darker */
+        }
+
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .timer-container {
+            background-color: var(--timer-bg);
+            color: var(--timer-text);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .timer-controls button {
+            background: none;
+            border: none;
+            color: var(--timer-text);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-controls button:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            /* Darker hover for light timer */
+        }
+
+        .night-mode .timer-controls button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            /* Lighter hover for dark timer */
+        }
+
+        .mode-toggle {
+            background: none;
+            border: none;
+            color: var(--header-text);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 6px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mode-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            /* Darker hover for light header */
+        }
+
+        .night-mode .mode-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            /* Lighter hover for dark header */
+        }
+
+        main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-container,
+        .questions-container {
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .passage-container {
+            width: 50%;
+            background-color: var(--passage-bg);
+            border-right: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .questions-container {
+            width: 50%;
+            background-color: var(--questions-bg);
+        }
+
+        .passage-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .passage-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .passage-text {
+            font-size: 17px;
+        }
+
+        .question-text {
+            font-size: 17px;
+            line-height: 1.8;
+            /* Increased line-height for fill-in-the-blank */
+        }
+
+        .passage-text p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .highlight {
+            background-color: var(--highlight-color);
+            cursor: pointer;
+        }
+
+        .highlight-tooltip {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 25px 0 15px;
+            color: var(--text-color);
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--passage-bg);
+            border-left: 4px solid var(--border-color);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: baseline;
+            /* Align baselines of number and text */
+        }
+
+        .question-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background-color: var(--progress-incomplete);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 10px;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .question.answered .question-number {
+            background-color: var(--progress-complete);
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .option input {
+            margin-right: 8px;
+        }
+
+        /* Styling for the new inline input fields */
+        .fill-in-the-blank {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--text-color);
+            width: 150px;
+            font-family: inherit;
+            font-size: 1em;
+            /* Inherit font size from parent */
+            color: inherit;
+            padding: 0 4px 2px 4px;
+            /* Add some padding */
+            margin: 0 3px;
+            /* Add some margin */
+            vertical-align: baseline;
+            /* Align with the text */
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .fill-in-the-blank:focus {
+            border-bottom-color: var(--button-bg);
+        }
+
+
+        .instructions {
+            font-size: 14px;
+            color: #757575;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .summary-box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #fafafa;
+            margin-top: 15px;
+        }
+
+        .summary-box p {
+            font-weight: normal !important;
+        }
+
+        .summary-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        .summary-options span {
+            padding: 5px;
+        }
+
+        .summary-text {
+            line-height: 2.2;
+        }
+
+        .summary-text .gap {
+            display: inline-block;
+            width: 150px;
+        }
+
+        .summary-text .question-input {
+            width: 40px;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
+        }        
+
+        footer {
+            background-color: var(--footer-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .progress-item {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--progress-incomplete);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .progress-item:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-item.completed {
+            background-color: var(--progress-complete);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--button-bg);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--button-bg);
+            /* Use primary button color for border */
+            color: var(--button-bg);
+            /* Use primary button color for text */
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(204, 0, 0, 0.1);
+            /* Light red tint on hover */
+        }
+
+        .night-mode .btn-secondary:hover {
+            background-color: rgba(153, 0, 0, 0.2);
+            /* Darker red tint on hover for night mode */
+        }
+
+
+        .feedback-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feedback-container {
+            background-color: var(--passage-bg);
+            width: 90%;
+            max-width: 900px;
+            height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feedback-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #close-feedback {
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+
+        .feedback-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .feedback-item {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--questions-bg);
+        }
+
+        .feedback-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .feedback-answer {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .correct {
+            color: var(--correct-color);
+        }
+
+        .incorrect {
+            color: var(--incorrect-color);
+        }
+
+        .feedback-explanation {
+            margin-top: 10px;
+            padding: 10px;
+            border-left: 3px solid var(--button-bg);
+            /* Use primary button color for explanation border */
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .feedback-passage {
+            margin-top: 8px;
+            font-style: italic;
+            color: #757575;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            main {
+                flex-direction: column;
+            }
+
+            .passage-container,
+            .questions-container {
+                width: 100%;
+                height: 50%;
+            }
+
+            .passage-container {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .progress-container {
+                flex-wrap: wrap;
+                max-width: 60%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo-area {
+                flex-wrap: wrap;
+                /* Allow items to wrap to the next line */
+                justify-content: center;
+                /* Center items when wrapped */
+                gap: 8px;
+                /* Adjusted gap for smaller screens */
+            }
+
+            .social-link {
+                padding: 6px 10px;
+                /* Reduced padding for smaller screens */
+                font-size: 13px;
+                /* Reduced font size for smaller screens */
+            }
+
+            .social-link i {
+                font-size: 1.1em;
+                /* Slightly smaller icon */
+            }
+
+            .social-link span {
+                display: inline;
+                /* Ensure text is visible */
+            }
+        }
+
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .header-controls {
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            .progress-container {
+                max-width: 50%;
+            }
+
+            .progress-item {
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .action-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+<header>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+<div class="logo-area">
+<!-- Removed the logo image tag as it was not opening -->
+<a class="social-link telegram" href="https://t.me/realexamielts" target="_blank" title="Join on Telegram">
+<i class="fab fa-telegram-plane"></i>
+<span>REAL EXAM IELTS - CD IELTS MATERIALS</span>
+</a>
+</div>
+<div class="header-controls">
+<div class="timer-container">
+<i class="fas fa-clock"></i>
+<span id="timer">20:00</span>
+<div class="timer-controls">
+<button id="start-timer" title="Start"><i class="fas fa-play"></i></button>
+<button id="pause-timer" title="Pause"><i class="fas fa-pause"></i></button>
+<button id="reset-timer" title="Reset"><i class="fas fa-redo"></i></button>
+</div>
+</div>
+<button class="mode-toggle" id="night-mode-toggle" title="Toggle Night Mode">
+<i class="fas fa-moon"></i>
+</button>
+</div>
+</header>
+<main>
+    <div class="passage-container" id="passage-container">
+        <div class="passage-content">
+
+            <h4>READING PASSAGE 2</h4>
+            <div class="instructions">You should spend about 20 minutes on Questions 14-26, which are based on
+                Reading Passage 2.</div>
+            <div class="passage-title"></div>
+            <div class="passage-text" id="passage-text">
+                <p style="text-align:center; font-weight: !important;"><b>Are Artists Liars?</b><br></p>
+
+<p><b>A</b> Shortly before his death, Marlon Brando was working on a series of instructional videos about acting, to he called "Lying for a Iiving". On the surviving footage, Brando can he seen dispensing gnomic advice on his craft to a group of enthusiastic, if somewhat bemused, Hollywood stars, including Leonardo Di Caprio and Sean Penn. Brando also recruited random people from the Los Angeles street and persuaded them to improvise (the footage is said to include a memorable scene featuring two dwarves and a giant Samoan). "If you can lie, you can act." Brando told Jod Kaftan, a writer for Rolling Stone and one of the few people to have viewed the footage. "Are you good at lying?" asked Kaftan. "Jesus." said Brando, "I'm fabulous at it".</p>
+
+<p><b>B</b> Brando was not the first person to note that the line between an artist and a liar is a line one. If art is a kind of lying, then lying is a form of art, albeit of a lower order-as Oscar Wilde and Mark Twain have observed. Indeed, lying and artistic storytelling spring from a common neurological root-one that is exposed in the cases of psychiatric patients who suffer from a particular kind of impairment. Both liars and artists refuse to accept the tyranny of reality. Both carefully craft stories that are worthy of belief – a skill requiring intellectual sophistication, emotional sensitivity and physical self-control (liars are writers and performers of their own work). Such parallels are hardly coincidental, as I discovered while researching my book on lying.</p>
+
+<p><b>C</b> A case study published in 1985 by Antonio Damasio, a neurologist, tells the story of a middle-aged woman with brain damage caused by a series of strokes. She retained cognitive abilities, including coherent speech, but what she actually said was rather unpredictable. Checking her knowledge of contemporary events, Damasio asked her about the Falklands War. In the language of psychiatry, this woman was "confabulating". Chronic confabulation is a rare type of memory problem that affects a small proportion of brain damaged people. In the literature it is defined as "the production of fabricated, distorted or misinterpreted memories about oneself or the world, without the conscious intention to deceive". Whereas amnesiacs make errors of omission, there are gaps in their recollections they find impossible to fill – confabulators make errors of commission: they make tilings up. Rather than forgetting, they are inventing. Confabulating patients are nearly always oblivious to their own condition, and will earnestly give absurdly implausible explanations of why they're in hospital, or talking to a doctor. One patient, asked about his surgical sear, explained that during the Second World War he surprised a teenage girl who shot him three times in the head, killing him, only for surgery to bring him back to life. The same patient, when asked about his family, described how at various times they had died in his arms, or had been killed before his eyes. Others tell yet more fantastical tales, about trips to the moon, fighting alongside Alexander in India or seeing Jesus on the Cross. Confabulators aren't out to deceive. They engage in what Morris Moseovitch, a neuropsychologist, calls "honest lying". Uncertain and obscurely distressed by their uncertainty, they are seized by a "compulsion to narrate": a deep-seated need to shape, order and explain what they do not understand. Chronic confabulators are often highly inventive at the verbal level, jamming together words in nonsensical but suggestive ways: one patient, when asked what happened to Queen Marie Antoinette of France, answered that she had been "suicided" by her family. In a sense, these patients are like novelists, as described by Henry James: people on whom "nothing is wasted". Unlike writers, however, they have little or no control over their own material.</p>
+
+<p><b>D</b> The wider significance of this condition is what it tells us about ourselves. Evidently, there is a gushing river of verbal creativity in the normal human mind, from which both artistic invention and lying are drawn. We are born storytellers, spinning, narrative out of our experience and imagination, straining against the leash that keeps us tethered to reality. This is a wonderful thing; it is what gives us out ability to conceive of alternative futures and different worlds. And it helps us to understand our own lives through the entertaining stories of others. But it can lead us into trouble, particularly when we try to persuade others that our inventions are real. Most of the time, as our stories bubble up to consciousness, we exercise our cerebral censors, controlling which stories we tell, and to whom. Yet people lie for all sorts of reasons, including the fact that confabulating can be dangerously fun.</p>
+
+<p><b>E</b> During a now-famous libel case in 1996, Jonathan Aitken, a former cabinet minister, recounted a tale to illustrate the horrors he endured after a national newspaper tainted his name. The case, which stretched on for more than two years, involved a series of claims made by the Guardian about Aitken's relationships with Saudi arms dealers, including meetings he allegedly held with them on a trip to Paris while he was a government minister. Whitt amazed many in hindsight was the sheer superfluity of the lies Aitken told during his testimony. Aitken's case collapsed in June 1997, when the defence finally found indisputable evidence about his Paris trip. Until then, Aitken's charm, fluency and flair for theatrical displays of sincerity looked as if they might bring him victory, they revealed that not only was Aitken's daughter not with him that day (when he was indeed doorstepped), but also that the minister had simply got into his car and drove off, with no vehicle in pursuit.</p>
+
+<p><b>F</b> Of course, unlike Aitken, actors, playwrights and novelists are not literally attempting to deceive us, because the rules are laid out in advance: come to the theatre, or open this book, and we'll lie to you. Perhaps this is why we fell it necessary to invent art in the first place: as a safe space into which our lies can be corralled, and channeled into something socially useful. Given the universal compulsion to tell stories, art is the best way to refine and enjoy the particularly outlandish or insight till ones. But that is not the whole story. The key way in which artistic "lies" differ from normal lies, and from the "honest lying" of chronic confabulators, is that they have a meaning and resonance beyond their creator. The liar lies on behalf of himself; the artist tell lies on behalf of everyone. If writers have a compulsion to narrate, they compel themselves to find insights about the human condition. Mario Vargas Llosa has written that novels "express a curious truth that can only he expressed in a furtive and veiled fashion, masquerading as what it is not." Art is a lie whose secret ingredient is truth.</p>
+</div>
+</div>
+</div>
+
+<div class="questions-container" id="questions-container">
+<div class="section-title">Questions 14–19</div>
+<div class="instructions">Reading Passage 2 has six paragraphs, A–F.<br/>Choose the correct heading for each paragraph from the list of headings below.<br/>Write the correct number, i–viii, in boxes 14–19 on your answer sheet.</div>
+
+<div class="question" style="margin-bottom:10px;">
+<strong>List of Headings</strong><br>
+<b>i</b> Unsuccessful deceit <br>
+<b>ii</b> Biological basis between liars and artists <br>
+<b>iii</b> How to lie in an artistic way <br>
+<b>iv</b> Confabulations and the exemplifiers <br>
+<b>v</b> The distinction between artists and common liars <br>
+<b>vi</b> The fine line between liars and artists <br>
+<b>vii</b> The definition of confabulation <br>
+<b>viii</b> Creativity when people lie <br>
+</div>
+
+<div class="question-group">
+<div class="question" id="q14">
+<div class="question-title"><div class="question-number">14</div><div class="question-text">Paragraph A</div></div>
+<select name="q14">
+<option value="">Select heading...</option>
+<option value="i">i</option>
+<option value="ii">ii</option>
+<option value="iii">iii</option>
+<option value="iv">iv</option>
+<option value="v">v</option>
+<option value="vi">vi</option>
+<option value="vii">vii</option>
+<option value="viii">viii</option>
+</select>
+</div>
+
+<div class="question" id="q15">
+<div class="question-title"><div class="question-number">15</div><div class="question-text">Paragraph B</div></div>
+<select name="q15">
+<option value="">Select heading...</option>
+<option value="i">i</option>
+<option value="ii">ii</option>
+<option value="iii">iii</option>
+<option value="iv">iv</option>
+<option value="v">v</option>
+<option value="vi">vi</option>
+<option value="vii">vii</option>
+<option value="viii">viii</option>
+</select>
+</div>
+
+<div class="question" id="q16">
+<div class="question-title"><div class="question-number">16</div><div class="question-text">Paragraph C</div></div>
+<select name="q16">
+<option value="">Select heading...</option>
+<option value="i">i</option>
+<option value="ii">ii</option>
+<option value="iii">iii</option>
+<option value="iv">iv</option>
+<option value="v">v</option>
+<option value="vi">vi</option>
+<option value="vii">vii</option>
+<option value="viii">viii</option>
+</select>
+</div>
+
+<div class="question" id="q17">
+<div class="question-title"><div class="question-number">17</div><div class="question-text">Paragraph D</div></div>
+<select name="q17">
+<option value="">Select heading...</option>
+<option value="i">i</option>
+<option value="ii">ii</option>
+<option value="iii">iii</option>
+<option value="iv">iv</option>
+<option value="v">v</option>
+<option value="vi">vi</option>
+<option value="vii">vii</option>
+<option value="viii">viii</option>
+</select>
+</div>
+
+<div class="question" id="q18">
+<div class="question-title"><div class="question-number">18</div><div class="question-text">Paragraph E</div></div>
+<select name="q18">
+<option value="">Select heading...</option>
+<option value="i">i</option>
+<option value="ii">ii</option>
+<option value="iii">iii</option>
+<option value="iv">iv</option>
+<option value="v">v</option>
+<option value="vi">vi</option>
+<option value="vii">vii</option>
+<option value="viii">viii</option>
+</select>
+</div>
+
+<div class="question" id="q19">
+<div class="question-title"><div class="question-number">19</div><div class="question-text">Paragraph F</div></div>
+<select name="q19">
+<option value="">Select heading...</option>
+<option value="i">i</option>
+<option value="ii">ii</option>
+<option value="iii">iii</option>
+<option value="iv">iv</option>
+<option value="v">v</option>
+<option value="vi">vi</option>
+<option value="vii">vii</option>
+<option value="viii">viii</option>
+</select>
+</div>
+</div>
+
+<div class="section-title">Questions 20–21</div>
+<div class="instructions">Choose <strong>TWO</strong> letters, A-E.<br/>Write the correct letters in boxes 20–21 on your answer sheet.</div>
+<div class="instructions">Which TWO of the following statements about people suffering from confabulation are true?</div>
+
+<div class="question" id="q20_21">
+<div class="question-title"><div class="question-number">20-21</div><div class="question-text">Select TWO correct options:</div></div>
+<div class="options">
+<div class="option">
+<input type="checkbox" name="q20_21" value="A"> A They have lost cognitive abilities.
+</div>
+<div class="option">
+<input type="checkbox" name="q20_21" value="B"> B They do not deliberately tell a lie.
+</div>
+<div class="option">
+<input type="checkbox" name="q20_21" value="C"> C They are normally aware of their condition.
+</div>
+<div class="option">
+<input type="checkbox" name="q20_21" value="D"> D They do not have the impetus to explain what they do not understand.
+</div>
+<div class="option">
+<input type="checkbox" name="q20_21" value="E"> E They try to make up stories.
+</div>
+</div>
+</div>
+
+<div class="section-title">Questions 22–23</div>
+<div class="instructions">Choose <strong>TWO</strong> letters, A-E.<br/>Write the correct letters in boxes 22–23 on your answer sheet.</div>
+<div class="instructions">Which TWO of the following statements about playwrights and novelists are true?</div>
+
+<div class="question" id="q22_23">
+<div class="question-title"><div class="question-number">22-23</div><div class="question-text">Select TWO correct options:</div></div>
+<div class="options">
+<div class="option">
+<input type="checkbox" name="q22_23" value="A"> A They give more meaning to the stories.
+</div>
+<div class="option">
+<input type="checkbox" name="q22_23" value="B"> B They tell lies for the benefit of themselves.
+</div>
+<div class="option">
+<input type="checkbox" name="q22_23" value="C"> C They have nothing to do with the truth out there.
+</div>
+<div class="option">
+<input type="checkbox" name="q22_23" value="D"> D We can be misled by them if not careful.
+</div>
+<div class="option">
+<input type="checkbox" name="q22_23" value="E"> E We know there are lies in the content.
+</div>
+</div>
+</div>
+
+<div class="section-title">Questions 24–26</div>
+<div class="instructions">Complete the summary below.<br/>Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.<br/>Write your answers in boxes 24–26 on your answer sheet.</div>
+
+<div class="question" id="q24">
+<div class="question-title"><div class="question-number">24</div><div class="question-text">A <input type="text" name="q24" class="fill-in-the-blank"/> accused Jonathan Aitken, a former cabinet minister, who was selling and buying with <input type="text" name="q25" class="fill-in-the-blank"/></div></div>
+</div>
+
+<div class="question" id="q26">
+<div class="question-title"><div class="question-number">26</div><div class="question-text">Aitken's case collapsed in June 1997, when the defence finally found indisputable evidence about his Paris trip. He was deemed to have his <input type="text" name="q26" class="fill-in-the-blank"/></div></div>
+</div>
+
+<div style="height:30px"></div>
+</div>
+</main>
+
+<footer>
+<div class="progress-container" id="progress-container"></div>
+<div class="action-buttons">
+<button class="btn-secondary" id="reset-btn">Reset Answers</button>
+<button class="btn-primary" id="submit-btn">Submit Answers</button>
+</div>
+</footer>
+
+<div class="feedback-overlay" id="feedback-overlay">
+<div class="feedback-container" id="feedback-container">
+<div class="feedback-header"><div class="feedback-title"><i class="fas fa-chart-bar"></i> Your Results <span class="score-display" id="score-display">0/13</span></div><button id="close-feedback" title="Close"><i class="fas fa-times"></i></button></div>
+<div class="feedback-body" id="feedback-body"></div>
+</div>
+</div>
+
+<script>
+// Night Mode Toggle
+document.getElementById('night-mode-toggle').addEventListener('click', function(){document.body.classList.toggle('night-mode');const icon=this.querySelector('i');if(document.body.classList.contains('night-mode')){icon.classList.remove('fa-moon');icon.classList.add('fa-sun')}else{icon.classList.remove('fa-sun');icon.classList.add('fa-moon')}})
+
+// Correct answers for Questions 14-26
+const correctAnswers = {
+q14: 'vi',
+q15: 'ii',
+q16: 'vii',
+q17: 'viii',
+q18: 'i',
+q19: 'v',
+q20_21: ['B', 'E'],
+q22_23: ['A', 'E'],
+q24: 'national newspaper',
+q25: 'arms dealers',
+q26: 'victory'
+};
+
+function normalize(s){return (s||'').toString().trim().toLowerCase();}
+
+// Submit handler
+document.getElementById('submit-btn').addEventListener('click', function(){
+let score=0;let total=Object.keys(correctAnswers).length;let feedbackHTML='';
+for(const [qid, correct] of Object.entries(correctAnswers)){
+let userAnswer='';
+const elems=document.getElementsByName(qid);
+if(!elems || elems.length===0) continue;
+
+// Handle checkbox questions (multiple answers)
+if (qid === 'q20_21' || qid === 'q22_23') {
+    const checkedBoxes = Array.from(elems).filter(el => el.checked).map(el => el.value);
+    userAnswer = checkedBoxes.sort().join(',');
+    const isCorrect = userAnswer === correct.sort().join(',');
+    if (isCorrect) score++;
+    
+    let displayUser = checkedBoxes.length > 0 ? checkedBoxes.join(', ') : '(no answer)';
+    feedbackHTML += `<div class="feedback-item"><div class="feedback-question">Q${qid.replace('q','').replace('_','-')}</div><div class="feedback-answer ${isCorrect? 'correct':'incorrect'}">Your Answer: ${displayUser}<br/>${isCorrect? '✔ Correct' : `✘ Incorrect (Correct: ${correct.join(', ')})`}</div>`;
+} 
+// Handle single answer questions
+else {
+    const el=elems[0];
+    if(el.tagName==='SELECT') userAnswer=el.value;
+    else userAnswer=el.value;
+    const isCorrect=normalize(userAnswer)===normalize(correct);
+    if(isCorrect) score++;
+    let displayUser = userAnswer || '(no answer)';
+    feedbackHTML += `<div class="feedback-item"><div class="feedback-question">Q${qid.replace('q','')}</div><div class="feedback-answer ${isCorrect? 'correct':'incorrect'}">Your Answer: ${displayUser}<br/>${isCorrect? '✔ Correct' : `✘ Incorrect (Correct: ${correct})`}</div>`;
+}
+
+// Add short explanation
+let explanation='';
+switch(qid){
+case 'q14': explanation = 'Paragraph A introduces Marlon Brando\'s perspective that acting is essentially "lying for a living," highlighting the fine line between artists and liars. He demonstrates through his instructional videos that the ability to convincingly portray fictional scenarios is central to the craft of acting.'; break;
+
+case 'q15': explanation = 'Paragraph B explores the biological and neurological connections between lying and artistic creation. Both activities originate from the same cognitive processes and involve crafting believable narratives, suggesting a shared neurological basis for deception and artistic expression.'; break;
+
+case 'q16': explanation = 'Paragraph C provides examples of confabulation through case studies of patients with brain damage. These individuals invent stories without conscious intent to deceive, demonstrating how the human mind naturally creates narratives to make sense of reality, even when memory fails.'; break;
+
+case 'q17': explanation = 'Paragraph D discusses the creative aspect of lying, showing how verbal creativity flows naturally from the human mind. This creativity manifests in both artistic invention and deception, revealing our innate tendency as storytellers to shape reality through narrative.'; break;
+
+case 'q18': explanation = 'Paragraph E presents the case of Jonathan Aitken as an example of unsuccessful deceit. Despite his theatrical displays of sincerity and charm, his lies were eventually exposed when concrete evidence emerged about his Paris trip, leading to the collapse of his legal case.'; break;
+
+case 'q19': explanation = 'Paragraph F distinguishes between artists and common liars by explaining that artistic "lies" serve a different purpose. While liars deceive for personal benefit, artists create fictional narratives that convey deeper truths about the human condition for everyone\'s benefit.'; break;
+
+case 'q20_21': explanation = 'People suffering from confabulation do not deliberately lie (B) but rather invent stories (E) to fill memory gaps. They typically retain cognitive abilities and are unaware of their condition, driven by a deep need to explain things they don\'t understand.'; break;
+
+case 'q22_23': explanation = 'Playwrights and novelists give more meaning to their stories (A) by conveying insights about human experience, and audiences understand that their works contain fictional elements (E). Unlike common liars, they don\'t deceive for personal gain but create art that resonates with universal truths.'; break;
+
+case 'q24': explanation = 'The passage mentions that a national newspaper made claims about Aitken\'s relationships with Saudi arms dealers, leading to the libel case that exposed his deception.'; break;
+
+case 'q25': explanation = 'Aitken was accused of having inappropriate relationships with Saudi arms dealers, including meetings during his official trip to Paris while serving as a government minister.'; break;
+
+case 'q26': explanation = 'Aitken\'s case relied heavily on his personal charm, fluency, and theatrical displays of sincerity. When evidence contradicted his testimony, this charm was revealed as part of his deceptive strategy.'; break;
+
+default: explanation='';
+}
+if(explanation) feedbackHTML += `<div class="feedback-explanation">${explanation}</div>`;
+feedbackHTML += `</div>`;
+}
+document.getElementById('feedback-body').innerHTML = feedbackHTML;
+document.getElementById('score-display').textContent = `${score}/${total}`;
+document.getElementById('feedback-overlay').style.display = 'flex';
+});
+
+document.getElementById('close-feedback').addEventListener('click', function(){document.getElementById('feedback-overlay').style.display='none'});
+
+
+
+// Modified highlight logic with color picker and remove functionality
+let highlightTooltip = null;
+let selectedRange = null;
+
+function createColorPicker(x, y, applyColorCallback) {
+    const colors = ["lightgreen", "yellow", "lightskyblue"];
+    const picker = document.createElement("div");
+    picker.className = "highlight-tooltip";
+    picker.style.top = `${y}px`;
+    picker.style.left = `${x}px`;
+    picker.style.position = "fixed";
+    picker.style.background = "#333";
+    picker.style.color = "white";
+    picker.style.padding = "5px 10px";
+    picker.style.borderRadius = "4px";
+    picker.style.zIndex = 1000;
+    picker.style.display = "flex";
+    colors.forEach(color => {
+        const btn = document.createElement("button");
+        btn.style.backgroundColor = color;
+        btn.style.border = "none";
+        btn.style.width = "20px";
+        btn.style.height = "20px";
+        btn.style.margin = "0 4px";
+        btn.style.borderRadius = "50%";
+        btn.title = `Highlight with ${color}`;
+        btn.addEventListener("click", () => {
+            applyColorCallback(color);
+            picker.remove();
+        });
+        picker.appendChild(btn);
+    });
+    document.body.appendChild(picker);
+    return picker;
+}
+
+function applyHighlight(color) {
+    if (!selectedRange) return;
+    const span = document.createElement("span");
+    span.className = "highlight";
+    span.style.backgroundColor = color;
+    span.setAttribute("data-color", color);
+    span.appendChild(selectedRange.extractContents());
+    selectedRange.insertNode(span);
+    selectedRange = null;
+    window.getSelection().removeAllRanges();
+
+    span.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (highlightTooltip) highlightTooltip.remove();
+        highlightTooltip = document.createElement("div");
+        highlightTooltip.className = "highlight-tooltip";
+        highlightTooltip.style.top = `${e.clientY}px`;
+        highlightTooltip.style.left = `${e.clientX}px`;
+        highlightTooltip.innerHTML = `<button style="color:white;background:red;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">Remove Highlight</button>`;
+        highlightTooltip.querySelector("button").addEventListener("click", function () {
+            const parent = span.parentNode;
+            while (span.firstChild) {
+                parent.insertBefore(span.firstChild, span);
+            }
+            parent.removeChild(span);
+            parent.normalize();
+            highlightTooltip.remove();
+        });
+        document.body.appendChild(highlightTooltip);
+    });
+}
+
+
+function handleMouseUp(e) {
+    const selection = window.getSelection();
+    if (selection.toString().trim() === '') return;
+    if (!e.currentTarget.contains(selection.anchorNode)) return;
+
+    selectedRange = selection.getRangeAt(0).cloneRange();
+    const rect = selectedRange.getBoundingClientRect();
+
+    if (highlightTooltip) highlightTooltip.remove();
+
+    highlightTooltip = createColorPicker(rect.left, rect.top - 40, applyHighlight);
+}
+
+document.getElementById('passage-text').addEventListener('mouseup', handleMouseUp);
+document.getElementById('questions-container').addEventListener('mouseup', handleMouseUp);
+
+document.addEventListener('mousedown', (e) => {
+    if (highlightTooltip && !highlightTooltip.contains(e.target)) {
+        highlightTooltip.remove();
+        highlightTooltip = null;
+        window.getSelection().removeAllRanges();
+    }
+});
+
+// Reset
+document.getElementById('reset-btn').addEventListener('click', function(){
+    const selects=document.querySelectorAll('select');
+    selects.forEach(s=>s.value='');
+    const texts=document.querySelectorAll('input[type=text]');
+    texts.forEach(t=>t.value='');
+    const checkboxes=document.querySelectorAll('input[type=checkbox]');
+    checkboxes.forEach(c=>c.checked=false);
+    const progressItems=document.querySelectorAll('.progress-item.completed');
+    progressItems.forEach(i=>i.classList.remove('completed'));
+});
+
+// Progress tracker
+function initializeProgressTracker(){
+    const progressContainer=document.getElementById('progress-container');
+    const questions=[
+        {id:'q14',number:14},{id:'q15',number:15},{id:'q16',number:16},{id:'q17',number:17},
+        {id:'q18',number:18},{id:'q19',number:19},{id:'q20_21',number:'20-21'},
+        {id:'q22_23',number:'22-23'},{id:'q24',number:24},{id:'q25',number:25},{id:'q26',number:26}
+    ];
+    questions.forEach(({id,number})=>{
+        const item=document.createElement('div');
+        item.className='progress-item';
+        item.textContent=number;
+        item.dataset.qid=id;
+        item.addEventListener('click',()=>{
+            const el=document.getElementById(id);
+            if(el) el.scrollIntoView({behavior:'smooth'});
+        });
+        progressContainer.appendChild(item);
+    });
+}
+
+function updateProgressStatus(){
+    const progressItems=document.querySelectorAll('.progress-item');
+    progressItems.forEach(item=>{
+        const qid=item.dataset.qid;
+        const questionElem=document.getElementById(qid);
+        if(!questionElem) return;
+        let answered=false;
+        
+        // Handle select questions
+        const select=questionElem.querySelector('select');
+        if(select && select.value!=='') answered=true;
+        
+        // Handle text input questions
+        const textInputs=questionElem.querySelectorAll('input[type=text]');
+        if(!answered && textInputs.length>0){
+            textInputs.forEach(inp=>{
+                if(inp.value.trim()!=='') answered=true;
+            });
+        }
+        
+        // Handle checkbox questions
+        const checkboxes=questionElem.querySelectorAll('input[type=checkbox]');
+        if(!answered && checkboxes.length>0){
+            const checked = Array.from(checkboxes).some(cb => cb.checked);
+            if(checked) answered=true;
+        }
+        
+        if(answered) item.classList.add('completed'); 
+        else item.classList.remove('completed');
+        
+        if(answered) questionElem.classList.add('answered'); 
+        else questionElem.classList.remove('answered');
+    });
+}
+
+document.addEventListener('change', updateProgressStatus);
+document.addEventListener('input', updateProgressStatus);
+document.addEventListener('DOMContentLoaded', ()=>{
+    initializeProgressTracker();
+    updateProgressStatus();
+    setupCheckboxLimits();
+});
+
+// Timer
+let timerInterval;
+let timeRemaining=20*60;
+function updateTimerDisplay(){
+    const minutes=Math.floor(timeRemaining/60).toString().padStart(2,'0');
+    const seconds=(timeRemaining%60).toString().padStart(2,'0');
+    document.getElementById('timer').textContent=`${minutes}:${seconds}`
+}
+document.getElementById('start-timer').addEventListener('click',()=>{
+    if(timerInterval) return;
+    timerInterval=setInterval(()=>{
+        if(timeRemaining>0){
+            timeRemaining--;
+            updateTimerDisplay()
+        }else{
+            clearInterval(timerInterval);
+            timerInterval=null;
+            alert('Time is up!')
+        }
+    } ,1000);
+});
+document.getElementById('pause-timer').addEventListener('click',()=>{
+    clearInterval(timerInterval);
+    timerInterval=null
+});
+document.getElementById('reset-timer').addEventListener('click',()=>{
+    clearInterval(timerInterval);
+    timerInterval=null;
+    timeRemaining=20*60;
+    updateTimerDisplay()
+});
+document.addEventListener('DOMContentLoaded', updateTimerDisplay);
+
+// Limit checkbox selection to 2 for questions 20-21 and 22-23
+function setupCheckboxLimits() {
+    const checkboxGroups = [
+        { name: 'q20_21', limit: 2 },
+        { name: 'q22_23', limit: 2 }
+    ];
+    
+    checkboxGroups.forEach(group => {
+        const checkboxes = document.querySelectorAll(`input[name="${group.name}"]`);
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const checkedCount = document.querySelectorAll(`input[name="${group.name}"]:checked`).length;
+                if (checkedCount > group.limit) {
+                    checkbox.checked = false;
+                    // Optional: Show a warning message
+                    showCheckboxWarning(group.name);
+                }
+                updateProgressStatus();
+            });
+        });
+    });
+}
+
+// Show warning when trying to select more than 2 options
+function showCheckboxWarning(questionName) {
+    // Remove any existing warning
+    const existingWarning = document.querySelector(`.checkbox-warning-${questionName}`);
+    if (existingWarning) {
+        existingWarning.remove();
+    }
+    
+    // Create warning message
+    const warning = document.createElement('div');
+    warning.className = `checkbox-warning checkbox-warning-${questionName}`;
+    warning.style.color = 'red';
+    warning.style.fontSize = '14px';
+    warning.style.marginTop = '5px';
+    warning.style.fontStyle = 'italic';
+    warning.textContent = 'You can only select two options for this question.';
+    
+    // Find the question container and append warning
+    const questionContainer = document.getElementById(questionName);
+    if (questionContainer) {
+        questionContainer.appendChild(warning);
+        
+        // Remove warning after 3 seconds
+        setTimeout(() => {
+            warning.remove();
+        }, 3000);
+    }
+}
+
+// Add CSS for checkbox warnings
+const style = document.createElement('style');
+style.textContent = `
+    .checkbox-warning {
+        animation: fadeInOut 3s ease-in-out;
+    }
+    
+    @keyframes fadeInOut {
+        0% { opacity: 0; }
+        20% { opacity: 1; }
+        80% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+`;
+document.head.appendChild(style);
+
+
+
+</script>
+</body>
+<!-- 
+    This test interface was developed by Shahriyor Jo'rayev
+    Telegram: @realexamielts
+-->
+</html>

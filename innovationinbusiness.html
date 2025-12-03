@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 3 – Innovation in Business</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  h3{margin:8px 0 0}
+  .muted{color:var(--muted)}
+
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+
+  /* Highlights */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1>READING PASSAGE 3 – Innovation in Business</h1>
+      <div class="muted">You should spend about 20 minutes on Questions 27–40.</div>
+
+      <div id="passage">
+        <h2>Reading Passage 3</h2>
+        <h3>Innovation in Business</h3>
+
+        <p><strong>A.</strong> Innovation describes the way that we develop new ideas, products and approaches, and it is one of the most vital human endeavours. Over the history of humanity, innovation has made life better in so many different ways. It is part of human nature to recognise the benefits of innovation; however, the majority of us have little comprehension of the processes that actually lead to innovation occurring. It is a frequent topic for discussion in journals and university lecture theatres. However, in company boardrooms across New Zealand, the term is heard far too frequently and more caution should be applied. Certainly, a recent international survey showed that the idea of innovation is so broad as to appear almost meaningless, with different sectors of the business world – or different divisions inside the same business – often defining innovation in their own way.</p>
+
+        <p><strong>B.</strong> While there is an obvious attraction to the new, innovation is not always about large scale research and development projects or revolutionary business models; it can be on a small, highly localised scale and involve a step-by-step approach. The famous case study of the drinks company Lucozade shows it can be as simple as adding a screw top to a bottle. This carefully managed change in packaging shifted the public perception of the product from a medicine to a sports drink and Lucozade profited handsomely, clearly showing their approach was successful. So what steps can businesses take to keep ahead in the innovation game?</p>
+
+        <p><strong>C.</strong> There seems to be a widespread belief that the world's best ideas are sudden and intuitive. Thomas Edison supposedly invented the light bulb with a sudden moment of clarity, but in fact the book <em>Edison: His Life and Inventions</em> shows that Edison's own inspiration usually resulted from laborious experimentation, rather than a moment of genius. Thus, business managers are at risk of overestimating the pace of development while underestimating the amount of perseverance needed. This is why we must reject the false assumption that innovation is just a moment of brilliance waiting to strike.</p>
+
+        <p><strong>D.</strong> No exploration of innovation is complete without mention of Steve Jobs, the late chief executive officer (CEO) of Apple. No-one encapsulated the creative essence of Silicon Valley, the home of many global tech companies, better than Jobs, but he has also been accused of arrogance. Jobs' managerial approach often irritated his co-workers but, in part, it was the fuel for his visionary innovations. He felt it his duty to make society a better place, but his egotistical behaviour could have undesirable consequences, too. Jobs' former employees have suggested this type of demanding behaviour affects sickness rates and group morale, which in turn may squash creativity and innovation.</p>
+
+        <p><strong>E.</strong> In his 2011 TED (Technology, Entertainment, Design) Talk, economist Tim Harford made this statement: ‘Show me a successful complex system, and I will show you a system that has evolved through trial and error.’ It sounds like common sense, and some commentators have claimed Harford's TED Talk was not persuasive, because it was stating the obvious. But he responds that a trial and error approach is not all that obvious, because society expects all problems to have a quick and simple solution. Harford is right to point out that both consumers and investors expect consistent and clear breakthroughs. But the value of step-by-step innovation is often underrated and failure may in fact be crucial to eventual success.</p>
+
+        <p><strong>F.</strong> Former chief solutions officer at Yahoo, Tim Sanders, believes that innovation is only ‘little ideas that combine with other little ideas that improve themselves into game-changing ideas’. This snowballing effect has similarities to the phenomenon that author and broadcaster Steven Johnson calls the ‘hummingbird effect’ of innovation. This points out that progress in a specific area or discipline can end up triggering small but significant developments elsewhere entirely. A good case to cite in support of this universal truth would be Gutenberg's printing press, which was revolutionary in itself for making books accessible to the masses. However, the press also affected an unrelated industry by causing a rise in demand for reading glasses.</p>
+
+        <p><strong>G.</strong> This highlights the wider idea of connectivity, which is an essential component of innovation. When Kode Biotech won a recent innovation award, CEO Steve Henry had this to say: ‘Most people think innovation is invention, but they don't understand that innovation is the conversion of invention into something useful.’ This is particularly true when it comes to Kode's highly specialised use of nano-technology. Henry says that Kode cannot chase all the opportunities it has created. Instead, Kode's approach is to collaborate with similar nano-technology businesses, which take its innovations and develop them into commodities that can be sold in the marketplace.</p>
+
+        <p><strong>H.</strong> Innovation can be hectic and disorganized, but that is the way that radical new ideas sometimes come about. But, for established businesses, the disorderly nature of innovation can seem daunting. Previously Unavailable, a specialist innovation consultancy, says that while 84% of businesses consider innovation critical to their future, only 6% are satisfied with their innovation efforts. Previously Unavailable uses a process called Black Box, which was developed following a study at Harvard Business School. Black Box was formed to overcome the barriers that prevent innovation in larger organisations. Using this unique system, Previously Unavailable will lease a team of innovation experts on a short-term basis to client organisations to assist with conceiving, developing and launching new products and business innovation. It seems probable that this sort of innovation consultancy will become increasingly common, just as businesses already employ specialist consultants for legal, financial or marketing services.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+
+<script>
+/* =======================
+   CONFIG (answers included)
+   ======================= */
+const CONFIG = {
+  durationMinutes: 20,
+  showFooterNavigator: true,
+  sections: [
+    /* 27–30 YES/NO/NOT GIVEN (writer's claims) */
+    {
+      type: "tfn3",
+      heading: "Questions 27–30",
+      instructions: [
+        "Do the following statements agree with the claims of the writer in Reading Passage 3?",
+        "Choose YES / NO / NOT GIVEN."
+      ],
+      items: [
+        { id: 27, text: "Most people naturally understand how innovation happens.", correct: "NO" },
+        { id: 28, text: "The word 'innovation' is overused in boardrooms in New Zealand.", correct: "YES" },
+        { id: 29, text: "A global survey found many different definitions of innovation in business.", correct: "YES" },
+        { id: 30, text: "Research and development projects have a higher priority today than in the past.", correct: "NOT GIVEN" }
+      ]
+    },
+
+    /* 31–35 MCQ A–D */
+    {
+      type: "mcq",
+      heading: "Questions 31–35",
+      instructions: ["Choose the correct letter, A, B, C or D."],
+      items: [
+        { id: 31, text: "What is the writer doing in the third paragraph?", options:{
+          A:"criticising the conclusions of one publication",
+          B:"praising the contribution of a famous inventor",
+          C:"dismissing one common idea about innovation",
+          D:"suggesting that innovation changes over time"
+        }, correct: "C" },
+        { id: 32, text: "What is the writer's main point in the fourth paragraph?", options:{
+          A:"Each industry will innovate in its own way.",
+          B:"There are pros and cons to strong leaders.",
+          C:"Some individuals are more innovative than others.",
+          D:"Leadership requires building teams that work together."
+        }, correct: "B" },
+        { id: 33, text: "The writer refers to Gutenberg's printing press in order to", options:{
+          A:"compare how two different innovations developed.",
+          B:"illustrate an exception to his point about innovation.",
+          C:"show why one approach to innovation was controversial.",
+          D:"give an example of a general rule about innovation."
+        }, correct: "D" },
+        { id: 34, text: "What is the writer's main point in the seventh paragraph?", options:{
+          A:"companies should cooperate to turn ideas into products.",
+          B:"a company tends to make profits from its own innovations.",
+          C:"science and business can often have common goals.",
+          D:"competition between businesses produces innovation."
+        }, correct: "A" },
+        { id: 35, text: "Which of the following statements does the writer NOT support?", options:{
+          A:"It is important to challenge conventional thinking.",
+          B:"Innovation requires more than just good ideas.",
+          C:"Some companies are better at innovating than others.",
+          D:"The ability to innovate is essential for business success."
+        }, correct: "A" }
+      ]
+    },
+
+    /* 36–40 sentence endings A–G */
+    {
+      type: "endings",
+      heading: "Questions 36–40",
+      instructions: ["Complete each sentence with the correct ending, A–G, below."],
+      legend: {
+        A:"innovators do not get enough credit for their own ideas.",
+        B:"innovation may influence a completely different field.",
+        C:"expressing what everyone already knows is pointless.",
+        D:"innovation can be enhanced through collaboration with similar companies.",
+        E:"innovation requires a great deal of hard work.",
+        F:"copying ideas that already exist is not true innovation.",
+        G:"certain personality types can limit innovation."
+      },
+      items: [
+        { id: 36, prompt: "A book about the life and work of Thomas Edison suggests that", correct: "E" },
+        { id: 37, prompt: "People who have worked for CEOs like Steve Jobs claim that", correct: "G" },
+        { id: 38, prompt: "Critics of Tim Harford's 2011 TED Talk say that", correct: "C" },
+        { id: 39, prompt: "Steven Johnson's 'hummingbird effect' proposes that", correct: "B" },
+        { id: 40, prompt: "Kode Biotech CEO Steve Henry believes that", correct: "D" }
+      ]
+    }
+  ]
+};
+
+/* =======================
+   RENDER (same template)
+   ======================= */
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+const typesMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+/* YES/NO/NOT GIVEN */
+function renderTFN3(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const opts=['YES','NO','NOT GIVEN'].map(v=>`<label><input type="radio" name="q${it.id}" value="${v}"> ${v}</label>`).join('');
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${opts}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct; typesMap[it.id]='tfn3';
+  });
+}
+
+/* MCQ A–D */
+function renderMCQ(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const opts=Object.entries(it.options).map(([k,v])=>`<label><input type="radio" name="q${it.id}" value="${k}"> ${k}. ${v}</label>`).join('');
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${opts}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct; typesMap[it.id]='mcq';
+  });
+}
+
+/* Sentence endings A–G */
+function renderEndings(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+
+  const legend=document.createElement('div'); legend.className='qblock';
+  legend.innerHTML = `<div class="qhead"><strong>Endings</strong></div>
+    <div class="options">${Object.entries(sec.legend).map(([k,v])=>`<div><b>${k}</b> — ${v}</div>`).join('')}</div>`;
+  qroot.appendChild(legend);
+
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const sel=`<select id="q${it.id}" name="q${it.id}">
+      <option value="">—</option>${Object.keys(sec.legend).map(k=>`<option value="${k}">${k}</option>`).join('')}
+    </select>`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.prompt}</div><div class="options">${sel}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct; typesMap[it.id]='end';
+  });
+}
+
+/* Build UI */
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='tfn3') renderTFN3(sec);
+  if (sec.type==='mcq')  renderMCQ(sec);
+  if (sec.type==='endings') renderEndings(sec);
+});
+
+/* Footer chips */
+const footerNav=document.getElementById('footerNav');
+footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+[...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+  const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+  chip.addEventListener('click',()=>{ document.getElementById(`anchor-${id}`).scrollIntoView({behavior:'smooth',block:'center'}); });
+  footerNav.appendChild(chip);
+});
+function markChipAnswered(id, answered){
+  const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered);
+}
+document.addEventListener('change',(e)=>{
+  const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  const id=m?+m[1]:null; if(!id) return;
+  const answered=(e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                 : (e.target.value.trim().length>0);
+  markChipAnswered(id, answered);
+});
+
+/* Timer */
+let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60;
+const timer=document.getElementById('timer');
+const pauseBtn=document.getElementById('pauseBtn');
+const resumeBtn=document.getElementById('resumeBtn');
+let paused=false, iv;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){ if(iv) clearInterval(iv);
+  iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft); if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent=fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+function norm(s){ return (s||'').trim().replace(/\s+/g,' ').toUpperCase(); }
+function submit(){
+  paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const itemsOut=[];
+  const ids=Object.keys(answersMap).map(Number).sort((a,b)=>a-b);
+
+  ids.forEach(key=>{
+    total++;
+    const type=typesMap[key];
+    let user='', ok=false;
+
+    if(type==='tfn3' || type==='mcq'){
+      const picked=document.querySelector(`input[name="q${key}"]:checked`);
+      user = picked? picked.value : '';
+      ok = norm(user)===norm(answersMap[key]);
+    } else if(type==='end'){
+      const sel=document.getElementById('q'+key);
+      user = sel? sel.value : '';
+      ok = norm(user)===norm(answersMap[key]);
+    }
+
+    if(user) graded++;
+    if(ok) correctCount++;
+    itemsOut.push({label:key, status: ok? '✓ Correct':'✗ Incorrect', user: user||'No answer', correct: String(answersMap[key])});
+  });
+
+  document.getElementById('score').innerHTML = `Graded ${graded} of ${total} • Score: ${correctCount}/${graded||total}`;
+  document.getElementById('answers').innerHTML = itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlights */
+const passageCard=document.getElementById('passageCard');
+const pPalette=document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Questions highlight */
+const qCard=document.querySelector('.card.questions');
+const qPalette=document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1 ? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if (node.closest && node.closest('input,textarea,select')) return;
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; });
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* Helper */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container=range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+</script>
+</body>
+</html>

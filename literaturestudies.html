@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 3 – Children’s literature studies today</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  .muted{color:var(--muted)}
+
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:420px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+      <div id="passage">
+        <h2>Reading Passage 3</h2>
+        <p><em>Children’s literature studies today</em></p>
+        <p>Who studies children's literature and what is it that they study? The answers to this question are complex and messy, because of the many confounding factors which exist in this field.</p>
+        <p>Firstly, unlike literature for adults, children's literature is not generally written by its own readers. Adults write for children, and thus adult perceptions of what children are and of what they could and should be become woven into the literature.</p>
+        <p>Furthermore, some of those who study children's literature (and those who write certain kinds of children's books) are less interested in literary values than in the kinds of lessons it can teach — either in terms of creating better children or in terms of serving a particular curriculum. The issue of how a teacher can use a children's book is often contentious, but even outside the classroom, much material for children is still didactic.</p>
+        <p>Thirdly, while almost all literature is currently promoted within a strong commercial matrix, children's literature is often especially targeted for marketing initiatives. This fact means that readers are often recruited with a message that is negligibly literary and significantly oriented to ideas of consumption. Daniel Hade (2002) has raised useful questions about whether children's experience of reading is altered when their books are part of a larger marketing framework involving the movie, the game, and the toy of a popular children's book. How children perceive and respond to their stories in this new context is an important question.</p>
+        <p>It is also important to note that texts in an ever‑increasing range of new media compete with print media for the attention of the child reader, and create definitional issues for scholars. Does the term ‘literature’ exclusively imply a verbal text? If not, where are the limits? Could a literary computer game ever be considered a work of literature? If not, what kind of attention should be paid to it, since children themselves undoubtedly perceive their print literature as part of a broader continuum? The internet provides one forum through which children now communicate with each other. (In 2003, the internet search engine Google listed 7,920,000 sites relating to the Harry Potter novels; even allowing for duplication and dead ends, that is a number with revolutionary implications.)</p>
+        <p>Finally, in the context of the higher education institutions where the formal study of children's literature is often located, at least three disciplinary frameworks (English, education, and librarianship) fragment the focus of scholarly study of children's literature.</p>
+        <p>How is the value of the imaginative encounter with the work of literature sustained and honored among such a welter of conflicting interests? One route through this maze is to ask the child readers for help. As David Lewis (2001) has perceptively noted, what children think of reading is not usually the same as what adults think, whether teachers or parents. As Lewis points out children ‘sometimes see more and they often see differently’. If those who study reading can explore children's perceptions as well as those of adults, their understanding of the nature of reading will be enhanced.</p>
+        <p>Lewis makes a further valid point when he adds that exploring children's perceptions is usually justified for educational reasons: ‘It is true that a better understanding of how children read and how they learn to read, is a prerequisite to improved approaches to teaching.’ However, it can also be argued, as Lewis rightly does, that when children's responses to literature are accessed and interpreted, they frequently lead to an understanding of how picture books appeal to children.</p>
+        <p>Young people's accounts of what and how they read also enable a more sophisticated description of many of the complex processes involved in reading. All descriptions of reading run the risk of solipsism: i.e. this is how I read so this is what reading is for everyone. Asking other readers how they read, however, reduces that risk. For example, if I am a strong visualiser as I read, I may consider that visualisation is a key component of successful reading and I may judge books by their capacity to evoke a vivid visual response. Other readers, however, may help me to realise that not everyone reads with mental pictures. Some readers respond to the patterns of the words, ‘hearing’ them inaudibly like a subliminal radio program. Others respond to the patterns of feelings in the story, responding with an emotional connection. Talking to competent readers, of all ages, provides a better understanding of reading experiences.</p>
+        <p>Children's insights are even more important when it comes to understanding the significance of print literature as one aspect of literary culture. Too often adults assume that reading any book at all is a more worthwhile experience than playing a digital game of any kind. A humbler approach would include asking why the game appeals to the player. Many adults will probably never develop the automatic skills to process a game as readily as they can read a book. This does not indicate that a book is better, but that a particular set of skills is absent. Non‑players must acknowledge that some fictional universes are thus closed to them, and a logical response would be to find someone who can guide them to the pleasures and challenges of the gaming world. Games need to be judged individually just as books do, and any evaluative framework needs to take this into account.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">📢 Join my Telegram</button>
+
+<script>
+const CONFIG = {
+  title: "READING PASSAGE 3 – Children’s literature studies today",
+  subtitle: "Spend about 20 minutes on Questions 27–40.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  showFooterNavigator: true,
+
+  sections: [
+    // 27–29 MCQ A–D
+    {
+      type: "mcq",
+      heading: "Questions 27–29",
+      instructions: ["Choose the correct letter A–D."],
+      items: [
+        { id: 27, prompt: "Which of the following best summarises the writer's argument in the second paragraph?", correct: "A", options: {A:"Children are portrayed as adults see them.", B:"Children are unable to write their own stories.", C:"Adults fail to stimulate children's imaginations.", D:"Adult literature is too difficult for children."} },
+        { id: 28, prompt: "In the third paragraph, what is the main interest of some people who study children's literature?", correct: "C", options: {A:"the quality of the writing", B:"the imaginative content of stories", C:"the instructive nature of children's books", D:"the way children are written about in stories"} },
+        { id: 29, prompt: "The main point of the writer's argument in the fifth paragraph is to…", correct: "B", options: {A:"demonstrate that academics consider computer games a logical extension of children's literature.", B:"explore the impact of computers on the boundaries of children's literature.", C:"illustrate that literature and computer games have different origins.", D:"prove that children are using computers more than they are reading literature."} }
+      ]
+    },
+    // 30–34 YES/NO/NOT GIVEN
+    {
+      type: "yn",
+      heading: "Questions 30–34",
+      instructions: ["Do the following statements agree with the views of the writer?", "Write YES / NO / NOT GIVEN."],
+      items: [
+        { id: 30, text: "Children tend to make a clear distinction between print literature and electronic media.", correct: "NOT GIVEN" },
+        { id: 31, text: "The study of children's literature at higher education institutions is restricted to one subject area.", correct: "NO" },
+        { id: 32, text: "Exploring children's perceptions of reading will assist parents to choose suitable books for children.", correct: "NOT GIVEN" },
+        { id: 33, text: "Adults may appreciate the appeal of illustrated stories better, if they have more information on how children read.", correct: "YES" },
+        { id: 34, text: "Children should be asked what features they would like digital games to include.", correct: "NOT GIVEN" }
+      ]
+    },
+    // 35–39 sentence endings match A–H
+    {
+      type: "match",
+      heading: "Questions 35–39",
+      instructions: ["Complete each sentence with the correct ending A–H."],
+      options: [
+        { key: "A", text: "accepting that literature exists in a variety of forms today" },
+        { key: "B", text: "verbalising the words in their heads" },
+        { key: "C", text: "discovering the reading techniques used by others" },
+        { key: "D", text: "the style of written stories changing over time" },
+        { key: "E", text: "the lack of some specific abilities" },
+        { key: "F", text: "a deeper knowledge of the intricacies of reading" },
+        { key: "G", text: "children teaching adults to play computer games" },
+        { key: "H", text: "creating a variety of images in their minds" }
+      ],
+      items: [
+        { id: 35, prompt: "Young people's accounts of how they read lead to", correct: "F" },
+        { id: 36, prompt: "The risk of solipsism is reduced by", correct: "C" },
+        { id: 37, prompt: "Strong visualisers judge books on the basis that they are", correct: "H" },
+        { id: 38, prompt: "Children's insights are important in", correct: "A" },
+        { id: 39, prompt: "When adults read a book more easily than they play a digital game it simply suggests", correct: "E" }
+      ]
+    },
+    // 40 final MCQ
+    {
+      type: "mcq",
+      heading: "Question 40",
+      instructions: ["Choose the correct letter A–D."],
+      items: [
+        { id: 40, prompt: "What was the writer's main purpose in writing this article?", correct: "C", options: {A:"to evaluate how the process of reading fits into children's literature studies", B:"to discuss the impact of increasing commercial influence on children's literature studies", C:"to review the challenges in the field of children's literature studies and suggest how to proceed", D:"to provide arguments in favour of including computerized forms in children's literature studies"} }
+      ]
+    }
+  ]
+};
+
+// RENDER
+ document.getElementById('title').textContent = CONFIG.title;
+ document.getElementById('subtitle').textContent = CONFIG.subtitle || '';
+ const qroot = document.getElementById('qroot');
+ const navIds = []; const answersMap = {};
+ function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+ function renderYN(sec){
+   qroot.appendChild(sectionHeader(sec.heading));
+   (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+   sec.items.forEach(it=>{
+     const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+     b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div>`;
+     const sel=document.createElement('select'); sel.name=`q${it.id}`; sel.id=`q${it.id}`;
+     sel.innerHTML=`<option value="">—</option>`+['YES','NO','NOT GIVEN'].map(v=>`<option value="${v}">${v}</option>`).join('');
+     const o=document.createElement('div'); o.className='options'; o.appendChild(sel);
+     b.appendChild(o); qroot.appendChild(b);
+     navIds.push(it.id); answersMap[it.id]=it.correct??'';
+   });
+ }
+ function renderLocate(sec){
+   qroot.appendChild(sectionHeader(sec.heading));
+   (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+   const letters=['A','B','C','D','E','F','G'];
+   sec.items.forEach(it=>{
+     const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+     const head=document.createElement('div'); head.className='qhead'; head.innerHTML=`<strong>${it.id}.</strong> ${it.prompt}`;
+     const o=document.createElement('div'); o.className='options';
+     o.innerHTML=letters.map(k=>`<label><input type="radio" name="q${it.id}" value="${k}"> ${k}</label>`).join('');
+     b.appendChild(head); b.appendChild(o); qroot.appendChild(b);
+     navIds.push(it.id); answersMap[it.id]=it.correct??'';
+   });
+ }
+ function renderMCQ(sec){
+   qroot.appendChild(sectionHeader(sec.heading));
+   (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+   sec.items.forEach(it=>{
+     const letters=Object.keys(it.options);
+     const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+     const head=document.createElement('div'); head.className='qhead'; head.innerHTML=`<strong>${it.id}.</strong> ${it.prompt}`;
+     const o=document.createElement('div'); o.className='options';
+     o.innerHTML=letters.map(k=>`<label><input type="radio" name="q${it.id}" value="${k}"> ${k}. ${it.options[k]}</label>`).join('');
+     b.appendChild(head); b.appendChild(o); qroot.appendChild(b);
+     navIds.push(it.id); answersMap[it.id]=it.correct??'';
+   });
+ }
+ function renderMatch(sec){
+   qroot.appendChild(sectionHeader(sec.heading));
+   (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+   const list=document.createElement('div'); list.className='qblock';
+   list.innerHTML=`<div class="qhead"><strong>Options A–H</strong></div>`+
+     '<div class="options">'+sec.options.map(o=>`<div><strong>${o.key}.</strong> ${o.text}</div>`).join('')+'</div>';
+   qroot.appendChild(list);
+   const letters=sec.options.map(o=>o.key);
+   sec.items.forEach(it=>{
+     const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+     const head=document.createElement('div'); head.className='qhead'; head.innerHTML=`<strong>${it.id}.</strong> ${it.prompt}`;
+     const o=document.createElement('div'); o.className='options';
+     o.innerHTML=letters.map(k=>`<label><input type="radio" name="q${it.id}" value="${k}"> ${k}</label>`).join('');
+     b.appendChild(head); b.appendChild(o); qroot.appendChild(b);
+     navIds.push(it.id); answersMap[it.id]=it.correct??'';
+   });
+ }
+
+ CONFIG.sections.forEach(sec=>{
+   if(sec.type==='yn') renderYN(sec);
+   if(sec.type==='locate') renderLocate(sec);
+   if(sec.type==='mcq') renderMCQ(sec);
+   if(sec.type==='match') renderMatch(sec);
+ });
+
+ const footerNav=document.getElementById('footerNav');
+ (function buildFooter(){
+   if(!CONFIG.showFooterNavigator){ footerNav.style.display='none'; return; }
+   footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+   [...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+     const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+     chip.addEventListener('click',()=>{ document.getElementById(`anchor-${id}`).scrollIntoView({behavior:'smooth',block:'center'}); });
+     footerNav.appendChild(chip);
+   });
+ })();
+ function markChipAnswered(id, answered){ const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered); }
+ document.addEventListener('change',(e)=>{
+   const m=String(e.target.name||e.target.id||'').match(/q(\d+)/); const id=m?+m[1]:null; if(!id) return;
+   const answered=(e.target.type==='radio')?(!!document.querySelector(`input[name='q${id}']:checked`)):(e.target.value.trim().length>0);
+   markChipAnswered(id, answered);
+ });
+
+ // TIMER
+ let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60; const timer=document.getElementById('timer'); const pauseBtn=document.getElementById('pauseBtn'); const resumeBtn=document.getElementById('resumeBtn'); let paused=false; let iv; const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; function startTick(){ if(iv) clearInterval(iv); iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft); if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);} timer.textContent=fmt(timeLeft); startTick(); pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; }); resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+ // SUBMIT
+ document.getElementById('submitBtn').addEventListener('click', submit);
+ function submit(){
+   paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+   let total=0, graded=0, correctCount=0; const itemsOut=[]; const ids=Object.keys(answersMap);
+   ids.forEach(key=>{
+     const ans=answersMap[key]; const label=key; let user='';
+     if(document.getElementById('q'+key)){ user=document.getElementById('q'+key).value; }
+     else { const picked=document.querySelector(`input[name="q${key}"]:checked`); user=picked?picked.value:''; }
+     const userShown=user||'No answer';
+     if((Array.isArray(ans)&&ans.length===0)||(!Array.isArray(ans)&&String(ans).trim()==='')){ total++; itemsOut.push({label,status:'— not graded —',user:userShown,correct:'(no key)'}); return; }
+     total++; graded++; let ok=false; const correctText=Array.isArray(ans)?ans.join(', '):ans; ok=userShown.trim().toUpperCase()===String(ans).trim().toUpperCase(); if(ok) correctCount++; itemsOut.push({label,status: ok?'✓ Correct':'✗ Incorrect',user:userShown,correct:correctText});
+   });
+   document.getElementById('score').innerHTML=`Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;
+   document.getElementById('answers').innerHTML=itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+   const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+ }
+
+ // Highlight helpers
+ const passageCard=document.getElementById('passageCard'); const pPalette=document.getElementById('pPalette'); passageCard.addEventListener('mouseup',(e)=>{ const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return; if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return; const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40); pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block'; }); document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; }); pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{ btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; }); }); document.getElementById('clearPMarks').addEventListener('click',()=>{ passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); }); pPalette.style.display='none'; });
+ const qCard=document.querySelector('.card.questions'); const qPalette=document.getElementById('qPalette'); qCard.addEventListener('mouseup',(e)=>{ const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return; if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return; const node=sel.getRangeAt(0).commonAncestorContainer.nodeType===1? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode; if(node.closest&&node.closest('input,textarea,select')) return; const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40); qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block'; }); document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; }); qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{ btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; }); }); document.getElementById('clearQMarks').addEventListener('click',()=>{ qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); }); qPalette.style.display='none'; });
+ function markSelection(color, scope){ const sel=window.getSelection(); if(!sel||!sel.rangeCount) return; const range=sel.getRangeAt(0); if(!scope.contains(range.commonAncestorContainer)) return; const container=range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode; if(container.closest&&container.closest('input, textarea, select')) return; const frag=range.extractContents(); const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag); range.insertNode(span); sel.removeAllRanges(); }
+
+ document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

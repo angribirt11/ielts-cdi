@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reading Passage 3 – Evolutionary Psychology</title>
+<style>
+  :root{--brand:#2563eb;--ink:#111827;--bg:#f7f7fb;--ok:#16a34a;--bad:#dc2626;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#111}
+  .container{display:flex;gap:20px;max-width:1200px;margin:0 auto;padding:20px 20px 96px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;overflow:auto;max-height:90vh}
+  .passage{flex:1}
+  .questions{flex:1}
+  h1{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:10px;margin:0 0 14px}
+  h2{color:var(--brand);margin:22px 0 10px}
+  h3{margin:8px 0 0}
+  .muted{color:var(--muted)}
+
+  /* Timer */
+  .timerWrap{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:10}
+  .timer{background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;font-weight:700}
+  .tbtn{border:1px solid #e5e7eb;background:#fff;color:#111;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* Questions */
+  .qsection{margin:14px 0 6px}
+  .qblock{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin:12px 0}
+  .qhead{font-weight:600;margin-bottom:8px}
+  .options{margin-top:8px}
+  .options label{display:block;margin:6px 0}
+  select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e5e7eb;width:100%;max-width:520px}
+  .submit{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:16px}
+  .submit:hover{filter:brightness(.95)}
+
+  /* Results */
+  .results{display:none;margin-top:18px;background:#f8f9fa;border-radius:10px;padding:16px}
+  .results ul{list-style:none;padding:0;margin:8px 0 0}
+  .results li{margin:6px 0;padding:8px;border-radius:8px}
+  .results li.ok{background:#ecfdf5;color:#065f46}
+  .results li.bad{background:#fef2f2;color:#991b1b}
+  .results .meta{font-size:13px;color:var(--muted)}
+
+  /* Footer chips */
+  .footerNav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:9}
+  .chip{border:1px solid #d1d5db;background:#fff;color:#111;padding:6px 10px;border-radius:999px;cursor:pointer;font-size:14px}
+  .chip.answered{border-color:#9ca3af;background:#f3f4f6}
+
+  /* Highlights */
+  .palette{position:fixed;background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);display:none;z-index:9}
+  .hbtn{background:var(--brand);color:#fff;border:0;padding:6px 10px;border-radius:6px;margin:4px 4px 0 0;cursor:pointer}
+  .highlight{background:yellow}
+
+  .tg{position:fixed;bottom:96px;right:16px;background:#0088cc;color:#fff;border:0;padding:12px 16px;border-radius:9999px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px rgba(0,136,204,.35)}
+</style>
+</head>
+<body>
+  <div class="timerWrap">
+    <div class="timer" id="timer">20:00</div>
+    <button class="tbtn" id="pauseBtn">⏸️ Pause</button>
+    <button class="tbtn" id="resumeBtn" disabled>▶️ Resume</button>
+  </div>
+
+  <!-- Highlight palettes -->
+  <div class="palette" id="pPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearPMarks">Clear</button>
+  </div>
+  <div class="palette" id="qPalette">
+    <button class="hbtn" data-color="yellow">Yellow</button>
+    <button class="hbtn" data-color="lightgreen">Green</button>
+    <button class="hbtn" data-color="lightblue">Blue</button>
+    <button class="hbtn" data-color="pink">Pink</button>
+    <button class="hbtn" data-color="orange">Orange</button>
+    <button class="hbtn" id="clearQMarks">Clear</button>
+  </div>
+
+  <div class="container">
+    <div class="card passage" id="passageCard">
+      <h1 id="title"></h1>
+      <div id="subtitle" class="muted"></div>
+
+      <div id="passage">
+        <h2>Reading Passage 3</h2>
+        <h3>Evolutionary Psychology</h3>
+
+        <p>Charles Darwin, the brilliant anthropologist and creator of the theory of evolution, is not normally associated with the modern business world. Nevertheless, Darwinian evolutionary theory is the foundation of a new wave of ideas about human behavior in general and particularly the way people behave in the workplace; these ideas have given the title of 'evolutionary psychology'. Evolutionary psychology revolves around the notion that our brains, like our bodies, have an inherited evolutionary design that has scarcely changed for 10,000 years. As respected evolutionary psychology experts <strong>Leda Cosmides</strong> and <strong>John Tooby</strong> comment, our modern skulls house a Stone Age mind. The US biologist <strong>Edward O Wilson</strong> sees evolutionary psychology as being a discipline which is based on both socio-biology, which is the study of the biological basis of social behavior, and psychology, which is the systematic study of human behavior.</p>
+
+        <p><strong>Nigel Nicholson</strong>, an organisational psychologist from the London Business School, is a strong supporter of evolutionary psychology and on this subject has published Managing the Human Animal. His book takes the reader on a journey from the Stone Age plains of the savannah to the modern office, and includes a discussion of Darwinism and behavioural psychology together with a dissection of dysfunctional organisational behavior. It is an effective approach explaining why people behave as they do, particularly at work. Evolutionary psychology is increasingly being cited in management circles, where managers are trying to understand puzzling aspects of human behaviour and by doing so improve the workplace. Nicholson believes that evolutionary psychology can help managers understand what goes wrong in organisational life and what they can do about it.</p>
+
+        <p>Nicholson maintains that evolutionary psychology dismisses the long-held assumption that our minds are like blank pages just waiting for culture and experience to write on them and shape our nature. He points out that sophisticated research shows the brain actually houses a store of knowledge when we are born, and now genetic research is establishing there are certain genes that account for abilities, tastes and tendencies. The stored knowledge in the human brain has not changed much since the Stone Age. As Tooby and Cosmides stress, there have not been enough generations for a brain that is well adapted to our post-industrial life to evolve through natural selection.</p>
+
+        <p>The evolutionary psychology version of human nature revolves around some key elements which we have inherited from our hunter-gatherer minds. One key element is emotion. Emotion was originally essential to keep early man alive and safe from predators. Emotion was, and continues to be our radar, guiding us throughout today's techno-defined business world. Despite this, the business world emphasises rational not emotional behaviour, and does not admit the importance of emotion. We still use the emotional part of our minds to make sense other people's behaviour and to create an impression, so we can often be taken in by appearances. This mental predisposition actually works best in small communities (the tribe), not in much larger environments filled with people we barely know (the modern workplace). Our minds naturally try to re-create our ancestral communities with networks of no more than 150 people, where there are clear hierarchies and leaders. As a consequence, it takes very little to trigger people's innate distrust of others because our safety in antiquity depended on supporting our near family and friends whom we valued more than other people.</p>
+
+        <p>So what advice does Nicholson have for the corporate world? He thinks that by knowing the reasons for people's behaviour it is possible to mould corporate environments into places that have more chance of working efficiently and being pleasant places to work in. Nicholson admits that not everybody in the business word agrees with his belief in the effectiveness of evolutionary psychology in the workplace. One group that resist the theory of evolutionary psychology is young MBA graduates who are just beginning their careers and feel that evolutionary psychology will make their lives at work more difficult. Older and wiser executives points out that they still tend to cling to the idea of a magic formula to bring people into line with corporate strategy. But that is back-to-front thinking according to Nicholson, who contends that we should be reinventing our business structures, not our fundamental human nature.</p>
+
+        <p>At the end of his book, Nicholson gives his forecast of what will and will not change in the business world. He believes that most people will still prefer more traditional forms of work and throughout their lives will continue to aim at lifelong status advancement. He also maintains that the line between work and home will be less defined, but that people will prefer traditional working patterns if working from home leaves them isolated from their work community. He doubts that the high-tech ideas of virtual companies will ever be very successful because people will still want to meet each other face-to-face. Nicholson describes his ideal organisation in the future: it would be decentralized, with small sub-units: the staff would be from diverse backgrounds and be allowed a high degree of self-determination. New endeavours and creativity would replace systems and rationality. Nicholson acknowledges that there is a long way to go in terms of the translation of his ideas of evolutionary psychology into practical propositions, but he is confident more and more people will come round to his way of thinking.</p>
+      </div>
+    </div>
+
+    <div class="card questions">
+      <h1>Questions</h1>
+      <div id="qroot"></div>
+      <button class="submit" id="submitBtn">Submit Answers</button>
+      <div class="results" id="results">
+        <h2>Your Results</h2>
+        <div id="score" class="meta"></div>
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerNav" id="footerNav"></div>
+  <button class="tg" id="tgBtn">📢 Join my Telegram</button>
+
+<script>
+/* =======================
+   CONFIG
+   ======================= */
+const CONFIG = {
+  title: "READING PASSAGE 3 – Evolutionary Psychology",
+  subtitle: "You should spend about 20 minutes on Questions 27–40.",
+  durationMinutes: 20,
+  telegramLink: "https://t.me/yourchannel",
+  showFooterNavigator: true,
+
+  sections: [
+    /* 27–31 MCQ */
+    {
+      type: "mcq",
+      heading: "Questions 27–31",
+      instructions: ["Choose the correct letter A, B, C or D.", "Write the correct letter in boxes 27–31 on your answer sheet."],
+      items: [
+        { 
+          id: 27, 
+          text: "The writer's purpose in the first paragraph is to", 
+          options: {
+            A: "oppose the views of Charles Darwin.",
+            B: "compare experts' opinions of Darwin's theory.",
+            C: "explain the theory of evolutionary psychology.",
+            D: "name experts in the field of evolutionary psychology."
+          }, 
+          correct: "C" 
+        },
+        { 
+          id: 28, 
+          text: "In the third paragraph which view about evolutionary psychology matches Nicholson's opinion?", 
+          options: {
+            A: "Our characters determine our career choices.",
+            B: "We begin life without any preconceived notions.",
+            C: "Our interests and skills depend on our environment.",
+            D: "We inherit ideas and characteristics from our ancestors."
+          }, 
+          correct: "D" 
+        },
+        { 
+          id: 29, 
+          text: "The writer discusses the key element of emotion in order to", 
+          options: {
+            A: "criticise primitive survival strategies.",
+            B: "explain attitudes and actions at work.",
+            C: "demonstrate the slowness of evolution.",
+            D: "suggest companies today are poorly structured."
+          }, 
+          correct: "B" 
+        },
+        { 
+          id: 30, 
+          text: "Which of the following does Nicholson predict will happen in the business world?", 
+          options: {
+            A: "Companies will remain in city centres.",
+            B: "Promotion will no longer motivate people.",
+            C: "Employees will be less independent than now.",
+            D: "Social interaction will remain important to workers."
+          }, 
+          correct: "D" 
+        },
+        { 
+          id: 31, 
+          text: "Which of the following is the most suitable title for Reading Passage 3?", 
+          options: {
+            A: "How successful companies manage change.",
+            B: "Understanding the origins of workplace behavior.",
+            C: "Darwin's theories rejected by modern management.",
+            D: "Why post-industrial organisations need to evolve more quickly."
+          }, 
+          correct: "B" 
+        }
+      ]
+    },
+
+    /* 32–35 Yes/No/Not Given */
+    {
+      type: "yes_no",
+      heading: "Questions 32–35",
+      instructions: [
+        "Do the following statements agree with the views of the writer in Reading Passage 3?",
+        "In boxes 32–35 on your answer sheet, write",
+        "YES if the statement agrees with the views of the writer",
+        "NO if the statement contradicts the views of the writer", 
+        "NOT GIVEN if it is impossible to say what the writer thinks about this"
+      ],
+      items: [
+        { id: 32, text: "Nicholson makes a persuasive argument in his book.", correct: "NOT GIVEN" },
+        { id: 33, text: "Tooby and Cosmides believe natural selection through the generations has prepared.", correct: "NOT GIVEN" },
+        { id: 34, text: "Our reliance on technology causes emotional problems in the workplace.", correct: "NOT GIVEN" },
+        { id: 35, text: "People today are more trusting than they used to be.", correct: "NO" }
+      ]
+    },
+
+    /* 36–40 Summary Completion */
+    {
+      type: "summary_words",
+      heading: "Questions 36–40",
+      instructions: [
+        "Complete the summary using the list of words, A–I below.",
+        "Write the correct letter, A–I, in boxes 36–40 on your answer sheet."
+      ],
+      title: "Nicholson's advice to the corporate world",
+      summary: "Nicholson believes that if we know why people act the way they do, we can change 36 ................ so employees will work more efficiently. Nicholson's ideas are unwelcome to 37 ................ but some executives are more open to what evolutionary psychology says. However, these executives still believe that there is a 38 ................ that will make employees act according to the company's practices. According to Nicholson, these senior executives are engaging in 39 ................ and we should not try to change 40 ................ but instead we should change our business structures.",
+      words: {
+        A: "business leaders",
+        B: "MBA graduates", 
+        C: "promotion structures",
+        D: "reward strategy",
+        E: "magic formula",
+        F: "strategic planning",
+        G: "back-to-front thinking",
+        H: "business environments",
+        I: "human nature"
+      },
+      items: [
+        { id: 36, correct: "H" },
+        { id: 37, correct: "B" },
+        { id: 38, correct: "E" },
+        { id: 39, correct: "G" },
+        { id: 40, correct: "I" }
+      ]
+    }
+  ]
+};
+
+/* =======================
+   RENDER
+   ======================= */
+document.getElementById('title').textContent = CONFIG.title;
+document.getElementById('subtitle').textContent = CONFIG.subtitle || '';
+
+const qroot = document.getElementById('qroot');
+const navIds = [];
+const answersMap = {};
+
+function sectionHeader(t){ const h=document.createElement('h2'); h.className='qsection'; h.textContent=t; return h; }
+
+/* MCQ renderer */
+function renderMCQ(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const opts=Object.entries(it.options).map(([k,v])=>`<label><input type="radio" name="q${it.id}" value="${k}"> ${k}. ${v}</label>`).join('');
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${opts}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Yes/No/Not Given renderer */
+function renderYesNo(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const opts = ['YES', 'NO', 'NOT GIVEN'].map(option => 
+      `<label><input type="radio" name="q${it.id}" value="${option}"> ${option}</label>`
+    ).join('');
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ${it.text}</div><div class="options">${opts}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Summary with word list renderer */
+function renderSummaryWords(sec){
+  qroot.appendChild(sectionHeader(sec.heading));
+  (sec.instructions||[]).forEach(tx=>{ const p=document.createElement('p'); p.className='muted'; p.textContent=tx; qroot.appendChild(p); });
+  
+  if(sec.title) {
+    const titleDiv = document.createElement('div');
+    titleDiv.innerHTML = `<h3>${sec.title}</h3>`;
+    qroot.appendChild(titleDiv);
+  }
+
+  if(sec.summary) {
+    const summaryDiv = document.createElement('div');
+    summaryDiv.className = 'qblock';
+    summaryDiv.innerHTML = `<div class="qhead">${sec.summary}</div>`;
+    qroot.appendChild(summaryDiv);
+  }
+
+  // Word list
+  const wordsDiv = document.createElement('div');
+  wordsDiv.className = 'qblock';
+  const wordsList = Object.entries(sec.words).map(([k,v]) => `<div><b>${k}</b> — ${v}</div>`).join('');
+  wordsDiv.innerHTML = `<div class="qhead"><strong>Word List</strong></div><div class="options">${wordsList}</div>`;
+  qroot.appendChild(wordsDiv);
+
+  sec.items.forEach(it=>{
+    const b=document.createElement('div'); b.className='qblock'; b.id=`anchor-${it.id}`;
+    const sel=`<select id="q${it.id}" name="q${it.id}">
+      <option value="">—</option>${Object.keys(sec.words).map(k=>`<option value="${k}">${k}</option>`).join('')}
+    </select>`;
+    b.innerHTML=`<div class="qhead"><strong>${it.id}.</strong> ................</div><div class="options">${sel}</div>`;
+    qroot.appendChild(b); navIds.push(it.id); answersMap[it.id]=it.correct||'';
+  });
+}
+
+/* Build UI */
+CONFIG.sections.forEach(sec=>{
+  if (sec.type==='mcq') renderMCQ(sec);
+  if (sec.type==='yes_no') renderYesNo(sec);
+  if (sec.type==='summary_words') renderSummaryWords(sec);
+});
+
+/* Footer chips */
+const footerNav=document.getElementById('footerNav');
+(function(){
+  if(!CONFIG.showFooterNavigator){ footerNav.style.display='none'; return; }
+  footerNav.innerHTML='<strong class="muted">Questions:</strong>';
+  [...new Set(navIds)].sort((a,b)=>a-b).forEach(id=>{
+    const chip=document.createElement('button'); chip.className='chip'; chip.id=`chip-${id}`; chip.textContent=id;
+    chip.addEventListener('click',()=>{ document.getElementById(`anchor-${id}`).scrollIntoView({behavior:'smooth',block:'center'}); });
+    footerNav.appendChild(chip);
+  });
+})();
+
+function markChipAnswered(id, answered){
+  const chip=document.getElementById(`chip-${id}`); if(chip) chip.classList.toggle('answered', !!answered);
+}
+
+document.addEventListener('change',(e)=>{
+  const m=String(e.target.name||e.target.id||'').match(/q(\d+)/);
+  const id=m?+m[1]:null; if(!id) return;
+  const answered=(e.target.type==='radio') ? (!!document.querySelector(`input[name='q${id}']:checked`))
+                 : (e.target.value.trim().length>0);
+  markChipAnswered(id, answered);
+});
+
+/* Timer */
+let timeLeft=Math.max(1,+CONFIG.durationMinutes||20)*60;
+const timer=document.getElementById('timer');
+const pauseBtn=document.getElementById('pauseBtn');
+const resumeBtn=document.getElementById('resumeBtn');
+let paused=false, iv;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function startTick(){ if(iv) clearInterval(iv);
+  iv=setInterval(()=>{ if(paused) return; timer.textContent=fmt(timeLeft); if(timeLeft<=0){ clearInterval(iv); alert("Time's up! Submitting."); submit(); } timeLeft--; },1000);
+}
+timer.textContent=fmt(timeLeft); startTick();
+pauseBtn.addEventListener('click',()=>{ paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false; });
+resumeBtn.addEventListener('click',()=>{ paused=false; pauseBtn.disabled=false; resumeBtn.disabled=true; });
+
+/* Submit & grading */
+document.getElementById('submitBtn').addEventListener('click', submit);
+function submit(){
+  paused=true; pauseBtn.disabled=true; resumeBtn.disabled=false;
+  let total=0, graded=0, correctCount=0;
+  const itemsOut=[];
+  const ids=Object.keys(answersMap);
+
+  ids.forEach(key=>{
+    const ans=answersMap[key];
+    const label=key;
+    let user='';
+    const picked=document.querySelector(`input[name="q${key}"]:checked`);
+    if(picked){ user=picked.value; }
+    else if(document.getElementById('q'+key)){ user=document.getElementById('q'+key).value; }
+    const shown=user||'No answer';
+
+    if(String(ans).trim()===''){ total++; itemsOut.push({label, status:'— not graded —', user:shown, correct:'(no key)'}); return; }
+
+    total++; graded++;
+    const ok = shown.trim().toUpperCase() === String(ans).trim().toUpperCase();
+    if(ok) correctCount++;
+    itemsOut.push({label, status: ok? '✓ Correct' : '✗ Incorrect', user:shown, correct:String(ans)});
+  });
+
+  document.getElementById('score').innerHTML = `Graded ${graded} of ${total} • Score: ${correctCount}/${graded}`;
+  document.getElementById('answers').innerHTML = itemsOut.map(it=>`<li class="${/Correct/.test(it.status)?'ok':'bad'}">Q${it.label}: ${it.status} — Your: <b>${it.user}</b> | Correct: <b>${it.correct}</b></li>`).join('');
+  const r=document.getElementById('results'); r.style.display='block'; r.scrollIntoView({behavior:'smooth'});
+}
+
+/* Highlights */
+const passageCard=document.getElementById('passageCard');
+const pPalette=document.getElementById('pPalette');
+passageCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!passageCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const r=passageCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  pPalette.style.left=(r.left+x)+'px'; pPalette.style.top=(r.top+y)+'px'; pPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!pPalette.contains(e.target)) pPalette.style.display='none'; });
+pPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, passageCard); pPalette.style.display='none'; });
+});
+document.getElementById('clearPMarks').addEventListener('click',()=>{
+  passageCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  pPalette.style.display='none';
+});
+
+/* Questions highlight */
+const qCard=document.querySelector('.card.questions');
+const qPalette=document.getElementById('qPalette');
+qCard.addEventListener('mouseup',(e)=>{
+  const sel=window.getSelection(); if(!sel||sel.toString().trim().length===0) return;
+  if(!qCard.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
+  const node = sel.getRangeAt(0).commonAncestorContainer.nodeType===1 ? sel.getRangeAt(0).commonAncestorContainer : sel.getRangeAt(0).commonAncestorContainer.parentNode;
+  if (node.closest && node.closest('input,textarea,select')) return;
+  const r=qCard.getBoundingClientRect(), x=Math.min(e.clientX-r.left,r.width-10), y=Math.max(0,e.clientY-r.top-40);
+  qPalette.style.left=(r.left+x)+'px'; qPalette.style.top=(r.top+y)+'px'; qPalette.style.display='block';
+});
+document.addEventListener('mousedown',(e)=>{ if(!qPalette.contains(e.target)) qPalette.style.display='none'; });
+qPalette.querySelectorAll('.hbtn[data-color]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ markSelection(btn.dataset.color, qCard); qPalette.style.display='none'; });
+});
+document.getElementById('clearQMarks').addEventListener('click',()=>{
+  qCard.querySelectorAll('span.highlight').forEach(n=>{ const p=n.parentNode; while(n.firstChild) p.insertBefore(n.firstChild,n); p.removeChild(n); p.normalize(); });
+  qPalette.style.display='none';
+});
+
+/* Helper */
+function markSelection(color, scope){
+  const sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  if(!scope.contains(range.commonAncestorContainer)) return;
+  const container=range.commonAncestorContainer.nodeType===1? range.commonAncestorContainer : range.commonAncestorContainer.parentNode;
+  if (container.closest && container.closest('input, textarea, select')) return;
+  const frag=range.extractContents();
+  const span=document.createElement('span'); span.className='highlight'; span.style.backgroundColor=color; span.appendChild(frag);
+  range.insertNode(span); sel.removeAllRanges();
+}
+
+/* TG button */
+document.querySelector('.tg').addEventListener('click',()=>window.open(CONFIG.telegramLink,'_blank'));
+</script>
+</body>
+</html>

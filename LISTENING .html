@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IELTS Listening Practice Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: Arial, sans-serif; background:#f9f9f9; color:#000; line-height:1.8; padding-bottom:100px; }
+    body::after { content:"REAL EXAM MATERIALS t.me/IELTS_PAPERS"; position:fixed; bottom:15px; right:15px; font-size:12px; color:#999; z-index:1; }
+
+    #header {
+        position:fixed; top:0; left:0; right:0; height:70px; background:#003087; color:white;
+        display:flex; align-items:center; justify-content:space-between; padding:0 30px; z-index:1000;
+        box-shadow:0 4px 15px rgba(0,0,0,0.2);
+    }
+    #logo { height:52px; margin-right:15px; }
+    #telegram { background:#0088cc; padding:10px 20px; border-radius:30px; text-decoration:none; color:white; font-weight:bold; }
+
+    /* TINY FIXED AUDIO BAR - EXACTLY LIKE REAL EXAM */
+    .audio-fixed {
+        position:fixed; top:100px; left:100%; transform:translateX(-50%); z-index:999;
+        background:white; padding:8px 15px; border-radius:10px; box-shadow:0 6px 25px rgba(0,0,0,0.25);
+        width:85%; max-width:750px; border:2px solid #ddd; font-size:10px;
+    }
+    .audio-fixed audio { width:100%; height:38px; }
+
+    .container { max-width:1000px; margin:160px auto 0; padding:20px; }
+    .section { display:none; background:white; padding:40px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.1); }
+    .section.active { display:block; }
+    .audio-fixed {
+    position: fixed;
+    top: 80px;
+    left: 40%;
+    transform: translateX(-50%);
+    width: 85%;
+    max-width: 750px;
+    background: white;
+    padding: 10px 15px;
+    border-radius: 12px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.25);
+    z-index: 999;
+    border: 2px solid #ddd;
+}
+
+.audio-fixed audio {
+    width: 100%;
+    height: 40px;
+}
+
+
+    /* 100% REAL IELTS BLANKS - DOTTED UNDERLINE (exactly like your photos) */
+    .blank {
+        display:inline-block; width:190px; height:34px; border:none; border-bottom:2px dotted #999;
+        background:transparent; padding:0 6px; font-size:16px; line-height:32px; text-align:left;
+        font-family:inherit; vertical-align:middle;
+    }
+    .blank:focus { outline:none; background:#fffbe6; border-bottom:2px solid #005cbf; }
+    .blank.correct { background:#d4edda !important; border-bottom:2px solid #28a745; }
+    .blank.wrong { background:#f8d7da !important; border-bottom:2px solid #dc3545; }
+    .correct-answer { color:#28a745; font-weight:bold; margin-left:8px; font-size:14px; }
+
+    .mcq {
+    display: block;            /* makes each option appear on a new line */
+    padding: 10px;
+    margin: 6px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.mcq:hover {
+    background-color: #f7f7f7;
+}
+
+.mcq input {
+    margin-right: 10px;
+}
+
+
+    .drag-container { display:flex; gap:30px; margin:40px 0; }
+    .drag-options { width:42%; background:#f0f4f8; padding:20px; border-radius:10px; }
+    .drag-questions { width:40%; background:#f0f4f8; padding:20px; border-radius:8px; font-size:15px; line-height:2; }
+    .drag-item { padding:12px; margin:8px 0; background:white; border:2px solid #ddd; border-radius:8px; cursor:grab; user-select:none; }
+    .drop-zone { min-height:44px; border:2px dashed #999; margin:9px 0; padding:8px; border-radius:8px; background:white; text-align:center; font-weight:bold; }
+    .drop-zone.filled { background:#e6f4ea; border-color:#28a745; color:#155724; }
+
+    .nav { position:fixed; bottom:0; left:0; right:0; background:white; padding:15px; box-shadow:0 -4px 15px rgba(0,0,0,0.1); display:flex; justify-content:center; gap:20px; z-index:1000; }
+    .nav button { padding:12px 28px; background:#e9ecef; border:none; border-radius:8px; font-weight:bold; cursor:pointer; }
+    .nav button.active { background:#005cbf; color:white; }
+    #submit { background:#28a745; color:white; padding:15px 50px; font-size:18px; }
+
+    /* REAL IELTS HIGHLIGHT BUTTONS */
+    #highlight-btn, #remove-highlight { position:fixed; top:100px; background:#ffeb3b; padding:12px 18px; border:none; border-radius:50px; box-shadow:0 4px 15px rgba(0,0,0,0.2); cursor:pointer; z-index:998; font-weight:bold; font-size:14px; }
+    #highlight-btn { right:180px; }
+    #remove-highlight { right:20px; background:#ff6b6b; color:white; }
+
+    #transcript-toggle { position:fixed; bottom:100px; right:20px; background:#005cbf; color:white; padding:12px 20px; border-radius:50px; cursor:pointer; z-index:998; font-weight:bold; box-shadow:0 4px 15px rgba(0,0,0,0.3); }
+    #transcript-box { display:none; position:fixed; bottom:100px; right:20px; width:420px; max-height:50vh; overflow-y:auto; background:white; padding:25px; border-radius:15px; box-shadow:0 10px 40px rgba(0,0,0,0.3); z-index:997; border:2px solid #ddd; line-height:1.7; font-size:15px; }
+
+    #results-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:2000; justify-content:center; align-items:center; }
+    .modal-box { background:white; padding:40px; border-radius:15px; max-width:900px; max-height:90vh; overflow:auto; position:relative; }
+    .close-x { position:absolute; top:15px; right:20px; font-size:36px; cursor:pointer; color:#999; }
+    table { width:100%; border-collapse:collapse; margin:20px 0; }
+    th, td { padding:14px; border:1px solid #ddd; text-align:center; }
+    th { background:#f0f4f8; }
+    .correct-row { background:#d4edda; }
+    .wrong-row { background:#f8d7da; }
+</style>
+</head>
+<body>
+
+<div id="header">
+    <div style="display:flex; align-items:center;">
+        <img id="logo" src="https://i.postimg.cc/jSBZzRJk/Picsart-25-09-13-12-25-27-722-removebg-preview.png" alt="Logo">
+        <h2>IELTS Listening Practice Test</h2>
+    </div>
+    <div style="display:flex; align-items:center; gap:25px;">
+        <a id="telegram" href="https://t.me/IELTS_PAPERS" target="_blank">t.me/IELTS_PAPERS</a>
+        <span id="timer">30:00</span>
+    </div>
+</div>
+
+<!-- FIXED AUDIO BAR -->
+<div class="audio-fixed">
+    <audio id="mainAudio" controls>
+        <source src="https://pub-3f49f5a7d9a44873b05f394e5ba70041.r2.dev/qotq-fn4o2b-arbr-1f2h9/audiomass-output%20(9).mp3" type="audio/mpeg">
+    </audio>
+</div>
+
+
+    <div id="audio-controls">
+        <button id="play-pause-btn">▶</button>
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+        <span id="current-time">0:00</span> / <span id="total-time">0:00</span>
+        <select id="speed-control">
+            <option value="0.5">0.5x</option>
+            <option value="0.75">0.75x</option>
+            <option value="1" selected>1x</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2x</option>
+        </select>
+    </div>
+</div>
+
+<!-- REAL IELTS HIGHLIGHT BUTTONS -->
+<button id="highlight-btn" onclick="highlightSelection()">Highlight</button>
+<button id="remove-highlight" onclick="removeHighlight()">Remove Highlight</button>
+
+<!-- TRANSCRIPT BUTTON -->
+<div id="transcript-toggle" onclick="document.getElementById('transcript-box').style.display=document.getElementById('transcript-box').style.display==='block'?'none':'block'">Transcript</div>
+<div id="transcript-box">
+    <span onclick="document.getElementById('transcript-box').style.display='none'" style="float:right; cursor:pointer; font-size:20px;">×</span>
+    <strong>Full Transcript (0:00) You will hear a telephone conversation between a woman who is moving to London and an employee of a relocation service. (0:11) First you have some time to look at questions 1 to 7. Now listen carefully and answer questions 1 to 7. (1:02) London Relocation Services, Daniel speaking. How may I help you? (1:06) Good morning.
+My family and I are moving to London later this year and I wonder if you can help? (1:13) Sure. First of all, I'll need to get some personal details. May I take your full name please? (1:20) It's Anna Woods.
+(1:22) Thanks. Where are you moving from? (1:25) Northern Ireland, just outside Belfast actually. (1:29) Right.
+And what's your current address? (1:32) It's 118 Fordyce Park. I'll spell that for you. It's F-O-R-D-Y-C-E.
+And that's in Ballysalem. (1:46) And what's the postcode? (1:49) It's B-T-14-9-B-J. (1:53) Alright.
+And could I take a contact phone number? (1:57) I'll give you my mobile number as you can get me on that any time. It's 078400-51963. (2:10) Great.
+Got that. Now we always like to get a bit more information about the families that we're moving. It helps with the search.
+Are you moving for work? (2:21) Yes. My husband's just got a new job in London. (2:24) And what about you? Do you work? (2:27) Well, I've been working as a teaching assistant recently, but I'm actually a qualified nurse and I'd like to get back into that if possible.
+(2:36) Right. And do you have any children? (2:39) Yes, a son. So we need to find a school for him.
+(2:43) Is it a secondary school you'll be looking for? (2:46) No, he's still in primary school. He's not quite at the secondary level yet. (2:50) Right.
+Fine. So, let's go on to talk about your requirements for the property. Do you have a preferred location? Is your husband's job in the centre? (3:01) No, it's in East London, but we'd rather live somewhere quieter.
+(3:06) Sure. There are some lovely areas in the south. (3:09) Okay, that sounds great.
+Now, my husband doesn't want to spend too long commuting to work every day. (3:16) So, I imagine that ideally he'd like to be not too far from a station then? (3:23) Yes. He drives now, but I guess that's not going to be possible and he's not keen on buses.
+(3:29) What about you or your son? Do you have any preferences? Does your son do any sport, for example? (3:36) He's quite active, so I'm sure he'd love a park nearby to run around in. He doesn't do swimming or anything like that. (3:44) Great.
+Before you hear the rest of the conversation, you have some time to look at questions 8 to 10. Now listen and answer questions 8 to 10. (4:19) So, what sort of property do you have in mind? (4:23) We have friends who live in an amazing flat over there, but as we've always lived in a house, I think we'll stick with that.
+We'd find it hard to adapt to a flat. (4:33) Okay. And size-wise, how many bedrooms would you like? (4:38) Well, there's just myself, my husband and our son.
+(4:42) So, you definitely need a two-bedroom property. But how about having a guest room? I might be able to find a three-bedroom property for you. (4:51) Yes, that would be ideal.
+We're sure to have family visiting often. (4:56) Alright. I've made a note of that.
+Now, are there any other requirements for your new property? (5:02) Hmm. Well, it's not essential, but it'd be handy to have an office for when my husband works from home. It doesn't need to be a big one.
+I guess it all comes down to budget. (5:15) Yes. Okay, Anna.
+Well, I've certainly got enough to be getting on with, and I... (5:24) That is the end of Part 1. You now have one minute to check your answers to Part 1. (5:32) Part 2 (5:33) You will hear a radio show host interviewing a man called Michael McKay, who is the director of a Canadian theatre. (5:44) First, you have some time to look at questions 11 to 14. Now listen carefully and answer questions 11 to 14.
+(6:31) Michael McKay, the executive director of the Canadiana Festival Theatre, is here with us to talk about the season starting in June. Welcome! (6:41) Thank you. We have an amazing season this year with some great deals for our clients.
+(6:48) You know, we have a lot of regular theatre goers who will be happy to know that we have some great specials for the upcoming season. (6:57) For example, if you order two tickets to any play performed at the theatre, you can get 50% off the price of the next play we put on. (7:07) This replaces the special offer we had last season, which was for 50% off all performances on Mondays.
+(7:17) It is good to get youth interested in theatre, so many schools arrange class trips to our theatre. (7:24) This year we will send a special study guide to each class so the students can familiarize themselves with the play beforehand. (7:33) Having some background information always makes the experience of watching the actors perform the play more enjoyable.
+(7:43) Each guide has suggestions for classroom discussion after seeing the show, which teachers find useful for a follow-up activity. (7:54) Also, we mustn't forget the Bring a Friend special for our senior citizens. (7:59) On Tuesday and Wednesday afternoons, everyone over 60 can buy one ticket and get one free.
+(8:06) The offer includes all the musicals plus the plays, so there is lots of choice. (8:14) We also include $5 off any gift shop purchase for those clients who spend more than $30 there. (8:22) So, what would you say is the best play you have this year? (8:27) Ha! All the plays are great, but the must-see play is called Something to Say.
+(8:34) It stars the amazing actor Christopher Plunkett. (8:39) This likely will be the last year we see him perform, as he has been on stage for over 60 years. (8:47) Actually, for the first time, he helped write this play, and it really is a commentary on his amazing career as an actor.
+(8:59) You may have seen him in supporting roles in movies, but acting on stage is his first love. (9:06) He has been in so many fantastic dramas, I can't think of him ever not being on stage. (9:16) Before you hear the rest of the interview, you have some time to look at questions 15 to 20.
+(9:57) Now listen and answer questions 15 to 20. (10:05) Now, let's talk about the season's musicals. (10:09) The first one is called The Climb.
+(10:12) Of course, the best part is that we have that really amazing singer, Justin McDonald, playing the part of the hero. (10:19) It is an inspiring story of a man called Stephen, who starts working for a newspaper in a very junior job in the mailroom. (10:30) After many years and many promotions, he finally gets to the top position.
+(10:36) He becomes editor-in-chief of the newspaper. (10:41) Then we have that wonderful classic that we show every two years because it is so popular, The Voyagers. (10:48) It is a wonderful story of a Canadian farming family in the late 1800s and how they settled their land near Kingston, Ontario.
+(10:59) The musical gives a good description of the times, the struggles, and the way of life in that period. (11:07) The next musical, Joey Brown, is a comical story of a piano player who writes songs for kids' TV shows. (11:16) However, he ends up having a terrible time when he gets a new boss who always criticizes him and makes his life difficult.
+(11:27) Poor Joey has to learn how to win over the boss. (11:31) The show has a couple of funny twists and a surprise ending. (11:36) In Main Street, Karen Hines stars in the true story of a young woman whose dream is to compete in the Olympics.
+(11:44) She is such a powerful actress in this role. (11:49) It is about a gymnast who is crushed when, during a practice session, she breaks her ankle just one week before the Games. (11:59) Now for Millie and Mike.
+(12:01) What a story this is. (12:04) Stephanie James and Peter Dumas are only ten years old, but they star in the musical as the twins Millie and Mike. (12:12) They have a wonderful upbringing with their grandmother who teaches them life's lessons through song.
+(12:20) The final must-see is so whimsical. (12:24) In Windswept, a land of imaginary creatures, the flowers and trees dance and the enchanted animals talk. (12:33) It is delightful.
+(12:35) And we even have a very talented actor who is amazing as he travels with us through the world of make-believe. (12:43) Kids love this one. (12:46) The music is fun and their imagination goes wild.
+(12:51) Michael, that all sounds wonderful. (12:54) Now tell me about the restaurants in the theater district. (13:01) That is the end of Part 2. (13:03) You now have 30 seconds to check your answers to Part 2. (13:09) Part 3 (13:11) You will hear an engineering student called Kathy discussing a piece of work with her tutor.
+(13:19) First, you have some time to look at questions 21 to 26. (14:14) Now listen carefully and answer questions 21 to 26. (14:23) Hello, Kathy.
+How's your dissertation on water pumps going? (14:27) Not too bad, thanks. (14:29) I'm getting on well with the literature review now and my lab work's fine so far. (14:35) Oh, that's good.
+(14:36) Remember, you should aim to have your results section completed by the end of next month, (14:41) so there's plenty of time to finalise the whole thing by the summer deadline. (14:46) Anyway, looks like you're on track. (14:49) I've been through your first chapter now and I was quite impressed.
+(14:52) Oh, that's a relief. (14:54) Sometimes your sentences are a little long and over-complex, (14:59) but the overall structure of the piece is very clear. (15:03) I'd recommend you get a critical friend to go through it with you.
+(15:07) Then, once you've built in citations of other work in the field, I think it'll be pretty good. (15:13) Oh, thanks. I was pleased I decided to focus on water pumps.
+(15:18) You seem to be testing an appropriate range of pump design. (15:23) Lots of students make the mistake of either restricting their range too much (15:28) or, conversely, not narrowing it down enough. (15:31) You've managed to avoid those twin traps.
+(15:35) However, I think you'd get more convincing results if you took some additional measurements. (15:41) I've noted exactly what I mean on your work. (15:43) Yes, I thought that might be necessary.
+(15:46) And I know I need to get down to some more library work too. (15:50) Well, I don't think that's essential at the moment. (15:53) Oh, right.
+So, what do you suggest I do next? (15:58) Repeat my last experiment using different variables? (16:03) Well, you could have a word with James Higgins tomorrow. (16:07) He's coming here to give a lecture on hydraulics to the faculty (16:10) and it would be a great chance to have a chat with him. (16:15) Especially as your experimental work has drawn so heavily from his last article in the British Engineering Journal.
+(16:22) Oh, fantastic! (16:23) And you never know how successful a chat with him might turn out to be. (16:28) I got my first research post when I was a final year student (16:32) and asked a visiting professor to explain what he meant in some article he'd written. (16:37) So I urge all my students to take any such opportunity that arises.
+(16:43) But times have changed. (16:45) People like that are too busy to talk to mere students these days. (16:49) I don't know about that.
+(16:51) Anyway, is there anything else I can help with? (16:54) Any practical information about layout, perhaps? (16:57) Well, I suppose I'm a bit unsure about how the bibliography should be presented. (17:04) Mind you, I can just check what's normally done in journal articles, (17:09) so that's not something to bother you with. (17:11) I'd welcome some guidance, though, about what I should or shouldn't include in the appendices.
+(17:18) I know some things, some of my data tables or details of specs perhaps, (17:25) are not really needed in the main body of the text and I'm likely to be pushed for words there. (17:30) OK, I can certainly help you with that. (17:34) But it will take a while, so can we deal with that next week? (17:38) I've got that solar panel seminar to go into in a few minutes.
+(17:42) There's plenty of work you can be carrying on with in the meantime. (17:45) Sure, that's no problem. (17:48) I think I'll go and investigate the latest version of the CAD software (17:52) to see if it might help with my pump design experiments at all.
+(17:59) Before you hear the rest of the discussion, you have some time to look at questions 27 to 30. (18:29) Now listen and answer questions 27 to 30. (18:37) Before you go, though, I'd like quickly to run through what you should be doing over the next few months, (18:43) not just for your dissertation, but also to help your chances of getting the research post you'd like.
+(18:49) Is that OK with you? (18:51) Yes, that would be really helpful. (18:52) Well, you certainly need to become a member of the Mechanical Engineers Society, (18:58) and then you'll be able to go along to their meetings. (19:02) There, you must make a point of making yourself known to various people, like Professor Jones.
+(19:08) He's the current president and is very approachable. (19:12) OK, so I could do some networking there. (19:15) Exactly.
+Also, I think you should try to set up some visits to industry. (19:20) Go to a lot of different workplaces just to see how things are done. (19:25) It's actually a very good way of making sure you're familiar with the cutting edge of what's going on.
+(19:32) Textbooks, even academic articles, sometimes lag behind industry. (19:38) That sounds really interesting. (19:40) Also, I'd love the chance to do a bit of work abroad for a while.
+(19:44) Well, that's actually the next thing I was going to recommend. (19:47) I'm sure we could set up a month for you in either the States or Canada, (19:52) and that would be a great way to find out how things are done elsewhere. (19:57) That'd be good.
+Thank you. (19:59) And the last thing I was going to suggest was that you could go to the European Water Engineering Conference (20:05) being held in Spain in May. (20:07) I could even present my dissertation there.
+(20:10) Yes. (20:11) Oh, thank you so much. That's all really helpful.
+(20:14) Good. (20:19) That is the end of Part 3. (20:22) You now have 30 seconds to check your answers to Part 3. (20:32) Part 4. (20:34) You will hear part of a lecture given to students in a food science department about safety standards. (20:42) First, you have some time to look at questions 31 to 40.
+(21:41) Now listen carefully and answer questions 31 to 40. (21:49) Good morning, everyone. (21:52) In today's lecture, I'm going to talk about food safety (21:56) and the factors involved in setting standards for the food industry (22:01) with particular reference to the situation here in Australia.
+(22:06) Now, before anyone can decide what kind of standards need to be set (22:12) for ensuring that any specific food product is safe, (22:16) scientists have to carry out a risk assessment. (22:21) And in doing this, they have to consider several potential problems. (22:27) Firstly, they have to consider the ingredients of the product.
+(22:32) They have to decide whether any of these might make the finished product more susceptible to harmful bacteria. (22:42) Then, they have to consider the process used in the preparation of the food (22:47) and whether or not it includes a step designed to eliminate unwanted microorganisms. (22:55) After that, they've got to consider the way products are stored.
+(23:01) For instance, in warehouses or cold stores and distributed to retailers. (23:07) And it doesn't end there. (23:09) The analysts even have to be aware of problems that might occur after the food has reached the supermarket.
+(23:18) Things like frozen foods being defrosted and then refrozen because the temperature fluctuated (23:25) or foods being kept past their expiry date. (23:30) And finally, any assessment of the overall risk has to take into account (23:36) the way the end users, consumers, normally handle food at home. (23:42) So, as you see, the risk assessment is quite complicated.
+(23:53) Now, there are several factors affecting what kind of food we eat. (23:58) Only one of which is legislation. (24:01) Another is the attitudes of consumers.
+(24:04) A good example of this is the dislike that many Australians have for additives in their food, (24:12) even when these additives are considered safe (24:15) and without them products have a shorter shelf life or a substandard appearance. (24:21) This has led to the phenomenal expansion of the market for organic food in Australia. (24:28) Another important influence on what we eat is the food industry itself.
+(24:35) In some large supermarkets, low prices are the main strategy for attracting customers, (24:41) while for more upscale marketers, image is more important. (24:46) But we should bear in mind, for all of them, the key consideration is profitability. (24:54) Finally, there is the influence of the mass media, (24:58) which is the most important source of information for most people.
+(25:03) Unfortunately, this has a rather negative effect, (25:08) because, in general, they are not very objective. (25:12) For one thing, the prime motivation of the media, as with the food industry, is sales. (25:18) And this has a major influence on the way in which the topic is dealt with.
+(25:24) A further problem is that news is regarded as a type of entertainment. (25:30) Often, the issues that get a top billing are those that are sensational or controversial. (25:36) So it's not at all surprising if the public ends up with a rather distorted understanding of food and food safety.
+(25:46) On top of that, up till now, food safety and nutrition have never been considered a really interesting topic for the public. (25:56) Very few TV or radio shows address the issues, (26:00) and even those shows that are devoted to cooking or eating generally ignore them. (26:06) At this point, I'll just offer a personal opinion on this subject of food safety.
+(26:12) I firmly believe in food safety education, starting at primary schools. (26:21) We know that many children who have been taught about the benefits of exercise (26:26) come home and lecture their parents about it. (26:30) So, the same could be done for food and food preparation.
+(26:35) And at the same time, the countless educational television shows... (26:47) You now have one minute to check your answers to Part 4. (27:58) That is the end of the listening test. (28:00) You now have ten minutes to transfer your answers to the listening answer sheet. (28:16) That is the end of Section 4. (28:19) You now have two minutes to check your answers.</strong><br><br>
+    <!-- Paste your full transcript here -->
+</div>
+
+<div class="container">
+
+<!-- PART 1 -->
+<div id="part1" class="section active">
+    <h2>PART 1 Questions 1 - 10</h2>
+    <p>Complete the notes below.<br>Write <b>ONE WORD AND/OR A NUMBER</b> for each answer.</p>
+    <div style="border:1px solid #000; padding:30px; margin-top:25px; line-height:2.8; font-size:16px;">
+        <strong>The London Relocation Services</strong><br><br>
+        Customer's name     <b>Anna Woods</b><br><br>
+        Customer's personal details<br>
+        • Current address 118 <span class="blank" contenteditable="true" id="q1"></span> Park, Ballysillian<br>
+        • Postcode. BT149BJ<br>
+        • Phone No: <span class="blank" contenteditable="true" id="q2"></span> (Mobile)<br><br>
+        Other information<br>
+        • Anna is hoping to find work as a <span class="blank" contenteditable="true" id="q3"></span><br>
+        • She needs to find a <span class="blank" contenteditable="true" id="q4"></span> school for her son.<br><br>
+        Requirements for the new property<br>
+        Location:<br>
+        • Her preferred location is in the <span class="blank" contenteditable="true" id="q5"></span> of the city.<br>
+        • Her husband would like to be near a <span class="blank" contenteditable="true" id="q6"></span><br>
+        • Her son would prefer to be close to a <span class="blank" contenteditable="true" id="q7"></span><br><br>
+        Property details:<br>
+        • She would like to live in a <span class="blank" contenteditable="true" id="q8"></span><br>
+        • She would prefer <span class="blank" contenteditable="true" id="q9"></span> bedrooms<br>
+        • A small <span class="blank" contenteditable="true" id="q10"></span> is also desirable
+    </div>
+</div>
+
+<!-- PART 2 -->
+<div id="part2" class="section">
+    <h2>PART 2 Questions 11 - 20</h2>
+<p><b>Questions 11 - 14</b><br>Choose the correct letter, <b>A, B or C</b>.</p>
+<p style="font-weight:bold; margin:20px 0;">Canadian Festival Theatre</p>
+
+<div style="line-height:2.5;">
+
+    11 What special offer is there for regular theatre-goers in this season?<br>
+    <label class="mcq"><input type="radio" name="q11" value="A"> A They can see a second play at a reduced price.</label>
+    <label class="mcq"><input type="radio" name="q11" value="B"> B They can buy two tickets and get two free.</label>
+    <label class="mcq"><input type="radio" name="q11" value="C"> C They can get a discount on Mondays.</label><br>
+
+    12 What information is given about the study guides?<br>
+    <label class="mcq"><input type="radio" name="q12" value="A"> A They are handed out at the theatre.</label>
+    <label class="mcq"><input type="radio" name="q12" value="B"> B They provide information on the actors.</label>
+    <label class="mcq"><input type="radio" name="q12" value="C"> C They give ideas for discussion.</label><br>
+
+    13 What information is given about the 'Bring a friend' special?<br>
+    <label class="mcq"><input type="radio" name="q13" value="A"> A It is only for those over 65.</label>
+    <label class="mcq"><input type="radio" name="q13" value="B"> B It applies to a number of productions.</label>
+    <label class="mcq"><input type="radio" name="q13" value="C"> C It includes a 5% reduction on gifts.</label><br>
+
+    14 What does Michael say about the actor Christopher Plunket?<br>
+    <label class="mcq"><input type="radio" name="q14" value="A"> A He may retire from acting soon.</label>
+    <label class="mcq"><input type="radio" name="q14" value="B"> B He writes his own plays.</label>
+    <label class="mcq"><input type="radio" name="q14" value="C"> C He prefers acting in films to performing live.</label>
+</div>
+
+
+    <p style="margin-top:40px;"><b>Questions 15 - 20</b><br>What is the main theme of each of the following musicals?<br>Choose <b>SIX</b> answers from <b>A–H</b>.</p>
+    <div class="drag-container">
+        <div class="drag-options">
+            <strong>Main theme</strong><br>
+            <div class="drag-item" draggable="true" data-val="A">A living in a different century</div>
+            <div class="drag-item" draggable="true" data-val="B">B managing to achieve success</div>
+            <div class="drag-item" draggable="true" data-val="C">C ageing slowly</div>
+            <div class="drag-item" draggable="true" data-val="D">D growing up</div>
+            <div class="drag-item" draggable="true" data-val="E">E experiencing disappointment</div>
+            <div class="drag-item" draggable="true" data-val="F">F living in a magical place</div>
+            <div class="drag-item" draggable="true" data-val="G">G overcoming poverty</div>
+            <div class="drag-item" draggable="true" data-val="H">H handling conflict</div>
+        </div>
+        <div class="drag-questions">
+            <strong>Musicals</strong><br>
+            15 The Climb  <div class="drop-zone" id="drop15"></div><br>
+            16 The Voyagers <div class="drop-zone" id="drop16"></div><br>
+            17 Joey Brown  <div class="drop-zone" id="drop17"></div><br>
+            18 Main Street <div class="drop-zone" id="drop18"></div><br>
+            19 Millie and Mike<div class="drop-zone" id="drop19"></div><br>
+            20 Windswept  <div class="drop-zone" id="drop20"></div>
+        </div>
+    </div>
+</div>
+
+<!-- PART 3 - FULLY WRITTEN -->
+<div id="part3" class="section">
+    <h2>PART 3 Questions 21 - 30</h2>
+<p><b>Questions 21 - 26</b><br>Choose the correct letter, <b>A, B or C</b>.</p>
+<p style="font-weight:bold; margin:20px 0;">Kathy's dissertation on water pumps</p>
+
+<div style="line-height:2.5;">
+
+    21 What part of Kathy's dissertation has the tutor just read?<br>
+    <label class="mcq"><input type="radio" name="q21" value="A"> A her results section</label>
+    <label class="mcq"><input type="radio" name="q21" value="B"> B her introductory chapter</label>
+    <label class="mcq"><input type="radio" name="q21" value="C"> C her review of the literature</label><br>
+
+    22 What did the tutor like about Kathy's work?<br>
+    <label class="mcq"><input type="radio" name="q22" value="A"> A the organisation</label>
+    <label class="mcq"><input type="radio" name="q22" value="B"> B the style of writing</label>
+    <label class="mcq"><input type="radio" name="q22" value="C"> C the use of resources</label><br>
+
+    23 Kathy and the tutor agree that she needs to<br>
+    <label class="mcq"><input type="radio" name="q23" value="A"> A do some more library research.</label>
+    <label class="mcq"><input type="radio" name="q23" value="B"> B record more data</label>
+    <label class="mcq"><input type="radio" name="q23" value="C"> C narrow down her topic.</label><br>
+
+    24 Why does the tutor give an example from his own experience?<br>
+    <label class="mcq"><input type="radio" name="q24" value="A"> A to show how successful he has become</label>
+    <label class="mcq"><input type="radio" name="q24" value="B"> B to illustrate how times have changed</label>
+    <label class="mcq"><input type="radio" name="q24" value="C"> C to encourage Kathy to do something similar</label><br>
+
+    25 Kathy would like the tutor to advise her on her<br>
+    <label class="mcq"><input type="radio" name="q25" value="A"> A layout.</label>
+    <label class="mcq"><input type="radio" name="q25" value="B"> B bibliography.</label>
+    <label class="mcq"><input type="radio" name="q25" value="C"> C appendices.</label><br>
+
+    26 What is Kathy going to do next?<br>
+    <label class="mcq"><input type="radio" name="q26" value="A"> A try out some software</label>
+    <label class="mcq"><input type="radio" name="q26" value="B"> B go to a seminar</label>
+    <label class="mcq"><input type="radio" name="q26" value="C"> C design a new type of pump</label>
+</div>
+
+
+    <p style="margin-top:40px;"><b>Questions 27 - 30</b><br>How will Kathy benefit from doing each of the following activities?<br>Choose <b>FOUR</b> answers from <b>A–F</b>.</p>
+    <div class="drag-container">
+        <div class="drag-options">
+            <strong>Benefits</strong><br>
+            <div class="drag-item" draggable="true" data-val="A">A broadens practical experience of the field</div>
+            <div class="drag-item" draggable="true" data-val="B">B chance to publicise own work</div>
+            <div class="drag-item" draggable="true" data-val="C">C effective way of keeping up-to-date</div>
+            <div class="drag-item" draggable="true" data-val="D">D looks good on a CV</div>
+            <div class="drag-item" draggable="true" data-val="E">E provides useful access to resources</div>
+            <div class="drag-item" draggable="true" data-val="F">F way to make useful contacts</div>
+        </div>
+        <div class="drag-questions">
+            <strong>Activities</strong><br>
+            27 going to Mechanical Engineers' Society meetings <div class="drop-zone" id="drop27"></div><br>
+            28 Visiting different workplaces <div class="drop-zone" id="drop28"></div><br>
+            29 getting some work experience abroad <div class="drop-zone" id="drop29"></div><br>
+            30 attending an international conference <div class="drop-zone" id="drop30"></div>
+        </div>
+    </div>
+</div>
+
+<!-- PART 4 - FULL -->
+<div id="part4" class="section">
+    <h2>PART 4 Questions 31 - 40</h2>
+    <p>Complete the notes below.<br>Write <b>ONE WORD ONLY</b> for each answer.</p>
+    <div style="border:1px solid #000; padding:25px; margin-top:25px; line-height:2.8; font-size:16px;">
+        <strong>Food Safety Standards</strong><br><br>
+        <strong>Risk assessment</strong><br>
+        Scientists have to consider potential problems with:<br>
+        • the product's <span class="blank" contenteditable="true" id="q31"></span> (could they attract harmful bacteria?)<br>
+        • method of preparation (will it eliminate harmful micro-organisms?)<br>
+        • how products are <span class="blank" contenteditable="true" id="q32"></span> and distributed<br>
+        • supermarkets (e.g. changes in <span class="blank" contenteditable="true" id="q33"></span> affecting the condition of frozen food)<br>
+        • end-users (how is food usually handled in the home?)<br><br>
+        <strong>Factors affecting food consumption</strong><br>
+        Legislation<br>
+        Consumer attitudes<br>
+        • e.g. dislike of additives → growth of the <span class="blank" contenteditable="true" id="q34"></span> food market in Australia<br><br>
+        The food industry<br>
+        • supermarkets may use price or <span class="blank" contenteditable="true" id="q35"></span> as their selling strategy (but the main concern is profitability)<br><br>
+        The mass media<br>
+        • now the main source of <span class="blank" contenteditable="true" id="q36"></span> for many<br>
+        • negative effect because not objective:<br>
+          concern for <span class="blank" contenteditable="true" id="q37"></span><br>
+          news is now a form of <span class="blank" contenteditable="true" id="q38"></span> which can mislead the public<br>
+        • few programmes deal with food safety or <span class="blank" contenteditable="true" id="q39"></span><br><br>
+        <strong>Personal opinion</strong><br>
+        • Importance of education: as with benefits of exercise, many children can influence their <span class="blank" contenteditable="true" id="q40"></span>
+    </div>
+</div>
+
+</div>
+
+<div class="nav">
+    <button class="active" onclick="show(1)">Section 1</button>
+    <button onclick="show(2)">Section 2</button>
+    <button onclick="show(3)">Section 3</button>
+    <button onclick="show(4)">Section 4</button>
+    <button id="submit" onclick="checkAnswers()">SUBMIT & CHECK</button>
+</div>
+
+<div id="results-modal">
+    <div class="modal-box">
+        <span class="close-x" onclick="document.getElementById('results-modal').style.display='none';showCorrect()">×</span>
+        <h2>Your Score: <span id="score">0</span>/40</h2>
+        <table id="result-table"></table>
+    </div>
+</div>
+
+<script>
+const answers = {q1:"FORDYCE",q2:"07840051963",q3:"NURSE",q4:"PRIMARY",q5:"SOUTH",q6:"STATION",q7:"PARK",q8:"HOUSE",q9:"THREE",q10:"OFFICE",q11:"A",q12:"C",q13:"B",q14:"A",q15:"B",q16:"C",q17:"H",q18:"E",q19:"A",q20:"F",q21:"B",q22:"A",q23:"C",q24:"C",q25:"B",q26:"A",q27:"F",q28:"C",q29:"A",q30:"B",q31:"INGREDIENTS",q32:"STORED",q33:"TEMPERATURE",q34:"ORGANIC",q35:"IMAGE",q36:"INFORMATION",q37:"SALES",q38:"ENTERTAINMENT",q39:"NUTRITION",q40:"PARENTS"};
+
+let time = 1800;
+setInterval(()=>{ if(time-->0){ let m=Math.floor(time/60).toString().padStart(2,'0'); let s=(time%60).toString().padStart(2,'0'); document.getElementById('timer').textContent=m+':'+s; }},1000);
+
+function show(n){
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.getElementById('part'+n).classList.add('active');
+    document.querySelectorAll('.nav button:not(#submit)').forEach((b,i)=>b.classList.toggle('active',i+1===n));
+    document.getElementById('audio').src='section'+n+'.mp3';
+    document.getElementById('audio').load();
+    document.getElementById('sec-num').textContent=n;
+}
+
+/* REAL IELTS HIGHLIGHTING */
+function highlightSelection() {
+    let sel = window.getSelection();
+    if (sel.toString().trim()) {
+        let range = sel.getRangeAt(0);
+        let span = document.createElement('span');
+        span.style.backgroundColor = '#ffeb3b';
+        span.className = 'ielts-highlight';
+        try { range.surroundContents(span); } catch(e) {}
+        sel.empty();
+    }
+}
+function removeHighlight() {
+    document.querySelectorAll('.ielts-highlight').forEach(el => {
+        const parent = el.parentNode;
+        while (el.firstChild) parent.insertBefore(el.firstChild, el);
+        parent.removeChild(el);
+    });
+}
+
+/* DRAG & DROP - CAN REMOVE ANSWER */
+document.querySelectorAll('.drag-item').forEach(i=>i.addEventListener('dragstart',e=>e.dataTransfer.setData('text',i.dataset.val)));
+document.querySelectorAll('.drop-zone').forEach(z=>{
+    z.addEventListener('dragover',e=>e.preventDefault());
+    z.addEventListener('drop',e=>{
+        e.preventDefault();
+        let val = e.dataTransfer.getData('text');
+        if(z.textContent.trim()) {
+            let old = z.textContent.trim();
+            let oldItem = document.querySelector(`.drag-item[data-val="${old}"]`);
+            if(oldItem) oldItem.style.opacity = '1';
+        }
+        z.textContent=val; z.classList.add('filled');
+        let source = document.querySelector(`.drag-item[data-val="${val}"]`);
+        if(source) source.style.opacity='0.3';
+    });
+    z.onclick = () => {
+        if(z.classList.contains('filled')){
+            let val = z.textContent.trim();
+            let item = document.querySelector(`.drag-item[data-val="${val}"]`);
+            if(item) item.style.opacity='1';
+            z.textContent=''; z.classList.remove('filled');
+        }
+    };
+});
+
+/* CHECK & SHOW CORRECT ANSWERS (MCQ also shows correct option) */
+function checkAnswers(){
+    let score=0, rows='';
+    for(let i=1;i<=40;i++){
+        let user='', correct=answers['q'+i];
+        let el = document.getElementById('q'+i) || document.getElementById('drop'+i);
+        let isCorrect = false;
+
+        if(i<=10 || i>=31){
+            user = el?.innerText.trim().toUpperCase()||'';
+            isCorrect = user===correct;
+            if(isCorrect) { score++; el.classList.add('correct'); }
+            else if(user) { el.classList.add('wrong'); el.innerHTML += `<span class="correct-answer">(${correct})</span>`; }
+        } else if((i>=11&&i<=14)||(i>=21&&i<=26)){
+            let checked = document.querySelector(`input[name="q${i}"]:checked`);
+            user = checked ? checked.value : '';
+            isCorrect = user===correct;
+            if(isCorrect) score++;
+        } else {
+            user = el?.textContent.trim()||'';
+            isCorrect = user===correct;
+            if(isCorrect) score++;
+        }
+        rows += `<tr class="${isCorrect?'correct-row':'wrong-row'}"><td>${i}</td><td>${user||'(empty)'}</td><td>${correct}</td></tr>`;
+    }
+    document.getElementById('score').textContent=score;
+    document.getElementById('result-table').innerHTML='<tr><th>Q</th><th>Your Answer</th><th>Correct</th></tr>'+rows;
+    document.getElementById('results-modal').style.display='flex';
+}
+
+function showCorrect(){
+    for(let k in answers){
+        let qnum = k.replace('q','');
+        let el = document.getElementById(k) || document.getElementById('drop'+qnum);
+        if(el){ el.innerText=answers[k]; el.classList.add('correct'); }
+        if((qnum>=11&&qnum<=14)||(qnum>=21&&qnum<=26)){
+            let opt = document.querySelector(`#q${qnum}${answers[k]}`);
+            if(opt){ opt.checked=true; opt.parentElement.classList.add('correct'); }
+        }
+    }
+}
+
+</script>
+</body>
+</html>
