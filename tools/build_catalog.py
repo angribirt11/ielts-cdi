@@ -44,7 +44,7 @@ def main() -> None:
     entry = {
       "title": path.stem,
       "file": rel_path,
-      "category": detect_category(path.name),
+      "category": detect_category(path.name, path),
       "hash": digest,
       "size": meta.st_size,
       "modified": meta.st_mtime,
@@ -80,14 +80,63 @@ def discover_html_files():
     yield path
 
 
-def detect_category(filename: str) -> str:
+def detect_category(filename: str, file_path: Path | None = None) -> str:
+  """
+  Phân loại đề dựa trên tên file và nội dung HTML.
+  Logic ưu tiên: từ khóa mạnh > từ khóa yếu > nội dung file > other
+  """
   lower = filename.lower()
-  if "listening" in lower:
-    return "listening"
-  if "reading" in lower:
-    return "reading"
-  if "writing" in lower:
-    return "writing"
+  
+  # Từ khóa mạnh (ưu tiên cao nhất)
+  strong_keywords = {
+    "listening": ["listening", "listen"],
+    "reading": ["reading", "passage", "passages"],
+    "writing": ["writing", "write", "task 1", "task 2", "task1", "task2"],
+  }
+  
+  # Đếm điểm cho mỗi category
+  scores = {"listening": 0, "reading": 0, "writing": 0}
+  
+  # Check từ khóa mạnh
+  for category, keywords in strong_keywords.items():
+    for keyword in keywords:
+      if keyword in lower:
+        scores[category] += 2  # Từ khóa mạnh = 2 điểm
+  
+  # Từ khóa yếu (bổ sung)
+  weak_keywords = {
+    "listening": ["audio", "sound", "hear"],
+    "reading": ["text", "comprehension", "read"],
+    "writing": ["essay", "letter", "report", "graph", "chart"],
+  }
+  
+  for category, keywords in weak_keywords.items():
+    for keyword in keywords:
+      if keyword in lower:
+        scores[category] += 1  # Từ khóa yếu = 1 điểm
+  
+  # Tìm category có điểm cao nhất
+  max_score = max(scores.values())
+  if max_score > 0:
+    # Nếu có điểm rõ ràng, trả về category cao nhất
+    # Ưu tiên theo thứ tự: listening > reading > writing (nếu cùng điểm)
+    priority_order = ["listening", "reading", "writing"]
+    for category in priority_order:
+      if scores[category] == max_score:
+        return category
+  
+  # Nếu không có từ khóa rõ ràng, đọc nội dung file HTML
+  if file_path and file_path.exists():
+    try:
+      content = file_path.read_text(encoding="utf-8", errors="ignore").lower()
+      # Check nội dung với từ khóa mạnh
+      for category, keywords in strong_keywords.items():
+        for keyword in keywords:
+          if keyword in content[:5000]:  # Chỉ đọc 5000 ký tự đầu
+            return category
+    except Exception:
+      pass
+  
   return "other"
 
 
