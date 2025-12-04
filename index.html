@@ -48,7 +48,11 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background-color: var(--color-bg);
+      /* Nền nhẹ kiểu Material You, không quá chói */
+      background:
+        radial-gradient(circle at top left, rgba(103, 80, 164, 0.08), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(3, 218, 197, 0.08), transparent 55%),
+        var(--color-bg);
       color: var(--color-text);
       transition: background-color 0.3s ease, color 0.3s ease;
     }
@@ -153,19 +157,91 @@
       background: var(--color-border);
     }
 
+    /* Tooltip */
+    .tooltip-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip-wrapper:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.4rem 0.7rem;
+      background: rgba(0, 0, 0, 0.85);
+      color: white;
+      font-size: 0.75rem;
+      border-radius: 6px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 1000;
+      animation: tooltipFadeIn 0.15s ease;
+    }
+
+    .tooltip-wrapper:hover::before {
+      content: '';
+      position: absolute;
+      bottom: calc(100% + 2px);
+      left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-top-color: rgba(0, 0, 0, 0.85);
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    @keyframes tooltipFadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
     .app-shell {
+      /* Khung ngoài: luôn là 1 cột, tận dụng không gian màn hình lớn */
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
       padding: 1.5rem clamp(1rem, 5vw, 3rem);
+      max-width: 1600px;
+      margin: 1.25rem auto 2.5rem;
+    }
+
+    /* Bên trong: sidebar trái (bộ lọc) + danh sách bên phải cho màn hình lớn */
+    .column-left {
+      display: grid;
+      grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    /* Card bộ lọc đầu tiên sticky khi scroll trên màn hình lớn */
+    .column-left > .surface-card:first-child {
+      position: sticky;
+      top: calc(1.25rem + 80px); /* Khoảng cách từ top = margin app-shell + chiều cao header */
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
     }
 
     .surface-card {
       background: var(--color-surface);
       border-radius: var(--md-radius-lg);
       padding: 1.25rem;
-      border: 1px solid var(--color-border);
-      transition: border-color 0.2s ease;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    .surface-card:hover {
+      border-color: rgba(103, 80, 164, 0.25);
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
     }
 
     .panel-head {
@@ -270,6 +346,13 @@
       cursor: pointer;
       transition: all 0.2s ease;
       font-size: 0.9rem;
+      position: relative;
+    }
+
+    .chip-count {
+      margin-left: 0.35rem;
+      font-size: 0.8rem;
+      opacity: 0.7;
     }
 
     .chip:hover {
@@ -296,14 +379,54 @@
 
     .quick-stats {
       display: flex;
-      gap: 0.75rem;
+      gap: 0.5rem;
       flex-wrap: wrap;
-      font-size: 0.85rem;
-      color: var(--color-text-secondary);
     }
 
-    .quick-stats span {
+    .stat-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.5rem 0.75rem;
+      border-radius: 10px;
+      background: var(--color-surface-hover);
+      border: 1px solid var(--color-border);
+      min-width: 70px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .stat-card.listening {
+      border-color: rgba(59, 130, 246, 0.4);
+      background: rgba(59, 130, 246, 0.08);
+    }
+
+    .stat-card.reading {
+      border-color: rgba(34, 197, 94, 0.4);
+      background: rgba(34, 197, 94, 0.08);
+    }
+
+    .stat-card.writing {
+      border-color: rgba(168, 85, 247, 0.4);
+      background: rgba(168, 85, 247, 0.08);
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--color-text-secondary);
       font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.2rem;
+    }
+
+    .stat-value {
+      font-size: 1.1rem;
+      font-weight: 700;
       color: var(--color-text);
     }
 
@@ -316,23 +439,47 @@
     }
 
     .test-row {
-      /* Card đơn giản, full chiều rộng trong ô lưới */
+      /* Card đề gọn, có bóng nhẹ, hover rõ ràng hơn */
       padding: 0.9rem 1rem;
-      border-radius: 12px;
-      border: 1px solid transparent;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 0, 0, 0.04);
       background: var(--color-surface);
-      transition: all 0.18s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease,
+        background-color 0.16s ease, opacity 0.2s ease;
+      opacity: 0;
+      animation: fadeInUp 0.3s ease forwards;
     }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .test-row:nth-child(1) { animation-delay: 0.02s; }
+    .test-row:nth-child(2) { animation-delay: 0.04s; }
+    .test-row:nth-child(3) { animation-delay: 0.06s; }
+    .test-row:nth-child(4) { animation-delay: 0.08s; }
+    .test-row:nth-child(5) { animation-delay: 0.1s; }
+    .test-row:nth-child(n+6) { animation-delay: 0.12s; }
 
     .test-row:hover {
       background: var(--color-surface-hover);
-      border-color: var(--color-border);
-      transform: translateY(-1px);
+      border-color: rgba(103, 80, 164, 0.55);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
     }
 
     .test-row.active {
       border-color: var(--color-primary);
-      box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-primary) 40%, transparent);
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-primary) 50%, transparent),
+        0 18px 40px rgba(0, 0, 0, 0.08);
     }
 
     .row-main {
@@ -433,7 +580,21 @@
 
     @media (max-width: 1024px) {
       .app-shell {
+        max-width: 100%;
+        margin: 1rem auto 2rem;
+      }
+
+      /* Tablet trở xuống: xếp bộ lọc và danh sách theo 1 cột như hiện tại */
+      .column-left {
+        display: flex;
         flex-direction: column;
+      }
+
+      /* Bỏ sticky trên mobile/tablet */
+      .column-left > .surface-card:first-child {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
       }
     }
 
@@ -489,10 +650,14 @@
       </div>
     </div>
     <div class="header-right">
-      <button class="theme-toggle" id="themeToggle" aria-label="Bật/tắt dark mode" title="Bật/tắt dark mode">
-        <span id="themeIcon">🌙</span>
-      </button>
-      <button class="tonal-btn" id="resetFilters" type="button">Xoá lọc</button>
+      <div class="tooltip-wrapper" data-tooltip="Bật/tắt dark mode (D)">
+        <button class="theme-toggle" id="themeToggle" aria-label="Bật/tắt dark mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+      <div class="tooltip-wrapper" data-tooltip="Xoá tất cả bộ lọc (Esc)">
+        <button class="tonal-btn" id="resetFilters" type="button">Xoá lọc</button>
+      </div>
     </div>
   </header>
 
@@ -545,17 +710,6 @@
         </header>
         <div id="testList" class="test-list" role="list" aria-live="polite"></div>
       </section>
-
-      <section class="surface-card duplicates-card">
-        <header class="panel-head">
-          <div>
-            <p class="eyebrow">Kiểm tra trùng</p>
-            <h2>File giống nhau</h2>
-          </div>
-          <span class="badge" id="duplicateCount">0</span>
-        </header>
-        <div id="duplicateList" class="duplicate-list"></div>
-      </section>
     </section>
   </main>
 
@@ -599,6 +753,17 @@
     function updateThemeIcon(theme) {
       themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
     }
+
+    // Auto-focus search input khi trang load
+    window.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        // Delay nhỏ để đảm bảo trang đã render xong
+        setTimeout(() => {
+          searchInput.focus();
+        }, 100);
+      }
+    });
   </script>
   <script src="assets/js/app.js" type="module"></script>
 </body>

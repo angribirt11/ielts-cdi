@@ -1,13 +1,19 @@
+const FILTERS_KEY = 'ielts_filters';
+const ITEMS_PER_PAGE = 50; // Số đề hiển thị mỗi lần
+const SEARCH_DEBOUNCE_MS = 300; // Delay cho search
+
 const state = {
   tests: [],
   filtered: [],
-  duplicates: [],
+  displayed: [], // Chỉ hiển thị một phần
   selected: null,
   filters: {
     category: 'all',
     query: '',
     sort: 'az',
   },
+  searchTimeout: null,
+  observer: null,
 };
 
 const refs = {
@@ -20,29 +26,24 @@ const refs = {
   searchInput: document.getElementById('searchInput'),
   sortSelect: document.getElementById('sortSelect'),
   resetFilters: document.getElementById('resetFilters'),
-  duplicateList: document.getElementById('duplicateList'),
-  duplicateCount: document.getElementById('duplicateCount'),
 };
 
 init();
 
 async function init() {
+  loadFilters(); // Load saved filters trước
   attachEvents();
   await loadData();
+  setupKeyboardShortcuts();
 }
 
 async function loadData() {
   refs.status.textContent = 'Đang tải dữ liệu...';
   try {
-    const [tests, duplicates] = await Promise.all([
-      fetchJSON('data/tests.json'),
-      fetchJSON('data/duplicates.json', []),
-    ]);
+    const tests = await fetchJSON('data/tests.json');
     state.tests = tests;
-    state.duplicates = duplicates;
     applyFilters();
     updateStats();
-    renderDuplicates();
     refs.status.textContent = `Đang hiển thị ${state.filtered.length} / ${state.tests.length} đề.`;
   } catch (error) {
     console.error(error);
@@ -67,28 +68,110 @@ function attachEvents() {
     refs.categoryFilters.querySelectorAll('.chip').forEach((chip) => chip.classList.remove('active'));
     btn.classList.add('active');
     state.filters.category = btn.dataset.category;
+    saveFilters();
     applyFilters();
   });
 
+  // Debounce cho search input
   refs.searchInput.addEventListener('input', (event) => {
-    state.filters.query = event.target.value.toLowerCase();
-    applyFilters();
+    const query = event.target.value.toLowerCase();
+    
+    // Hiển thị loading indicator
+    refs.status.textContent = 'Đang tìm kiếm...';
+    
+    // Clear timeout cũ
+    if (state.searchTimeout) {
+      clearTimeout(state.searchTimeout);
+    }
+    
+    // Set timeout mới
+    state.searchTimeout = setTimeout(() => {
+      state.filters.query = query;
+      saveFilters();
+      applyFilters();
+    }, SEARCH_DEBOUNCE_MS);
   });
 
   refs.sortSelect.addEventListener('change', (event) => {
     state.filters.sort = event.target.value;
+    saveFilters();
     applyFilters();
   });
 
   refs.resetFilters.addEventListener('click', () => {
-    state.filters = { category: 'all', query: '', sort: 'az' };
-    refs.categoryFilters.querySelectorAll('.chip').forEach((chip) => {
-      chip.classList.toggle('active', chip.dataset.category === 'all');
-    });
-    refs.searchInput.value = '';
-    refs.sortSelect.value = 'az';
-    applyFilters();
+    resetFilters();
   });
+}
+
+function resetFilters() {
+  state.filters = { category: 'all', query: '', sort: 'az' };
+  refs.categoryFilters.querySelectorAll('.chip').forEach((chip) => {
+    chip.classList.toggle('active', chip.dataset.category === 'all');
+  });
+  refs.searchInput.value = '';
+  refs.sortSelect.value = 'az';
+  saveFilters();
+  applyFilters();
+}
+
+function setupKeyboardShortcuts() {
+  document.addEventListener('keydown', (event) => {
+    // Ctrl+F hoặc Cmd+F: Focus vào search
+    if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
+      event.preventDefault();
+      refs.searchInput.focus();
+      refs.searchInput.select();
+    }
+
+    // Esc: Xóa filter
+    if (event.key === 'Escape') {
+      const isSearchFocused = document.activeElement === refs.searchInput;
+      if (isSearchFocused) {
+        refs.searchInput.blur();
+      } else {
+        resetFilters();
+      }
+    }
+
+    // D: Toggle dark mode
+    if (event.key === 'd' || event.key === 'D') {
+      const isInputFocused = document.activeElement.tagName === 'INPUT' || 
+                             document.activeElement.tagName === 'SELECT';
+      if (!isInputFocused) {
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) themeToggle.click();
+      }
+    }
+  });
+}
+
+function loadFilters() {
+  try {
+    const saved = localStorage.getItem(FILTERS_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      state.filters = { ...state.filters, ...parsed };
+      
+      // Restore UI state
+      if (refs.searchInput) refs.searchInput.value = state.filters.query || '';
+      if (refs.sortSelect) refs.sortSelect.value = state.filters.sort || 'az';
+      if (refs.categoryFilters) {
+        refs.categoryFilters.querySelectorAll('.chip').forEach((chip) => {
+          chip.classList.toggle('active', chip.dataset.category === state.filters.category);
+        });
+      }
+    }
+  } catch (error) {
+    console.warn('Không thể load filters đã lưu:', error);
+  }
+}
+
+function saveFilters() {
+  try {
+    localStorage.setItem(FILTERS_KEY, JSON.stringify(state.filters));
+  } catch (error) {
+    console.warn('Không thể lưu filters:', error);
+  }
 }
 
 function applyFilters() {
@@ -99,8 +182,11 @@ function applyFilters() {
     return matchesCategory && matchesQuery;
   });
   sortFiltered();
+  
+  // Reset về trang đầu khi filter thay đổi
+  state.displayed = [];
   renderList();
-  refs.status.textContent = `Đang hiển thị ${state.filtered.length} / ${state.tests.length} đề.`;
+  refs.status.textContent = `Đang hiển thị ${state.displayed.length} / ${state.filtered.length} đề.`;
 }
 
 function sortFiltered() {
@@ -136,7 +222,15 @@ function sortFiltered() {
 }
 
 function renderList() {
-  refs.testList.innerHTML = '';
+  // Nếu đang reset (displayed rỗng), clear list trước
+  if (state.displayed.length === 0) {
+    refs.testList.innerHTML = '';
+    if (state.observer) {
+      state.observer.disconnect();
+      state.observer = null;
+    }
+  }
+
   if (!state.filtered.length) {
     refs.testList.innerHTML = '<p class="row-meta">Không tìm thấy đề nào phù hợp với bộ lọc.</p>';
     refs.resultCount.textContent = '0 kết quả';
@@ -145,10 +239,19 @@ function renderList() {
 
   refs.resultCount.textContent = `${state.filtered.length} / ${state.tests.length} đề`;
 
+  // Lazy load: chỉ render một phần đầu tiên
+  const startIndex = state.displayed.length;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, state.filtered.length);
+  const itemsToRender = state.filtered.slice(startIndex, endIndex);
+
   const fragment = document.createDocumentFragment();
-  state.filtered.forEach((test) => {
+  itemsToRender.forEach((test, relativeIndex) => {
+    const absoluteIndex = startIndex + relativeIndex;
     const row = refs.rowTemplate.content.firstElementChild.cloneNode(true);
     const rowElement = row;
+    
+    // Reset animation delay để animation chạy lại khi filter thay đổi
+    rowElement.style.animationDelay = `${absoluteIndex * 0.02}s`;
 
     const mainBtn = rowElement.querySelector('.row-main');
     row.querySelector('.row-title').textContent = test.title;
@@ -162,6 +265,56 @@ function renderList() {
   });
 
   refs.testList.appendChild(fragment);
+  
+  // Cập nhật danh sách đã hiển thị
+  state.displayed = state.filtered.slice(0, endIndex);
+  
+  // Nếu còn đề chưa hiển thị, setup intersection observer để load thêm
+  if (endIndex < state.filtered.length) {
+    setupLazyLoad();
+  } else {
+    // Disconnect observer nếu đã load hết
+    if (state.observer) {
+      state.observer.disconnect();
+      state.observer = null;
+    }
+  }
+  
+  refs.status.textContent = `Đang hiển thị ${state.displayed.length} / ${state.filtered.length} đề.`;
+}
+
+function setupLazyLoad() {
+  // Disconnect observer cũ nếu có
+  if (state.observer) {
+    state.observer.disconnect();
+  }
+
+  // Tạo sentinel element (phần tử cuối cùng để trigger load)
+  const sentinel = refs.testList.querySelector('.load-more-sentinel');
+  if (sentinel) {
+    sentinel.remove();
+  }
+
+  const newSentinel = document.createElement('div');
+  newSentinel.className = 'load-more-sentinel';
+  newSentinel.style.height = '20px';
+  refs.testList.appendChild(newSentinel);
+
+  // Setup Intersection Observer
+  state.observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          renderList(); // Load thêm
+        }
+      });
+    },
+    {
+      rootMargin: '200px', // Load trước khi đến viewport 200px
+    }
+  );
+
+  state.observer.observe(newSentinel);
 }
 
 function selectTest(test, row) {
@@ -191,48 +344,46 @@ function updateStats() {
       acc[test.category] = (acc[test.category] || 0) + 1;
       return acc;
     },
-    { all: state.tests.length },
+    { all: state.tests.length, listening: 0, reading: 0, writing: 0, other: 0 },
   );
 
+  // Update quick stats với card đẹp hơn
   refs.quickStats.innerHTML = `
-    <div>Tổng <span>${totals.all || 0}</span></div>
-    <div>Listening <span>${totals.listening || 0}</span></div>
-    <div>Reading <span>${totals.reading || 0}</span></div>
-    <div>Writing <span>${totals.writing || 0}</span></div>
+    <div class="stat-card">
+      <span class="stat-label">Tổng</span>
+      <span class="stat-value">${totals.all || 0}</span>
+    </div>
+    <div class="stat-card listening">
+      <span class="stat-label">🎧 Listening</span>
+      <span class="stat-value">${totals.listening || 0}</span>
+    </div>
+    <div class="stat-card reading">
+      <span class="stat-label">📘 Reading</span>
+      <span class="stat-value">${totals.reading || 0}</span>
+    </div>
+    <div class="stat-card writing">
+      <span class="stat-label">✍️ Writing</span>
+      <span class="stat-value">${totals.writing || 0}</span>
+    </div>
   `;
-}
 
-function renderDuplicates() {
-  if (!state.duplicates.length) {
-    refs.duplicateCount.textContent = '0';
-    refs.duplicateList.innerHTML = '<p class="row-meta">Không phát hiện file trùng nội dung.</p>';
-    return;
-  }
-
-  refs.duplicateCount.textContent = state.duplicates.length;
-  const fragment = document.createDocumentFragment();
-
-  state.duplicates.forEach((group) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'duplicate-group';
-    wrapper.innerHTML = `
-      <h3>Hash ${group.hash.slice(0, 8)}…</h3>
-      <p>${group.files.length} file giống hệt nhau</p>
-    `;
-
-    const fileList = document.createElement('div');
-    fileList.className = 'duplicate-files';
-    group.files.forEach((file) => {
-      const item = document.createElement('span');
-      item.textContent = file;
-      fileList.appendChild(item);
-    });
-
-    wrapper.appendChild(fileList);
-    fragment.appendChild(wrapper);
+  // Update chip buttons với số lượng
+  refs.categoryFilters.querySelectorAll('.chip').forEach((chip) => {
+    const category = chip.dataset.category;
+    const count = totals[category] || 0;
+    const existingCount = chip.querySelector('.chip-count');
+    
+    if (category === 'all') {
+      if (existingCount) existingCount.remove();
+    } else {
+      if (existingCount) {
+        existingCount.textContent = `(${count})`;
+      } else {
+        const countSpan = document.createElement('span');
+        countSpan.className = 'chip-count';
+        countSpan.textContent = `(${count})`;
+        chip.appendChild(countSpan);
+      }
+    }
   });
-
-  refs.duplicateList.innerHTML = '';
-  refs.duplicateList.appendChild(fragment);
 }
-
